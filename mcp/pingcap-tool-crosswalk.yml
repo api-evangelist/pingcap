@@ -1,0 +1,365 @@
+generated: '2026-08-02'
+method: derived
+source: mcp/pingcap-mcp.yml + openapi/*-openapi-original.*
+note: 'PingCAP ships an MCP server AND a large OpenAPI surface, but they address DIFFERENT planes. The TiDB MCP
+  Server speaks the MySQL data plane (schemas, queries, DML/DDL, SQL users) inside one database; the published OpenAPI
+  documents are the TiDB Cloud control plane (clusters, branches, imports, exports, changefeeds, IAM, billing, Data
+  Service). There is therefore NO tool-to-operation overlap: every MCP tool is mcp_only and every REST operation
+  is rest_only. That divergence is the finding, not a gap to paper over. The bridge PingCAP does publish is the
+  tidbcloud-manager agent skill, which drives the control-plane OpenAPI directly rather than through MCP.'
+surfaces:
+  openapi:
+    files:
+    - pingcap-ossinsight-public-api-openapi-original.yaml
+    - pingcap-tidb-cloud-billing-v1beta1-openapi-original.json
+    - pingcap-tidb-cloud-data-service-v1beta1-openapi-original.json
+    - pingcap-tidb-cloud-dedicated-v1beta1-openapi-original.json
+    - pingcap-tidb-cloud-iam-v1beta1-openapi-original.json
+    - pingcap-tidb-cloud-starter-essential-v1beta1-openapi-original.json
+    - pingcap-tidb-cloud-v1beta-openapi-original.json
+    - pingcap-tidb-cloud-zero-v1alpha1-openapi-original.json
+    - pingcap-tidb-dm-openapi-original.yaml
+    operations: 192
+    gated: false
+    auth: HTTP Digest with an organization API key
+  graphql:
+    present: false
+  mcp:
+    server: tidb-mcp-server
+    transport: stdio | sse
+    hosted_endpoint: null
+    tools_list_gated: n/a — no public remote endpoint; tool list taken from the published docs
+    plane: MySQL data plane
+  agent_skills:
+    files:
+    - skills/pingcap-tidbcloud-tidbcloud-manager.md
+    - skills/pingcap-tidbcloud-tidb-zero.md
+    binds_to: the TiDB Cloud OpenAPI control plane
+crosswalk: []
+mcp_only:
+- tool: show_databases
+  reason: MySQL data-plane operation; TiDB Cloud publishes no equivalent REST operation — schema and query access
+    happen over the MySQL wire protocol, not over the management API.
+- tool: switch_database
+  reason: MySQL data-plane operation; TiDB Cloud publishes no equivalent REST operation — schema and query access
+    happen over the MySQL wire protocol, not over the management API.
+- tool: show_tables
+  reason: MySQL data-plane operation; TiDB Cloud publishes no equivalent REST operation — schema and query access
+    happen over the MySQL wire protocol, not over the management API.
+- tool: db_query
+  reason: MySQL data-plane operation; TiDB Cloud publishes no equivalent REST operation — schema and query access
+    happen over the MySQL wire protocol, not over the management API.
+- tool: db_execute
+  reason: MySQL data-plane operation; TiDB Cloud publishes no equivalent REST operation — schema and query access
+    happen over the MySQL wire protocol, not over the management API.
+- tool: db_create_user
+  reason: MySQL data-plane operation; TiDB Cloud publishes no equivalent REST operation — schema and query access
+    happen over the MySQL wire protocol, not over the management API.
+- tool: db_remove_user
+  reason: MySQL data-plane operation; TiDB Cloud publishes no equivalent REST operation — schema and query access
+    happen over the MySQL wire protocol, not over the management API.
+rest_only:
+- capability: ossinsight-public-api / Collections
+  operations:
+  - list-collections
+  - list-hot-collections
+  - collection-repo-ranking-by-issues
+  - collection-repo-ranking-by-prs
+  - collection-repo-ranking-by-stars
+  - list-repos-of-collection
+  count: 6
+- capability: ossinsight-public-api / Trends
+  operations:
+  - list-trending-repos
+  count: 1
+- capability: ossinsight-public-api / Issue Creators
+  operations:
+  - list-issue-creators
+  - list-countries-of-issue-creators
+  - issue-creators-history
+  - list-organizations-of-issue-creators
+  count: 4
+- capability: ossinsight-public-api / Pull Request Creators
+  operations:
+  - list-pull-request-creators
+  - list-countries-of-pr-creators
+  - pull-request-creators-history
+  - list-organizations-of-pr-creators
+  count: 4
+- capability: ossinsight-public-api / Stargazers
+  operations:
+  - list-countries-of-stargazers
+  - stargazers-history
+  - list-organizations-of-stargazers
+  count: 3
+- capability: tidb-cloud-billing-v1beta1 / Billing
+  operations:
+  - GET /bills/{billedMonth}
+  - POST /billsCostExplorer
+  - GET /billsCostExplorer/args
+  - GET /billsDetails/{billedMonth}
+  count: 4
+- capability: tidb-cloud-data-service-v1beta1 / Data App
+  operations:
+  - DataApp_ListDataApps
+  - DataApp_CreateDataApp
+  - DataAppsService_GetSystemEndpointConfig
+  - DataAppsService_UpdateSystemEndpointConfig
+  - DataApp_GetChat2QuerySettings
+  - DataApp_UpdateChat2QuerySettings
+  - DataApp_UpdateDataApp
+  - DataApp_GetDataApp
+  - DataApp_DeleteDataApp
+  count: 9
+- capability: tidb-cloud-data-service-v1beta1 / Data Source
+  operations:
+  - DataSource_ListDataSources
+  - DataSource_CreateDataSource
+  - DataSource_GetDataSource
+  - DataSource_DeleteDataSource
+  count: 4
+- capability: tidb-cloud-data-service-v1beta1 / Endpoint
+  operations:
+  - Endpoint_ListEndpoints
+  - Endpoint_CreateEndpoint
+  - Endpoint_UpdateEndpoint
+  - Endpoint_GetEndpoint
+  - Endpoint_DeleteEndpoint
+  - Endpoint_TestEndpoint
+  count: 6
+- capability: tidb-cloud-data-service-v1beta1 / Data API Key
+  operations:
+  - APIKey_ListApiKeys
+  - APIKey_CreateApiKey
+  - APIKey_UpdateApiKey
+  - APIKey_GetApiKey
+  - APIKey_DeleteApiKey
+  count: 5
+- capability: tidb-cloud-data-service-v1beta1 / Deployment
+  operations:
+  - Deployment_ListDeployments
+  - Deployment_CreateDeployment
+  - Deployment_GetDeployment
+  count: 3
+- capability: tidb-cloud-data-service-v1beta1 / OpenAPI Specification
+  operations:
+  - APISpecification_GetApiSpec
+  count: 1
+- capability: tidb-cloud-dedicated-v1beta1 / Cluster
+  operations:
+  - ClusterService_ListClusters
+  - ClusterService_CreateCluster
+  - ClusterService_GetCluster
+  - ClusterService_DeleteCluster
+  - ClusterService_UpdateCluster
+  - ClusterService_PauseCluster
+  - ClusterService_ResumeCluster
+  - ClusterService_ResetRootPassword
+  - ClusterService_ShowNodeQuota
+  - ClusterService_GetLogRedactionPolicy
+  count: 10
+- capability: tidb-cloud-dedicated-v1beta1 / Region
+  operations:
+  - RegionService_ListRegions
+  - RegionService_GetRegion
+  - RegionService_ShowCloudProviders
+  - RegionService_ListNodeSpecs
+  - RegionService_GetNodeSpec
+  count: 5
+- capability: tidb-cloud-dedicated-v1beta1 / Private Endpoint Connection
+  operations:
+  - PrivateEndpointConnectionService_GetPrivateLinkService
+  - PrivateEndpointConnectionService_ListPrivateEndpointConnections
+  - PrivateEndpointConnectionService_CreatePrivateEndpointConnection
+  - PrivateEndpointConnectionService_GetPrivateEndpointConnection
+  - PrivateEndpointConnectionService_DeletePrivateEndpointConnection
+  count: 5
+- capability: tidb-cloud-dedicated-v1beta1 / Import
+  operations:
+  - ListImports
+  - CreateImport
+  - GetImport
+  - CancelImport
+  count: 4
+- capability: tidb-cloud-dedicated-v1beta1 / Integration
+  operations:
+  - IntegrationService_ListIntegrations
+  - IntegrationService_CreateIntegration
+  - IntegrationService_DeleteIntegration
+  count: 3
+- capability: tidb-cloud-dedicated-v1beta1 / Changefeed
+  operations:
+  - ListChangefeedRCUs
+  - ListChangefeeds
+  - CreateChangefeed
+  - GetChangefeed
+  - DeleteChangefeed
+  - EditChangefeedDownstreamConfig
+  - PauseChangefeed
+  - ResumeChangefeed
+  - ScaleChangefeed
+  count: 9
+- capability: tidb-cloud-iam-v1beta1 / API Key
+  operations:
+  - GET /apikeys
+  - POST /apikeys
+  - GET /apikeys/{accessKey}
+  - DELETE /apikeys/{accessKey}
+  - PATCH /apikeys/{accessKey}
+  count: 5
+- capability: tidb-cloud-iam-v1beta1 / Audit Log
+  operations:
+  - GET /auditLogs
+  count: 1
+- capability: tidb-cloud-iam-v1beta1 / Member
+  operations:
+  - GET /members
+  - POST /members
+  - POST /members/batchUpdate
+  - DELETE /members/{user_id}
+  - PATCH /members/{user_id}
+  - POST /members/{user_id}/resendInvitation
+  count: 6
+- capability: tidb-cloud-starter-essential-v1beta1 / Cluster
+  operations:
+  - ClusterService_ListClusters
+  - ClusterService_CreateCluster
+  - ClusterService_GetCluster
+  - ClusterService_DeleteCluster
+  - ClusterService_PartialUpdateCluster
+  - ClusterService_ListRegions
+  count: 6
+- capability: tidb-cloud-starter-essential-v1beta1 / Branch
+  operations:
+  - BranchService_ListBranches
+  - BranchService_CreateBranch
+  - BranchService_GetBranch
+  - BranchService_DeleteBranch
+  - BranchService_ResetBranch
+  count: 5
+- capability: tidb-cloud-starter-essential-v1beta1 / Export
+  operations:
+  - ExportService_ListExports
+  - ExportService_CreateExport
+  - ExportService_GetExport
+  - ExportService_DeleteExport
+  - ExportService_CancelExport
+  count: 5
+- capability: tidb-cloud-starter-essential-v1beta1 / Import
+  operations:
+  - ImportService_ListImports
+  - ImportService_CreateImport
+  - ImportService_GetImport
+  - ImportService_CancelImport
+  count: 4
+- capability: tidb-cloud-v1beta / Cluster
+  operations:
+  - ListProviderRegions
+  - ListAwsCmek
+  - CreateAwsCmek
+  - ListClustersOfProject
+  - CreateCluster
+  - GetCluster
+  - DeleteCluster
+  - UpdateCluster
+  - GetPrivateEndpointService
+  - CreatePrivateEndpointService
+  - ListPrivateEndpoints
+  - CreatePrivateEndpoint
+  - DeletePrivateEndpoint
+  - ListPrivateEndpointsOfProject
+  count: 14
+- capability: tidb-cloud-v1beta / Project
+  operations:
+  - ListProjects
+  - CreateProject
+  count: 2
+- capability: tidb-cloud-v1beta / Backup
+  operations:
+  - ListBackUpOfCluster
+  - CreateBackup
+  - GetBackupOfCluster
+  - DeleteBackup
+  count: 4
+- capability: tidb-cloud-v1beta / Import
+  operations:
+  - ListImportTasks
+  - CreateImportTask
+  - PreviewImportData
+  - GetImportTaskRoleInfo
+  - UploadLocalFile
+  - GetImportTask
+  - UpdateImportTask
+  count: 7
+- capability: tidb-cloud-v1beta / Restore
+  operations:
+  - ListRestoreTasks
+  - CreateRestoreTask
+  - GetRestoreTask
+  count: 3
+- capability: tidb-cloud-zero-v1alpha1 / PublicShadowPoolService
+  operations:
+  - PublicShadowPoolService_RequireDatabase
+  count: 1
+- capability: tidb-dm / doc
+  operations:
+  - GetDocHTML
+  - GetDocJSON
+  count: 2
+- capability: tidb-dm / source
+  operations:
+  - DMAPICreateSource
+  - DMAPIGetSourceList
+  - DMAPIGetSource
+  - DMAPIDeleteSource
+  - DMAPIUpdateSource
+  - DMAPIGetSourceStatus
+  - DMAPIEnableSource
+  - DMAPIDisableSource
+  - DMAPITransferSource
+  - DMAPIEnableRelay
+  - DMAPIDisableRelay
+  - DMAPIPurgeRelay
+  - DMAPIGetSourceSchemaList
+  - DMAPIGetSourceTableList
+  count: 14
+- capability: tidb-dm / task
+  operations:
+  - DMAPICreateTask
+  - DMAPIGetTaskList
+  - DMAPIGetTask
+  - DMAPIDeleteTask
+  - DMAPIUpdateTask
+  - DMAPIGetTaskStatus
+  - DMAPIStartTask
+  - DMAPIStopTask
+  - DMAPIGetTaskMigrateTargets
+  - DMAPIGetSchemaListByTaskAndSource
+  - DMAPIGetTableListByTaskAndSource
+  - DMAPIGetTableStructure
+  - DMAPIOperateTableStructure
+  - DMAPIDeleteTableStructure
+  - DMAPIConvertTask
+  - DMAPICreateTaskTemplate
+  - DMAPIGetTaskTemplateList
+  - DMAPIImportTaskTemplate
+  - DMAPIGetTaskTemplate
+  - DMAPUpdateTaskTemplate
+  - DMAPIDeleteTaskTemplate
+  count: 21
+- capability: tidb-dm / cluster
+  operations:
+  - DMAPIGetClusterInfo
+  - DMAPIUpdateClusterInfo
+  - DMAPIGetClusterMasterList
+  - DMAPIOfflineMasterNode
+  - DMAPIGetClusterWorkerList
+  - DMAPIOfflineWorkerNode
+  count: 6
+coverage:
+  tools_named: 7
+  tools_bound_to_rest: 0
+  mcp_only: 7
+  rest_operations_total: 192
+  rest_operations_with_a_tool: 0
+  overlap: none — disjoint planes

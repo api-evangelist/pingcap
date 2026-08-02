@@ -1,0 +1,74 @@
+generated: '2026-08-02'
+method: searched
+source: https://docs.pingcap.com/tidbcloud/api-overview/
+docs: https://docs.pingcap.com/tidbcloud/api/v1beta#section/Authentication
+note: None of the published TiDB Cloud OpenAPI/Swagger documents declare a securityDefinitions block; the authentication
+  contract is documented only in prose in the API overview and in each spec's info.description. This profile is
+  searched from those docs, not derived from the specs.
+summary:
+  types:
+  - http
+  http_schemes:
+  - digest
+  api_key_in: []
+  oauth2_flows: []
+  spec_declared: false
+schemes:
+- name: TiDB Cloud organization API key
+  type: http
+  scheme: digest
+  rfc: RFC 7616 (HTTP Digest Access Authentication)
+  description: Every TiDB Cloud API request is authenticated with HTTP Digest Authentication. The API key public
+    key acts as the username and the private key acts as the password, so the private key is never transmitted over
+    the network. Missing or invalid credentials return 401.
+  credential:
+    kind: key pair
+    public_key: username component; visible in the console
+    private_key: password component; displayed only once at creation and never retrievable again
+  scope: Organization-wide. The key carries a role (for example org:owner) and an optional project scope, configured
+    at creation time in Organization Settings > API Keys.
+  managed_via:
+  - https://tidbcloud.com/org-settings/api-keys
+  - openapi/pingcap-tidb-cloud-iam-v1beta1-openapi-original.json (/apikeys CRUD)
+  example: curl --digest --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' --request GET --url https://serverless.tidbapi.com/v1beta1/clusters
+  applies_to:
+  - api.tidbcloud.com
+  - serverless.tidbapi.com
+  - dedicated.tidbapi.com
+  - iam.tidbapi.com
+  - billing.tidbapi.com
+  - dataservice.tidbapi.com
+  sources:
+  - pingcap-ossinsight-public-api-openapi-original.yaml
+  - pingcap-tidb-cloud-billing-v1beta1-openapi-original.json
+  - pingcap-tidb-cloud-data-service-v1beta1-openapi-original.json
+  - pingcap-tidb-cloud-dedicated-v1beta1-openapi-original.json
+  - pingcap-tidb-cloud-iam-v1beta1-openapi-original.json
+  - pingcap-tidb-cloud-starter-essential-v1beta1-openapi-original.json
+  - pingcap-tidb-cloud-v1beta-openapi-original.json
+  - pingcap-tidb-cloud-zero-v1alpha1-openapi-original.json
+  - pingcap-tidb-dm-openapi-original.yaml
+- name: TiDB Cloud Data Service Data API key
+  type: http
+  scheme: digest
+  description: A separate key class used to call deployed Data Service endpoints (reading data in a cluster), distinct
+    from the organization API key used to manage Data Apps and platform resources.
+  docs: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  sources:
+  - openapi/pingcap-tidb-cloud-data-service-v1beta1-openapi-original.json
+- name: No authentication (TiDB Cloud Zero)
+  type: none
+  description: The TiDB Cloud Zero provisioning endpoint is deliberately unauthenticated and free to call; it returns
+    a short-lived MySQL-compatible instance with generated credentials that expires in 30 days unless claimed.
+  sources:
+  - openapi/pingcap-tidb-cloud-zero-v1alpha1-openapi-original.json
+- name: No authentication (OSS Insight Public API)
+  type: none
+  description: The OSS Insight public analytics API is read-only and open; no credential is documented.
+  sources:
+  - openapi/pingcap-ossinsight-public-api-openapi-original.yaml
+database_auth:
+  note: Data-plane access to a TiDB cluster is MySQL protocol authentication (SQL user + password) over TLS, managed
+    with ticloud serverless sql-user or in the console. TiDB Cloud console sign-in additionally supports OAuth 2.0
+    / SSO, but the management API itself does not accept OAuth tokens.
+  docs: https://docs.pingcap.com/tidbcloud/tidb-cloud-quickstart/

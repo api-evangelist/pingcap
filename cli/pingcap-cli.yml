@@ -1,0 +1,147 @@
+generated: '2026-08-02'
+method: searched
+source: https://docs.pingcap.com/tidbcloud/cli-reference/
+name: ticloud
+display_name: TiDB Cloud CLI
+status: public preview
+repository: https://github.com/tidbcloud/tidbcloud-cli
+docs: https://docs.pingcap.com/tidbcloud/cli-reference/
+quickstart: https://docs.pingcap.com/tidbcloud/get-started-with-cli/
+scope: Manages TiDB Cloud Starter and Essential instances. Not applicable to TiDB Cloud Dedicated clusters.
+install:
+- method: script
+  command: curl https://raw.githubusercontent.com/tidbcloud/tidbcloud-cli/main/install.sh | sh
+  platforms:
+  - macos
+  - linux
+  recommended: true
+- method: tiup
+  command: tiup install cloud
+  note: Invoke as `tiup cloud [command]`
+  platforms:
+  - macos
+  - linux
+- method: binary
+  command: download from https://github.com/tidbcloud/tidbcloud-cli/releases/latest
+  platforms:
+  - macos
+  - linux
+  - windows
+- method: github-action
+  command: 'uses: tidbcloud/setup-tidbcloud-cli'
+  url: https://github.com/tidbcloud/setup-tidbcloud-cli
+- method: homebrew-tap
+  command: brew tap tidbcloud/tap
+  url: https://github.com/tidbcloud/homebrew-tap
+auth:
+- mode: api-key
+  command: ticloud config create --profile-name <name> --public-key <pk> --private-key <sk>
+- mode: oauth
+  command: ticloud auth login
+  note: Stores an OAuth token in the user profile.
+commands:
+- command: auth
+  subcommands:
+  - login
+  - logout
+  - whoami
+  description: Log in and out of TiDB Cloud
+- command: serverless
+  alias: s
+  subcommands:
+  - create
+  - delete
+  - describe
+  - list
+  - update
+  - spending-limit
+  - region
+  - shell
+  description: Manage TiDB Cloud Starter or Essential instances
+- command: serverless branch
+  subcommands:
+  - create
+  - delete
+  - describe
+  - list
+  - shell
+  description: Manage database branches for an instance
+- command: serverless import
+  subcommands:
+  - cancel
+  - describe
+  - list
+  - start
+  description: Manage import tasks
+- command: serverless export
+  subcommands:
+  - create
+  - describe
+  - list
+  - cancel
+  - download
+  description: Manage export tasks
+- command: serverless sql-user
+  subcommands:
+  - create
+  - list
+  - delete
+  - update
+  description: Manage SQL users on an instance
+- command: serverless audit-log
+  subcommands:
+  - config
+  - describe
+  - filter-rule
+  - download
+  description: Manage database audit logging
+- command: project
+  subcommands:
+  - list
+  description: Manage projects
+- command: config
+  subcommands:
+  - create
+  - delete
+  - describe
+  - edit
+  - list
+  - set
+  - use
+  description: Configure user profiles
+- command: completion
+  subcommands:
+  - bash
+  - fish
+  - powershell
+  - zsh
+  description: Generate a shell completion script
+- command: upgrade
+  subcommands: []
+  description: Update the CLI to the latest version
+- command: help
+  subcommands:
+  - auth
+  - config
+  - serverless
+  - project
+  - upgrade
+  - help
+  - completion
+  description: View help for any command
+modes:
+- interactive (prompted)
+- non-interactive (all flags supplied)
+global_flags:
+- flag: --no-color
+  description: Disable colour in output (non-interactive mode only)
+- flag: -P, --profile
+  description: Select the active user profile for this command
+- flag: -D, --debug
+  description: Enable debug mode
+key_flows:
+- ticloud serverless create — provision a Starter/Essential instance
+- ticloud serverless shell — open an interactive SQL shell against an instance
+- ticloud serverless branch create — branch a database for a test or preview environment
+- ticloud serverless import start / export create — move data in and out
+binary_package: packages/pingcap-packages.yml

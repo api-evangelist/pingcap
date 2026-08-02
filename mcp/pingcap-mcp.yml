@@ -1,0 +1,72 @@
+generated: '2026-08-02'
+method: searched
+source: https://docs.pingcap.com/ai/tidb-mcp-server/
+status: published
+server:
+  name: tidb-mcp-server
+  display_name: TiDB MCP Server
+  maintainer: PingCAP
+  transport:
+  - stdio
+  - sse
+  default_transport: stdio
+  url: null
+  hosted: false
+  note: Self-hosted / locally run. There is no PingCAP-operated remote MCP endpoint; the server is launched by the
+    MCP client and connects to a TiDB or TiDB Cloud instance the caller supplies.
+  install: uvx --from "pytidb[mcp]" tidb-mcp-server
+  sse_install: uvx --from "pytidb[mcp]" tidb-mcp-server --transport sse
+  package: pytidb[mcp]
+  repository: https://github.com/pingcap/pytidb
+  docs: https://docs.pingcap.com/ai/tidb-mcp-server/
+configuration:
+  env:
+  - name: TIDB_HOST
+    description: TiDB host to connect to
+  - name: TIDB_PORT
+    description: TiDB port (4000 by default)
+  - name: TIDB_USERNAME
+    description: SQL user
+  - name: TIDB_PASSWORD
+    description: SQL user password
+  - name: TIDB_DATABASE
+    description: Default database
+  client_config: mcpServers block in the MCP client configuration file; .env file for SSE mode
+tools:
+- name: show_databases
+  description: Show all databases in the TiDB Cloud Starter instance
+  category: schema
+  read_only: true
+- name: switch_database
+  description: Switch to a specific database
+  category: schema
+  read_only: true
+- name: show_tables
+  description: Show all tables in the current database
+  category: schema
+  read_only: true
+- name: db_query
+  description: Execute read-only SQL queries
+  category: sql
+  read_only: true
+- name: db_execute
+  description: Execute SQL statements (DML or DDL)
+  category: sql
+  read_only: false
+- name: db_create_user
+  description: Create a new database user
+  category: user-management
+  read_only: false
+- name: db_remove_user
+  description: Remove an existing database user
+  category: user-management
+  read_only: false
+surface_note: The TiDB MCP Server operates on the SQL data plane (MySQL protocol), not on the TiDB Cloud management
+  REST API. Agent-side control-plane work is instead covered by the published tidbcloud-manager agent skill, which
+  drives the TiDB Cloud OpenAPI directly.
+crosswalk: mcp/pingcap-tool-crosswalk.yml
+x-evidence:
+  fetched: '2026-08-02'
+  tools_list_probe: not applicable — stdio/SSE server launched locally, no anonymous public endpoint to POST tools/list
+    against
+  tool_source: docs.pingcap.com/ai/tidb-mcp-server/ published tool list

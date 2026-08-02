@@ -1,0 +1,43 @@
+generated: '2026-08-02'
+method: searched
+probe: true
+source: https://www.pingcap.com/trust-hub/
+url: https://www.pingcap.com/trust-hub/
+name: TiDB Trust Hub
+certifications:
+- ISO 27001
+- ISO 27701
+- SOC 2
+- PCI DSS
+- GDPR
+- HIPAA
+- EU-US Data Privacy Framework
+audit_statement: PingCAP states it conducts regular third-party audits against rigorous standards, including SOC
+  2 and PCI-DSS.
+gaps:
+- SOC 2 type (Type 1 vs Type 2) is not stated publicly
+- No self-service portal for downloading audit reports — reports are requested through PingCAP contacts
+- No FedRAMP or CSA STAR listing found
+related:
+- name: Security page / vulnerability disclosure
+  url: https://www.pingcap.com/security/
+- name: Data Processing Agreement
+  url: https://www.pingcap.com/legal/data-processing-agreement-for-tidb-cloud-services/
+- name: Sub-processors and affiliates
+  url: https://www.pingcap.com/legal/sub-processors-and-affiliates-for-tidb-cloud-services/
+- name: Service Level Agreement
+  url: https://www.pingcap.com/legal/service-level-agreement-for-tidb-cloud-services/
+- name: Cloud Services Agreement
+  url: https://www.pingcap.com/legal/tidb-cloud-services-agreement/
+- name: Privacy Policy
+  url: https://www.pingcap.com/privacy-policy/
+evidence:
+- source: https://www.pingcap.com/trust-hub/
+  keywords:
+  - iso 27001
+  - iso 27701
+  - soc 2
+  - pci-dss
+  - gdpr
+  - hipaa
+  - eu-us data privacy framework

@@ -1,0 +1,48 @@
+generated: '2026-08-02'
+method: searched
+source: https://zero.tidbcloud.com/ , https://play.tidbcloud.com/ , https://docs.pingcap.com/tidbcloud/tidb-cloud-quickstart/
+note: PingCAP does not ship a test/live key split or magic test values in the payments sense. Its sandbox story
+  is free and disposable real infrastructure. No credential or test value is invented here; only what the provider
+  publishes is recorded.
+environments:
+- name: TiDB Cloud Zero
+  url: https://zero.tidbcloud.com/
+  kind: ephemeral database, no sign-up
+  auth: none — the provisioning API is unauthenticated
+  api: openapi/pingcap-tidb-cloud-zero-v1alpha1-openapi-original.json
+  base_url: https://zero.tidbapi.com/v1alpha1
+  provision: POST /instances
+  returns:
+  - id
+  - name
+  - connection.host
+  - connection.port
+  - connection.username
+  - connection.password
+  - expiresAt
+  - remainingDatabaseQuota
+  lifetime: auto-expires after 30 days unless claimed into a TiDB Cloud Starter instance
+  tls: 'required — connect with --ssl-mode=REQUIRED or ssl: true'
+  agent_skill: skills/pingcap-agent-rules-tidb-cloud-zero.md
+- name: TiDB Playground
+  url: https://play.tidbcloud.com/
+  kind: hosted browser playground
+  auth: none — no registration required
+  note: Run SQL against a pre-loaded TiDB instance directly in the browser.
+- name: TiDB Cloud Starter free tier
+  url: https://tidbcloud.com/free-trial
+  kind: free managed instance on a real account
+  auth: TiDB Cloud account; API access via an organization API key
+  note: The zero-cost entry point for exercising the v1beta1 Starter/Essential API end to end.
+- name: tiup playground
+  url: https://docs.pingcap.com/tidb/stable/quick-start-with-tidb/
+  kind: local single-machine TiDB cluster
+  command: tiup playground
+  note: Local self-managed sandbox for the open-source database and its HTTP/DM APIs.
+branching:
+  feature: database branches
+  docs: https://docs.pingcap.com/tidbcloud/branch-overview/
+  api: BranchService_CreateBranch / BranchService_ResetBranch on the Starter and Essential API
+  note: Branches give a production-shaped, isolated copy of a database for CI and preview environments — the closest
+    thing TiDB Cloud has to a fixture/reset primitive.
+test_values: []

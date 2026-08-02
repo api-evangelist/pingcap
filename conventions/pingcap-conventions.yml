@@ -1,0 +1,90 @@
+generated: '2026-08-02'
+method: searched
+source: https://docs.pingcap.com/tidbcloud/api-overview/ + info.description of every published TiDB Cloud spec
+transport:
+  protocol: HTTPS only
+  media_type: application/json
+  note: All entities are expressed in JSON; payloads for POST/PATCH/PUT must be JSON.
+authentication:
+  style: HTTP Digest (RFC 7616) with an organization API key pair
+  artifact: authentication/pingcap-authentication.yml
+idempotency:
+  supported: false
+  header: null
+  note: No idempotency key header or parameter is documented, and none appears in any published TiDB Cloud OpenAPI
+    document. Retrying a create call may create a second resource. Custom verbs are expressed as colon-suffixed
+    methods (for example :pauseCluster, :resume, :cancel), several of which are naturally idempotent by state, but
+    there is no client-supplied idempotency contract.
+pagination:
+  styles:
+  - page/size (v1beta)
+  - page-token (v1beta1, AIP-158 style)
+  v1beta:
+    params:
+    - page
+    - page_size
+    response_fields:
+    - items
+    - total
+  v1beta1:
+    params:
+    - pageSize
+    - pageToken
+    response_fields:
+    - nextPageToken
+    - totalSize
+  note: The v1beta1 APIs are gRPC-transcoded Google API-style services, so they use pageSize/pageToken and return
+    nextPageToken; the legacy v1beta API uses page/page_size and returns items + total.
+field_selection:
+  view_parameter: view
+  note: Several v1beta1 list/get operations accept a view enum (BASIC / FULL) to control response depth.
+field_masks:
+  parameter: updateMask
+  note: Partial-update operations follow the Google API field-mask convention (for example ClusterService_PartialUpdateCluster).
+custom_methods:
+  style: colon-suffixed custom verbs on a resource path
+  examples:
+  - POST /clusters/{clusterId}:pauseCluster
+  - POST /clusters/{clusterId}:resumeCluster
+  - POST /clusters/{clusterId}:resetRootPassword
+  - POST /changefeeds/{changefeedId}:pause
+  - POST /clusters/{clusterId}/exports/{exportId}:cancel
+resource_names:
+  style: Google AIP-122 relative resource names on v1beta1
+  examples:
+  - orgs/{orgId}/apiKeys/{apiKeyId}
+  - clusters/{clusterId}
+  - dataApps/{dataAppId}
+error_envelope:
+  shape: 'google.rpc.Status: {code, message, details[]}'
+  artifact: errors/pingcap-problem-types.yml
+  rfc9457: false
+rate_limiting:
+  limit: 100 requests per minute per API key
+  headers:
+  - X-Ratelimit-Limit-Minute
+  - X-Ratelimit-Remaining-Minute
+  - X-Ratelimit-Reset
+  artifact: rate-limits/pingcap-rate-limits.yml
+request_tracing:
+  request_id_header: null
+  note: No documented client-visible request-id or correlation header. Responses pass through a Kong gateway that
+    emits x-kong-response-latency.
+versioning:
+  style: URI path (/v1beta1, /api/v1beta, /v1alpha1)
+  artifact: lifecycle/pingcap-lifecycle.yml
+timestamps:
+  format: RFC 3339 / ISO 8601 UTC on v1beta1 (createdAt, updateTime); Unix epoch seconds as strings on parts of
+    the legacy v1beta API (create_timestamp)
+async_operations:
+  style: poll the resource state field
+  note: Long-running work (cluster creation, import, export, restore, changefeed scaling) returns immediately and
+    is tracked by polling a status/state enum such as CREATING -> AVAILABLE or PREPARING -> IMPORTING -> COMPLETED.
+    There is no operations resource and no webhook callback.
+events:
+  webhooks: false
+  asyncapi: false
+  note: PingCAP publishes no webhook catalog and no AsyncAPI document. Cluster events are viewable in the console
+    Events page; alert notifications are delivered by email and Slack only. Changefeeds stream row changes to Kafka,
+    MySQL, TiDB Cloud and object storage, but they are a data-replication feature configured through REST, not an
+    API event contract.

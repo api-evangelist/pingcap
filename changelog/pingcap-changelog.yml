@@ -1,0 +1,99 @@
+generated: '2026-08-02'
+method: searched
+source: https://docs.pingcap.com/tidbcloud/api/v1beta#section/API-Changelog and the API Changelog section of each
+  v1beta1 spec, plus https://docs.pingcap.com/tidbcloud/tidb-cloud-release-notes/
+scheme: dated entries (YYYYMMDD) per API surface, published inline in each OpenAPI info.description; product-wide
+  release notes are published separately by calendar date
+current_version: v1beta1
+feeds:
+- name: TiDB Cloud release notes
+  url: https://docs.pingcap.com/tidbcloud/tidb-cloud-release-notes/
+  cadence: weekly
+- name: TiDB Self-Managed release notes
+  url: https://docs.pingcap.com/releases/tidb-self-managed/
+- name: TiDB Operator release notes
+  url: https://docs.pingcap.com/releases/tidb-operator/
+- name: TiUP releases
+  url: https://github.com/pingcap/tiup/releases
+entries:
+- date: '2026-07-28'
+  surface: TiDB Cloud (product)
+  breaking: false
+  highlights:
+  - Database audit logging in public preview for TiDB Cloud Dedicated on TiDB v7.5.6+ / v8.5.2+, with S3/GCS/Azure
+    Blob sinks and SQL-user filter rules.
+- date: '2026-07-21'
+  surface: TiDB Cloud (product)
+  breaking: false
+  highlights:
+  - Top RU public preview for TiDB Cloud Essential adds Alibaba Cloud Jakarta (ap-southeast-5).
+- date: '2026-07-14'
+  surface: TiDB Cloud (product)
+  breaking: false
+  highlights:
+  - Cross-region restore for Dedicated can now create the target CIDR block inline.
+- date: '2026-07-07'
+  surface: Dedicated API v1beta1
+  breaking: false
+  additions:
+  - ListChangefeedRCUs
+  - ListChangefeeds
+  - CreateChangefeed
+  - GetChangefeed
+  - DeleteChangefeed
+  - EditChangefeedDownstreamConfig
+  - PauseChangefeed
+  - ResumeChangefeed
+  - ScaleChangefeed
+  highlights:
+  - Changefeed management endpoints introduced on the Dedicated API.
+- date: '2026-04-14'
+  surface: v1beta + Starter/Essential API v1beta1
+  breaking: false
+  additions:
+  - type field on ListProjects
+  highlights:
+  - Projects now expose a type field so callers can distinguish dedicated, TiDB X and virtual projects; a migration
+    guide accompanies it. Starter/Essential "clusters" renamed to "instances" in descriptions only.
+  migration_guide: https://docs.pingcap.com/tidbcloud/tidbx-starter-essential-project-api-migration-guide
+- date: '2025-10-28'
+  surface: Dedicated API v1beta1
+  breaking: false
+  additions:
+  - IntegrationService_ListIntegrations
+  - IntegrationService_CreateIntegration
+  - IntegrationService_DeleteIntegration
+  highlights:
+  - Third-party monitoring integration endpoints (Datadog, Prometheus, New Relic).
+- date: '2025-08-12'
+  surface: Starter/Essential API v1beta1 + Dedicated API v1beta1
+  breaking: false
+  highlights:
+  - 'Initial release of the two tier-specific v1beta1 APIs: Cluster, Branch, Export and Import on Starter/Essential;
+    Cluster, Region and Private Endpoint Connection on Dedicated. "TiDB Cloud Serverless" renamed to "TiDB Cloud
+    Starter".'
+- date: '2024-09-10'
+  surface: v1beta + Data Service v1beta1
+  breaking: false
+  highlights:
+  - 'Product renames: "TiDB Serverless" to "TiDB Cloud Serverless", "TiDB Dedicated" to "TiDB Cloud Dedicated".
+    Chat2Query settings drop gpt-3.5-turbo and add gpt-4o / gpt-4o-mini.'
+- date: '2024-04-16'
+  surface: v1beta
+  breaking: false
+  highlights:
+  - Spec updated so every optional field accepts null.
+- date: '2023-09-05'
+  surface: v1beta
+  breaking: false
+  additions:
+  - CreatePrivateEndpointService
+  - GetPrivateEndpointService
+  - CreatePrivateEndpoint
+  - ListPrivateEndpoints
+  - ListPrivateEndpointsOfProject
+  - DeletePrivateEndpoint
+  highlights:
+  - Private endpoint service and private endpoint management.
+note: PingCAP does not publish a machine-readable changelog feed for the API; the authoritative record is the API
+  Changelog section rendered inside each Redoc reference page, mirrored here for the recent window.

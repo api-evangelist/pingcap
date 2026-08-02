@@ -1,0 +1,78 @@
+generated: '2026-08-02'
+method: derived
+source: openapi/*-openapi-original.* (4xx/5xx responses) + https://docs.pingcap.com/tidbcloud/api/v1beta
+format: google.rpc.Status
+rfc9457: false
+note: 'TiDB Cloud does not use RFC 9457 application/problem+json. Every error is a JSON object shaped like google.rpc.Status:
+  {"code": <int>, "message": <string>, "details": [...]}. The numeric code is a TiDB Cloud-specific error number
+  (for example 49900001, 49900007), not the HTTP status.'
+envelope:
+  content_type: application/json
+  fields:
+  - name: code
+    type: integer
+    description: TiDB Cloud numeric error code returned with this error.
+  - name: message
+    type: string
+    description: Developer-facing error message.
+  - name: details
+    type: array
+    description: Additional error detail messages (protobuf Any entries).
+  schemas:
+  - googlerpcStatus
+  - rpcStatus
+  - ErrorResponse
+problems:
+- status: 400
+  title: A request field is invalid
+  remediation: Validate the request body and query parameters against the operation schema.
+  schema: googlerpcStatus
+  source_specs:
+  - openapi/pingcap-tidb-cloud-starter-essential-v1beta1-openapi-original.json
+  - openapi/pingcap-tidb-cloud-dedicated-v1beta1-openapi-original.json
+  - openapi/pingcap-tidb-cloud-iam-v1beta1-openapi-original.json
+  - openapi/pingcap-tidb-cloud-billing-v1beta1-openapi-original.json
+  - openapi/pingcap-tidb-cloud-data-service-v1beta1-openapi-original.json
+  - openapi/pingcap-tidb-cloud-v1beta-openapi-original.json
+- status: 401
+  title: The API key cannot be authenticated
+  remediation: Send the request with --digest and a valid public/private API key pair. The private key is only shown
+    once at creation; re-create the key if it was lost.
+  schema: googlerpcStatus
+  example_code: 49900001
+  example_message: public_key not found
+- status: 403
+  title: The API key does not have permission to access the resource
+  remediation: Grant the key a role/scope that covers the target organization or project in Organization Settings
+    > API Keys.
+  schema: googlerpcStatus
+- status: 404
+  title: Resource not found
+  remediation: Verify the cluster, project, backup or changefeed identifier.
+  schema: googlerpcStatus
+  source_specs:
+  - openapi/pingcap-tidb-cloud-dedicated-v1beta1-openapi-original.json
+  - openapi/pingcap-tidb-cloud-v1beta-openapi-original.json
+- status: 429
+  title: You have exceeded the rate limit
+  remediation: Back off until X-Ratelimit-Reset seconds have elapsed; request a quota increase via support.
+  schema: googlerpcStatus
+  example_code: 49900007
+- status: 500
+  title: Internal server error
+  remediation: Retry with backoff; open a support ticket if it persists.
+  schema: googlerpcStatus
+- status: default
+  title: An unexpected error response
+  remediation: Read code and message from the body.
+  schema: googlerpcStatus
+coverage:
+  specs_analysed: 9
+  statuses_declared:
+  - '400'
+  - '401'
+  - '403'
+  - '404'
+  - '429'
+  - '500'
+  - default

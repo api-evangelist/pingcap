@@ -1,0 +1,48 @@
+generated: '2026-08-02'
+method: searched
+source: https://docs.pingcap.com/tidbcloud/api-overview/
+versioning:
+  scheme: uri-path
+  current: v1beta1
+  versions:
+  - version: v1beta1
+    status: beta / current
+    hosts:
+    - serverless.tidbapi.com
+    - dedicated.tidbapi.com
+    - iam.tidbapi.com
+    - billing.tidbapi.com
+    - dataservice.tidbapi.com
+  - version: v1beta
+    status: legacy — superseded by the tier-specific v1beta1 APIs
+    hosts:
+    - api.tidbcloud.com
+  - version: v1alpha1
+    status: alpha (TiDB Cloud Zero)
+    hosts:
+    - zero.tidbapi.com
+  docs: https://docs.pingcap.com/tidbcloud/api-overview/
+  note: The whole TiDB Cloud API is labelled beta in its own documentation.
+deprecation:
+  policy_url: null
+  sunset_header: false
+  deprecation_header: false
+  note: No formal, dated API deprecation or sunset policy is published, and no RFC 8594 Sunset/Deprecation headers
+    are documented. Deprecations are announced in the per-spec API Changelog and, for the project surface, in a
+    dedicated migration guide.
+  deprecated_surfaces:
+  - surface: Import (v1beta)
+    marked: Deprecated in the v1beta API reference tag list
+    replacement: the v1beta1 Import endpoints on the Starter/Essential and Dedicated APIs
+  - surface: MSP API (v1beta1)
+    marked: Deprecated in the API overview
+    replacement: null
+  migration_guides:
+  - https://docs.pingcap.com/tidbcloud/tidbx-starter-essential-project-api-migration-guide
+sla:
+  url: https://www.pingcap.com/legal/service-level-agreement-for-tidb-cloud-services/
+  note: Service Level Agreement for TiDB Cloud Services; uptime commitments vary by tier.
+status_page: https://status.tidbcloud.com/
+release_notes: https://docs.pingcap.com/tidbcloud/tidb-cloud-release-notes/
+support_policy: https://docs.pingcap.com/tidbcloud/connected-care-detail/
+deprecated_operations: []

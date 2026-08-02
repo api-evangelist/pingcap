@@ -1,0 +1,107 @@
+generated: '2026-08-02'
+method: searched
+source: npm registry, PyPI, Go module proxy, Terraform Registry, GitHub (pingcap + tidbcloud orgs), docs.pingcap.com
+packages:
+- language: javascript
+  registry: npm
+  name: '@tidbcloud/serverless'
+  version_seen: 0.3.0
+  url: https://www.npmjs.com/package/@tidbcloud/serverless
+  install: npm install @tidbcloud/serverless
+  description: TiDB Cloud Serverless Driver — a fetch-API-compatible driver for connecting to TiDB Cloud from serverless
+    and edge runtimes.
+  repository: https://github.com/tidbcloud/serverless-js
+  docs: https://docs.pingcap.com/developer/serverless-driver/
+  official: true
+- language: javascript
+  registry: npm
+  name: '@tidbcloud/prisma-adapter'
+  version_seen: 6.17.0
+  url: https://www.npmjs.com/package/@tidbcloud/prisma-adapter
+  install: npm install @tidbcloud/prisma-adapter
+  description: Prisma driver adapter for the TiDB Cloud serverless driver.
+  repository: https://github.com/tidbcloud/prisma-adapter
+  official: true
+- language: javascript
+  registry: npm
+  name: '@tidbcloud/kysely'
+  version_seen: 0.0.4
+  url: https://www.npmjs.com/package/@tidbcloud/kysely
+  install: npm install @tidbcloud/kysely
+  description: Kysely dialect for TiDB Cloud, powered by the TiDB Cloud serverless driver.
+  repository: https://github.com/tidbcloud/kysely
+  official: true
+- language: python
+  registry: pypi
+  name: pytidb
+  version_seen: 0.0.14
+  url: https://pypi.org/project/pytidb/
+  install: pip install pytidb
+  description: 'TiDB AI SDK for Python: table modelling, CRUD, transactions, vector/full-text/hybrid search, auto-embedding.
+    Also ships the TiDB MCP Server (pip install "pytidb[mcp]").'
+  repository: https://github.com/pingcap/pytidb
+  docs: https://pingcap.github.io/ai/
+  official: true
+- language: python
+  registry: pypi
+  name: tidb-vector
+  version_seen: 0.0.15
+  url: https://pypi.org/project/tidb-vector/
+  install: pip install tidb-vector
+  description: TiDB Vector SDK for Python — vector search client for TiDB.
+  repository: https://github.com/pingcap/tidb-vector-python
+  official: true
+- language: python
+  registry: pypi
+  name: django-tidb
+  url: https://pypi.org/project/django-tidb/
+  install: pip install django-tidb
+  description: TiDB dialect for Django.
+  repository: https://github.com/pingcap/django-tidb
+  official: true
+- language: go
+  registry: go-modules
+  name: github.com/tidbcloud/tidbcloud-cli
+  url: https://pkg.go.dev/github.com/tidbcloud/tidbcloud-cli
+  install: go install github.com/tidbcloud/tidbcloud-cli@latest
+  description: Source module for the ticloud CLI, including the generated TiDB Cloud API clients.
+  repository: https://github.com/tidbcloud/tidbcloud-cli
+  official: true
+- language: hcl
+  registry: terraform-registry
+  name: tidbcloud/tidbcloud
+  url: https://registry.terraform.io/providers/tidbcloud/tidbcloud/latest
+  install: terraform { required_providers { tidbcloud = { source = "tidbcloud/tidbcloud" } } }
+  description: Terraform TiDB Cloud Provider — manage TiDB Cloud clusters, backups, restores and imports as code.
+  repository: https://github.com/tidbcloud/terraform-provider-tidbcloud
+  official: true
+- language: ruby
+  registry: rubygems
+  name: activerecord-tidb-adapter
+  url: https://rubygems.org/gems/activerecord-tidb-adapter
+  install: gem install activerecord-tidb-adapter
+  description: TiDB adapter for ActiveRecord / Rails.
+  repository: https://github.com/pingcap/activerecord-tidb-adapter
+  official: true
+- language: binary
+  registry: github-releases
+  name: ticloud
+  url: https://github.com/tidbcloud/tidbcloud-cli/releases/latest
+  install: curl https://raw.githubusercontent.com/tidbcloud/tidbcloud-cli/main/install.sh | sh
+  description: TiDB Cloud CLI binary. Also installable through TiUP (tiup install cloud) and via the tidbcloud/homebrew-tap
+    Homebrew tap.
+  repository: https://github.com/tidbcloud/tidbcloud-cli
+  surface: cli/pingcap-cli.yml
+  official: true
+drivers_note: TiDB is MySQL wire-compatible, so any standard MySQL driver (mysql2, PyMySQL, go-sql-driver/mysql,
+  Connector/J, mysqlclient) connects without a TiDB-specific package. The list above covers only first-party PingCAP/TiDB
+  Cloud libraries.
+counts:
+  official: 10
+  languages:
+  - javascript
+  - python
+  - go
+  - hcl
+  - ruby
+  - binary

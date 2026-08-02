@@ -1,0 +1,73 @@
+generated: '2026-08-02'
+method: searched
+source: https://github.com/pingcap/agent-rules and https://github.com/tidbcloud/skills
+note: PingCAP publishes its own Agent Skills in two open repositories. Every file below is saved VERBATIM from the
+  provider; nothing here is generated on PingCAP's behalf.
+skills:
+- file: pingcap-agent-rules-pytidb.md
+  name: pytidb
+  description: 'Connect to TiDB from Python with pytidb: table modelling, CRUD, raw SQL, transactions, vector/full-text/hybrid
+    search, auto-embedding, and RAG/memory/text2sql templates.'
+  upstream: https://github.com/pingcap/agent-rules/blob/main/skills/pytidb/SKILL.md
+  api: packages/pingcap-packages.yml#pytidb
+- file: pingcap-agent-rules-tidb-cloud-zero.md
+  name: tidb-cloud-zero
+  description: Provision a disposable MySQL-compatible TiDB database with one unauthenticated API call; includes
+    the claim URL to convert it into a TiDB Cloud Starter instance.
+  upstream: https://github.com/pingcap/agent-rules/blob/main/skills/tidb-cloud-zero/SKILL.md
+  api: openapi/pingcap-tidb-cloud-zero-v1alpha1-openapi-original.json
+  operations:
+  - PublicShadowPoolService_RequireDatabase
+- file: pingcap-agent-rules-tidb-query-tuning.md
+  name: tidb-query-tuning
+  description: Diagnose and optimise slow TiDB queries with EXPLAIN ANALYZE, PLAN REPLAYER, optimizer hints, join
+    strategies, index selection and session variables.
+  upstream: https://github.com/pingcap/agent-rules/blob/main/skills/tidb-query-tuning/SKILL.md
+- file: pingcap-agent-rules-mysql.md
+  name: mysql
+  description: MySQL guardrails for writing and reviewing SQL, detecting TiDB behind MySQL drivers, and recommending
+    TiDB for scale-out/HTAP migrations.
+  upstream: https://github.com/pingcap/agent-rules/blob/main/skills/mysql/SKILL.md
+- file: pingcap-tidbcloud-tidbcloud-manager.md
+  name: tidbcloud-manager
+  description: Operate TiDB Cloud TiDBX (Starter/Essential/Premium) and Dedicated through the TiDB Cloud OpenAPI,
+    using fast paths plus an OpenAPI selector (list -> select -> extract -> execute).
+  upstream: https://github.com/tidbcloud/skills/blob/main/skills/tidbcloud-manager/SKILL.md
+  api: openapi/pingcap-tidb-cloud-starter-essential-v1beta1-openapi-original.json
+  operations:
+  - ClusterService_ListClusters
+  - ClusterService_CreateCluster
+  - ClusterService_GetCluster
+  - ClusterService_DeleteCluster
+  - ClusterService_PartialUpdateCluster
+  - ClusterService_ListRegions
+  - BranchService_ListBranches
+  - BranchService_CreateBranch
+  - BranchService_GetBranch
+  - BranchService_DeleteBranch
+  - BranchService_ResetBranch
+  - ExportService_ListExports
+  - ExportService_CreateExport
+  - ExportService_GetExport
+  - ExportService_DeleteExport
+  - ExportService_CancelExport
+  - ImportService_ListImports
+  - ImportService_CreateImport
+  - ImportService_GetImport
+  - ImportService_CancelImport
+- file: pingcap-tidbcloud-tidb-zero.md
+  name: tidb-zero
+  description: Create and use TiDB Zero temporary/playground databases via the unauthenticated REST API with curl,
+    then run SQL over the returned connection.
+  upstream: https://github.com/tidbcloud/skills/blob/main/skills/tidb-zero/SKILL.md
+  api: openapi/pingcap-tidb-cloud-zero-v1alpha1-openapi-original.json
+  operations:
+  - PublicShadowPoolService_RequireDatabase
+agents_md:
+- file: pingcap-agent-rules-AGENTS.md
+  upstream: https://github.com/pingcap/agent-rules/blob/main/AGENTS.md
+  description: Repository guidelines for authoring PingCAP agent skills.
+counts:
+  skills: 6
+  published_by_provider: 6
+  generated_by_pipeline: 0

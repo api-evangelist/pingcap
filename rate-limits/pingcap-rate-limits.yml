@@ -1,0 +1,24 @@
+generated: '2026-08-02'
+method: searched
+source: https://docs.pingcap.com/tidbcloud/api/v1beta#section/Rate-Limiting
+scope: per API key
+rate_limits:
+- name: TiDB Cloud API default
+  limit_count: 100
+  limit_period: minute
+  unit: requests
+  applies_to: every TiDB Cloud API host (api.tidbcloud.com, serverless/dedicated/iam/billing/dataservice.tidbapi.com)
+  exceeded_status: 429
+  increase: submit a support request at https://support.pingcap.com/hc/en-us/requests/new?ticket_form_id=7800003722519
+headers:
+- name: X-Ratelimit-Limit-Minute
+  description: Requests allowed per minute. Currently 100.
+- name: X-Ratelimit-Remaining-Minute
+  description: Requests remaining in the current minute. At 0 the API returns 429.
+- name: X-Ratelimit-Reset
+  description: Seconds until the current rate-limit window resets.
+exceeded_example:
+  status: 429
+  code: 49900007
+  message: The request exceeded the limit of 100 times per apikey per minute.
+gateway: 'Kong (server: kong/2.8.1 observed on rate-limit responses in the published docs)'

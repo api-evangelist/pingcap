@@ -1,0 +1,35 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for TiDB Cloud IAM API
+  version: 1.0.0
+extends: openapi/pingcap-tidb-cloud-iam-v1beta1-openapi-original.json
+x-generated: '2026-08-02'
+x-method: generated
+x-source: apis.yml + repo artifacts (no mutation of the harvested original)
+actions:
+- target: $.info
+  update:
+    x-apievangelist-provider: PingCAP
+    x-apievangelist-slug: pingcap
+    x-apievangelist-source: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+    x-apievangelist-harvested: '2026-08-02'
+    x-apievangelist-operations: 12
+- target: $.info
+  update:
+    x-apievangelist-base-url: https://iam.tidbapi.com/v1beta1
+- target: $.info
+  update:
+    x-apievangelist-authentication: HTTP Digest (RFC 7616) with a TiDB Cloud organization API key pair; not declared
+      in the source spec (no securityDefinitions block)
+    x-apievangelist-authentication-artifact: authentication/pingcap-authentication.yml
+    x-apievangelist-rate-limit: 100 requests per minute per API key; X-Ratelimit-Limit-Minute / X-Ratelimit-Remaining-Minute
+      / X-Ratelimit-Reset; 429 on exceed
+    x-apievangelist-rate-limit-artifact: rate-limits/pingcap-rate-limits.yml
+    x-apievangelist-error-envelope: google.rpc.Status {code, message, details[]} — not RFC 9457
+    x-apievangelist-error-artifact: errors/pingcap-problem-types.yml
+    x-apievangelist-conventions: conventions/pingcap-conventions.yml
+    x-apievangelist-idempotency: none documented — retries of create operations are not deduplicated
+- target: $.info
+  update:
+    x-apievangelist-gap: 12 of 12 operations in this document have no operationId; agents and code generators must
+      fall back to method+path.

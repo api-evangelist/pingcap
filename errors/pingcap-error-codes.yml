@@ -1,0 +1,22 @@
+generated: '2026-08-02'
+method: searched
+source: https://docs.pingcap.com/tidbcloud/api/v1beta#section/Rate-Limiting and the Get Started response examples
+note: TiDB Cloud publishes numeric API error codes inline in the API reference rather than as a single registry
+  page. Only codes the documentation states verbatim are recorded here; the space is larger than this list and is
+  not fully published.
+envelope_field: code
+error_codes:
+- code: 49900001
+  http_status: 401
+  message: public_key not found
+  cause: The public key component of the API key does not exist or was deleted.
+  action: Re-create the API key in Organization Settings > API Keys and update the caller.
+- code: 49900007
+  http_status: 429
+  message: The request exceeded the limit of 100 times per apikey per minute.
+  cause: More than 100 requests were made with one API key inside a single minute.
+  action: Honour X-Ratelimit-Reset and retry; request more quota through PingCAP support.
+database_error_codes:
+  note: TiDB itself (the SQL layer) publishes a separate, much larger error-code registry for MySQL-compatible and
+    TiDB-specific SQL errors.
+  docs: https://docs.pingcap.com/tidb/stable/error-codes/

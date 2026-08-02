@@ -1,0 +1,320 @@
+generated: '2026-08-02'
+method: derived
+source: openapi/*-openapi-original.* ($ref graph, path hierarchy and id-reference fields)
+note: Two disjoint models. The control plane above is the TiDB Cloud resource graph reachable over REST. The data
+  plane inside a cluster is ordinary MySQL-compatible SQL (schemas, tables, indexes, vector columns) and is not
+  modelled by any OpenAPI document — it is reached over the MySQL wire protocol or through the TiDB MCP Server.
+entities:
+- name: Organization
+  description: Top-level TiDB Cloud tenant that owns API keys, members, projects and bills.
+  identifiers:
+  - orgs/{orgId}
+  schemas:
+  - v1beta1ApiKey
+  - v1beta1Member
+  api: iam
+- name: Project
+  description: Grouping of clusters inside an organization; carries a type (dedicated, TiDB X, virtual).
+  identifiers:
+  - project_id
+  schemas:
+  - openapiListProjectItem
+  api: v1beta
+- name: Cluster
+  description: A TiDB deployment. Starter/Essential instances live on the serverless API; Dedicated clusters on
+    the dedicated API. Carries state, region, node spec and connection strings.
+  identifiers:
+  - clusterId
+  - cluster_id
+  schemas:
+  - tidb_cloud_open_apiserverlessv1beta1Cluster
+  - tidb_cloud_open_apidedicatedv1beta1Cluster
+  api: serverless + dedicated + v1beta
+- name: Branch
+  description: A copy-on-write database branch of a Starter/Essential cluster, used for CI and preview.
+  identifiers:
+  - branchId
+  schemas:
+  - v1beta1Branch
+  api: serverless
+- name: Export
+  description: An outbound data-export task attached to a cluster.
+  identifiers:
+  - exportId
+  schemas:
+  - v1beta1Export
+  api: serverless
+- name: Import
+  description: An inbound data-import task attached to a cluster.
+  identifiers:
+  - importId
+  - import_id
+  - id
+  schemas:
+  - v1beta1Import
+  api: serverless + dedicated + v1beta
+- name: Backup
+  description: A manual or scheduled backup of a Dedicated cluster.
+  identifiers:
+  - backup_id
+  schemas:
+  - openapiListBackupItem
+  api: v1beta
+- name: Restore
+  description: A restore task that materialises a backup into a new cluster.
+  identifiers:
+  - restore_id
+  schemas:
+  - openapiGetRestoreResp
+  api: v1beta
+- name: Changefeed
+  description: A change-data-capture stream from a Dedicated cluster to a downstream sink, sized in RCUs.
+  identifiers:
+  - changefeedId
+  schemas:
+  - v1beta1Changefeed
+  api: dedicated
+- name: TiDBNodeGroup
+  description: A group of TiDB compute nodes inside a Dedicated cluster; the anchor for private link.
+  identifiers:
+  - tidbNodeGroupId
+  schemas: []
+  api: dedicated
+- name: PrivateEndpointConnection
+  description: A customer private-link connection into a TiDB node group.
+  identifiers:
+  - privateEndpointConnectionId
+  - endpoint_id
+  schemas: []
+  api: dedicated + v1beta
+- name: Integration
+  description: A third-party observability integration (Datadog, Prometheus, New Relic) bound to a cluster.
+  identifiers:
+  - id
+  schemas:
+  - openapiv1beta1IntegrationStatusResp
+  api: dedicated
+- name: Region
+  description: A cloud provider region in which clusters can be created; parent of node specs.
+  identifiers:
+  - regionId
+  schemas: []
+  api: dedicated + serverless
+- name: NodeSpec
+  description: A purchasable node shape within a region and component type.
+  identifiers:
+  - nodeSpecKey
+  schemas: []
+  api: dedicated
+- name: ApiKey
+  description: An organization API key pair (public + private) with a role and optional project scope.
+  identifiers:
+  - accessKey
+  schemas:
+  - v1beta1ApiKey
+  api: iam
+- name: Member
+  description: A user in the organization, with a role.
+  identifiers:
+  - user_id
+  schemas: []
+  api: iam
+- name: AuditLog
+  description: An organization-level audit record of console and API activity.
+  identifiers: []
+  schemas: []
+  api: iam
+- name: Bill
+  description: A monthly bill for an organization, summarised by project and by service.
+  identifiers:
+  - billedMonth
+  schemas: []
+  api: billing
+- name: DataApp
+  description: 'A Data Service application: a named collection of endpoints over one or more clusters.'
+  identifiers:
+  - dataAppId
+  schemas: []
+  api: dataservice
+- name: DataSource
+  description: A cluster linked to a Data App.
+  identifiers:
+  - clusterId
+  schemas: []
+  api: dataservice
+- name: Endpoint
+  description: A custom HTTP endpoint in a Data App that executes a parameterised SQL statement.
+  identifiers:
+  - endpointId
+  schemas: []
+  api: dataservice
+- name: Deployment
+  description: A deployment of a Data App version.
+  identifiers: []
+  schemas: []
+  api: dataservice
+- name: ZeroInstance
+  description: An ephemeral, unauthenticated TiDB instance with generated connection credentials.
+  identifiers:
+  - id
+  schemas:
+  - v1RequireDatabaseResponse
+  - InstanceConnection
+  api: zero
+relationships:
+- from: Organization
+  type: has_many
+  to: Project
+  via: project_id
+  source: openapi/pingcap-tidb-cloud-v1beta-openapi-original.json
+- from: Organization
+  type: has_many
+  to: ApiKey
+  via: orgs/{orgId}/apiKeys/{apiKeyId}
+  source: openapi/pingcap-tidb-cloud-iam-v1beta1-openapi-original.json
+- from: Organization
+  type: has_many
+  to: Member
+  via: user_id
+  source: openapi/pingcap-tidb-cloud-iam-v1beta1-openapi-original.json
+- from: Organization
+  type: has_many
+  to: Bill
+  via: billedMonth
+  source: openapi/pingcap-tidb-cloud-billing-v1beta1-openapi-original.json
+- from: Project
+  type: has_many
+  to: Cluster
+  via: /projects/{project_id}/clusters
+  source: openapi/pingcap-tidb-cloud-v1beta-openapi-original.json
+- from: Project
+  type: has_many
+  to: Restore
+  via: /projects/{project_id}/restores
+  source: openapi/pingcap-tidb-cloud-v1beta-openapi-original.json
+- from: Project
+  type: has_many
+  to: DataApp
+  via: projectId
+  source: openapi/pingcap-tidb-cloud-data-service-v1beta1-openapi-original.json
+- from: Cluster
+  type: has_many
+  to: Branch
+  via: /clusters/{clusterId}/branches
+  source: openapi/pingcap-tidb-cloud-starter-essential-v1beta1-openapi-original.json
+- from: Cluster
+  type: has_many
+  to: Export
+  via: /clusters/{clusterId}/exports
+  source: openapi/pingcap-tidb-cloud-starter-essential-v1beta1-openapi-original.json
+- from: Cluster
+  type: has_many
+  to: Import
+  via: /clusters/{clusterId}/imports
+  source: openapi/pingcap-tidb-cloud-starter-essential-v1beta1-openapi-original.json
+- from: Cluster
+  type: has_many
+  to: Backup
+  via: /clusters/{cluster_id}/backups
+  source: openapi/pingcap-tidb-cloud-v1beta-openapi-original.json
+- from: Cluster
+  type: has_many
+  to: Integration
+  via: /clusters/{clusterId}/integrations
+  source: openapi/pingcap-tidb-cloud-dedicated-v1beta1-openapi-original.json
+- from: Cluster
+  type: has_many
+  to: TiDBNodeGroup
+  via: /clusters/{clusterId}/tidbNodeGroups/{tidbNodeGroupId}
+  source: openapi/pingcap-tidb-cloud-dedicated-v1beta1-openapi-original.json
+- from: TiDBNodeGroup
+  type: has_many
+  to: PrivateEndpointConnection
+  via: privateEndpointConnections
+  source: openapi/pingcap-tidb-cloud-dedicated-v1beta1-openapi-original.json
+- from: Cluster
+  type: belongs_to
+  to: Region
+  via: regionId
+  source: openapi/pingcap-tidb-cloud-dedicated-v1beta1-openapi-original.json
+- from: Region
+  type: has_many
+  to: NodeSpec
+  via: /regions/{regionId}/nodeSpecs
+  source: openapi/pingcap-tidb-cloud-dedicated-v1beta1-openapi-original.json
+- from: Changefeed
+  type: belongs_to
+  to: Cluster
+  via: clusterId
+  source: openapi/pingcap-tidb-cloud-dedicated-v1beta1-openapi-original.json
+- from: Restore
+  type: belongs_to
+  to: Backup
+  via: backup_id
+  source: openapi/pingcap-tidb-cloud-v1beta-openapi-original.json
+- from: DataApp
+  type: has_many
+  to: Endpoint
+  via: endpointId
+  source: openapi/pingcap-tidb-cloud-data-service-v1beta1-openapi-original.json
+- from: DataApp
+  type: has_many
+  to: DataSource
+  via: clusterIds
+  source: openapi/pingcap-tidb-cloud-data-service-v1beta1-openapi-original.json
+- from: DataApp
+  type: has_many
+  to: Deployment
+  via: deployments
+  source: openapi/pingcap-tidb-cloud-data-service-v1beta1-openapi-original.json
+id_conventions:
+  v1beta1: Google AIP-122 relative resource names, for example orgs/{orgId}/apiKeys/{apiKeyId}, clusters/{clusterId},
+    dataApps/{dataAppId}. Ids are opaque numeric strings.
+  v1beta: 'Flat snake_case ids: project_id, cluster_id, backup_id, restore_id, import_id.'
+state_machines:
+- entity: Cluster
+  field: cluster_status
+  states:
+  - AVAILABLE
+  - CREATING
+  - MODIFYING
+  - PAUSED
+  - PAUSING
+  - RESUMING
+  - UNAVAILABLE
+  - IMPORTING
+  - MAINTAINING
+- entity: Import
+  field: phase
+  states:
+  - PREPARING
+  - IMPORTING
+  - COMPLETED
+  - FAILED
+  - CANCELING
+  - CANCELED
+- entity: Backup
+  field: status
+  states:
+  - PENDING
+  - RUNNING
+  - FAILED
+  - SUCCESS
+- entity: Restore
+  field: status
+  states:
+  - PENDING
+  - RUNNING
+  - FAILED
+  - SUCCESS
+- entity: PrivateEndpointConnection
+  field: status
+  states:
+  - PENDING
+  - ACTIVE
+  - DELETING
+  - FAILED
+counts:
+  entities: 23
+  relationships: 21
+  rest_operations: 192

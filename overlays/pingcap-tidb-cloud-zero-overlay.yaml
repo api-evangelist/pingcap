@@ -1,0 +1,19 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for TiDB Cloud Zero API
+  version: 1.0.0
+extends: openapi/pingcap-tidb-cloud-zero-v1alpha1-openapi-original.json
+x-generated: '2026-08-02'
+x-method: generated
+x-source: apis.yml + repo artifacts (no mutation of the harvested original)
+actions:
+- target: $.info
+  update:
+    x-apievangelist-provider: PingCAP
+    x-apievangelist-slug: pingcap
+    x-apievangelist-source: https://zero.tidbcloud.com/
+    x-apievangelist-harvested: '2026-08-02'
+    x-apievangelist-operations: 1
+- target: $.info
+  update:
+    x-apievangelist-base-url: https://zero.tidbapi.com/v1alpha1
