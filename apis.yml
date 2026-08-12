@@ -29,208 +29,12 @@ tags:
 - open-source
 - infrastructure
 apis:
-- name: TiDB Cloud Starter and Essential API (v1beta1)
-  description: 'REST API for managing TiDB Cloud Starter and TiDB Cloud Essential instances: cluster lifecycle,
-    database branches, data export tasks and data import tasks. HTTPS-only, JSON entities, HTTP Digest authentication
-    with an organization API key pair, 100 requests per minute per key.'
-  humanURL: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
-  baseURL: https://serverless.tidbapi.com/v1beta1
-  tags:
-  - distributed-sql
-  - database
-  - tidb
-  - dbaas
-  - cloud-database
-  - serverless
-  properties:
-  - type: Documentation
-    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
-  - type: APIReference
-    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
-  - type: OpenAPI
-    url: openapi/pingcap-tidb-cloud-starter-essential-v1beta1-openapi-original.json
-  - type: Overlay
-    url: overlays/pingcap-tidb-cloud-starter-essential-overlay.yaml
-- name: TiDB Cloud Dedicated API (v1beta1)
-  description: 'REST API for managing TiDB Cloud Dedicated clusters: cluster CRUD, pause/resume, root password reset,
-    node quota, regions and node specs, private endpoint connections, data imports, third-party integrations and
-    changefeeds (change data capture to downstream systems).'
-  humanURL: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
-  baseURL: https://dedicated.tidbapi.com/v1beta1
-  tags:
-  - distributed-sql
-  - database
-  - tidb
-  - dbaas
-  - cloud-database
-  - change-data-capture
-  properties:
-  - type: Documentation
-    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
-  - type: APIReference
-    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
-  - type: OpenAPI
-    url: openapi/pingcap-tidb-cloud-dedicated-v1beta1-openapi-original.json
-  - type: Overlay
-    url: overlays/pingcap-tidb-cloud-dedicated-overlay.yaml
-- name: TiDB Cloud IAM API (v1beta1)
-  description: 'REST API for TiDB Cloud identity and access management: create, list, update and delete organization
-    API keys, list audit logs, and manage organization members and their roles including batch updates and invitation
-    resend.'
-  humanURL: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
-  baseURL: https://iam.tidbapi.com/v1beta1
-  tags:
-  - identity
-  - access-management
-  - api-keys
-  - audit-log
-  - tidb
-  - cloud-database
-  properties:
-  - type: Documentation
-    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
-  - type: APIReference
-    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
-  - type: OpenAPI
-    url: openapi/pingcap-tidb-cloud-iam-v1beta1-openapi-original.json
-  - type: Overlay
-    url: overlays/pingcap-tidb-cloud-iam-overlay.yaml
-- name: TiDB Cloud Billing API (v1beta1)
-  description: 'REST API for TiDB Cloud billing: retrieve the monthly bill for an organization, retrieve line-item
-    bill details, and query the cost explorer with supported grouping and filter arguments.'
-  humanURL: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
-  baseURL: https://billing.tidbapi.com/v1beta1
-  tags:
-  - billing
-  - finops
-  - cost-management
-  - tidb
-  - cloud-database
-  - dbaas
-  properties:
-  - type: Documentation
-    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
-  - type: APIReference
-    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
-  - type: OpenAPI
-    url: openapi/pingcap-tidb-cloud-billing-v1beta1-openapi-original.json
-  - type: Overlay
-    url: overlays/pingcap-tidb-cloud-billing-overlay.yaml
-- name: TiDB Cloud Data Service API (v1beta1)
-  description: 'REST API for TiDB Cloud Data Service: manage Data Apps, data sources, custom HTTP endpoints backed
-    by SQL, deployments and Data API keys. Data Service also generates an OpenAPI 3.0 specification per Data App
-    so the endpoints you author can be consumed as a standard machine-readable contract.'
-  humanURL: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
-  baseURL: https://dataservice.tidbapi.com/v1beta1
-  tags:
-  - data-service
-  - low-code
-  - sql
-  - rest
-  - tidb
-  - cloud-database
-  properties:
-  - type: Documentation
-    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
-  - type: APIReference
-    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
-  - type: OpenAPI
-    url: openapi/pingcap-tidb-cloud-data-service-v1beta1-openapi-original.json
-  - type: Overlay
-    url: overlays/pingcap-tidb-cloud-data-service-overlay.yaml
-- name: TiDB Cloud API (v1beta, legacy)
-  description: The original TiDB Cloud administrative REST API covering projects, clusters, backups, restores and
-    the deprecated import surface. Superseded by the v1beta1 tier-specific APIs but still documented and callable
-    at api.tidbcloud.com with HTTP Digest authentication.
-  humanURL: https://docs.pingcap.com/tidbcloud/api/v1beta/
-  baseURL: https://api.tidbcloud.com/api/v1beta
-  tags:
-  - distributed-sql
-  - database
-  - tidb
-  - dbaas
-  - cloud-database
-  - backup
-  properties:
-  - type: Documentation
-    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
-  - type: APIReference
-    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
-  - type: OpenAPI
-    url: openapi/pingcap-tidb-cloud-v1beta-openapi-original.json
-  - type: Overlay
-    url: overlays/pingcap-tidb-cloud-v1beta-overlay.yaml
-- name: TiDB Cloud Zero API (v1alpha1)
-  description: Unauthenticated REST API that provisions a disposable, MySQL-compatible TiDB database in a single
-    call. Instances auto-expire after 30 days unless claimed into a regular TiDB Cloud Starter instance. Used as
-    the zero-friction playground and as the provisioning surface behind the published tidb-cloud-zero agent skill.
-  humanURL: https://zero.tidbcloud.com/
-  baseURL: https://zero.tidbapi.com/v1alpha1
-  tags:
-  - sandbox
-  - playground
-  - tidb
-  - database
-  - mysql-compatible
-  - ephemeral
-  properties:
-  - type: Documentation
-    url: https://zero.tidbcloud.com/
-  - type: OpenAPI
-    url: openapi/pingcap-tidb-cloud-zero-v1alpha1-openapi-original.json
-  - type: Overlay
-    url: overlays/pingcap-tidb-cloud-zero-overlay.yaml
-  - type: Sandbox
-    url: https://zero.tidbcloud.com/
-- name: TiDB Data Migration (DM) OpenAPI
-  description: OpenAPI 3.0 control-plane API for TiDB Data Migration, the platform that replicates MySQL-compatible
-    upstreams into TiDB. Covers upstream source registration, relay log control, migration task lifecycle and status,
-    task templates, table-structure operations and DM cluster master/worker membership. Served by dm-master in a
-    self-managed DM deployment.
-  humanURL: https://docs.pingcap.com/tidb/stable/dm-open-api/
-  baseURL: https://docs.pingcap.com/tidb/stable/dm-open-api/
-  tags:
-  - data-migration
-  - replication
-  - tidb
-  - mysql-compatible
-  - open-source
-  - etl
-  properties:
-  - type: Documentation
-    url: https://docs.pingcap.com/tidb/stable/dm-open-api/
-  - type: OpenAPI
-    url: openapi/pingcap-tidb-dm-openapi-original.yaml
-  - type: Overlay
-    url: overlays/pingcap-tidb-dm-overlay.yaml
-  - type: SourceCode
-    url: https://github.com/pingcap/tiflow/blob/master/dm/openapi/spec/dm.yaml
-- name: OSS Insight Public API
-  description: Public read-only REST API behind OSS Insight, the PingCAP-built open-source analytics service that
-    queries billions of GitHub events stored in TiDB. Exposes repository, developer, organization, collection and
-    trending analytics endpoints used by the ossinsight.io site and by third parties.
-  humanURL: https://ossinsight.io/docs/api
-  baseURL: https://api.ossinsight.io/v1
-  tags:
-  - open-source
-  - analytics
-  - github
-  - developer-data
-  - tidb
-  - insights
-  properties:
-  - type: Documentation
-    url: https://ossinsight.io/docs/api
-  - type: OpenAPI
-    url: openapi/pingcap-ossinsight-public-api-openapi-original.yaml
-  - type: Overlay
-    url: overlays/pingcap-ossinsight-overlay.yaml
-  - type: SourceCode
-    url: https://github.com/pingcap/ossinsight
 - name: TiDB MCP Server
-  description: Official Model Context Protocol server maintained by PingCAP that exposes a TiDB or TiDB Cloud database
-    to MCP-capable agents and IDEs. Ships in the pytidb package, runs over stdio by default or SSE with --transport
-    sse, and provides schema introspection, read query execution, DML/DDL execution and database user management.
+  description: >-
+    Official Model Context Protocol server maintained by PingCAP that exposes a TiDB or TiDB Cloud database
+    to MCP-capable agents and IDEs. Ships in the pytidb package, runs over stdio by default or SSE with
+    --transport sse, and provides schema introspection, read query execution, DML/DDL execution and database
+    user management.
   humanURL: https://docs.pingcap.com/ai/tidb-mcp-server/
   baseURL: https://docs.pingcap.com/ai/tidb-mcp-server/
   tags:
@@ -249,12 +53,1465 @@ apis:
     url: mcp/pingcap-tool-crosswalk.yml
   - type: SourceCode
     url: https://github.com/pingcap/pytidb
+- aid: pingcap:pingcap-api-key-api
+  name: PingCAP API Key API
+  description: The API Key API from PingCAP — 2 operation(s) for api key.
+  humanURL: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  baseURL: https://serverless.tidbapi.com/v1beta1
+  tags:
+  - API Key
+  properties:
+  - type: OpenAPI
+    url: openapi/pingcap-api-key-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: Documentation
+    url: https://zero.tidbcloud.com/
+  - type: Sandbox
+    url: https://zero.tidbcloud.com/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidb/stable/dm-open-api/
+  - type: SourceCode
+    url: https://github.com/pingcap/tiflow/blob/master/dm/openapi/spec/dm.yaml
+  - type: Documentation
+    url: https://ossinsight.io/docs/api
+  - type: SourceCode
+    url: https://github.com/pingcap/ossinsight
+- aid: pingcap:pingcap-audit-log-api
+  name: PingCAP Audit Log API
+  description: The Audit Log API from PingCAP — 1 operation(s) for audit log.
+  humanURL: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  baseURL: https://serverless.tidbapi.com/v1beta1
+  tags:
+  - Audit Log
+  properties:
+  - type: OpenAPI
+    url: openapi/pingcap-audit-log-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: Documentation
+    url: https://zero.tidbcloud.com/
+  - type: Sandbox
+    url: https://zero.tidbcloud.com/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidb/stable/dm-open-api/
+  - type: SourceCode
+    url: https://github.com/pingcap/tiflow/blob/master/dm/openapi/spec/dm.yaml
+  - type: Documentation
+    url: https://ossinsight.io/docs/api
+  - type: SourceCode
+    url: https://github.com/pingcap/ossinsight
+- aid: pingcap:pingcap-backup-api
+  name: PingCAP Backup API
+  description: >-
+    Create, get, modify, and delete backups for TiDB clusters.
+
+
+    For TiDB Cloud Starter instances, you cannot create or manage backups via API. You can use [Dumpling](https://docs.pingcap.com/tidb/stable/dumpling-overview)
+    to export your data as backups.
+  humanURL: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  baseURL: https://serverless.tidbapi.com/v1beta1
+  tags:
+  - Backup
+  properties:
+  - type: OpenAPI
+    url: openapi/pingcap-backup-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: Documentation
+    url: https://zero.tidbcloud.com/
+  - type: Sandbox
+    url: https://zero.tidbcloud.com/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidb/stable/dm-open-api/
+  - type: SourceCode
+    url: https://github.com/pingcap/tiflow/blob/master/dm/openapi/spec/dm.yaml
+  - type: Documentation
+    url: https://ossinsight.io/docs/api
+  - type: SourceCode
+    url: https://github.com/pingcap/ossinsight
+- aid: pingcap:pingcap-billing-api
+  name: PingCAP Billing API
+  description: The Billing API from PingCAP — 4 operation(s) for billing.
+  humanURL: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  baseURL: https://serverless.tidbapi.com/v1beta1
+  tags:
+  - Billing
+  properties:
+  - type: OpenAPI
+    url: openapi/pingcap-billing-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: Documentation
+    url: https://zero.tidbcloud.com/
+  - type: Sandbox
+    url: https://zero.tidbcloud.com/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidb/stable/dm-open-api/
+  - type: SourceCode
+    url: https://github.com/pingcap/tiflow/blob/master/dm/openapi/spec/dm.yaml
+  - type: Documentation
+    url: https://ossinsight.io/docs/api
+  - type: SourceCode
+    url: https://github.com/pingcap/ossinsight
+- aid: pingcap:pingcap-branch-api
+  name: PingCAP Branch API
+  description: The Branch API from PingCAP — 3 operation(s) for branch.
+  humanURL: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  baseURL: https://serverless.tidbapi.com/v1beta1
+  tags:
+  - Branch
+  properties:
+  - type: OpenAPI
+    url: openapi/pingcap-branch-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: Documentation
+    url: https://zero.tidbcloud.com/
+  - type: Sandbox
+    url: https://zero.tidbcloud.com/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidb/stable/dm-open-api/
+  - type: SourceCode
+    url: https://github.com/pingcap/tiflow/blob/master/dm/openapi/spec/dm.yaml
+  - type: Documentation
+    url: https://ossinsight.io/docs/api
+  - type: SourceCode
+    url: https://github.com/pingcap/ossinsight
+- aid: pingcap:pingcap-changefeed-api
+  name: PingCAP Changefeed API
+  description: >-
+    List changefeed RCU options, list changefeeds, create a changefeed, get a changefeed, delete a changefeed,
+    update a changefeed downstream config, pause a changefeed, resume a changefeed, and scale a changefeed.
+  humanURL: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  baseURL: https://serverless.tidbapi.com/v1beta1
+  tags:
+  - Changefeed
+  properties:
+  - type: OpenAPI
+    url: openapi/pingcap-changefeed-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: Documentation
+    url: https://zero.tidbcloud.com/
+  - type: Sandbox
+    url: https://zero.tidbcloud.com/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidb/stable/dm-open-api/
+  - type: SourceCode
+    url: https://github.com/pingcap/tiflow/blob/master/dm/openapi/spec/dm.yaml
+  - type: Documentation
+    url: https://ossinsight.io/docs/api
+  - type: SourceCode
+    url: https://github.com/pingcap/ossinsight
+- aid: pingcap:pingcap-chat2query-api
+  name: PingCAP Chat2 Query API
+  description: The Chat2Query API from PingCAP — 1 operation(s) for chat2query.
+  humanURL: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  baseURL: https://serverless.tidbapi.com/v1beta1
+  tags:
+  - Chat2Query
+  properties:
+  - type: OpenAPI
+    url: openapi/pingcap-chat2query-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: Documentation
+    url: https://zero.tidbcloud.com/
+  - type: Sandbox
+    url: https://zero.tidbcloud.com/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidb/stable/dm-open-api/
+  - type: SourceCode
+    url: https://github.com/pingcap/tiflow/blob/master/dm/openapi/spec/dm.yaml
+  - type: Documentation
+    url: https://ossinsight.io/docs/api
+  - type: SourceCode
+    url: https://github.com/pingcap/ossinsight
+- aid: pingcap:pingcap-cluster-api
+  name: PingCAP Cluster API
+  description: >-
+    Create, get, update, delete, pause, resume, reset the root password, and list node quotas of a cluster.
+  humanURL: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  baseURL: https://serverless.tidbapi.com/v1beta1
+  tags:
+  - Cluster
+  properties:
+  - type: OpenAPI
+    url: openapi/pingcap-cluster-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: Documentation
+    url: https://zero.tidbcloud.com/
+  - type: Sandbox
+    url: https://zero.tidbcloud.com/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidb/stable/dm-open-api/
+  - type: SourceCode
+    url: https://github.com/pingcap/tiflow/blob/master/dm/openapi/spec/dm.yaml
+  - type: Documentation
+    url: https://ossinsight.io/docs/api
+  - type: SourceCode
+    url: https://github.com/pingcap/ossinsight
+- aid: pingcap:pingcap-collections-api
+  name: PingCAP Collections API
+  description: The Collections API from PingCAP — 6 operation(s) for collections.
+  humanURL: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  baseURL: https://serverless.tidbapi.com/v1beta1
+  tags:
+  - Collections
+  properties:
+  - type: OpenAPI
+    url: openapi/pingcap-collections-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: Documentation
+    url: https://zero.tidbcloud.com/
+  - type: Sandbox
+    url: https://zero.tidbcloud.com/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidb/stable/dm-open-api/
+  - type: SourceCode
+    url: https://github.com/pingcap/tiflow/blob/master/dm/openapi/spec/dm.yaml
+  - type: Documentation
+    url: https://ossinsight.io/docs/api
+  - type: SourceCode
+    url: https://github.com/pingcap/ossinsight
+- aid: pingcap:pingcap-data-api-key-api
+  name: PingCAP Data API Key API
+  description: >-
+    Create, get, update, delete, and list Data API keys of a Data App. The Data API key in Data Service
+    is different from the key used in the [TiDB Cloud API](https://docs.pingcap.com/tidbcloud/api/v1beta#section/Authentication).
+    The Data API key is used to access data in the TiDB Cloud clusters, whereas the TiDB Cloud API key
+    is used to manage resources such as projects, clusters, Data Apps, and endpoints.
+  humanURL: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  baseURL: https://serverless.tidbapi.com/v1beta1
+  tags:
+  - Data API Key
+  properties:
+  - type: OpenAPI
+    url: openapi/pingcap-data-api-key-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: Documentation
+    url: https://zero.tidbcloud.com/
+  - type: Sandbox
+    url: https://zero.tidbcloud.com/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidb/stable/dm-open-api/
+  - type: SourceCode
+    url: https://github.com/pingcap/tiflow/blob/master/dm/openapi/spec/dm.yaml
+  - type: Documentation
+    url: https://ossinsight.io/docs/api
+  - type: SourceCode
+    url: https://github.com/pingcap/ossinsight
+- aid: pingcap:pingcap-data-app-api
+  name: PingCAP Data App API
+  description: Create, get, update, delete, and list Data Apps.
+  humanURL: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  baseURL: https://serverless.tidbapi.com/v1beta1
+  tags:
+  - Data App
+  properties:
+  - type: OpenAPI
+    url: openapi/pingcap-data-app-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: Documentation
+    url: https://zero.tidbcloud.com/
+  - type: Sandbox
+    url: https://zero.tidbcloud.com/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidb/stable/dm-open-api/
+  - type: SourceCode
+    url: https://github.com/pingcap/tiflow/blob/master/dm/openapi/spec/dm.yaml
+  - type: Documentation
+    url: https://ossinsight.io/docs/api
+  - type: SourceCode
+    url: https://github.com/pingcap/ossinsight
+- aid: pingcap:pingcap-data-source-api
+  name: PingCAP Data Source API
+  description: Create, get, delete, and list data sources of a Data App.
+  humanURL: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  baseURL: https://serverless.tidbapi.com/v1beta1
+  tags:
+  - Data Source
+  properties:
+  - type: OpenAPI
+    url: openapi/pingcap-data-source-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: Documentation
+    url: https://zero.tidbcloud.com/
+  - type: Sandbox
+    url: https://zero.tidbcloud.com/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidb/stable/dm-open-api/
+  - type: SourceCode
+    url: https://github.com/pingcap/tiflow/blob/master/dm/openapi/spec/dm.yaml
+  - type: Documentation
+    url: https://ossinsight.io/docs/api
+  - type: SourceCode
+    url: https://github.com/pingcap/ossinsight
+- aid: pingcap:pingcap-deployment-api
+  name: PingCAP Deployment API
+  description: Create, get, and list deployments of a Data App.
+  humanURL: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  baseURL: https://serverless.tidbapi.com/v1beta1
+  tags:
+  - Deployment
+  properties:
+  - type: OpenAPI
+    url: openapi/pingcap-deployment-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: Documentation
+    url: https://zero.tidbcloud.com/
+  - type: Sandbox
+    url: https://zero.tidbcloud.com/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidb/stable/dm-open-api/
+  - type: SourceCode
+    url: https://github.com/pingcap/tiflow/blob/master/dm/openapi/spec/dm.yaml
+  - type: Documentation
+    url: https://ossinsight.io/docs/api
+  - type: SourceCode
+    url: https://github.com/pingcap/ossinsight
+- aid: pingcap:pingcap-doc-api
+  name: PingCAP Doc API
+  description: The doc API from PingCAP — 2 operation(s) for doc.
+  humanURL: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  baseURL: https://serverless.tidbapi.com/v1beta1
+  tags:
+  - doc
+  properties:
+  - type: OpenAPI
+    url: openapi/pingcap-doc-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: Documentation
+    url: https://zero.tidbcloud.com/
+  - type: Sandbox
+    url: https://zero.tidbcloud.com/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidb/stable/dm-open-api/
+  - type: SourceCode
+    url: https://github.com/pingcap/tiflow/blob/master/dm/openapi/spec/dm.yaml
+  - type: Documentation
+    url: https://ossinsight.io/docs/api
+  - type: SourceCode
+    url: https://github.com/pingcap/ossinsight
+- aid: pingcap:pingcap-endpoint-api
+  name: PingCAP Endpoint API
+  description: Create, get, delete, list, and test endpoints of a Data App.
+  humanURL: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  baseURL: https://serverless.tidbapi.com/v1beta1
+  tags:
+  - Endpoint
+  properties:
+  - type: OpenAPI
+    url: openapi/pingcap-endpoint-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: Documentation
+    url: https://zero.tidbcloud.com/
+  - type: Sandbox
+    url: https://zero.tidbcloud.com/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidb/stable/dm-open-api/
+  - type: SourceCode
+    url: https://github.com/pingcap/tiflow/blob/master/dm/openapi/spec/dm.yaml
+  - type: Documentation
+    url: https://ossinsight.io/docs/api
+  - type: SourceCode
+    url: https://github.com/pingcap/ossinsight
+- aid: pingcap:pingcap-export-api
+  name: PingCAP Export API
+  description: The Export API from PingCAP — 3 operation(s) for export.
+  humanURL: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  baseURL: https://serverless.tidbapi.com/v1beta1
+  tags:
+  - Export
+  properties:
+  - type: OpenAPI
+    url: openapi/pingcap-export-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: Documentation
+    url: https://zero.tidbcloud.com/
+  - type: Sandbox
+    url: https://zero.tidbcloud.com/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidb/stable/dm-open-api/
+  - type: SourceCode
+    url: https://github.com/pingcap/tiflow/blob/master/dm/openapi/spec/dm.yaml
+  - type: Documentation
+    url: https://ossinsight.io/docs/api
+  - type: SourceCode
+    url: https://github.com/pingcap/ossinsight
+- aid: pingcap:pingcap-import-api
+  name: PingCAP Import API
+  description: List import tasks, create an import task, get an import task, and cancel an import task.
+  humanURL: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  baseURL: https://serverless.tidbapi.com/v1beta1
+  tags:
+  - Import
+  properties:
+  - type: OpenAPI
+    url: openapi/pingcap-import-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: Documentation
+    url: https://zero.tidbcloud.com/
+  - type: Sandbox
+    url: https://zero.tidbcloud.com/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidb/stable/dm-open-api/
+  - type: SourceCode
+    url: https://github.com/pingcap/tiflow/blob/master/dm/openapi/spec/dm.yaml
+  - type: Documentation
+    url: https://ossinsight.io/docs/api
+  - type: SourceCode
+    url: https://github.com/pingcap/ossinsight
+- aid: pingcap:pingcap-integration-api
+  name: PingCAP Integration API
+  description: List integrations, create an integration, and delete an integration.
+  humanURL: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  baseURL: https://serverless.tidbapi.com/v1beta1
+  tags:
+  - Integration
+  properties:
+  - type: OpenAPI
+    url: openapi/pingcap-integration-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: Documentation
+    url: https://zero.tidbcloud.com/
+  - type: Sandbox
+    url: https://zero.tidbcloud.com/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidb/stable/dm-open-api/
+  - type: SourceCode
+    url: https://github.com/pingcap/tiflow/blob/master/dm/openapi/spec/dm.yaml
+  - type: Documentation
+    url: https://ossinsight.io/docs/api
+  - type: SourceCode
+    url: https://github.com/pingcap/ossinsight
+- aid: pingcap:pingcap-issue-creators-api
+  name: PingCAP Issue Creators API
+  description: The Issue Creators API from PingCAP — 4 operation(s) for issue creators.
+  humanURL: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  baseURL: https://serverless.tidbapi.com/v1beta1
+  tags:
+  - Issue Creators
+  properties:
+  - type: OpenAPI
+    url: openapi/pingcap-issue-creators-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: Documentation
+    url: https://zero.tidbcloud.com/
+  - type: Sandbox
+    url: https://zero.tidbcloud.com/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidb/stable/dm-open-api/
+  - type: SourceCode
+    url: https://github.com/pingcap/tiflow/blob/master/dm/openapi/spec/dm.yaml
+  - type: Documentation
+    url: https://ossinsight.io/docs/api
+  - type: SourceCode
+    url: https://github.com/pingcap/ossinsight
+- aid: pingcap:pingcap-member-api
+  name: PingCAP Member API
+  description: The Member API from PingCAP — 4 operation(s) for member.
+  humanURL: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  baseURL: https://serverless.tidbapi.com/v1beta1
+  tags:
+  - Member
+  properties:
+  - type: OpenAPI
+    url: openapi/pingcap-member-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: Documentation
+    url: https://zero.tidbcloud.com/
+  - type: Sandbox
+    url: https://zero.tidbcloud.com/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidb/stable/dm-open-api/
+  - type: SourceCode
+    url: https://github.com/pingcap/tiflow/blob/master/dm/openapi/spec/dm.yaml
+  - type: Documentation
+    url: https://ossinsight.io/docs/api
+  - type: SourceCode
+    url: https://github.com/pingcap/ossinsight
+- aid: pingcap:pingcap-openapi-specification-api
+  name: PingCAP OpenAPI Specification API
+  description: Get the OpenAPI specification of a Data App.
+  humanURL: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  baseURL: https://serverless.tidbapi.com/v1beta1
+  tags:
+  - OpenAPI Specification
+  properties:
+  - type: OpenAPI
+    url: openapi/pingcap-openapi-specification-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: Documentation
+    url: https://zero.tidbcloud.com/
+  - type: Sandbox
+    url: https://zero.tidbcloud.com/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidb/stable/dm-open-api/
+  - type: SourceCode
+    url: https://github.com/pingcap/tiflow/blob/master/dm/openapi/spec/dm.yaml
+  - type: Documentation
+    url: https://ossinsight.io/docs/api
+  - type: SourceCode
+    url: https://github.com/pingcap/ossinsight
+- aid: pingcap:pingcap-private-endpoint-connection-api
+  name: PingCAP Private Endpoint Connection API
+  description: >-
+    Get private link service for a TiDB node group, create a private endpoint connection, list private
+    endpoint connections, get a private endpoint connection, and delete a private endpoint connection.
+  humanURL: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  baseURL: https://serverless.tidbapi.com/v1beta1
+  tags:
+  - Private Endpoint Connection
+  properties:
+  - type: OpenAPI
+    url: openapi/pingcap-private-endpoint-connection-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: Documentation
+    url: https://zero.tidbcloud.com/
+  - type: Sandbox
+    url: https://zero.tidbcloud.com/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidb/stable/dm-open-api/
+  - type: SourceCode
+    url: https://github.com/pingcap/tiflow/blob/master/dm/openapi/spec/dm.yaml
+  - type: Documentation
+    url: https://ossinsight.io/docs/api
+  - type: SourceCode
+    url: https://github.com/pingcap/ossinsight
+- aid: pingcap:pingcap-project-api
+  name: PingCAP Project API
+  description: List projects.
+  humanURL: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  baseURL: https://serverless.tidbapi.com/v1beta1
+  tags:
+  - Project
+  properties:
+  - type: OpenAPI
+    url: openapi/pingcap-project-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: Documentation
+    url: https://zero.tidbcloud.com/
+  - type: Sandbox
+    url: https://zero.tidbcloud.com/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidb/stable/dm-open-api/
+  - type: SourceCode
+    url: https://github.com/pingcap/tiflow/blob/master/dm/openapi/spec/dm.yaml
+  - type: Documentation
+    url: https://ossinsight.io/docs/api
+  - type: SourceCode
+    url: https://github.com/pingcap/ossinsight
+- aid: pingcap:pingcap-publicshadowpoolservice-api
+  name: PingCAP Public Shadow Pool Service API
+  description: >-
+    The PublicShadowPoolService API from PingCAP — 1 operation(s) for publicshadowpoolservice.
+  humanURL: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  baseURL: https://serverless.tidbapi.com/v1beta1
+  tags:
+  - PublicShadowPoolService
+  properties:
+  - type: OpenAPI
+    url: openapi/pingcap-publicshadowpoolservice-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: Documentation
+    url: https://zero.tidbcloud.com/
+  - type: Sandbox
+    url: https://zero.tidbcloud.com/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidb/stable/dm-open-api/
+  - type: SourceCode
+    url: https://github.com/pingcap/tiflow/blob/master/dm/openapi/spec/dm.yaml
+  - type: Documentation
+    url: https://ossinsight.io/docs/api
+  - type: SourceCode
+    url: https://github.com/pingcap/ossinsight
+- aid: pingcap:pingcap-pull-request-creators-api
+  name: PingCAP Pull Request Creators API
+  description: The Pull Request Creators API from PingCAP — 4 operation(s) for pull request creators.
+  humanURL: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  baseURL: https://serverless.tidbapi.com/v1beta1
+  tags:
+  - Pull Request Creators
+  properties:
+  - type: OpenAPI
+    url: openapi/pingcap-pull-request-creators-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: Documentation
+    url: https://zero.tidbcloud.com/
+  - type: Sandbox
+    url: https://zero.tidbcloud.com/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidb/stable/dm-open-api/
+  - type: SourceCode
+    url: https://github.com/pingcap/tiflow/blob/master/dm/openapi/spec/dm.yaml
+  - type: Documentation
+    url: https://ossinsight.io/docs/api
+  - type: SourceCode
+    url: https://github.com/pingcap/ossinsight
+- aid: pingcap:pingcap-region-api
+  name: PingCAP Region API
+  description: List regions, get a region, and list cloud providers and node specs of a region.
+  humanURL: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  baseURL: https://serverless.tidbapi.com/v1beta1
+  tags:
+  - Region
+  properties:
+  - type: OpenAPI
+    url: openapi/pingcap-region-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: Documentation
+    url: https://zero.tidbcloud.com/
+  - type: Sandbox
+    url: https://zero.tidbcloud.com/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidb/stable/dm-open-api/
+  - type: SourceCode
+    url: https://github.com/pingcap/tiflow/blob/master/dm/openapi/spec/dm.yaml
+  - type: Documentation
+    url: https://ossinsight.io/docs/api
+  - type: SourceCode
+    url: https://github.com/pingcap/ossinsight
+- aid: pingcap:pingcap-restore-api
+  name: PingCAP Restore API
+  description: >-
+    Get and create restore tasks for TiDB clusters. You can only restore data to a new cluster.
+
+
+    For more information on restoration on TiDB Cloud, refer to [Restore](https://docs.pingcap.com/tidbcloud/backup-and-restore#restore).
+
+
+    For TiDB Cloud Starter instances, you cannot manage restore tasks via API.
+  humanURL: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  baseURL: https://serverless.tidbapi.com/v1beta1
+  tags:
+  - Restore
+  properties:
+  - type: OpenAPI
+    url: openapi/pingcap-restore-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: Documentation
+    url: https://zero.tidbcloud.com/
+  - type: Sandbox
+    url: https://zero.tidbcloud.com/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidb/stable/dm-open-api/
+  - type: SourceCode
+    url: https://github.com/pingcap/tiflow/blob/master/dm/openapi/spec/dm.yaml
+  - type: Documentation
+    url: https://ossinsight.io/docs/api
+  - type: SourceCode
+    url: https://github.com/pingcap/ossinsight
+- aid: pingcap:pingcap-source-api
+  name: PingCAP Source API
+  description: source
+  humanURL: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  baseURL: https://serverless.tidbapi.com/v1beta1
+  tags:
+  - source
+  properties:
+  - type: OpenAPI
+    url: openapi/pingcap-source-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: Documentation
+    url: https://zero.tidbcloud.com/
+  - type: Sandbox
+    url: https://zero.tidbcloud.com/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidb/stable/dm-open-api/
+  - type: SourceCode
+    url: https://github.com/pingcap/tiflow/blob/master/dm/openapi/spec/dm.yaml
+  - type: Documentation
+    url: https://ossinsight.io/docs/api
+  - type: SourceCode
+    url: https://github.com/pingcap/ossinsight
+- aid: pingcap:pingcap-stargazers-api
+  name: PingCAP Stargazers API
+  description: The Stargazers API from PingCAP — 3 operation(s) for stargazers.
+  humanURL: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  baseURL: https://serverless.tidbapi.com/v1beta1
+  tags:
+  - Stargazers
+  properties:
+  - type: OpenAPI
+    url: openapi/pingcap-stargazers-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: Documentation
+    url: https://zero.tidbcloud.com/
+  - type: Sandbox
+    url: https://zero.tidbcloud.com/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidb/stable/dm-open-api/
+  - type: SourceCode
+    url: https://github.com/pingcap/tiflow/blob/master/dm/openapi/spec/dm.yaml
+  - type: Documentation
+    url: https://ossinsight.io/docs/api
+  - type: SourceCode
+    url: https://github.com/pingcap/ossinsight
+- aid: pingcap:pingcap-task-api
+  name: PingCAP Task API
+  description: task
+  humanURL: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  baseURL: https://serverless.tidbapi.com/v1beta1
+  tags:
+  - task
+  properties:
+  - type: OpenAPI
+    url: openapi/pingcap-task-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: Documentation
+    url: https://zero.tidbcloud.com/
+  - type: Sandbox
+    url: https://zero.tidbcloud.com/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidb/stable/dm-open-api/
+  - type: SourceCode
+    url: https://github.com/pingcap/tiflow/blob/master/dm/openapi/spec/dm.yaml
+  - type: Documentation
+    url: https://ossinsight.io/docs/api
+  - type: SourceCode
+    url: https://github.com/pingcap/ossinsight
+- aid: pingcap:pingcap-trends-api
+  name: PingCAP Trends API
+  description: The Trends API from PingCAP — 1 operation(s) for trends.
+  humanURL: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  baseURL: https://serverless.tidbapi.com/v1beta1
+  tags:
+  - Trends
+  properties:
+  - type: OpenAPI
+    url: openapi/pingcap-trends-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: Documentation
+    url: https://zero.tidbcloud.com/
+  - type: Sandbox
+    url: https://zero.tidbcloud.com/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidb/stable/dm-open-api/
+  - type: SourceCode
+    url: https://github.com/pingcap/tiflow/blob/master/dm/openapi/spec/dm.yaml
+  - type: Documentation
+    url: https://ossinsight.io/docs/api
+  - type: SourceCode
+    url: https://github.com/pingcap/ossinsight
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: Overlay
+  url: overlays/pingcap-ossinsight-overlay.yaml
+- type: License
+  name: Apache-2.0
+  url: https://github.com/pingcap/pytidb/blob/main/LICENSE
 - type: AgenticAccess
   url: agentic-access/pingcap-agentic-access.yml
 - type: TrustCenter
