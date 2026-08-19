@@ -1,0 +1,734 @@
+openapi: 3.2.0
+info:
+  title: DM OpenAPI DOC Source API
+  version: 6.0.0
+  description: source
+servers:
+- url: https://you.domain.com/
+tags:
+- name: source
+  description: source
+  externalDocs:
+    description: doc
+    url: https://docs.pingcap.com/zh/tidb/stable/quick-start-create-source
+paths:
+  /api/v1/sources:
+    post:
+      tags:
+      - source
+      summary: create and enable a new data source
+      operationId: DMAPICreateSource
+      requestBody:
+        description: request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSourceRequest'
+      responses:
+        '201':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Source'
+        '400':
+          description: failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorWithMessage'
+    get:
+      tags:
+      - source
+      summary: get data source list
+      operationId: DMAPIGetSourceList
+      parameters:
+      - name: with_status
+        in: query
+        required: false
+        description: list source with status
+        schema:
+          type: boolean
+          example: true
+      - name: enable_relay
+        in: query
+        required: false
+        description: only return the enable-relay source
+        schema:
+          type: boolean
+          example: true
+      responses:
+        '200':
+          description: data source list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetSourceListResponse'
+  /api/v1/sources/{source-name}:
+    get:
+      tags:
+      - source
+      summary: get source
+      operationId: DMAPIGetSource
+      parameters:
+      - name: source-name
+        in: path
+        description: globally unique data source name
+        required: true
+        schema:
+          type: string
+          example: mysql-01
+      - name: with_status
+        in: query
+        required: false
+        description: list source with status
+        schema:
+          type: boolean
+          example: true
+      responses:
+        '200':
+          description: source
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Source'
+        '404':
+          description: source not found
+    delete:
+      tags:
+      - source
+      summary: delete a data source
+      operationId: DMAPIDeleteSource
+      parameters:
+      - name: source-name
+        in: path
+        description: globally unique data source name
+        required: true
+        schema:
+          type: string
+          example: mysql-01
+      - name: force
+        in: query
+        required: false
+        description: force stop source also stop the related tasks
+        schema:
+          type: boolean
+          example: true
+      responses:
+        '204':
+          description: success
+        '400':
+          description: failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorWithMessage'
+    put:
+      tags:
+      - source
+      summary: update a data source
+      operationId: DMAPIUpdateSource
+      parameters:
+      - name: source-name
+        in: path
+        description: globally unique data source name
+        required: true
+        schema:
+          type: string
+          example: mysql-01
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateSourceRequest'
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Source'
+        '400':
+          description: failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorWithMessage'
+  /api/v1/sources/{source-name}/status:
+    get:
+      tags:
+      - source
+      summary: get the current status of the data source
+      operationId: DMAPIGetSourceStatus
+      parameters:
+      - name: source-name
+        in: path
+        description: globally unique data source name
+        required: true
+        schema:
+          type: string
+          example: mysql-replica-01
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetSourceStatusResponse'
+        '400':
+          description: failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorWithMessage'
+  /api/v1/sources/{source-name}/enable:
+    post:
+      tags:
+      - source
+      summary: enable a data source
+      operationId: DMAPIEnableSource
+      parameters:
+      - name: source-name
+        in: path
+        description: globally unique data source name
+        required: true
+        schema:
+          type: string
+          example: mysql-01
+      responses:
+        '200':
+          description: success
+        '400':
+          description: failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorWithMessage'
+  /api/v1/sources/{source-name}/disable:
+    post:
+      tags:
+      - source
+      summary: disable a data source
+      operationId: DMAPIDisableSource
+      parameters:
+      - name: source-name
+        in: path
+        description: globally unique data source name
+        required: true
+        schema:
+          type: string
+          example: mysql-01
+      responses:
+        '200':
+          description: success
+        '400':
+          description: failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorWithMessage'
+  /api/v1/sources/{source-name}/transfer:
+    post:
+      tags:
+      - source
+      summary: transfer source to a free worker
+      operationId: DMAPITransferSource
+      parameters:
+      - name: source-name
+        in: path
+        description: globally unique data source name
+        required: true
+        schema:
+          type: string
+          example: mysql-01
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WorkerNameRequest'
+      responses:
+        '200':
+          description: success
+        '400':
+          description: failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorWithMessage'
+  /api/v1/sources/{source-name}/relay/enable:
+    post:
+      tags:
+      - source
+      summary: enable relay log function for the data source
+      parameters:
+      - name: source-name
+        in: path
+        description: globally unique data source name
+        required: true
+        schema:
+          type: string
+          example: mysql-01
+      operationId: DMAPIEnableRelay
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EnableRelayRequest'
+      responses:
+        '200':
+          description: success
+        '400':
+          description: failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorWithMessage'
+  /api/v1/sources/{source-name}/relay/disable:
+    post:
+      tags:
+      - source
+      summary: disable relay log function for the data source
+      operationId: DMAPIDisableRelay
+      parameters:
+      - name: source-name
+        in: path
+        description: globally unique data source name
+        required: true
+        schema:
+          type: string
+          example: mysql-01
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DisableRelayRequest'
+      responses:
+        '200':
+          description: success
+        '400':
+          description: failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorWithMessage'
+  /api/v1/sources/{source-name}/relay/purge:
+    post:
+      tags:
+      - source
+      summary: purge relay log
+      operationId: DMAPIPurgeRelay
+      parameters:
+      - name: source-name
+        in: path
+        description: globally unique data source name
+        required: true
+        schema:
+          type: string
+          example: mysql-01
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PurgeRelayRequest'
+      responses:
+        '200':
+          description: success
+        '400':
+          description: failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorWithMessage'
+  /api/v1/sources/{source-name}/schemas:
+    get:
+      tags:
+      - source
+      summary: get source schema list
+      operationId: DMAPIGetSourceSchemaList
+      parameters:
+      - name: source-name
+        in: path
+        description: source name
+        required: true
+        schema:
+          type: string
+          example: source-1
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SchemaNameList'
+        '400':
+          description: failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorWithMessage'
+  /api/v1/sources/{source-name}/schemas/{schema-name}:
+    get:
+      tags:
+      - source
+      summary: get source table list
+      operationId: DMAPIGetSourceTableList
+      parameters:
+      - name: source-name
+        in: path
+        description: source name
+        required: true
+        schema:
+          type: string
+          example: source-1
+      - name: schema-name
+        in: path
+        description: schema name
+        required: true
+        schema:
+          type: string
+          example: db1
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TableNameList'
+        '400':
+          description: failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorWithMessage'
+components:
+  schemas:
+    UpdateSourceRequest:
+      type: object
+      properties:
+        source:
+          $ref: '#/components/schemas/Source'
+      required:
+      - source
+    TableNameList:
+      description: schema name list
+      type: array
+      items:
+        type: string
+        example: table1
+    SchemaNameList:
+      description: schema name list
+      type: array
+      items:
+        type: string
+        example: db1
+    GetSourceListResponse:
+      type: object
+      properties:
+        total:
+          type: integer
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Source'
+      required:
+      - total
+      - data
+    WorkerNameRequest:
+      description: requests related to workers
+      type: object
+      properties:
+        worker_name:
+          type: string
+          example: worker-1
+          description: worker name
+      required:
+      - worker_name
+    Source:
+      type: object
+      description: source
+      properties:
+        source_name:
+          type: string
+          example: mysql-01
+          description: source name
+        host:
+          type: string
+          example: 127.0.0.1
+          description: source address
+        port:
+          type: integer
+          example: 3306
+          description: source port
+        user:
+          type: string
+          example: root
+          description: source username
+        password:
+          type:
+          - string
+          - 'null'
+          example: '123456'
+          description: source password
+        enable_gtid:
+          type: boolean
+          example: false
+          default: false
+          description: whether to use GTID to pull binlogs from upstream
+        enable:
+          type: boolean
+          example: false
+          default: false
+          description: whether this source is enabled
+        flavor:
+          type: string
+          example: mysql
+          description: flavor of this source
+        task_name_list:
+          $ref: '#/components/schemas/TaskNameList'
+        security:
+          $ref: '#/components/schemas/Security'
+        purge:
+          $ref: '#/components/schemas/Purge'
+        status_list:
+          type: array
+          items:
+            $ref: '#/components/schemas/SourceStatus'
+        relay_config:
+          $ref: '#/components/schemas/RelayConfig'
+      required:
+      - source_name
+      - host
+      - port
+      - user
+      - enable_gtid
+      - enable
+    PurgeRelayRequest:
+      description: action to stop a relay request
+      type: object
+      properties:
+        relay_binlog_name:
+          type: string
+          example: mysql-bin.000002
+          description: starting filename of the upstream binlog
+        relay_dir:
+          type:
+          - string
+          - 'null'
+          description: 'specify relay sub directory for relay_binlog_name. If not specified, the latest one will be used. Sample format: 2ae76434-f79f-11e8-bde2-0242ac130008.000001'
+      required:
+      - relay_binlog_name
+    Security:
+      type:
+      - object
+      - 'null'
+      description: data source ssl configuration, the field will be hidden when getting the data source configuration from the interface
+      properties:
+        ssl_ca_content:
+          type: string
+          example: ''
+          description: certificate file content
+        ssl_cert_content:
+          type: string
+          example: ''
+          description: File content of PEM format/X509 format certificates
+        ssl_key_content:
+          type: string
+          example: ''
+          description: Content of the private key file in X509 format
+        cert_allowed_cn:
+          type: array
+          description: Common Name of SSL certificates
+          items:
+            type: string
+      required:
+      - ssl_ca_content
+      - ssl_cert_content
+      - ssl_key_content
+    ErrorWithMessage:
+      description: operation error
+      type: object
+      properties:
+        error_msg:
+          type: string
+          description: error message
+        error_code:
+          type: integer
+          description: error code
+      required:
+      - error_msg
+      - error_code
+    Purge:
+      description: relay log cleanup policy configuration
+      type: object
+      properties:
+        interval:
+          type:
+          - integer
+          - 'null'
+          default: 3600
+          description: 'The interval to periodically check if the relay log is expired, default value: 3600, in seconds'
+          format: int64
+        expires:
+          type:
+          - integer
+          - 'null'
+          default: 0
+          description: expiration time of relay log
+          format: int64
+        remain_space:
+          type:
+          - integer
+          - 'null'
+          default: 15
+          description: Minimum free disk space, in GB
+          format: int64
+    EnableRelayRequest:
+      description: action to start a relay request
+      type: object
+      properties:
+        worker_name_list:
+          $ref: '#/components/schemas/WorkerNameList'
+        relay_binlog_name:
+          type:
+          - string
+          - 'null'
+          example: mysql-bin.000002
+          description: starting filename of the upstream binlog
+        relay_binlog_gtid:
+          type:
+          - string
+          - 'null'
+          example: e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849
+          description: starting GTID of the upstream binlog
+        relay_dir:
+          type:
+          - string
+          - 'null'
+          default: ./relay_log
+          description: the directory where the relay log is stored
+    SourceStatus:
+      description: source status
+      type: object
+      properties:
+        source_name:
+          type: string
+          example: mysql-replica-01
+          description: source name
+        worker_name:
+          type: string
+          example: worker-1
+          description: The worker currently bound to the source
+        relay_status:
+          $ref: '#/components/schemas/RelayStatus'
+        error_msg:
+          type: string
+          description: error message when something wrong
+      required:
+      - source_name
+      - worker_name
+    WorkerNameList:
+      description: worker name list
+      type: array
+      items:
+        type: string
+        example: worker-1
+    RelayStatus:
+      description: status of relay log
+      type: object
+      properties:
+        master_binlog:
+          type: string
+          example: (mysql-bin.000001, 1979)
+          description: upstream binlog file information
+        master_binlog_gtid:
+          type: string
+          example: e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849
+          description: GTID of the upstream
+        relay_dir:
+          type: string
+          description: the directory where the relay log is stored
+          example: ./sub_dir
+        relay_binlog_gtid:
+          type: string
+          example: e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849
+          description: relay current GTID
+        relay_catch_up_master:
+          type: boolean
+          description: whether to catch up with upstream progress
+        stage:
+          type: string
+          description: current status
+          example: Running
+      required:
+      - master_binlog
+      - master_binlog_gtid
+      - relay_dir
+      - relay_binlog_gtid
+      - relay_catch_up_master
+      - stage
+    CreateSourceRequest:
+      type: object
+      properties:
+        source:
+          $ref: '#/components/schemas/Source'
+        worker_name:
+          type: string
+          example: worker-1
+      required:
+      - source
+    RelayConfig:
+      description: the config of relay
+      type: object
+      properties:
+        enable_relay:
+          type: boolean
+        relay_binlog_name:
+          type:
+          - string
+          - 'null'
+          example: mysql-bin.000002
+          description: starting filename of the upstream binlog
+        relay_binlog_gtid:
+          type:
+          - string
+          - 'null'
+          example: e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849
+          description: starting GTID of the upstream binlog
+        relay_dir:
+          type:
+          - string
+          - 'null'
+          default: ./relay_log
+          description: the directory where the relay log is stored
+    TaskNameList:
+      description: task name list
+      type: array
+      items:
+        type: string
+        example: task1
+    DisableRelayRequest:
+      description: action to stop a relay request
+      type: object
+      properties:
+        worker_name_list:
+          $ref: '#/components/schemas/WorkerNameList'
+    GetSourceStatusResponse:
+      type: object
+      properties:
+        total:
+          type: integer
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SourceStatus'
+      required:
+      - total
+      - data
+externalDocs:
+  description: DM OpenAPI DOC
+  url: https://docs.pingcap.com/zh/tidb-data-migration/stable

@@ -1,0 +1,151 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "TiDB Cloud Data Service OPEN Data API Key API",
+    "version": "v1beta1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Data API Key",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List all API keys for a Data App.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dataservice.tidbapi.com/v1beta1/dataApps/:dataAppId/apiKeys",
+            "params": [
+              {
+                "name": "dataAppId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the Data App. You can get the ID from the response of [List all Data Apps in a project](#tag/Data-App/operation/DataApp_ListDataApps)."
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of items to return. If it is not set or set to `0`, the default value `100` will be used."
+              },
+              {
+                "name": "pageToken",
+                "value": "",
+                "type": "query",
+                "description": "The identifier of the current page, used to retrieve the next page of results. You can get this value from the `nextPageToken` field in the previous response. To access the first page of data, omit this field."
+              }
+            ]
+          },
+          "docs": "List all API keys for a Data App."
+        },
+        {
+          "info": {
+            "name": "Create an API key for a Data App.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dataservice.tidbapi.com/v1beta1/dataApps/:dataAppId/apiKeys",
+            "params": [
+              {
+                "name": "dataAppId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the Data App. You can get the ID from the response of [List all Data Apps in a project](#tag/Data-App/operation/DataApp_ListDataApps)."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "For each Data App, you can create up to **100** API keys."
+        },
+        {
+          "info": {
+            "name": "Get an API key by ID.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dataservice.tidbapi.com/v1beta1/dataApps/:dataAppId/apiKeys/:apiKeyId",
+            "params": [
+              {
+                "name": "dataAppId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the Data App. You can get the ID from the response of [List all Data Apps in a project](#tag/Data-App/operation/DataApp_ListDataApps)."
+              },
+              {
+                "name": "apiKeyId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the API key, which is returned when you [Create an API key](#tag/Data-API-Key/operation/APIKey_CreateApiKey)."
+              }
+            ]
+          },
+          "docs": "Get an API key by ID."
+        },
+        {
+          "info": {
+            "name": "Update an API key for a Data App.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://dataservice.tidbapi.com/v1beta1/dataApps/:dataAppId/apiKeys/:apiKeyId",
+            "params": [
+              {
+                "name": "dataAppId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the Data App. You can get the ID from the response of [List all Data Apps in a project](#tag/Data-App/operation/DataApp_ListDataApps)."
+              },
+              {
+                "name": "apiKeyId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the API key, which is returned when you [create an API key](#tag/Data-API-Key/operation/APIKey_CreateApiKey)."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "With this endpoint, you can update the description, role, rate limit, or expiration time of an API key.\n\n**Note:** You cannot update an expired key."
+        },
+        {
+          "info": {
+            "name": "Delete an API key for a Data App.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://dataservice.tidbapi.com/v1beta1/dataApps/:dataAppId/apiKeys/:apiKeyId",
+            "params": [
+              {
+                "name": "dataAppId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the Data App. You can get the ID from the response of [List all Data Apps in a project](#tag/Data-App/operation/DataApp_ListDataApps)."
+              },
+              {
+                "name": "apiKeyId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the API key, which is returned when you [Create an API key](#tag/Data-API-Key/operation/APIKey_CreateApiKey)."
+              }
+            ]
+          },
+          "docs": "Before you delete an API key, make sure that the API key is not used by any Data App."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,195 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "TiDB Cloud Dedicated Private Endpoint Connection API",
+    "version": "v1beta1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Private Endpoint Connection",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get private link service for a TiDB node group",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dedicated.tidbapi.com/v1beta1/clusters/:clusterId/tidbNodeGroups/:tidbNodeGroupId/privateLinkService",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the cluster for which to get the private link service."
+              },
+              {
+                "name": "tidbNodeGroupId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the TiDB node group for which to get the private link service."
+              }
+            ]
+          },
+          "docs": "Retrieves the private link service configuration for a [TiDB node group](https://docs.pingcap.com/tidbcloud/tidb-node-group-overview/). You can use the private link service to establish private endpoint connections to your TiDB cluster."
+        },
+        {
+          "info": {
+            "name": "List private endpoint connections",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dedicated.tidbapi.com/v1beta1/clusters/:clusterId/tidbNodeGroups/:tidbNodeGroupId/privateEndpointConnections",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "The id of the cluster for which to list private link connections. To list private link connections across different clusters and TiDB node groups, set as `-``."
+              },
+              {
+                "name": "tidbNodeGroupId",
+                "value": "",
+                "type": "path",
+                "description": "To list private link connections across different clusters and TiDB node groups, set tidb_node_group_id to \"-\"."
+              },
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "query",
+                "description": "Pass this project_id only when listing under a project across different clusters and TiDB node groups.\nBoth cluster_id and tidb_node_group_id should be set to \"-\" in this case.\nIf unspecified, the project ID of the cluster is used."
+              },
+              {
+                "name": "cloudProvider",
+                "value": "",
+                "type": "query",
+                "description": "If specified, only private link connections of the specified cloud provider will be returned.\n\n - aws: Amazon Web Services.\n - gcp: Google Cloud Platform.\n - azure: Microsoft Azure.\n - alicloud: Alibaba Cloud"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of private link connections to return. The service may return fewer than this value.\nIf unspecified, at most 10 private link connections will be returned.\nThe maximum value is 100; values above 100 will be coerced to 100."
+              },
+              {
+                "name": "pageToken",
+                "value": "",
+                "type": "query",
+                "description": "A page token, received from a previous `ListPrivateLinkConnections` call.\nProvide this to retrieve the subsequent page."
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "The number of individual resources to skip before starting to return results.\nIf the skip value causes the cursor to move past the end of the collection,\nthe response will be 200 OK with an empty result set and no next_page_token."
+              }
+            ]
+          },
+          "docs": "Lists private endpoint connections for a cluster and TiDB node group. To list private link connections across different clusters and TiDB node groups, set cluster_id and tidb_node_group_id to \"-\". If you want to list private link connections under a project across different clusters and TiDB node groups, set both cluster_id and tidb_node_group_id to \"-\", and pass the project_id in the query parameter."
+        },
+        {
+          "info": {
+            "name": "Create a private endpoint connection",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dedicated.tidbapi.com/v1beta1/clusters/:clusterId/tidbNodeGroups/:tidbNodeGroupId/privateEndpointConnections",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the cluster for which to create the private endpoint connection."
+              },
+              {
+                "name": "tidbNodeGroupId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the TiDB node group to which the private endpoint connection belongs."
+              },
+              {
+                "name": "validateOnly",
+                "value": "",
+                "type": "query",
+                "description": "(Azure only) If set to `true`, the request is validated but not executed. Defaults to `false`."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a private endpoint connection for a TiDB node group. For more information, see the following documents:\n\n- [Connect via Private Endpoint with AWS](https://docs.pingcap.com/tidbcloud/set-up-private-endpoint-connections/) \n- [Connect via Private Endpoint with Azure](https://docs.pingcap.com/tidbcloud/set-up-private-endpoint-connections-on-azure/) \n- [Connect via Private Endpoint with Google Cloud](https://docs.pingcap.com/tidbcloud/set-up-private-endpoint-connections-on-google-cloud/)"
+        },
+        {
+          "info": {
+            "name": "Get a private endpoint connection",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dedicated.tidbapi.com/v1beta1/clusters/:clusterId/tidbNodeGroups/:tidbNodeGroupId/privateEndpointConnections/:privateEndpointConnectionId",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the cluster for which to get the private endpoint connection."
+              },
+              {
+                "name": "tidbNodeGroupId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the TiDB node group for which to get the private endpoint connection."
+              },
+              {
+                "name": "privateEndpointConnectionId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the private endpoint connection to get."
+              }
+            ]
+          },
+          "docs": "Retrieves a private endpoint connection for a TiDB node group."
+        },
+        {
+          "info": {
+            "name": "Delete a private endpoint connection",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://dedicated.tidbapi.com/v1beta1/clusters/:clusterId/tidbNodeGroups/:tidbNodeGroupId/privateEndpointConnections/:privateEndpointConnectionId",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the cluster from which to delete the private endpoint connection."
+              },
+              {
+                "name": "tidbNodeGroupId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the TiDB node group from which to delete the private endpoint connection."
+              },
+              {
+                "name": "privateEndpointConnectionId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the private endpoint connection to delete."
+              }
+            ]
+          },
+          "docs": "Deletes a private endpoint connection for a TiDB node group."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

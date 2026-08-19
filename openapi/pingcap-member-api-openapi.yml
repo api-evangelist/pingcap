@@ -1,0 +1,604 @@
+openapi: 3.2.0
+info:
+  description: "*TiDB Cloud API is in beta.*\n\n# Overview\n\nThe TiDB Cloud API is a [REST interface](https://en.wikipedia.org/wiki/Representational_state_transfer) that provides you with programmatic access to manage administrative objects within TiDB Cloud.\n\nThe API has the following features:\n\n- **JSON entities.** All entities are expressed in JSON.\n- **HTTPS-only.** You can only access the API via HTTPS, ensuring all the data sent over the network is encrypted with TLS.\n- **Key-based access and digest authentication.** Before you access TiDB Cloud API, you must generate an API key. All requests are authenticated through [HTTP Digest Authentication](https://en.wikipedia.org/wiki/Digest_access_authentication), ensuring the API key is never sent over the network.\n\n# Get Started\n\nThis guide helps you make your first API call to TiDB Cloud API. You'll learn how to authenticate a request, build a request, and interpret the response.\n\n## Prerequisites\n\nTo complete this guide, you need to perform the following tasks:\n\n- Create a [TiDB Cloud account](https://tidbcloud.com/free-trial)\n- Install [curl](https://curl.se/)\n\n## Step 1. Create an API key\n\nTo create an API key, log in to your TiDB Cloud console. Navigate to the [**API Keys**](https://tidbcloud.com/org-settings/api-keys) page of your organization, and create an API key.\n\nAn API key contains a public key and a private key. Copy and save them in a secure location. You will need to use the API key later in this guide.\n\nFor more details about creating API keys, refer to [API Key Management](#section/Authentication/API-Key-Management).\n\n## Step 2. Make your first API call\n\n### Build an API call\n\nTiDB Cloud API call consists of the following components:\n\n- **A host.** The host for TiDB Cloud API is <https://iam.tidbapi.com>.\n- **An API Key**. The public key and the private key are required for authentication.\n- **A request.** When submitting data to a resource via `POST`, `PATCH`, or `PUT`, you must submit your payload in JSON.\n\nIn this guide, you call the [List all accessible API Keys](#tag/API-Key/paths/~1apikeys/get) endpoint. For the detailed description of the endpoint, see the [API reference](#tag/API-Key/paths/~1apikeys/get).\n\n### Call an API endpoint\n\nTo get all projects in your organization, run the following command in your terminal. Remember to change `YOUR_PUBLIC_KEY` to your public key and `YOUR_PRIVATE_KEY` to your private key.\n\n```shell\ncurl --digest \\\n  --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --request GET \\\n  --url https://iam.tidbapi.com/v1beta1/apikeys\n```\n\n## Step 3. Check the response\n\nAfter making the API call, if the status code in response is `200` and you see details about all the API keys in your organization, your request is successful. Here is an example of a successful response.\n\n```log\n{\n\t\"apiKeys\": [{\n\t\t\"name\": \"orgs/1/apiKeys/2\",\n\t\t\"accessKey\": \"ABCDEFGH\",\n\t\t\"secretKey\": \"********************************0000\",\n\t\t\"displayName\": \"New Key\",\n\t\t\"role\": \"org:owner\"\n\t}],\n\t\"nextPageToken\": \"\"\n}\n``` \n\n# Authentication\n\nThe TiDB Cloud API uses [HTTP Digest Authentication](https://en.wikipedia.org/wiki/Digest_access_authentication). It protects your private key from being sent over the network. For more details about HTTP Digest Authentication, refer to the [IETF RFC](https://datatracker.ietf.org/doc/html/rfc7616).\n\n## API key overview\n\n- The API key contains a public key and a private key, which act as the username and password required in the HTTP Digest Authentication. The private key only displays upon the key creation.\n- The API key belongs to your organization and acts as the `Organization Owner` role. You can check [permissions of owner](https://docs.pingcap.com/tidbcloud/manage-user-access#configure-member-roles).\n- You must provide the correct API key in every request. Otherwise, TiDB Cloud responds with a `401` error.\n\n## API key management\n\n### Create an API key\n\nOnly the **owner** of an organization can create an API key.\n\nTo create an API key in an organization, perform the following steps:\n\n1. In the [TiDB Cloud console](https://tidbcloud.com), switch to your target organization using the combo box in the upper-left corner.\n2. In the left navigation pane, click **Organization Settings** > **API Keys**.\n3. On the **API Keys** page, click **Create API Key**.\n4. Enter a description for your API key.\n5. Configure the role and scope for the API key. For more information about the permissions of a role, see [User roles](https://docs.pingcap.com/tidbcloud/manage-user-access/#user-roles).\n6. Click **Generate API Key**. Copy and save the public key and the private key.\n7. Make sure that you have copied and saved the private key in a secure location. The private key only displays upon the creation. After leaving this page, you will not be able to get the full private key again.\n8. Click **Done**.\n\n### View details of an API key\n\nTo view details of an API key, perform the following steps:\n\n1. In the [TiDB Cloud console](https://tidbcloud.com), switch to your target organization using the combo box in the upper-left corner.\n2. In the left navigation pane, click **Organization Settings** > **API Keys**.\n3. You can view the details of the API keys on the page.\n\n### Edit an API key\n\nOnly the **owner** of an organization can modify an API key.\n\nTo edit an API key in an organization, perform the following steps:\n\n1. In the [TiDB Cloud console](https://tidbcloud.com), switch to your target organization using the combo box in the upper-left corner.\n2. In the left navigation pane, click **Organization Settings** > **API Keys**.\n3. On the **API Keys** page, click **...** in the API key row that you want to change, and then click **Update Role**.\n4. You can update the description and role of the API key.\n5. Click **Update**.\n\n### Delete an API key\n\nOnly the **owner** of an organization can delete an API key.\n\nTo delete an API key in an organization, perform the following steps:\n\n1. In the [TiDB Cloud console](https://tidbcloud.com), switch to your target organization using the combo box in the upper-left corner.\n2. In the left navigation pane, click **Organization Settings** > **API Keys**.\n3. On the **API Keys** page, click **...** in the API key row that you want to delete, and then click **Delete**.\n4. Click **I understand, delete it.**\n\n# Rate Limiting\n\nThe TiDB Cloud API allows up to 100 requests per minute per API key. If you exceed the rate limit, the API returns a `429` error. For more quota, you can [submit a request](https://support.pingcap.com/hc/en-us/requests/new?ticket_form_id=7800003722519) to contact our support team.\n\nEach API request returns the following headers about the limit.\n\n- `X-Ratelimit-Limit-Minute`: The number of requests allowed per minute. It is 100 currently.\n- `X-Ratelimit-Remaining-Minute`: The number of remaining requests in the current minute. When it reaches `0`, the API returns a `429` error and indicates that you exceed the rate limit.\n- `X-Ratelimit-Reset`: The time in seconds at which the current rate limit resets.\n\nIf you exceed the rate limit, an error response returns like this.\n\n```\n> HTTP/2 429\n> date: Fri, 22 Jul 2022 05:28:37 GMT\n> content-type: application/json\n> content-length: 66\n> x-ratelimit-reset: 23\n> x-ratelimit-remaining-minute: 0\n> x-ratelimit-limit-minute: 100\n> x-kong-response-latency: 2\n> server: kong/2.8.1\n\n> {\"details\":[],\"code\":49900007,\"message\":\"The request exceeded the limit of 100 times per apikey per minute. For more quota, please contact us: https://support.pingcap.com/hc/en-us/requests/new?ticket_form_id=7800003722519\"}\n```\n\n# API Changelog\n\nThis changelog lists all changes to the TiDB Cloud API.\n\n<!-- In reverse chronological order -->\n\n## 20260526\n- Introduce the following endpoints for managing organization members:\n    - [List members](#tag/Member/paths/~1members/get)\n    - [Invite members](#tag/Member/paths/~1members/post)\n    - [Batch update members](#tag/Member/paths/~1members~1batchUpdate/post)\n    - [Delete a member](#tag/Member/paths/~1members~1%7Buser_id%7D/delete)\n    - [Update a member](#tag/Member/paths/~1members~1%7Buser_id%7D/patch)\n    - [Resend an invitation](#tag/Member/paths/~1members~1%7Buser_id%7D~1resendInvitation/post)\n\n## 20251209\n- Add the [List console audit logs](#tag/Audit-Log/paths/~1auditLogs/get) endpoint.\n## 20250812\n- Add the role-based access control (RBAC) for API key management at both the organization and project levels.\n## 20240116\n- Add the [Create a new API key](#tag/API-Key/paths/~1apikeys/post) endpoint.\n- Add the [Get a single API key](#tag/API-Key/paths/~1apikeys~1%7BaccessKey%7D/get) endpoint.\n- Add the [List API keys](#tag/API-Key/paths/~1apikeys/get) endpoint.\n- Add the [Update an API key](#tag/API-Key/paths/~1apikeys~1%7BaccessKey%7D/patch) endpoint.\n- Add the [Delete an API key](#tag/API-Key/paths/~1apikeys~1%7BaccessKey%7D/delete) endpoint.\n"
+  title: IAM System OPEN Member API
+  contact: {}
+  version: v1beta1
+servers:
+- url: https://iam.tidbapi.com/v1beta1
+tags:
+- name: Member
+paths:
+  /members:
+    get:
+      description: Lists all members in your organization. You can filter the results by email address, role, status, project ID, or instance ID.
+      tags:
+      - Member
+      summary: List members
+      parameters:
+      - description: The maximum number of members to return. If not specified, at most 100 members will be returned.
+        name: pageSize
+        in: query
+        schema:
+          type: integer
+      - description: 'The pagination token received from a previous `List members` request. Use this token to retrieve the next page of results.
+
+
+          **Note**: When paginating, all other parameters must match the original request.'
+        name: pageToken
+        in: query
+        schema:
+          type: string
+      - description: Filters the results by email address. Only members whose email matches the specified value are returned.
+        name: email
+        in: query
+        schema:
+          type: string
+      - description: 'Filters the results by one or more roles. Only members assigned any of the specified roles are returned.
+
+
+          To specify multiple roles, repeat the `roles` parameter for each value. For example, `?roles=org:owner&roles=org:member`.'
+        name: roles
+        in: query
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            enum:
+            - org:owner
+            - org:member
+            - org:billing_admin
+            - org:billing_viewer
+            - org:audit_admin
+            - project:owner
+            - project:dev
+            - project:readonly
+            - project:ctl_plane_viewer
+            - cluster:admin
+            - cluster:viewer
+            type: string
+      - description: 'Filters the results by one or more member statuses. Only members in any of the specified statuses are returned.
+
+
+          To specify multiple statuses, repeat the `statuses` parameter for each value. For example, `?statuses=Active&statuses=Pending`.'
+        name: statuses
+        in: query
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            enum:
+            - Active
+            - Pending
+            type: string
+      - description: 'Specifies the sorting order of results. Use a supported field name, optionally followed by `asc` (ascending order) or `desc` (descending order). For example, `email desc`. By default, results are sorted in ascending order.
+
+
+          Supported fields: `email`, `invite_time`, `login_time`.'
+        name: orderBy
+        in: query
+        schema:
+          type: string
+          enum:
+          - email asc
+          - email desc
+          - invite_time asc
+          - invite_time desc
+          - login_time asc
+          - login_time desc
+      - description: The ID of the project. If specified, only members assigned to the specified project are returned.
+        name: projectId
+        in: query
+        schema:
+          type: string
+      - description: The ID of the TiDB Cloud Starter, Essential, or Premium instance. If specified, only members assigned to the specified instance are returned.
+        name: instanceId
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.OpenApiListUsersRsp'
+        '400':
+          description: A request field is invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.OpenApiError'
+        '401':
+          description: The API key cannot be authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.OpenApiError'
+        '403':
+          description: The API key does not have permission to access the resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.OpenApiError'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.OpenApiError'
+      x-code-samples:
+      - lang: curl
+        source: "curl --digest \\\n  --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --request GET \\\n  --url 'https://iam.tidbapi.com/v1beta1/members'"
+    post:
+      description: Invites one or more users to your organization. You can also assign organization, project, and instance roles to the invited members in the same request.
+      tags:
+      - Member
+      summary: Invite members
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.OpenApiInviteUsersRsp'
+        '400':
+          description: A request field is invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.OpenApiError'
+        '401':
+          description: The API key cannot be authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.OpenApiError'
+        '403':
+          description: The API key does not have permission to access the resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.OpenApiError'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.OpenApiError'
+      x-code-samples:
+      - lang: curl
+        source: "curl --digest \\\n  --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --request POST \\\n  -d '{\"emails\": [\"user@example.com\"], \"orgRole\": {\"rbacRole\": \"org:member\"}}' \\\n  --url 'https://iam.tidbapi.com/v1beta1/members'"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/api.OpenApiInviteUsersReq'
+        description: The members to invite, including their email addresses and roles.
+        required: true
+  /members/batchUpdate:
+    post:
+      description: Updates the organization, project, and instance roles of multiple members in a single request. You can update at most 100 members per request.
+      tags:
+      - Member
+      summary: Batch update members
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.OpenApiBatchUpdateUsersRsp'
+        '400':
+          description: A request field is invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.OpenApiError'
+        '401':
+          description: The API key cannot be authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.OpenApiError'
+        '403':
+          description: The API key does not have permission to access the resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.OpenApiError'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.OpenApiError'
+      x-code-samples:
+      - lang: curl
+        source: "curl --digest \\\n  --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --request POST \\\n  -d '{\"users\": [{\"userId\": \"123456\", \"orgRole\": {\"rbacRole\": \"org:member\"}}]}' \\\n  --url 'https://iam.tidbapi.com/v1beta1/members/batchUpdate'"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/api.openApiBatchUpdateUsersReqDoc'
+        description: The members to update and the new roles to assign to each of them.
+        required: true
+  /members/{user_id}:
+    delete:
+      description: Removes a member from your organization. The member loses all roles within the organization.
+      tags:
+      - Member
+      summary: Delete a member
+      parameters:
+      - description: The ID of the member to remove from your organization.
+        name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: A successful response.
+        '400':
+          description: A request field is invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.OpenApiError'
+        '401':
+          description: The API key cannot be authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.OpenApiError'
+        '403':
+          description: The API key does not have permission to access the resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.OpenApiError'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.OpenApiError'
+      x-code-samples:
+      - lang: curl
+        source: "curl --digest \\\n  --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --request DELETE \\\n  --url 'https://iam.tidbapi.com/v1beta1/members/{user_id}'"
+    patch:
+      description: Updates the organization, project, and instance roles of a member. Project roles and instance roles are fully replaced when provided in the request.
+      tags:
+      - Member
+      summary: Update a member
+      parameters:
+      - description: The ID of the member to update.
+        name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: A successful response.
+        '400':
+          description: A request field is invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.OpenApiError'
+        '401':
+          description: The API key cannot be authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.OpenApiError'
+        '403':
+          description: The API key does not have permission to access the resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.OpenApiError'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.OpenApiError'
+      x-code-samples:
+      - lang: curl
+        source: "curl --digest \\\n  --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --request PATCH \\\n  -d '{\"orgRole\": {\"rbacRole\": \"org:member\"}}' \\\n  --url 'https://iam.tidbapi.com/v1beta1/members/{user_id}'"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/api.openApiUpdateUserReqDoc'
+        description: The new roles to assign to the member.
+        required: true
+  /members/{user_id}/resendInvitation:
+    post:
+      description: Resends the invitation email to a user who has not yet accepted the invitation.
+      tags:
+      - Member
+      summary: Resend an invitation
+      parameters:
+      - description: The ID of the member whose invitation email you want to resend.
+        name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: A successful response.
+        '400':
+          description: A request field is invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.OpenApiError'
+        '401':
+          description: The API key cannot be authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.OpenApiError'
+        '403':
+          description: The API key does not have permission to access the resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.OpenApiError'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.OpenApiError'
+      x-code-samples:
+      - lang: curl
+        source: "curl --digest \\\n  --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --request POST \\\n  --url 'https://iam.tidbapi.com/v1beta1/members/{user_id}/resendInvitation'"
+components:
+  schemas:
+    api.OpenApiOrgRole:
+      type: object
+      properties:
+        rbacRole:
+          description: The organization-level role assigned to the member.
+          type: string
+          enum:
+          - org:owner
+          - org:member
+          - org:billing_admin
+          - org:billing_viewer
+          - org:audit_admin
+          example: org:owner
+        scopeId:
+          description: The ID of the organization to which the role applies.
+          type: string
+    api.OpenApiBatchUpdateUserResult:
+      type: object
+      properties:
+        error:
+          description: The error details when the member update failed. This field is empty when the update succeeded.
+          allOf:
+          - $ref: '#/components/schemas/api.OpenApiBatchUpdateError'
+        success:
+          description: Indicates whether the member was updated successfully.
+          type: boolean
+        userId:
+          description: The ID of the member.
+          type: string
+    api.OpenApiInviteUsersReq:
+      type: object
+      required:
+      - emails
+      - orgRole
+      properties:
+        emails:
+          description: The email addresses of the users to invite.
+          type: array
+          items:
+            type: string
+        instanceRoles:
+          description: The instance-level roles to assign to the invited members.
+          type: array
+          items:
+            $ref: '#/components/schemas/api.OpenApiInstanceRole'
+        orgRole:
+          description: The organization-level role to assign to the invited members.
+          allOf:
+          - $ref: '#/components/schemas/api.OpenApiOrgRole'
+        projectRoles:
+          description: The project-level roles to assign to the invited members.
+          type: array
+          items:
+            $ref: '#/components/schemas/api.OpenApiProjectRole'
+    api.OpenApiBatchUpdateError:
+      type: object
+      properties:
+        code:
+          description: The error code returned when the member update failed.
+          type: string
+        message:
+          description: The error message describing why the member update failed.
+          type: string
+    api.OpenApiInstanceRole:
+      type: object
+      properties:
+        rbacRole:
+          description: The instance-level role assigned to the member.
+          type: string
+          enum:
+          - cluster:admin
+          - cluster:viewer
+          example: cluster:admin
+        scopeId:
+          description: The ID of the TiDB Cloud Starter, Essential, or Premium instance to which the role applies.
+          type: string
+    api.OpenApiUser:
+      type: object
+      properties:
+        email:
+          description: The email address of the member.
+          type: string
+          example: user@example.com
+        firstName:
+          description: The first name of the member.
+          type: string
+          example: John
+        instanceRoles:
+          description: The instance-level roles assigned to the member.
+          type: array
+          items:
+            $ref: '#/components/schemas/api.OpenApiInstanceRole'
+        inviteTime:
+          description: The timestamp when the member was invited, in the [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format.
+          type: string
+          example: '2024-01-01T00:00:00Z'
+        lastLoginTime:
+          description: The timestamp when the member last logged in, in the [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format.
+          type: string
+          example: '2024-01-01T00:00:00Z'
+        lastName:
+          description: The last name of the member.
+          type: string
+          example: Doe
+        orgRole:
+          description: The organization-level role assigned to the member.
+          allOf:
+          - $ref: '#/components/schemas/api.OpenApiOrgRole'
+        projectRoles:
+          description: The project-level roles assigned to the member.
+          type: array
+          items:
+            $ref: '#/components/schemas/api.OpenApiProjectRole'
+        status:
+          description: The current status of the member. `Active` indicates the member has accepted the invitation; `Pending` indicates the invitation has not yet been accepted.
+          type: string
+          example: Active
+        userId:
+          description: The ID of the member.
+          type: string
+          example: '123456'
+    api.openApiBatchUpdateUsersReqDoc:
+      type: object
+      properties:
+        users:
+          description: The list of members to update.
+          type: array
+          items:
+            $ref: '#/components/schemas/api.openApiBatchUpdateUserEntryDoc'
+    api.openApiBatchUpdateUserEntryDoc:
+      type: object
+      required:
+      - userId
+      properties:
+        instanceRoles:
+          description: The new instance-level roles to assign to the member. The existing instance roles are fully replaced when this field is provided.
+          type: array
+          items:
+            $ref: '#/components/schemas/api.OpenApiInstanceRole'
+        orgRole:
+          description: The new organization-level role to assign to the member.
+          allOf:
+          - $ref: '#/components/schemas/api.OpenApiOrgRole'
+        projectRoles:
+          description: The new project-level roles to assign to the member. The existing project roles are fully replaced when this field is provided.
+          type: array
+          items:
+            $ref: '#/components/schemas/api.OpenApiProjectRole'
+        userId:
+          description: The ID of the member to update.
+          type: string
+    api.OpenApiBatchUpdateUsersRsp:
+      type: object
+      properties:
+        results:
+          description: The list of update results, one for each member in the request.
+          type: array
+          items:
+            $ref: '#/components/schemas/api.OpenApiBatchUpdateUserResult'
+    api.OpenApiInviteUsersRsp:
+      type: object
+      properties:
+        message:
+          description: A human-readable message describing the result of the invitation.
+          type: string
+        success:
+          description: Indicates whether the invitation was sent successfully.
+          type: boolean
+        users:
+          description: The list of members that were invited.
+          type: array
+          items:
+            $ref: '#/components/schemas/api.OpenApiInviteUserResult'
+    api.openApiUpdateUserReqDoc:
+      type: object
+      properties:
+        instanceRoles:
+          description: The new instance-level roles to assign to the member. The existing instance roles are fully replaced when this field is provided.
+          type: array
+          items:
+            $ref: '#/components/schemas/api.OpenApiInstanceRole'
+        orgRole:
+          description: The new organization-level role to assign to the member.
+          allOf:
+          - $ref: '#/components/schemas/api.OpenApiOrgRole'
+        projectRoles:
+          description: The new project-level roles to assign to the member. The existing project roles are fully replaced when this field is provided.
+          type: array
+          items:
+            $ref: '#/components/schemas/api.OpenApiProjectRole'
+    api.OpenApiInviteUserResult:
+      type: object
+      properties:
+        email:
+          description: The email address of the invited member.
+          type: string
+        userId:
+          description: The ID of the invited member.
+          type: string
+    api.OpenApiProjectRole:
+      type: object
+      properties:
+        rbacRole:
+          description: The project-level role assigned to the member.
+          type: string
+          enum:
+          - project:owner
+          - project:dev
+          - project:readonly
+          - project:ctl_plane_viewer
+          example: project:owner
+        scopeId:
+          description: The ID of the project to which the role applies.
+          type: string
+    api.OpenApiListUsersRsp:
+      type: object
+      properties:
+        nextPageToken:
+          description: The token to retrieve the next page of results. Use this value as the `pageToken` parameter in the next request. This field is empty when there are no more pages.
+          type: string
+          example: ''
+        totalSize:
+          description: The total number of members that match the query.
+          type: integer
+          example: 10
+        users:
+          description: The list of members returned for the current page.
+          type: array
+          items:
+            $ref: '#/components/schemas/api.OpenApiUser'
+    api.OpenApiError:
+      type: object
+      properties:
+        code:
+          type: string
+        error: {}
+        msgPrefix:
+          type: string
+        status:
+          type: integer

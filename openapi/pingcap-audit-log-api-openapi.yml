@@ -1,0 +1,180 @@
+openapi: 3.2.0
+info:
+  description: "*TiDB Cloud API is in beta.*\n\n# Overview\n\nThe TiDB Cloud API is a [REST interface](https://en.wikipedia.org/wiki/Representational_state_transfer) that provides you with programmatic access to manage administrative objects within TiDB Cloud.\n\nThe API has the following features:\n\n- **JSON entities.** All entities are expressed in JSON.\n- **HTTPS-only.** You can only access the API via HTTPS, ensuring all the data sent over the network is encrypted with TLS.\n- **Key-based access and digest authentication.** Before you access TiDB Cloud API, you must generate an API key. All requests are authenticated through [HTTP Digest Authentication](https://en.wikipedia.org/wiki/Digest_access_authentication), ensuring the API key is never sent over the network.\n\n# Get Started\n\nThis guide helps you make your first API call to TiDB Cloud API. You'll learn how to authenticate a request, build a request, and interpret the response.\n\n## Prerequisites\n\nTo complete this guide, you need to perform the following tasks:\n\n- Create a [TiDB Cloud account](https://tidbcloud.com/free-trial)\n- Install [curl](https://curl.se/)\n\n## Step 1. Create an API key\n\nTo create an API key, log in to your TiDB Cloud console. Navigate to the [**API Keys**](https://tidbcloud.com/org-settings/api-keys) page of your organization, and create an API key.\n\nAn API key contains a public key and a private key. Copy and save them in a secure location. You will need to use the API key later in this guide.\n\nFor more details about creating API keys, refer to [API Key Management](#section/Authentication/API-Key-Management).\n\n## Step 2. Make your first API call\n\n### Build an API call\n\nTiDB Cloud API call consists of the following components:\n\n- **A host.** The host for TiDB Cloud API is <https://iam.tidbapi.com>.\n- **An API Key**. The public key and the private key are required for authentication.\n- **A request.** When submitting data to a resource via `POST`, `PATCH`, or `PUT`, you must submit your payload in JSON.\n\nIn this guide, you call the [List all accessible API Keys](#tag/API-Key/paths/~1apikeys/get) endpoint. For the detailed description of the endpoint, see the [API reference](#tag/API-Key/paths/~1apikeys/get).\n\n### Call an API endpoint\n\nTo get all projects in your organization, run the following command in your terminal. Remember to change `YOUR_PUBLIC_KEY` to your public key and `YOUR_PRIVATE_KEY` to your private key.\n\n```shell\ncurl --digest \\\n  --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --request GET \\\n  --url https://iam.tidbapi.com/v1beta1/apikeys\n```\n\n## Step 3. Check the response\n\nAfter making the API call, if the status code in response is `200` and you see details about all the API keys in your organization, your request is successful. Here is an example of a successful response.\n\n```log\n{\n\t\"apiKeys\": [{\n\t\t\"name\": \"orgs/1/apiKeys/2\",\n\t\t\"accessKey\": \"ABCDEFGH\",\n\t\t\"secretKey\": \"********************************0000\",\n\t\t\"displayName\": \"New Key\",\n\t\t\"role\": \"org:owner\"\n\t}],\n\t\"nextPageToken\": \"\"\n}\n``` \n\n# Authentication\n\nThe TiDB Cloud API uses [HTTP Digest Authentication](https://en.wikipedia.org/wiki/Digest_access_authentication). It protects your private key from being sent over the network. For more details about HTTP Digest Authentication, refer to the [IETF RFC](https://datatracker.ietf.org/doc/html/rfc7616).\n\n## API key overview\n\n- The API key contains a public key and a private key, which act as the username and password required in the HTTP Digest Authentication. The private key only displays upon the key creation.\n- The API key belongs to your organization and acts as the `Organization Owner` role. You can check [permissions of owner](https://docs.pingcap.com/tidbcloud/manage-user-access#configure-member-roles).\n- You must provide the correct API key in every request. Otherwise, TiDB Cloud responds with a `401` error.\n\n## API key management\n\n### Create an API key\n\nOnly the **owner** of an organization can create an API key.\n\nTo create an API key in an organization, perform the following steps:\n\n1. In the [TiDB Cloud console](https://tidbcloud.com), switch to your target organization using the combo box in the upper-left corner.\n2. In the left navigation pane, click **Organization Settings** > **API Keys**.\n3. On the **API Keys** page, click **Create API Key**.\n4. Enter a description for your API key.\n5. Configure the role and scope for the API key. For more information about the permissions of a role, see [User roles](https://docs.pingcap.com/tidbcloud/manage-user-access/#user-roles).\n6. Click **Generate API Key**. Copy and save the public key and the private key.\n7. Make sure that you have copied and saved the private key in a secure location. The private key only displays upon the creation. After leaving this page, you will not be able to get the full private key again.\n8. Click **Done**.\n\n### View details of an API key\n\nTo view details of an API key, perform the following steps:\n\n1. In the [TiDB Cloud console](https://tidbcloud.com), switch to your target organization using the combo box in the upper-left corner.\n2. In the left navigation pane, click **Organization Settings** > **API Keys**.\n3. You can view the details of the API keys on the page.\n\n### Edit an API key\n\nOnly the **owner** of an organization can modify an API key.\n\nTo edit an API key in an organization, perform the following steps:\n\n1. In the [TiDB Cloud console](https://tidbcloud.com), switch to your target organization using the combo box in the upper-left corner.\n2. In the left navigation pane, click **Organization Settings** > **API Keys**.\n3. On the **API Keys** page, click **...** in the API key row that you want to change, and then click **Update Role**.\n4. You can update the description and role of the API key.\n5. Click **Update**.\n\n### Delete an API key\n\nOnly the **owner** of an organization can delete an API key.\n\nTo delete an API key in an organization, perform the following steps:\n\n1. In the [TiDB Cloud console](https://tidbcloud.com), switch to your target organization using the combo box in the upper-left corner.\n2. In the left navigation pane, click **Organization Settings** > **API Keys**.\n3. On the **API Keys** page, click **...** in the API key row that you want to delete, and then click **Delete**.\n4. Click **I understand, delete it.**\n\n# Rate Limiting\n\nThe TiDB Cloud API allows up to 100 requests per minute per API key. If you exceed the rate limit, the API returns a `429` error. For more quota, you can [submit a request](https://support.pingcap.com/hc/en-us/requests/new?ticket_form_id=7800003722519) to contact our support team.\n\nEach API request returns the following headers about the limit.\n\n- `X-Ratelimit-Limit-Minute`: The number of requests allowed per minute. It is 100 currently.\n- `X-Ratelimit-Remaining-Minute`: The number of remaining requests in the current minute. When it reaches `0`, the API returns a `429` error and indicates that you exceed the rate limit.\n- `X-Ratelimit-Reset`: The time in seconds at which the current rate limit resets.\n\nIf you exceed the rate limit, an error response returns like this.\n\n```\n> HTTP/2 429\n> date: Fri, 22 Jul 2022 05:28:37 GMT\n> content-type: application/json\n> content-length: 66\n> x-ratelimit-reset: 23\n> x-ratelimit-remaining-minute: 0\n> x-ratelimit-limit-minute: 100\n> x-kong-response-latency: 2\n> server: kong/2.8.1\n\n> {\"details\":[],\"code\":49900007,\"message\":\"The request exceeded the limit of 100 times per apikey per minute. For more quota, please contact us: https://support.pingcap.com/hc/en-us/requests/new?ticket_form_id=7800003722519\"}\n```\n\n# API Changelog\n\nThis changelog lists all changes to the TiDB Cloud API.\n\n<!-- In reverse chronological order -->\n\n## 20260526\n- Introduce the following endpoints for managing organization members:\n    - [List members](#tag/Member/paths/~1members/get)\n    - [Invite members](#tag/Member/paths/~1members/post)\n    - [Batch update members](#tag/Member/paths/~1members~1batchUpdate/post)\n    - [Delete a member](#tag/Member/paths/~1members~1%7Buser_id%7D/delete)\n    - [Update a member](#tag/Member/paths/~1members~1%7Buser_id%7D/patch)\n    - [Resend an invitation](#tag/Member/paths/~1members~1%7Buser_id%7D~1resendInvitation/post)\n\n## 20251209\n- Add the [List console audit logs](#tag/Audit-Log/paths/~1auditLogs/get) endpoint.\n## 20250812\n- Add the role-based access control (RBAC) for API key management at both the organization and project levels.\n## 20240116\n- Add the [Create a new API key](#tag/API-Key/paths/~1apikeys/post) endpoint.\n- Add the [Get a single API key](#tag/API-Key/paths/~1apikeys~1%7BaccessKey%7D/get) endpoint.\n- Add the [List API keys](#tag/API-Key/paths/~1apikeys/get) endpoint.\n- Add the [Update an API key](#tag/API-Key/paths/~1apikeys~1%7BaccessKey%7D/patch) endpoint.\n- Add the [Delete an API key](#tag/API-Key/paths/~1apikeys~1%7BaccessKey%7D/delete) endpoint.\n"
+  title: IAM System OPEN Audit Log API
+  contact: {}
+  version: v1beta1
+servers:
+- url: https://iam.tidbapi.com/v1beta1
+tags:
+- name: Audit Log
+paths:
+  /auditLogs:
+    get:
+      description: Lists all console audit logs for your organization. This endpoint helps you track various behaviors and operations of users on the [TiDB Cloud console](https://tidbcloud.com/). You can filter results by time range, event type, or keyword.
+      tags:
+      - Audit Log
+      summary: List audit logs
+      parameters:
+      - description: The pagination token received from a previous [List audit logs](#tag/Audit-Log/paths/~1auditLogs/get) request. Use this token to retrieve the next page of results.
+        name: pageToken
+        in: query
+        schema:
+          type: string
+      - description: The maximum number of audit logs to return. If not specified, at most 100 audit logs will be returned.
+        name: pageSize
+        in: query
+        schema:
+          type: integer
+          default: '100'
+          maximum: '100'
+          minimum: '1'
+      - description: Filters the results to include only audit logs created on or after this timestamp, in the [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format.
+        name: startTime
+        in: query
+        schema:
+          type: string
+          format: date-time
+      - description: Filters the results to include only audit logs created before or at this timestamp, in the [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format.
+        name: endTime
+        in: query
+        schema:
+          type: string
+          format: date-time
+      - description: Filters the results by specific event types. For more information, see [Console audit event types](https://docs.pingcap.com/tidbcloud/tidb-cloud-console-auditing/#console-audit-event-types).
+        name: auditEventTypes
+        in: query
+        schema:
+          type: string
+      - description: Filters results to include only audit logs that contain the specified search term.
+        name: keyword
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/controller.queryAuditLogRsp'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/controller.openApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/controller.openApiError'
+      x-code-samples:
+      - lang: curl
+        label: curl
+        source: "curl --digest --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --location 'https://iam.tidbapi.com/v1beta1/auditLogs?startTime=2025-12-03T00:00:00Z'"
+components:
+  schemas:
+    controller.orgAuditLog:
+      type: object
+      properties:
+        clusterId:
+          description: The ID of the cluster associated with the audit event.
+          type: string
+          example: '1'
+        clusterName:
+          description: The display name of the cluster.
+          type: string
+          example: Cluster0
+        clusterType:
+          description: The plan of the cluster.
+          type: string
+          example: Dedicated
+        details:
+          description: The additional details about the audit event.
+          type: string
+          example: '{"port_number":"4000","tidb_node_group_id":"","tidb_quantity":"1","tidb_size":"8C16G","tier_type":"dedicated","tikv_quantity":"3","tikv_size":"8C32G","tikv_storage_size":"500"}'
+        endTime:
+          description: The timestamp when the operation completed, in the [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format.
+          type: string
+          example: '2025-12-03T07:34:32Z'
+        eventType:
+          description: The type of the audit event.
+          type: string
+          example: CreateCluster
+        id:
+          description: The ID of the audit event.
+          type: string
+          example: '1234567890'
+        operationEmail:
+          description: The email address of the user who performed the operation.
+          type: string
+          example: user@test.com
+        operationId:
+          description: The ID of the operation that generated the audit event.
+          type: string
+          example: 0987654321
+        operationIp:
+          description: The IP address from which the operation was performed.
+          type: string
+          example: 0.0.0.0
+        operationLoginMethod:
+          description: The authentication method used when the user signed in.
+          type: string
+          example: google-oauth2
+        operationType:
+          description: The type of the operation, indicating whether the operation was performed by a user or through the API.
+          type: string
+          example: User
+        organizationId:
+          description: The ID of the organization in which the event occurred.
+          type: string
+          example: '1122334455'
+        organizationName:
+          description: The name of the organization.
+          type: string
+          example: Test Organization
+        projectId:
+          description: The ID of the project associated with the event.
+          type: string
+          example: '6677889900'
+        projectName:
+          description: The name of the project.
+          type: string
+          example: Test Project
+        result:
+          description: The outcome of the operation, such as `Success` or `Failure`.
+          type: string
+          example: Success
+        tranceId:
+          description: A trace identifier used to correlate this audit event with related system logs.
+          type: string
+          example: 1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p
+    controller.queryAuditLogRsp:
+      type: object
+      properties:
+        auditLogs:
+          description: A list of console audit logs that match the query.
+          type: array
+          items:
+            $ref: '#/components/schemas/controller.orgAuditLog'
+          title: AuditLog
+        nextPageToken:
+          description: The token to retrieve the next page of results. Use this value as the `pageToken` parameter in the next request. This field is empty when there are no more pages.
+          type: string
+          example: 1a2b3c4d5e6f7g8h
+        totalSize:
+          description: The total number of console audit logs that match the query.
+          type: integer
+          example: 100
+    controller.openApiError:
+      type: object
+      properties:
+        code:
+          type: string
+        error: {}
+        msgPrefix:
+          type: string
+        status:
+          type: integer

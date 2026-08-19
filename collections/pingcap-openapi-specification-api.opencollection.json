@@ -1,0 +1,43 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "TiDB Cloud Data Service OPEN OpenAPI Specification API",
+    "version": "v1beta1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "OpenAPI Specification",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get the OpenAPI Specification of a Data App.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dataservice.tidbapi.com/v1beta1/dataApps/:dataAppId/apiSpec",
+            "params": [
+              {
+                "name": "dataAppId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the Data App. You can get the ID from the response of [List all Data Apps in a project](#tag/Data-App/operation/DataApp_ListDataApps)."
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "The format of the generated OpenAPI Specification."
+              }
+            ]
+          },
+          "docs": "TiDB Cloud Data Service supports generating the OpenAPI Specification 3.0 for each Data App, which enables you to interact with your endpoints in a standardized format. You can use this specification to generate standardized OpenAPI documentation, client SDKs, and server stubs."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

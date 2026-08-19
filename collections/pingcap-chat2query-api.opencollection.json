@@ -1,0 +1,60 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "TiDB Cloud Data Service OPEN Chat2 Query API",
+    "version": "v1beta1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Chat2Query",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Chat2Query Data App settings by ID.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dataservice.tidbapi.com/v1beta1/dataApps/:dataAppId/chat2querySettings",
+            "params": [
+              {
+                "name": "dataAppId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the Data App. You can get the ID from the response of [List all Data Apps in a project](#tag/Data-App/operation/DataApp_ListDataApps)."
+              }
+            ]
+          },
+          "docs": "With this endpoint, you can get the settings of a Chat2Query Data App, such as `name`, `llmApiKey`, `languageCode`, and `llmModel`. To get basic information, such as `version`, `projectId`, and `clusterIds`, use the [Get a Data App by ID](#tag/Data-App/operation/DataApp_GetDataApp) endpoint instead."
+        },
+        {
+          "info": {
+            "name": "Update Chat2Query Data App settings by ID.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://dataservice.tidbapi.com/v1beta1/dataApps/:dataAppId/chat2querySettings",
+            "params": [
+              {
+                "name": "dataAppId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the Data App. You can get the ID from the response of [List all Data Apps in a project](#tag/Data-App/operation/DataApp_ListDataApps)."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "With this endpoint, you can update the `llmApiKey`, `languageCode`, or `llmModel` settings of a Chat2Query Data App. To update the version, name, or description, use the [Update a Data App](#tag/Data-App/operation/DataApp_UpdateDataApp) endpoint instead."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

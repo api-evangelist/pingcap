@@ -1,0 +1,85 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "TiDB Cloud Dedicated Integration API",
+    "version": "v1beta1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Integration",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List integrations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dedicated.tidbapi.com/v1beta1/clusters/:clusterId/integrations",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the cluster to list integrations for."
+              }
+            ]
+          },
+          "docs": "Lists all integrations configured for a cluster, including their current runtime status."
+        },
+        {
+          "info": {
+            "name": "Create an integration",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dedicated.tidbapi.com/v1beta1/clusters/:clusterId/integrations",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the target cluster where the integration will be created."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new external metrics integration for the specified cluster. Supported integrations include [Datadog](https://www.datadoghq.com), [New Relic](https://newrelic.com), and [Prometheus](https://prometheus.io)."
+        },
+        {
+          "info": {
+            "name": "Delete an integration",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://dedicated.tidbapi.com/v1beta1/clusters/:clusterId/integrations/:id",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the cluster from which to delete the integration."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the integration to delete."
+              }
+            ]
+          },
+          "docs": "Removes an integration from the cluster."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

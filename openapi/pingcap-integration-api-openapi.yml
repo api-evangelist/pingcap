@@ -1,0 +1,537 @@
+openapi: 3.2.0
+info:
+  title: TiDB Cloud Dedicated Integration API
+  description: "*TiDB Cloud API is in beta.*\n\nThis API manages [TiDB Cloud Dedicated](https://docs.pingcap.com/tidbcloud/select-cluster-tier/#tidb-cloud-dedicated) clusters. For TiDB Cloud Starter or TiDB Cloud Essential instances, use the [TiDB Cloud Starter and Essential API](https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless). For more information about TiDB Cloud API, see [TiDB Cloud API Overview](https://docs.pingcap.com/tidbcloud/api-overview/).\n\n# Overview\n\nThe TiDB Cloud API is a [REST interface](https://en.wikipedia.org/wiki/Representational_state_transfer) that provides you with programmatic access to manage clusters and related resources within TiDB Cloud.\n\nThe API has the following features:\n\n- **JSON entities.** All entities are expressed in JSON.\n- **HTTPS-only.** You can only access the API via HTTPS, ensuring all the data sent over the network is encrypted with TLS.\n- **Key-based access and digest authentication.** Before you access TiDB Cloud API, you must generate an API key. All requests are authenticated through [HTTP Digest Authentication](https://en.wikipedia.org/wiki/Digest_access_authentication), ensuring the API key is never sent over the network.\n\n# Get Started\n\nThis guide helps you make your first API call to TiDB Cloud API. You'll learn how to authenticate a request, build a request, and interpret the response.\n\n## Prerequisites\n\nTo complete this guide, you need to perform the following tasks:\n\n- Create a [TiDB Cloud account](https://tidbcloud.com/free-trial)\n- Install [curl](https://curl.se/)\n\n## Step 1. Create an API key\n\nTo create an API key, log in to your TiDB Cloud console. Navigate to the [**API Keys**](https://tidbcloud.com/org-settings/api-keys) page of your organization, and create an API key.\n\nAn API key contains a public key and a private key. Copy and save them in a secure location. You will need to use the API key later in this guide.\n\nFor more details about creating API keys, refer to [API Key Management](#section/Authentication/API-Key-Management).\n\n## Step 2. Make your first API call\n\n### Build an API call\n\nTiDB Cloud API call consists of the following components:\n\n- **A host**. The host for TiDB Cloud API is <https://dedicated.tidbapi.com>.\n- **An API Key**. The public key and the private key are required for authentication.\n- **A request**. When submitting data to a resource via `POST`, `PATCH`, or `PUT`, you must submit your payload in JSON.\n\nIn this guide, you call the [List clusters](#tag/Cluster/operation/ClusterService_ListClusters) endpoint. For the detailed description of the endpoint, see the [API reference](#tag/Cluster/operation/ClusterService_ListClusters).\n\n### Call an API endpoint\n\nTo get all clusters in your organization, run the following command in your terminal. Remember to change `YOUR_PUBLIC_KEY` to your public key and `YOUR_PRIVATE_KEY` to your private key.\n\n```shell\ncurl --digest \\\n --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n --request GET \\\n --url 'https://dedicated.tidbapi.com/v1beta1/clusters'\n```\n\n## Step 3. Check the response\n\nAfter making the API call, if the status code in response is `200` and you see details about all clusters in your organization, your request is successful.\n\n# Authentication\n\nThe TiDB Cloud API uses [HTTP Digest Authentication](https://en.wikipedia.org/wiki/Digest_access_authentication). It protects your private key from being sent over the network. For more details about HTTP Digest Authentication, refer to the [IETF RFC](https://datatracker.ietf.org/doc/html/rfc7616).\n\n## API key overview\n\n- The API key contains a public key and a private key, which act as the username and password required in the HTTP Digest Authentication. The private key only displays upon the key creation.\n- The API key belongs to your organization and acts as the `Organization Owner` role. You can check [permissions of owner](https://docs.pingcap.com/tidbcloud/manage-user-access#configure-member-roles).\n- You must provide the correct API key in every request. Otherwise, TiDB Cloud responds with a `401` error.\n\n## API key management\n\n### Create an API key\n\nOnly the **owner** of an organization can create an API key.\n\nTo create an API key in an organization, perform the following steps:\n\n1. In the [TiDB Cloud console](https://tidbcloud.com), switch to your target organization using the combo box in the upper-left corner.\n2. In the left navigation pane, click **Organization Settings** > **API Keys**.\n3. On the **API Keys** page, click **Create API Key**.\n4. Enter a description for your API key.\n5. Configure the role and scope for the API key. For more information about the permissions of a role, see [User roles](https://docs.pingcap.com/tidbcloud/manage-user-access/#user-roles).\n6. Click **Generate API Key**. Copy and save the public key and the private key.\n7. Make sure that you have copied and saved the private key in a secure location. The private key only displays upon the creation. After leaving this page, you will not be able to get the full private key again.\n8. Click **Done**.\n\n### View details of an API key\n\nTo view details of an API key, perform the following steps:\n\n1. In the [TiDB Cloud console](https://tidbcloud.com), switch to your target organization using the combo box in the upper-left corner.\n2. In the left navigation pane, click **Organization Settings** > **API Keys**.\n3. You can view the details of the API keys on the page.\n\n### Edit an API key\n\nOnly the **owner** of an organization can modify an API key.\n\nTo edit an API key in an organization, perform the following steps:\n\n1. In the [TiDB Cloud console](https://tidbcloud.com), switch to your target organization using the combo box in the upper-left corner.\n2. In the left navigation pane, click **Organization Settings** > **API Keys**.\n3. On the **API Keys** page, click **...** in the API key row that you want to change, and then click **Update Role**.\n4. You can update the description and role of the API key.\n5. Click **Update**.\n\n### Delete an API key\n\nOnly the **owner** of an organization can delete an API key.\n\nTo delete an API key in an organization, perform the following steps:\n\n1. In the [TiDB Cloud console](https://tidbcloud.com), switch to your target organization using the combo box in the upper-left corner.\n2. In the left navigation pane, click **Organization Settings** > **API Keys**.\n3. On the **API Keys** page, click **...** in the API key row that you want to delete, and then click **Delete**.\n4. Click **I understand, delete it.**\n\n# Rate Limiting\n\nThe TiDB Cloud API allows up to 100 requests per minute per API key. If you exceed the rate limit, the API returns a `429` error. For more quota, you can [submit a request](https://support.pingcap.com/hc/en-us/requests/new?ticket_form_id=7800003722519) to contact our support team.\n\nEach API request returns the following headers about the limit.\n\n- `X-Ratelimit-Limit-Minute`: The number of requests allowed per minute. It is 100 currently.\n- `X-Ratelimit-Remaining-Minute`: The number of remaining requests in the current minute. When it reaches `0`, the API returns a `429` error and indicates that you exceed the rate limit.\n- `X-Ratelimit-Reset`: The time in seconds at which the current rate limit resets.\n\nIf you exceed the rate limit, an error response returns like this.\n\n```\n> HTTP/2 429\n> date: Fri, 22 Jul 2022 05:28:37 GMT\n> content-type: application/json\n> content-length: 66\n> x-ratelimit-reset: 23\n> x-ratelimit-remaining-minute: 0\n> x-ratelimit-limit-minute: 100\n> x-kong-response-latency: 2\n> server: kong/2.8.1\n\n> {\"details\":[],\"code\":49900007,\"message\":\"The request exceeded the limit of 100 times per apikey per minute. For more quota, please contact us: https://support.pingcap.com/hc/en-us/requests/new?ticket_form_id=7800003722519\"}\n```\n\n# API Changelog\n\nThis changelog lists all changes to the TiDB Cloud API.\n\n<!-- In reverse chronological order -->\n\n## 20260707\n\n- Introduce the following Changefeed endpoints for managing changefeeds:\n\t* [List changefeed RCU options](#tag/Changefeed/operation/ListChangefeedRCUs)\n\t* [List changefeeds](#tag/Changefeed/operation/ListChangefeeds)\n\t* [Create a changefeed](#tag/Changefeed/operation/CreateChangefeed)\n\t* [Get a changefeed](#tag/Changefeed/operation/GetChangefeed)\n\t* [Delete a changefeed](#tag/Changefeed/operation/DeleteChangefeed)\n\t* [Update a changefeed downstream config](#tag/Changefeed/operation/EditChangefeedDownstreamConfig)\n\t* [Pause a changefeed](#tag/Changefeed/operation/PauseChangefeed)\n\t* [Resume a changefeed](#tag/Changefeed/operation/ResumeChangefeed)\n\t* [Scale a changefeed](#tag/Changefeed/operation/ScaleChangefeed)\n\n## 20251028\n\n- Introduce the following TiDB Cloud Dedicated API endpoints for managing third-party monitoring integrations:\n\t* [List integrations](#tag/Integration/operation/IntegrationService_ListIntegrations)\n\t* [Create an integration](#tag/Integration/operation/IntegrationService_CreateIntegration)\n\t* [Delete an integration](#tag/Integration/operation/IntegrationService_DeleteIntegration)\n\n## 20250812\n\n- Initial release of the TiDB Cloud Dedicated API, including the following resources and endpoints:\n\t* Cluster\n\t\t* [List clusters](#tag/Cluster/operation/ClusterService_ListClusters)\n\t\t* [Create a cluster](#tag/Cluster/operation/ClusterService_CreateCluster)\n\t\t* [Get a cluster](#tag/Cluster/operation/ClusterService_GetCluster)\n\t\t* [Delete a cluster](#tag/Cluster/operation/ClusterService_DeleteCluster)\n\t\t* [Update a cluster](#tag/Cluster/operation/ClusterService_UpdateCluster)\n\t\t* [Pause a cluster](#tag/Cluster/operation/ClusterService_PauseCluster)\n\t\t* [Resume a cluster](#tag/Cluster/operation/ClusterService_ResumeCluster)\n\t\t* [Reset the root password of a cluster](#tag/Cluster/operation/ClusterService_ResetRootPassword)\n\t\t* [List node quotas for your organization](#tag/Cluster/operation/ClusterService_ShowNodeQuota)\n\t\t* [Get log redaction policy](#tag/Cluster/operation/ClusterService_GetLogRedactionPolicy)\n\t* Region\n\t\t* [List regions](#tag/Region/operation/RegionService_ListRegions)\n\t\t* [Get a region](#tag/Region/operation/RegionService_GetRegion)\n\t\t* [List cloud providers](#tag/Region/operation/RegionService_ShowCloudProviders)\n\t\t* [List node specs](#tag/Region/operation/RegionService_ListNodeSpecs)\n\t\t* [Get a node spec](#tag/Region/operation/RegionService_GetNodeSpec)\n\t* Private Endpoint Connection\n\t\t* [Get private link service for a TiDB node group](#tag/Private-Endpoint-Connection/operation/PrivateEndpointConnectionService_GetPrivateLinkService)\n\t\t* [Create a private endpoint connection](#tag/Private-Endpoint-Connection/operation/PrivateEndpointConnectionService_CreatePrivateEndpointConnection)\n\t\t* [List private endpoint connections](#tag/Private-Endpoint-Connection/operation/PrivateEndpointConnectionService_ListPrivateEndpointConnections)\n\t\t* [Get a private endpoint connection](#tag/Private-Endpoint-Connection/operation/PrivateEndpointConnectionService_GetPrivateEndpointConnection)\n\t\t* [Delete a private endpoint connection](#tag/Private-Endpoint-Connection/operation/PrivateEndpointConnectionService_DeletePrivateEndpointConnection)\n\t* Import\n\t\t* [List import tasks](#tag/Import/operation/ListImports)\n\t\t* [Create an import task](#tag/Import/operation/CreateImport)\n\t\t* [Get an import task](#tag/Import/operation/GetImport)\n\t\t* [Cancel an import task](#tag/Import/operation/CancelImport)\n\t\n"
+  version: v1beta1
+servers:
+- url: https://dedicated.tidbapi.com/v1beta1
+tags:
+- name: Integration
+  description: List integrations, create an integration, and delete an integration.
+paths:
+  /clusters/{clusterId}/integrations:
+    get:
+      summary: List integrations
+      description: Lists all integrations configured for a cluster, including their current runtime status.
+      operationId: IntegrationService_ListIntegrations
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/openapiv1beta1ListIntegrationsResp'
+        '400':
+          description: A request field is invalid.
+          content:
+            application/json:
+              schema:
+                example:
+                  code: 400
+                  message: 'Invalid request: missing or invalid field'
+                  details: []
+                allOf:
+                - $ref: '#/components/schemas/rpcStatus'
+        '401':
+          description: The API key cannot be authenticated.
+          content:
+            application/json:
+              schema:
+                example:
+                  code: 401
+                  message: The API key cannot be authenticated.
+                  details: []
+                allOf:
+                - $ref: '#/components/schemas/rpcStatus'
+        '403':
+          description: The API key does not have permission to access the resource.
+          content:
+            application/json:
+              schema:
+                example:
+                  code: 403
+                  message: The API key does not have permission to access the resource.
+                  details: []
+                allOf:
+                - $ref: '#/components/schemas/rpcStatus'
+        '429':
+          description: You have exceeded the rate limit.
+          content:
+            application/json:
+              schema:
+                example:
+                  code: 429
+                  message: You have exceeded the rate limit.
+                  details: []
+                allOf:
+                - $ref: '#/components/schemas/rpcStatus'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                example:
+                  code: 500
+                  message: Internal server error
+                  details: []
+                allOf:
+                - $ref: '#/components/schemas/rpcStatus'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: clusterId
+        description: The ID of the cluster to list integrations for.
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uint64
+      tags:
+      - Integration
+      x-codeSamples:
+      - label: curl
+        lang: bash
+        source: "curl -X GET \"https://dedicated.tidbapi.com/v1beta1/clusters/123/integrations\" \\\n  --digest --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  -H \"Accept: application/json\""
+    post:
+      summary: Create an integration
+      description: Creates a new external metrics integration for the specified cluster. Supported integrations include [Datadog](https://www.datadoghq.com), [New Relic](https://newrelic.com), and [Prometheus](https://prometheus.io).
+      operationId: IntegrationService_CreateIntegration
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/openapiv1beta1IntegrationStatusResp'
+        '400':
+          description: A request field is invalid.
+          content:
+            application/json:
+              schema:
+                example:
+                  code: 400
+                  message: 'Invalid request: missing or invalid field'
+                  details: []
+                allOf:
+                - $ref: '#/components/schemas/rpcStatus'
+        '401':
+          description: The API key cannot be authenticated.
+          content:
+            application/json:
+              schema:
+                example:
+                  code: 401
+                  message: The API key cannot be authenticated.
+                  details: []
+                allOf:
+                - $ref: '#/components/schemas/rpcStatus'
+        '403':
+          description: The API key does not have permission to access the resource.
+          content:
+            application/json:
+              schema:
+                example:
+                  code: 403
+                  message: The API key does not have permission to access the resource.
+                  details: []
+                allOf:
+                - $ref: '#/components/schemas/rpcStatus'
+        '429':
+          description: You have exceeded the rate limit.
+          content:
+            application/json:
+              schema:
+                example:
+                  code: 429
+                  message: You have exceeded the rate limit.
+                  details: []
+                allOf:
+                - $ref: '#/components/schemas/rpcStatus'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                example:
+                  code: 500
+                  message: Internal server error
+                  details: []
+                allOf:
+                - $ref: '#/components/schemas/rpcStatus'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: clusterId
+        description: The ID of the target cluster where the integration will be created.
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uint64
+      tags:
+      - Integration
+      x-codeSamples:
+      - label: curl
+        lang: bash
+        source: "curl -X POST \"https://dedicated.tidbapi.com/v1beta1/clusters/123/integrations\" \\\n  --digest --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"type\": \"DATADOG\",\n    \"datadog\": {\n      \"api_key\": \"<DATADOG_API_KEY>\",\n      \"site\": \"US1\"\n    }\n  }'"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                type: DATADOG
+                datadog:
+                  api_key: <DATADOG_API_KEY>
+                  site: US1
+              properties:
+                type:
+                  description: 'The service provider for the integration. Must be one of the supported values: `"DATADOG"`, `"NEWRELIC"`, or `"PROMETHEUS"`.'
+                  allOf:
+                  - $ref: '#/components/schemas/openapiv1beta1IntegrationType'
+                datadog:
+                  description: The configuration for the Datadog integration. This is required when `type` is `"DATADOG"`.
+                  allOf:
+                  - $ref: '#/components/schemas/v1beta1CreateDatadogIntegrationRequest'
+                newrelic:
+                  description: The configuration for the New Relic integration. This is required when `type` is `"NEWRELIC"`.
+                  allOf:
+                  - $ref: '#/components/schemas/v1beta1CreateNewrelicIntegrationRequest'
+                prometheus:
+                  description: The configuration for the Prometheus integration. This is required when `type` is `"PROMETHEUS"`.
+                  allOf:
+                  - $ref: '#/components/schemas/v1beta1CreatePrometheusMetricsKeyRequest'
+        required: true
+  /clusters/{clusterId}/integrations/{id}:
+    delete:
+      summary: Delete an integration
+      description: Removes an integration from the cluster.
+      operationId: IntegrationService_DeleteIntegration
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+        '400':
+          description: A request field is invalid.
+          content:
+            application/json:
+              schema:
+                example:
+                  code: 400
+                  message: 'Invalid request: missing or invalid field'
+                  details: []
+                allOf:
+                - $ref: '#/components/schemas/rpcStatus'
+        '401':
+          description: The API key cannot be authenticated.
+          content:
+            application/json:
+              schema:
+                example:
+                  code: 401
+                  message: The API key cannot be authenticated.
+                  details: []
+                allOf:
+                - $ref: '#/components/schemas/rpcStatus'
+        '403':
+          description: The API key does not have permission to access the resource.
+          content:
+            application/json:
+              schema:
+                example:
+                  code: 403
+                  message: The API key does not have permission to access the resource.
+                  details: []
+                allOf:
+                - $ref: '#/components/schemas/rpcStatus'
+        '429':
+          description: You have exceeded the rate limit.
+          content:
+            application/json:
+              schema:
+                example:
+                  code: 429
+                  message: You have exceeded the rate limit.
+                  details: []
+                allOf:
+                - $ref: '#/components/schemas/rpcStatus'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                example:
+                  code: 500
+                  message: Internal server error
+                  details: []
+                allOf:
+                - $ref: '#/components/schemas/rpcStatus'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: clusterId
+        description: The ID of the cluster from which to delete the integration.
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uint64
+      - name: id
+        description: The ID of the integration to delete.
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uint64
+      tags:
+      - Integration
+      x-codeSamples:
+      - label: curl
+        lang: bash
+        source: "curl -X DELETE \"https://dedicated.tidbapi.com/v1beta1/clusters/123/integrations/456\" \\\n  --digest --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  -H \"Accept: application/json\""
+components:
+  schemas:
+    v1beta1CreatePrometheusMetricsKeyRequest:
+      type: object
+      example: {}
+    openapiv1beta1DatadogSite:
+      type: string
+      enum:
+      - US1
+      - US3
+      - US5
+      - EU1
+      - US1_FED
+      - AP1
+      - AP2
+    openapiv1beta1NewrelicSite:
+      type: string
+      enum:
+      - US_OTLP
+      - EU_OTLP
+    v1beta1CreateDatadogIntegrationRequest:
+      type: object
+      example:
+        api_key: <DATADOG_API_KEY>
+        site: US1
+      properties:
+        apiKey:
+          type: string
+          description: The Datadog API key used to authenticate your integration. This field is write-only and will be masked in all responses.
+        site:
+          description: The Datadog site region where your cluster metrics are sent.
+          allOf:
+          - $ref: '#/components/schemas/openapiv1beta1DatadogSite'
+    openapiv1beta1ListIntegrationsResp:
+      type: object
+      example:
+        items:
+        - id: 103
+          type: DATADOG
+          datadog:
+            state: ACTIVE
+            site: US1
+            masked_api_key: '****3086'
+          create_time: '2025-10-23T12:34:56Z'
+          update_time: '2025-10-24T08:21:00Z'
+          creator: admin@example.com
+        total: 1
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/openapiv1beta1IntegrationStatusResp'
+          description: The list of integrations configured for the cluster.
+        total:
+          type: integer
+          format: int32
+          description: The total number of integrations configured for the cluster.
+    openapiv1beta1IntegrationType:
+      type: string
+      enum:
+      - DATADOG
+      - NEWRELIC
+      - PROMETHEUS
+    v1beta1IntegrationState:
+      type: string
+      enum:
+      - NONE
+      - ACTIVE
+      - ERROR
+    v1beta1CreateNewrelicIntegrationRequest:
+      type: object
+      example:
+        api_key: <NEWRELIC_API_KEY>
+        site: US_OTLP
+      properties:
+        apiKey:
+          type: string
+          description: The New Relic ingestion key used to connect your cluster to New Relic. This field is write-only and will be masked in all responses.
+        site:
+          description: The New Relic ingestion site where your cluster metrics are sent.
+          allOf:
+          - $ref: '#/components/schemas/openapiv1beta1NewrelicSite'
+    v1beta1DatadogIntegrationStatusResp:
+      type: object
+      example:
+        state: ACTIVE
+        status_reason: ''
+        site: US1
+        site_url: https://app.datadoghq.com
+        dashboard_url: https://app.datadoghq.com/dashboard/example
+        masked_api_key: '****3086'
+      properties:
+        state:
+          description: The current state of the Datadog integration.
+          allOf:
+          - $ref: '#/components/schemas/v1beta1IntegrationState'
+        statusReason:
+          type: string
+          description: A message describing the reason for an `ERROR` state. Empty when the integration is functioning normally.
+        site:
+          description: The Datadog site region where your cluster metrics are sent.
+          allOf:
+          - $ref: '#/components/schemas/openapiv1beta1DatadogSite'
+        siteUrl:
+          type: string
+          description: The base URL of the Datadog site.
+        dashboardUrl:
+          type: string
+          description: A link to view your cluster metrics in Datadog.
+        maskedApiKey:
+          type: string
+          description: The API key used for the integration, which is partially masked.
+    rpcStatus:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/protobufAny'
+    protobufAny:
+      type: object
+      properties:
+        '@type':
+          type: string
+          description: A URL or resource name that uniquely identifies the type of the serialized protocol buffer message.
+      additionalProperties: {}
+      description: "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n    // or ...\n    if (any.isSameTypeAs(Foo.getDefaultInstance())) {\n      foo = any.unpack(Foo.getDefaultInstance());\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := anypb.New(foo)\n     if err != nil {\n       ...\n     }\n     ...\n     foo := &pb.Foo{}\n     if err := any.UnmarshalTo(foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
+    v1beta1NewrelicIntegrationStatusResp:
+      type: object
+      example:
+        state: ACTIVE
+        status_reason: ''
+        site: US_OTLP
+        site_url: https://one.newrelic.com
+        dashboard_url: https://one.newrelic.com/dashboard/example
+        masked_api_key: '****abcd'
+      properties:
+        state:
+          description: The current state of the New Relic integration.
+          allOf:
+          - $ref: '#/components/schemas/v1beta1IntegrationState'
+        statusReason:
+          type: string
+          description: A message describing the reason for an `ERROR` state. Empty when the integration is functioning normally.
+        site:
+          description: The New Relic ingestion site to use for metrics collection.
+          allOf:
+          - $ref: '#/components/schemas/openapiv1beta1NewrelicSite'
+        siteUrl:
+          type: string
+          description: The base URL of the New Relic site.
+        dashboardUrl:
+          type: string
+          description: A link to view your cluster metrics in New Relic.
+        maskedApiKey:
+          type: string
+          description: The API key used for the integration, which is partially masked.
+    openapiv1beta1CreateMetricsKeyResp:
+      type: object
+      example:
+        key: <PROMETHEUS_READ_KEY>
+        query_endpoint: https://prom.example.com/api/v1/query
+      properties:
+        key:
+          type: string
+          description: The generated read-only API key for authenticating Prometheus queries.
+        queryEndpoint:
+          type: string
+          description: The Prometheus-compatible HTTP endpoint for querying your cluster metrics.
+    openapiv1beta1IntegrationStatusResp:
+      type: object
+      example:
+        id: 103
+        type: DATADOG
+        datadog:
+          state: ACTIVE
+          status_reason: ''
+          site: US1
+          site_url: https://app.datadoghq.com
+          dashboard_url: https://app.datadoghq.com/dashboard/example
+          masked_api_key: '****3086'
+        create_time: '2025-10-23T12:34:56Z'
+        update_time: '2025-10-24T08:21:00Z'
+        creator: admin@example.com
+      properties:
+        id:
+          type: string
+          format: uint64
+          description: The unique identifier of the integration.
+        type:
+          description: The service provider for the integration.
+          allOf:
+          - $ref: '#/components/schemas/openapiv1beta1IntegrationType'
+        datadog:
+          description: The configuration and status details for the Datadog integration.
+          allOf:
+          - $ref: '#/components/schemas/v1beta1DatadogIntegrationStatusResp'
+        newrelic:
+          description: The configuration and status details for the New Relic integration.
+          allOf:
+          - $ref: '#/components/schemas/v1beta1NewrelicIntegrationStatusResp'
+        prometheus:
+          description: The configuration and status details for the Prometheus integration.
+          allOf:
+          - $ref: '#/components/schemas/openapiv1beta1CreateMetricsKeyResp'
+        createTime:
+          type: string
+          format: date-time
+          description: The timestamp when the integration was created, in the [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format.
+        updateTime:
+          type: string
+          format: date-time
+          description: The timestamp when the integration was last updated, in the [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format.
+        creator:
+          type: string
+          description: The email address or system identifier of the user who created the integration.
+x-tagGroups:
+- name: Endpoints
+  tags:
+  - Cluster
+  - Region
+  - Private Endpoint Connection
+  - Import
+  - Integration
+  - Changefeed

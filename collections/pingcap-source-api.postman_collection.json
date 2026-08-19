@@ -1,0 +1,2073 @@
+{
+  "item": [
+    {
+      "id": "3e1a5dbb-3af3-42f1-944d-96e21e21b0b3",
+      "name": "source",
+      "description": {
+        "content": "source",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "ae392c16-8142-4b9b-b877-0ad83e9f6a5c",
+          "name": "create and enable a new data source",
+          "request": {
+            "name": "create and enable a new data source",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "sources"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"source\": {\n    \"source_name\": \"<string>\",\n    \"host\": \"<string>\",\n    \"port\": \"<integer>\",\n    \"user\": \"<string>\",\n    \"enable_gtid\": false,\n    \"enable\": false,\n    \"password\": \"<string,null>\",\n    \"flavor\": \"<string>\",\n    \"task_name_list\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"security\": {\n      \"ssl_ca_content\": \"<string>\",\n      \"ssl_cert_content\": \"<string>\",\n      \"ssl_key_content\": \"<string>\",\n      \"cert_allowed_cn\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    \"purge\": {\n      \"interval\": 3600,\n      \"expires\": 0,\n      \"remain_space\": 15\n    },\n    \"status_list\": [\n      {\n        \"source_name\": \"<string>\",\n        \"worker_name\": \"<string>\",\n        \"relay_status\": {\n          \"master_binlog\": \"<string>\",\n          \"master_binlog_gtid\": \"<string>\",\n          \"relay_dir\": \"<string>\",\n          \"relay_binlog_gtid\": \"<string>\",\n          \"relay_catch_up_master\": \"<boolean>\",\n          \"stage\": \"<string>\"\n        },\n        \"error_msg\": \"<string>\"\n      },\n      {\n        \"source_name\": \"<string>\",\n        \"worker_name\": \"<string>\",\n        \"relay_status\": {\n          \"master_binlog\": \"<string>\",\n          \"master_binlog_gtid\": \"<string>\",\n          \"relay_dir\": \"<string>\",\n          \"relay_binlog_gtid\": \"<string>\",\n          \"relay_catch_up_master\": \"<boolean>\",\n          \"stage\": \"<string>\"\n        },\n        \"error_msg\": \"<string>\"\n      }\n    ],\n    \"relay_config\": {\n      \"enable_relay\": \"<boolean>\",\n      \"relay_binlog_name\": \"<string,null>\",\n      \"relay_binlog_gtid\": \"<string,null>\",\n      \"relay_dir\": \"./relay_log\"\n    }\n  },\n  \"worker_name\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "da95dd60-01da-4419-94b2-fbe03563079a",
+              "name": "success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "sources"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"source\": {\n    \"source_name\": \"mysql-01\",\n    \"host\": \"127.0.0.1\",\n    \"port\": 3306,\n    \"user\": \"root\",\n    \"enable_gtid\": false,\n    \"enable\": false,\n    \"password\": \"123456\",\n    \"flavor\": \"mysql\",\n    \"task_name_list\": [\n      \"task1\",\n      \"task1\"\n    ],\n    \"security\": {\n      \"ssl_ca_content\": \"\",\n      \"ssl_cert_content\": \"\",\n      \"ssl_key_content\": \"\",\n      \"cert_allowed_cn\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    \"purge\": {\n      \"interval\": 3600,\n      \"expires\": 0,\n      \"remain_space\": 15\n    },\n    \"status_list\": [\n      {\n        \"source_name\": \"mysql-replica-01\",\n        \"worker_name\": \"worker-1\",\n        \"relay_status\": {\n          \"master_binlog\": \"(mysql-bin.000001, 1979)\",\n          \"master_binlog_gtid\": \"e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849\",\n          \"relay_dir\": \"./sub_dir\",\n          \"relay_binlog_gtid\": \"e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849\",\n          \"relay_catch_up_master\": \"<boolean>\",\n          \"stage\": \"Running\"\n        },\n        \"error_msg\": \"<string>\"\n      },\n      {\n        \"source_name\": \"mysql-replica-01\",\n        \"worker_name\": \"worker-1\",\n        \"relay_status\": {\n          \"master_binlog\": \"(mysql-bin.000001, 1979)\",\n          \"master_binlog_gtid\": \"e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849\",\n          \"relay_dir\": \"./sub_dir\",\n          \"relay_binlog_gtid\": \"e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849\",\n          \"relay_catch_up_master\": \"<boolean>\",\n          \"stage\": \"Running\"\n        },\n        \"error_msg\": \"<string>\"\n      }\n    ],\n    \"relay_config\": {\n      \"enable_relay\": \"<boolean>\",\n      \"relay_binlog_name\": \"mysql-bin.000002\",\n      \"relay_binlog_gtid\": \"e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849\",\n      \"relay_dir\": \"./relay_log\"\n    }\n  },\n  \"worker_name\": \"worker-1\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"source_name\": \"mysql-01\",\n  \"host\": \"127.0.0.1\",\n  \"port\": 3306,\n  \"user\": \"root\",\n  \"enable_gtid\": false,\n  \"enable\": false,\n  \"password\": \"123456\",\n  \"flavor\": \"mysql\",\n  \"task_name_list\": [\n    \"task1\",\n    \"task1\"\n  ],\n  \"security\": {\n    \"ssl_ca_content\": \"\",\n    \"ssl_cert_content\": \"\",\n    \"ssl_key_content\": \"\",\n    \"cert_allowed_cn\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  },\n  \"purge\": {\n    \"interval\": 3600,\n    \"expires\": 0,\n    \"remain_space\": 15\n  },\n  \"status_list\": [\n    {\n      \"source_name\": \"mysql-replica-01\",\n      \"worker_name\": \"worker-1\",\n      \"relay_status\": {\n        \"master_binlog\": \"(mysql-bin.000001, 1979)\",\n        \"master_binlog_gtid\": \"e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849\",\n        \"relay_dir\": \"./sub_dir\",\n        \"relay_binlog_gtid\": \"e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849\",\n        \"relay_catch_up_master\": \"<boolean>\",\n        \"stage\": \"Running\"\n      },\n      \"error_msg\": \"<string>\"\n    },\n    {\n      \"source_name\": \"mysql-replica-01\",\n      \"worker_name\": \"worker-1\",\n      \"relay_status\": {\n        \"master_binlog\": \"(mysql-bin.000001, 1979)\",\n        \"master_binlog_gtid\": \"e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849\",\n        \"relay_dir\": \"./sub_dir\",\n        \"relay_binlog_gtid\": \"e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849\",\n        \"relay_catch_up_master\": \"<boolean>\",\n        \"stage\": \"Running\"\n      },\n      \"error_msg\": \"<string>\"\n    }\n  ],\n  \"relay_config\": {\n    \"enable_relay\": \"<boolean>\",\n    \"relay_binlog_name\": \"mysql-bin.000002\",\n    \"relay_binlog_gtid\": \"e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849\",\n    \"relay_dir\": \"./relay_log\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7c4e6070-001e-4ee5-94f0-24e33d23c021",
+              "name": "failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "sources"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"source\": {\n    \"source_name\": \"mysql-01\",\n    \"host\": \"127.0.0.1\",\n    \"port\": 3306,\n    \"user\": \"root\",\n    \"enable_gtid\": false,\n    \"enable\": false,\n    \"password\": \"123456\",\n    \"flavor\": \"mysql\",\n    \"task_name_list\": [\n      \"task1\",\n      \"task1\"\n    ],\n    \"security\": {\n      \"ssl_ca_content\": \"\",\n      \"ssl_cert_content\": \"\",\n      \"ssl_key_content\": \"\",\n      \"cert_allowed_cn\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    \"purge\": {\n      \"interval\": 3600,\n      \"expires\": 0,\n      \"remain_space\": 15\n    },\n    \"status_list\": [\n      {\n        \"source_name\": \"mysql-replica-01\",\n        \"worker_name\": \"worker-1\",\n        \"relay_status\": {\n          \"master_binlog\": \"(mysql-bin.000001, 1979)\",\n          \"master_binlog_gtid\": \"e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849\",\n          \"relay_dir\": \"./sub_dir\",\n          \"relay_binlog_gtid\": \"e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849\",\n          \"relay_catch_up_master\": \"<boolean>\",\n          \"stage\": \"Running\"\n        },\n        \"error_msg\": \"<string>\"\n      },\n      {\n        \"source_name\": \"mysql-replica-01\",\n        \"worker_name\": \"worker-1\",\n        \"relay_status\": {\n          \"master_binlog\": \"(mysql-bin.000001, 1979)\",\n          \"master_binlog_gtid\": \"e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849\",\n          \"relay_dir\": \"./sub_dir\",\n          \"relay_binlog_gtid\": \"e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849\",\n          \"relay_catch_up_master\": \"<boolean>\",\n          \"stage\": \"Running\"\n        },\n        \"error_msg\": \"<string>\"\n      }\n    ],\n    \"relay_config\": {\n      \"enable_relay\": \"<boolean>\",\n      \"relay_binlog_name\": \"mysql-bin.000002\",\n      \"relay_binlog_gtid\": \"e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849\",\n      \"relay_dir\": \"./relay_log\"\n    }\n  },\n  \"worker_name\": \"worker-1\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error_msg\": \"string\",\n  \"error_code\": 9977\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7971d1e3-30bc-40ca-b4f5-6d8a7ca5bf0a",
+          "name": "get data source list",
+          "request": {
+            "name": "get data source list",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "sources"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "with_status",
+                  "value": "<boolean>",
+                  "description": "list source with status"
+                },
+                {
+                  "disabled": false,
+                  "key": "enable_relay",
+                  "value": "<boolean>",
+                  "description": "only return the enable-relay source"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "32b67d8d-3d7b-4a4c-8b12-19a96848fa75",
+              "name": "data source list",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "sources"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "with_status",
+                      "value": "true"
+                    },
+                    {
+                      "key": "enable_relay",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"total\": 8746,\n  \"data\": [\n    {\n      \"source_name\": \"mysql-01\",\n      \"host\": \"127.0.0.1\",\n      \"port\": 3306,\n      \"user\": \"root\",\n      \"enable_gtid\": false,\n      \"enable\": false,\n      \"password\": \"123456\",\n      \"flavor\": \"mysql\",\n      \"task_name_list\": [\n        \"task1\",\n        \"task1\"\n      ],\n      \"security\": {\n        \"ssl_ca_content\": \"\",\n        \"ssl_cert_content\": \"\",\n        \"ssl_key_content\": \"\",\n        \"cert_allowed_cn\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      },\n      \"purge\": {\n        \"interval\": 3600,\n        \"expires\": 0,\n        \"remain_space\": 15\n      },\n      \"status_list\": [\n        {\n          \"source_name\": \"mysql-replica-01\",\n          \"worker_name\": \"worker-1\",\n          \"relay_status\": {\n            \"master_binlog\": \"(mysql-bin.000001, 1979)\",\n            \"master_binlog_gtid\": \"e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849\",\n            \"relay_dir\": \"./sub_dir\",\n            \"relay_binlog_gtid\": \"e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849\",\n            \"relay_catch_up_master\": \"<boolean>\",\n            \"stage\": \"Running\"\n          },\n          \"error_msg\": \"<string>\"\n        },\n        {\n          \"source_name\": \"mysql-replica-01\",\n          \"worker_name\": \"worker-1\",\n          \"relay_status\": {\n            \"master_binlog\": \"(mysql-bin.000001, 1979)\",\n            \"master_binlog_gtid\": \"e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849\",\n            \"relay_dir\": \"./sub_dir\",\n            \"relay_binlog_gtid\": \"e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849\",\n            \"relay_catch_up_master\": \"<boolean>\",\n            \"stage\": \"Running\"\n          },\n          \"error_msg\": \"<string>\"\n        }\n      ],\n      \"relay_config\": {\n        \"enable_relay\": \"<boolean>\",\n        \"relay_binlog_name\": \"mysql-bin.000002\",\n        \"relay_binlog_gtid\": \"e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849\",\n        \"relay_dir\": \"./relay_log\"\n      }\n    },\n    {\n      \"source_name\": \"mysql-01\",\n      \"host\": \"127.0.0.1\",\n      \"port\": 3306,\n      \"user\": \"root\",\n      \"enable_gtid\": false,\n      \"enable\": false,\n      \"password\": \"123456\",\n      \"flavor\": \"mysql\",\n      \"task_name_list\": [\n        \"task1\",\n        \"task1\"\n      ],\n      \"security\": {\n        \"ssl_ca_content\": \"\",\n        \"ssl_cert_content\": \"\",\n        \"ssl_key_content\": \"\",\n        \"cert_allowed_cn\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      },\n      \"purge\": {\n        \"interval\": 3600,\n        \"expires\": 0,\n        \"remain_space\": 15\n      },\n      \"status_list\": [\n        {\n          \"source_name\": \"mysql-replica-01\",\n          \"worker_name\": \"worker-1\",\n          \"relay_status\": {\n            \"master_binlog\": \"(mysql-bin.000001, 1979)\",\n            \"master_binlog_gtid\": \"e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849\",\n            \"relay_dir\": \"./sub_dir\",\n            \"relay_binlog_gtid\": \"e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849\",\n            \"relay_catch_up_master\": \"<boolean>\",\n            \"stage\": \"Running\"\n          },\n          \"error_msg\": \"<string>\"\n        },\n        {\n          \"source_name\": \"mysql-replica-01\",\n          \"worker_name\": \"worker-1\",\n          \"relay_status\": {\n            \"master_binlog\": \"(mysql-bin.000001, 1979)\",\n            \"master_binlog_gtid\": \"e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849\",\n            \"relay_dir\": \"./sub_dir\",\n            \"relay_binlog_gtid\": \"e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849\",\n            \"relay_catch_up_master\": \"<boolean>\",\n            \"stage\": \"Running\"\n          },\n          \"error_msg\": \"<string>\"\n        }\n      ],\n      \"relay_config\": {\n        \"enable_relay\": \"<boolean>\",\n        \"relay_binlog_name\": \"mysql-bin.000002\",\n        \"relay_binlog_gtid\": \"e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849\",\n        \"relay_dir\": \"./relay_log\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0db38f30-0d19-4837-a8ad-1f53fcc872b3",
+          "name": "get source",
+          "request": {
+            "name": "get source",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "sources",
+                ":source-name"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "with_status",
+                  "value": "<boolean>",
+                  "description": "list source with status"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "source-name",
+                  "description": "(Required) globally unique data source name"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "6cee6b40-4e56-4998-b79b-3c76e1e64d5a",
+              "name": "source",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "sources",
+                    ":source-name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "with_status",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "source-name",
+                      "description": "(Required) globally unique data source name"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"source_name\": \"mysql-01\",\n  \"host\": \"127.0.0.1\",\n  \"port\": 3306,\n  \"user\": \"root\",\n  \"enable_gtid\": false,\n  \"enable\": false,\n  \"password\": \"123456\",\n  \"flavor\": \"mysql\",\n  \"task_name_list\": [\n    \"task1\",\n    \"task1\"\n  ],\n  \"security\": {\n    \"ssl_ca_content\": \"\",\n    \"ssl_cert_content\": \"\",\n    \"ssl_key_content\": \"\",\n    \"cert_allowed_cn\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  },\n  \"purge\": {\n    \"interval\": 3600,\n    \"expires\": 0,\n    \"remain_space\": 15\n  },\n  \"status_list\": [\n    {\n      \"source_name\": \"mysql-replica-01\",\n      \"worker_name\": \"worker-1\",\n      \"relay_status\": {\n        \"master_binlog\": \"(mysql-bin.000001, 1979)\",\n        \"master_binlog_gtid\": \"e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849\",\n        \"relay_dir\": \"./sub_dir\",\n        \"relay_binlog_gtid\": \"e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849\",\n        \"relay_catch_up_master\": \"<boolean>\",\n        \"stage\": \"Running\"\n      },\n      \"error_msg\": \"<string>\"\n    },\n    {\n      \"source_name\": \"mysql-replica-01\",\n      \"worker_name\": \"worker-1\",\n      \"relay_status\": {\n        \"master_binlog\": \"(mysql-bin.000001, 1979)\",\n        \"master_binlog_gtid\": \"e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849\",\n        \"relay_dir\": \"./sub_dir\",\n        \"relay_binlog_gtid\": \"e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849\",\n        \"relay_catch_up_master\": \"<boolean>\",\n        \"stage\": \"Running\"\n      },\n      \"error_msg\": \"<string>\"\n    }\n  ],\n  \"relay_config\": {\n    \"enable_relay\": \"<boolean>\",\n    \"relay_binlog_name\": \"mysql-bin.000002\",\n    \"relay_binlog_gtid\": \"e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849\",\n    \"relay_dir\": \"./relay_log\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "067c05f4-4263-4b0c-9136-a8eb35e74f35",
+              "name": "source not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "sources",
+                    ":source-name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "with_status",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "source-name",
+                      "description": "(Required) globally unique data source name"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "097da7cb-d56d-4822-a882-75d6c4d1a1c4",
+          "name": "delete a data source",
+          "request": {
+            "name": "delete a data source",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "sources",
+                ":source-name"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "force",
+                  "value": "<boolean>",
+                  "description": "force stop source also stop the related tasks"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "source-name",
+                  "description": "(Required) globally unique data source name"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "f780600e-4b89-4edd-98be-bfbe0a36d764",
+              "name": "success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "sources",
+                    ":source-name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "force",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "source-name",
+                      "description": "(Required) globally unique data source name"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "3012aa10-e7c5-487d-ad76-ada673f8a90d",
+              "name": "failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "sources",
+                    ":source-name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "force",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "source-name",
+                      "description": "(Required) globally unique data source name"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error_msg\": \"string\",\n  \"error_code\": 9977\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0dfcf4f0-f39e-4a25-8f84-3bf225737ca1",
+          "name": "update a data source",
+          "request": {
+            "name": "update a data source",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "sources",
+                ":source-name"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "source-name",
+                  "description": "(Required) globally unique data source name"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"source\": {\n    \"source_name\": \"<string>\",\n    \"host\": \"<string>\",\n    \"port\": \"<integer>\",\n    \"user\": \"<string>\",\n    \"enable_gtid\": false,\n    \"enable\": false,\n    \"password\": \"<string,null>\",\n    \"flavor\": \"<string>\",\n    \"task_name_list\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"security\": {\n      \"ssl_ca_content\": \"<string>\",\n      \"ssl_cert_content\": \"<string>\",\n      \"ssl_key_content\": \"<string>\",\n      \"cert_allowed_cn\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    \"purge\": {\n      \"interval\": 3600,\n      \"expires\": 0,\n      \"remain_space\": 15\n    },\n    \"status_list\": [\n      {\n        \"source_name\": \"<string>\",\n        \"worker_name\": \"<string>\",\n        \"relay_status\": {\n          \"master_binlog\": \"<string>\",\n          \"master_binlog_gtid\": \"<string>\",\n          \"relay_dir\": \"<string>\",\n          \"relay_binlog_gtid\": \"<string>\",\n          \"relay_catch_up_master\": \"<boolean>\",\n          \"stage\": \"<string>\"\n        },\n        \"error_msg\": \"<string>\"\n      },\n      {\n        \"source_name\": \"<string>\",\n        \"worker_name\": \"<string>\",\n        \"relay_status\": {\n          \"master_binlog\": \"<string>\",\n          \"master_binlog_gtid\": \"<string>\",\n          \"relay_dir\": \"<string>\",\n          \"relay_binlog_gtid\": \"<string>\",\n          \"relay_catch_up_master\": \"<boolean>\",\n          \"stage\": \"<string>\"\n        },\n        \"error_msg\": \"<string>\"\n      }\n    ],\n    \"relay_config\": {\n      \"enable_relay\": \"<boolean>\",\n      \"relay_binlog_name\": \"<string,null>\",\n      \"relay_binlog_gtid\": \"<string,null>\",\n      \"relay_dir\": \"./relay_log\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "481b3127-4fe7-42e6-b848-64c65e59bab9",
+              "name": "success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "sources",
+                    ":source-name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "source-name",
+                      "description": "(Required) globally unique data source name"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"source\": {\n    \"source_name\": \"mysql-01\",\n    \"host\": \"127.0.0.1\",\n    \"port\": 3306,\n    \"user\": \"root\",\n    \"enable_gtid\": false,\n    \"enable\": false,\n    \"password\": \"123456\",\n    \"flavor\": \"mysql\",\n    \"task_name_list\": [\n      \"task1\",\n      \"task1\"\n    ],\n    \"security\": {\n      \"ssl_ca_content\": \"\",\n      \"ssl_cert_content\": \"\",\n      \"ssl_key_content\": \"\",\n      \"cert_allowed_cn\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    \"purge\": {\n      \"interval\": 3600,\n      \"expires\": 0,\n      \"remain_space\": 15\n    },\n    \"status_list\": [\n      {\n        \"source_name\": \"mysql-replica-01\",\n        \"worker_name\": \"worker-1\",\n        \"relay_status\": {\n          \"master_binlog\": \"(mysql-bin.000001, 1979)\",\n          \"master_binlog_gtid\": \"e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849\",\n          \"relay_dir\": \"./sub_dir\",\n          \"relay_binlog_gtid\": \"e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849\",\n          \"relay_catch_up_master\": \"<boolean>\",\n          \"stage\": \"Running\"\n        },\n        \"error_msg\": \"<string>\"\n      },\n      {\n        \"source_name\": \"mysql-replica-01\",\n        \"worker_name\": \"worker-1\",\n        \"relay_status\": {\n          \"master_binlog\": \"(mysql-bin.000001, 1979)\",\n          \"master_binlog_gtid\": \"e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849\",\n          \"relay_dir\": \"./sub_dir\",\n          \"relay_binlog_gtid\": \"e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849\",\n          \"relay_catch_up_master\": \"<boolean>\",\n          \"stage\": \"Running\"\n        },\n        \"error_msg\": \"<string>\"\n      }\n    ],\n    \"relay_config\": {\n      \"enable_relay\": \"<boolean>\",\n      \"relay_binlog_name\": \"mysql-bin.000002\",\n      \"relay_binlog_gtid\": \"e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849\",\n      \"relay_dir\": \"./relay_log\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"source_name\": \"mysql-01\",\n  \"host\": \"127.0.0.1\",\n  \"port\": 3306,\n  \"user\": \"root\",\n  \"enable_gtid\": false,\n  \"enable\": false,\n  \"password\": \"123456\",\n  \"flavor\": \"mysql\",\n  \"task_name_list\": [\n    \"task1\",\n    \"task1\"\n  ],\n  \"security\": {\n    \"ssl_ca_content\": \"\",\n    \"ssl_cert_content\": \"\",\n    \"ssl_key_content\": \"\",\n    \"cert_allowed_cn\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  },\n  \"purge\": {\n    \"interval\": 3600,\n    \"expires\": 0,\n    \"remain_space\": 15\n  },\n  \"status_list\": [\n    {\n      \"source_name\": \"mysql-replica-01\",\n      \"worker_name\": \"worker-1\",\n      \"relay_status\": {\n        \"master_binlog\": \"(mysql-bin.000001, 1979)\",\n        \"master_binlog_gtid\": \"e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849\",\n        \"relay_dir\": \"./sub_dir\",\n        \"relay_binlog_gtid\": \"e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849\",\n        \"relay_catch_up_master\": \"<boolean>\",\n        \"stage\": \"Running\"\n      },\n      \"error_msg\": \"<string>\"\n    },\n    {\n      \"source_name\": \"mysql-replica-01\",\n      \"worker_name\": \"worker-1\",\n      \"relay_status\": {\n        \"master_binlog\": \"(mysql-bin.000001, 1979)\",\n        \"master_binlog_gtid\": \"e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849\",\n        \"relay_dir\": \"./sub_dir\",\n        \"relay_binlog_gtid\": \"e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849\",\n        \"relay_catch_up_master\": \"<boolean>\",\n        \"stage\": \"Running\"\n      },\n      \"error_msg\": \"<string>\"\n    }\n  ],\n  \"relay_config\": {\n    \"enable_relay\": \"<boolean>\",\n    \"relay_binlog_name\": \"mysql-bin.000002\",\n    \"relay_binlog_gtid\": \"e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849\",\n    \"relay_dir\": \"./relay_log\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "95bb38de-bb79-44e5-af77-6562114a57e5",
+              "name": "failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "sources",
+                    ":source-name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "source-name",
+                      "description": "(Required) globally unique data source name"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"source\": {\n    \"source_name\": \"mysql-01\",\n    \"host\": \"127.0.0.1\",\n    \"port\": 3306,\n    \"user\": \"root\",\n    \"enable_gtid\": false,\n    \"enable\": false,\n    \"password\": \"123456\",\n    \"flavor\": \"mysql\",\n    \"task_name_list\": [\n      \"task1\",\n      \"task1\"\n    ],\n    \"security\": {\n      \"ssl_ca_content\": \"\",\n      \"ssl_cert_content\": \"\",\n      \"ssl_key_content\": \"\",\n      \"cert_allowed_cn\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    \"purge\": {\n      \"interval\": 3600,\n      \"expires\": 0,\n      \"remain_space\": 15\n    },\n    \"status_list\": [\n      {\n        \"source_name\": \"mysql-replica-01\",\n        \"worker_name\": \"worker-1\",\n        \"relay_status\": {\n          \"master_binlog\": \"(mysql-bin.000001, 1979)\",\n          \"master_binlog_gtid\": \"e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849\",\n          \"relay_dir\": \"./sub_dir\",\n          \"relay_binlog_gtid\": \"e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849\",\n          \"relay_catch_up_master\": \"<boolean>\",\n          \"stage\": \"Running\"\n        },\n        \"error_msg\": \"<string>\"\n      },\n      {\n        \"source_name\": \"mysql-replica-01\",\n        \"worker_name\": \"worker-1\",\n        \"relay_status\": {\n          \"master_binlog\": \"(mysql-bin.000001, 1979)\",\n          \"master_binlog_gtid\": \"e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849\",\n          \"relay_dir\": \"./sub_dir\",\n          \"relay_binlog_gtid\": \"e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849\",\n          \"relay_catch_up_master\": \"<boolean>\",\n          \"stage\": \"Running\"\n        },\n        \"error_msg\": \"<string>\"\n      }\n    ],\n    \"relay_config\": {\n      \"enable_relay\": \"<boolean>\",\n      \"relay_binlog_name\": \"mysql-bin.000002\",\n      \"relay_binlog_gtid\": \"e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849\",\n      \"relay_dir\": \"./relay_log\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error_msg\": \"string\",\n  \"error_code\": 9977\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6a71a354-eaba-4ffa-bda0-29da5a55f51a",
+          "name": "get the current status of the data source",
+          "request": {
+            "name": "get the current status of the data source",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "sources",
+                ":source-name",
+                "status"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "source-name",
+                  "description": "(Required) globally unique data source name"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d1bb4290-ba3b-4dd6-9997-bae9f96dda86",
+              "name": "success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "sources",
+                    ":source-name",
+                    "status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "source-name",
+                      "description": "(Required) globally unique data source name"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"total\": 7791,\n  \"data\": [\n    {\n      \"source_name\": \"mysql-replica-01\",\n      \"worker_name\": \"worker-1\",\n      \"relay_status\": {\n        \"master_binlog\": \"(mysql-bin.000001, 1979)\",\n        \"master_binlog_gtid\": \"e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849\",\n        \"relay_dir\": \"./sub_dir\",\n        \"relay_binlog_gtid\": \"e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849\",\n        \"relay_catch_up_master\": \"<boolean>\",\n        \"stage\": \"Running\"\n      },\n      \"error_msg\": \"<string>\"\n    },\n    {\n      \"source_name\": \"mysql-replica-01\",\n      \"worker_name\": \"worker-1\",\n      \"relay_status\": {\n        \"master_binlog\": \"(mysql-bin.000001, 1979)\",\n        \"master_binlog_gtid\": \"e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849\",\n        \"relay_dir\": \"./sub_dir\",\n        \"relay_binlog_gtid\": \"e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849\",\n        \"relay_catch_up_master\": \"<boolean>\",\n        \"stage\": \"Running\"\n      },\n      \"error_msg\": \"<string>\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "269e4786-f621-4b5d-97e2-45247c59a2f3",
+              "name": "failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "sources",
+                    ":source-name",
+                    "status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "source-name",
+                      "description": "(Required) globally unique data source name"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error_msg\": \"string\",\n  \"error_code\": 9977\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3048f1fc-e1a3-4144-a571-d3c34f9b2e7b",
+          "name": "enable a data source",
+          "request": {
+            "name": "enable a data source",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "sources",
+                ":source-name",
+                "enable"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "source-name",
+                  "description": "(Required) globally unique data source name"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "41995c66-e0e2-4f36-9957-bab907d26e1d",
+              "name": "success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "sources",
+                    ":source-name",
+                    "enable"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "source-name",
+                      "description": "(Required) globally unique data source name"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "181049c0-9f2f-44f4-bf07-e5346d0c2901",
+              "name": "failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "sources",
+                    ":source-name",
+                    "enable"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "source-name",
+                      "description": "(Required) globally unique data source name"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error_msg\": \"string\",\n  \"error_code\": 9977\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9901e966-eb70-4c7e-9002-4a54c40db743",
+          "name": "disable a data source",
+          "request": {
+            "name": "disable a data source",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "sources",
+                ":source-name",
+                "disable"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "source-name",
+                  "description": "(Required) globally unique data source name"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "3c1ffcdd-80cf-45f6-9a3a-ad65e2c0c860",
+              "name": "success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "sources",
+                    ":source-name",
+                    "disable"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "source-name",
+                      "description": "(Required) globally unique data source name"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "af8c8df5-e9af-4cdf-a03b-45b656f441d7",
+              "name": "failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "sources",
+                    ":source-name",
+                    "disable"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "source-name",
+                      "description": "(Required) globally unique data source name"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error_msg\": \"string\",\n  \"error_code\": 9977\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a39f4817-618b-4406-9d0e-66128e9e6b54",
+          "name": "transfer source to a free worker",
+          "request": {
+            "name": "transfer source to a free worker",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "sources",
+                ":source-name",
+                "transfer"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "source-name",
+                  "description": "(Required) globally unique data source name"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"worker_name\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "43630e4b-fd94-41ac-a53a-a11cdc689daa",
+              "name": "success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "sources",
+                    ":source-name",
+                    "transfer"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "source-name",
+                      "description": "(Required) globally unique data source name"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"worker_name\": \"worker-1\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "506fa5d1-5451-4e50-aecd-bb34291158b9",
+              "name": "failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "sources",
+                    ":source-name",
+                    "transfer"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "source-name",
+                      "description": "(Required) globally unique data source name"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"worker_name\": \"worker-1\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error_msg\": \"string\",\n  \"error_code\": 9977\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f56a5679-0032-47ed-b4b8-6f6f24255241",
+          "name": "enable relay log function for the data source",
+          "request": {
+            "name": "enable relay log function for the data source",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "sources",
+                ":source-name",
+                "relay",
+                "enable"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "source-name",
+                  "description": "(Required) globally unique data source name"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"worker_name_list\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"relay_binlog_name\": \"<string,null>\",\n  \"relay_binlog_gtid\": \"<string,null>\",\n  \"relay_dir\": \"./relay_log\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "0ac3349d-c912-4293-81c4-3688defc5e9c",
+              "name": "success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "sources",
+                    ":source-name",
+                    "relay",
+                    "enable"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "source-name",
+                      "description": "(Required) globally unique data source name"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"worker_name_list\": [\n    \"worker-1\",\n    \"worker-1\"\n  ],\n  \"relay_binlog_name\": \"mysql-bin.000002\",\n  \"relay_binlog_gtid\": \"e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849\",\n  \"relay_dir\": \"./relay_log\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "d8e1670d-1dec-42a7-a864-1f00e3f50f89",
+              "name": "failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "sources",
+                    ":source-name",
+                    "relay",
+                    "enable"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "source-name",
+                      "description": "(Required) globally unique data source name"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"worker_name_list\": [\n    \"worker-1\",\n    \"worker-1\"\n  ],\n  \"relay_binlog_name\": \"mysql-bin.000002\",\n  \"relay_binlog_gtid\": \"e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849\",\n  \"relay_dir\": \"./relay_log\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error_msg\": \"string\",\n  \"error_code\": 9977\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8797a9e0-48aa-4dad-9ca5-cdf80b082c24",
+          "name": "disable relay log function for the data source",
+          "request": {
+            "name": "disable relay log function for the data source",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "sources",
+                ":source-name",
+                "relay",
+                "disable"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "source-name",
+                  "description": "(Required) globally unique data source name"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"worker_name_list\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "72e0e037-6c68-47c6-b68d-0bfded93db31",
+              "name": "success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "sources",
+                    ":source-name",
+                    "relay",
+                    "disable"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "source-name",
+                      "description": "(Required) globally unique data source name"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"worker_name_list\": [\n    \"worker-1\",\n    \"worker-1\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "334e214f-5f98-4a0b-882a-2a05227c4ef6",
+              "name": "failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "sources",
+                    ":source-name",
+                    "relay",
+                    "disable"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "source-name",
+                      "description": "(Required) globally unique data source name"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"worker_name_list\": [\n    \"worker-1\",\n    \"worker-1\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error_msg\": \"string\",\n  \"error_code\": 9977\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "98d45136-6599-445f-a5a7-b884532d6016",
+          "name": "purge relay log",
+          "request": {
+            "name": "purge relay log",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "sources",
+                ":source-name",
+                "relay",
+                "purge"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "source-name",
+                  "description": "(Required) globally unique data source name"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"relay_binlog_name\": \"<string>\",\n  \"relay_dir\": \"<string,null>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "91c255c0-e709-4116-a434-c49bc2715fde",
+              "name": "success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "sources",
+                    ":source-name",
+                    "relay",
+                    "purge"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "source-name",
+                      "description": "(Required) globally unique data source name"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"relay_binlog_name\": \"mysql-bin.000002\",\n  \"relay_dir\": \"<string,null>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "c7d76360-5316-4a0d-bea1-048b8e54998c",
+              "name": "failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "sources",
+                    ":source-name",
+                    "relay",
+                    "purge"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "source-name",
+                      "description": "(Required) globally unique data source name"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"relay_binlog_name\": \"mysql-bin.000002\",\n  \"relay_dir\": \"<string,null>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error_msg\": \"string\",\n  \"error_code\": 9977\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "fd03c730-ed78-4661-83f2-0f7ff90ec94e",
+          "name": "get source schema list",
+          "request": {
+            "name": "get source schema list",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "sources",
+                ":source-name",
+                "schemas"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "source-name",
+                  "description": "(Required) source name"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "45d211d3-5503-4ef4-860f-ec60101ae5c5",
+              "name": "success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "sources",
+                    ":source-name",
+                    "schemas"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "source-name",
+                      "description": "(Required) source name"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  \"db1\",\n  \"db1\"\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "039bfeb2-a1d6-47e7-8c0e-1787314418eb",
+              "name": "failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "sources",
+                    ":source-name",
+                    "schemas"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "source-name",
+                      "description": "(Required) source name"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error_msg\": \"string\",\n  \"error_code\": 9977\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6797a496-ba34-4605-bdce-4c638c5b5680",
+          "name": "get source table list",
+          "request": {
+            "name": "get source table list",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "sources",
+                ":source-name",
+                "schemas",
+                ":schema-name"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "source-name",
+                  "description": "(Required) source name"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "schema-name",
+                  "description": "(Required) schema name"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "400fd4cd-d982-4f1e-b595-60b91c1e5d1f",
+              "name": "success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "sources",
+                    ":source-name",
+                    "schemas",
+                    ":schema-name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "source-name",
+                      "description": "(Required) source name"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "schema-name",
+                      "description": "(Required) schema name"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  \"table1\",\n  \"table1\"\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "16ef2338-4a1a-42ac-8fd9-a0261a6876a9",
+              "name": "failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "sources",
+                    ":source-name",
+                    "schemas",
+                    ":schema-name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "source-name",
+                      "description": "(Required) source name"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "schema-name",
+                      "description": "(Required) schema name"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error_msg\": \"string\",\n  \"error_code\": 9977\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://you.domain.com/",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "881721c0-a54e-464d-a33f-51e0686bbff9",
+    "name": "DM OpenAPI DOC Source API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "source",
+      "type": "text/plain"
+    }
+  }
+}

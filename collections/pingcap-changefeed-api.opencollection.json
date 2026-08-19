@@ -1,0 +1,217 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "TiDB Cloud Dedicated Changefeed API",
+    "version": "v1beta1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Changefeed",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List changefeed RCU options",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dedicated.tidbapi.com/v1beta1/changefeedRCUs"
+          },
+          "docs": "Lists the available changefeed RCU options that can be selected for a changefeed."
+        },
+        {
+          "info": {
+            "name": "List changefeeds",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dedicated.tidbapi.com/v1beta1/changefeeds",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "query",
+                "description": "The ID of the cluster to list changefeeds for."
+              },
+              {
+                "name": "downstreamType",
+                "value": "",
+                "type": "query",
+                "description": "The downstream type to filter by. When not specified, returns all types."
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of changefeeds to return. The default value is 20."
+              },
+              {
+                "name": "pageToken",
+                "value": "",
+                "type": "query",
+                "description": "The page token from a previous ListChangefeeds response, used to retrieve the next page."
+              }
+            ]
+          },
+          "docs": "Lists the changefeeds for a cluster. Results can be filtered by downstream type and paginated using the page token."
+        },
+        {
+          "info": {
+            "name": "Create a changefeed",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dedicated.tidbapi.com/v1beta1/changefeeds",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a changefeed to replicate data from a TiDB cluster to a downstream system. Supports Kafka, MySQL, S3, GCS, and Azure Blob downstream types."
+        },
+        {
+          "info": {
+            "name": "Get a changefeed",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dedicated.tidbapi.com/v1beta1/changefeeds/:changefeedId",
+            "params": [
+              {
+                "name": "changefeedId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the changefeed to retrieve."
+              },
+              {
+                "name": "invalidateCache",
+                "value": "",
+                "type": "query",
+                "description": "Indicates whether to bypass the cache and return the real-time checkpoint information."
+              }
+            ]
+          },
+          "docs": "Gets the details of a changefeed by its ID, including its state, configuration, and checkpoint information."
+        },
+        {
+          "info": {
+            "name": "Delete a changefeed",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://dedicated.tidbapi.com/v1beta1/changefeeds/:changefeedId",
+            "params": [
+              {
+                "name": "changefeedId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the changefeed to delete."
+              }
+            ]
+          },
+          "docs": "Deletes a changefeed by its ID. This operation cannot be undone. The changefeed must be in a deletable state."
+        },
+        {
+          "info": {
+            "name": "Update a changefeed downstream config",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dedicated.tidbapi.com/v1beta1/changefeeds/:changefeedId:editDownstreamConfig",
+            "params": [
+              {
+                "name": "changefeedId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the changefeed to update."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates the mutable configuration of an existing changefeed. The changefeed must be in the PAUSED state."
+        },
+        {
+          "info": {
+            "name": "Pause a changefeed",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dedicated.tidbapi.com/v1beta1/changefeeds/:changefeedId:pause",
+            "params": [
+              {
+                "name": "changefeedId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the changefeed to pause."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Pauses a running changefeed. While paused, the changefeed stops replicating data but retains its configuration and checkpoint."
+        },
+        {
+          "info": {
+            "name": "Resume a changefeed",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dedicated.tidbapi.com/v1beta1/changefeeds/:changefeedId:resume",
+            "params": [
+              {
+                "name": "changefeedId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the changefeed to resume."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Resumes a paused changefeed. The changefeed continues replicating data from its last checkpoint."
+        },
+        {
+          "info": {
+            "name": "Scale a changefeed",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dedicated.tidbapi.com/v1beta1/changefeeds/:changefeedId:scale",
+            "params": [
+              {
+                "name": "changefeedId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the changefeed to scale."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Scales a changefeed to a different replication capacity (RCU). The new capacity takes effect after the operation completes."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

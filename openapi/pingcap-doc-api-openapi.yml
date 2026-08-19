@@ -1,0 +1,30 @@
+openapi: 3.2.0
+info:
+  title: DM OpenAPI Doc API
+  version: 6.0.0
+servers:
+- url: https://you.domain.com/
+tags:
+- name: doc
+paths:
+  /api/v1/docs:
+    get:
+      tags:
+      - doc
+      summary: get doc html
+      operationId: GetDocHTML
+      responses:
+        '200':
+          description: HTML content
+  /api/v1/dm.json:
+    get:
+      tags:
+      - doc
+      summary: get doc json
+      operationId: GetDocJSON
+      responses:
+        '200':
+          description: json content
+externalDocs:
+  description: DM OpenAPI DOC
+  url: https://docs.pingcap.com/zh/tidb-data-migration/stable

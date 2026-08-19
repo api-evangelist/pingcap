@@ -1,0 +1,833 @@
+openapi: 3.2.0
+info:
+  title: OSSInsight Public Pull Request Creators API
+  description: "\nOSSInsight Public APIs (beta) provide a convenient way to access insight data for open source projects on GitHub, supplementing the existing GitHub API.\n\nIt provides data query in different dimensions, including:\n\n```mdx-code-block\nimport DocCardList from '@theme/DocCardList';\nimport {useCurrentSidebarCategory} from '@docusaurus/theme-common';\n\n<DocCardList items={useCurrentSidebarCategory().items.filter((item) => {\n    // Exclude Introduction and Showcase pages\n    return item.docId !== 'api/showcase' && item.docId !== 'api/ossinsight-public-api';\n})}/>\n```\n\n## Usage\n\nThe OSSInsight Public API is designed to follow the OpenAPI specification and can be accessed by initiating HTTP requests using the command line `curl` or web request libraries in different programming languages.\n\n### Base URL\n\nAll API requests are based on the following URL:\n\n```shell\nhttps://api.ossinsight.io/v1\n```\n\n### Authentication\n\nNo authentication is required for beta version of public APIs, but there are [rate limits](#rate-limit) for API requests.\n\n> Note:\n> We will add authentication way for larger API requests in future releases.\n\n### Rate Limit\n\nFor each IP address, the rate limit allows for up to **600 requests per hour**, which can be checked by the following fields in the Response Header to see the current usage:\n\n```\nx-ratelimit-limit: 600\nx-ratelimit-remaining: 599\n```\n\nIn addition, we have also set up a global rate limit of up to **1000 requests per minute**, which can be checked by the following fields in the Response Header to see the current usage:\n\n```\nx-ratelimit-limit-minute: 1000\nx-ratelimit-remaining-minute: 97\n```\n\n### Example\n\nFor example, if you want to know what countries the stargazers in the `pingcap/tidb` repository are located in, you can make a request using the curl command as follows:\n\n```shell\ncurl https://api.ossinsight.io/v1/repos/pingcap/tidb/stargazers/countries\n```\n\n<details>\n\n<summary>Example Response</summary>\n\n```json\n{\n  \"type\": \"sql_endpoint\",\n  \"data\": {\n    \"columns\": [\n      {\n        \"col\": \"country_or_area\",\n        \"data_type\": \"CHAR\",\n        \"nullable\": true\n      },\n      {\n        \"col\": \"count\",\n        \"data_type\": \"BIGINT\",\n        \"nullable\": true\n      },\n      {\n        \"col\": \"percentage\",\n        \"data_type\": \"DECIMAL\",\n        \"nullable\": true\n      }\n    ],\n    \"rows\": [\n      {\n        \"count\": \"9183\",\n        \"country_or_area\": \"CN\",\n        \"percentage\": \"0.5936\"\n      },\n      {\n        \"count\": \"1542\",\n        \"country_or_area\": \"US\",\n        \"percentage\": \"0.0997\"\n      },\n      {\n        \"count\": \"471\",\n        \"country_or_area\": \"JP\",\n        \"percentage\": \"0.0304\"\n      }\n    ],\n    \"result\": {\n      \"code\": 200,\n      \"message\": \"Query OK!\",\n      \"start_ms\": 1690351487809,\n      \"end_ms\": 1690351487930,\n      \"latency\": \"121ms\",\n      \"row_count\": 132,\n      \"row_affect\": 0,\n      \"limit\": 300,\n      \"databases\": [\n        \"gharchive_dev\"\n      ]\n    }\n  }\n}\n```\n\n</details>\n\n## Request New API \n\nIf the API in the documentation does not meet your query requirements, please contact us as follows:\n\n- Email us at ossinsight@pingcap.com\n- Open an issue in the [OSSInsight GitHub repository](https://github.com/pingcap/ossinsight/issues/new?assignees=&labels=type%2Ffeature&projects=&template=feature_request.md&title=New%20API)\n"
+  version: v1beta
+servers:
+- url: https://api.ossinsight.io/v1
+tags:
+- name: Pull Request Creators
+paths:
+  /repos/{owner}/{repo}/pull_request_creators/:
+    get:
+      operationId: list-pull-request-creators
+      summary: List pull request creators
+      tags:
+      - Pull Request Creators
+      description: "Querying the pull request creators list in a given repository.\n\nThis API provides multiple ways to sort the query results, for example:\n\n- `sort=prs-desc` (Default): Sorted in descending order based on `prs` field (the number of PRs they have contributed), meaning that the contributor with the most PRs is at the top.\n- `sort=first_pr_merged_at-desc`: Sorted in descending order based on `first_pr_merged_at` field (the time of their first merged PR), which means you can got a list of new code contributors of the repository.\n  "
+      parameters:
+      - schema:
+          type: string
+          enum:
+          - login
+          - prs
+          - prs-desc
+          - first_pr_opened_at
+          - first_pr_opened_at-desc
+          - first_pr_merged_at
+          - first_pr_merged_at-desc
+          default: prs-desc
+        in: query
+        name: sort
+        required: false
+        description: Specify the field by which to sort the pull request creators list (values with a `-desc` suffix indicate descending sorting)
+      - schema:
+          type: boolean
+          default: true
+        in: query
+        name: exclude_bots
+        required: false
+        description: 'Whether to exclude robot accounts (includes GitHub App and normal users whose username matches the pattern, for example: `ti-chi-bot`).'
+      - schema:
+          type: integer
+          default: 1
+        in: query
+        name: page
+        required: false
+        description: Page number of the results to fetch.
+      - schema:
+          type: integer
+          default: 30
+        in: query
+        name: page_size
+        required: false
+        description: The number of results per page (max 100).
+      - schema:
+          type: string
+        example: pingcap
+        in: path
+        name: owner
+        required: true
+        description: The owner of the repo.
+      - schema:
+          type: string
+        example: tidb
+        in: path
+        name: repo
+        required: true
+        description: The name of the repo.
+      responses:
+        '200':
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - type
+                - data
+                properties:
+                  type:
+                    type: string
+                    description: The type of the endpoint.
+                    enum:
+                    - sql_endpoint
+                    example: sql_endpoint
+                  data:
+                    type: object
+                    required:
+                    - columns
+                    - rows
+                    - result
+                    properties:
+                      columns:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                          - col
+                          - data_type
+                          - nullable
+                          properties:
+                            col:
+                              type: string
+                              description: The name of the column in the query result.
+                            data_type:
+                              type: string
+                              enum:
+                              - CHAR
+                              - BIGINT
+                              - DECIMAL
+                              - INT
+                              - UNSIGNED BIGINT
+                              - TINYINT
+                              - TIMESTAMP
+                              - TEXT
+                              - VARCHAR
+                              - DATETIME
+                              - DOUBLE
+                              - FLOAT
+                              - DATE
+                              - TIME
+                              - YEAR
+                              - MEDIUMINT
+                              - SMALLINT
+                              - BIT
+                              - BINARY
+                              - VARBINARY
+                              - JSON
+                              - ENUM
+                              - SET
+                              - TINYTEXT
+                              - MEDIUMTEXT
+                              - LONGTEXT
+                              - TINYBLOB
+                              - MEDIUMBLOB
+                              - BLOB
+                              - LONGBLOB
+                              description: The data type of the column.
+                            nullable:
+                              type: boolean
+                              description: Whether the column is nullable.
+                          additionalProperties: true
+                        example:
+                        - col: id
+                          data_type: INT
+                        - col: login
+                          data_type: VARCHAR
+                        - col: name
+                          data_type: VARCHAR
+                        - col: prs
+                          data_type: INT
+                        - col: first_pr_opened_at
+                          data_type: DATETIME
+                        - col: first_pr_merged_at
+                          data_type: DATETIME
+                      rows:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              description: The ID of the pull request creator
+                            login:
+                              type: string
+                              description: The login (username) of the pull request creator
+                            name:
+                              type: string
+                              description: The name of the pull request creator
+                            prs:
+                              type: string
+                              description: The number of pull requests created by the pull request creator
+                            first_pr_opened_at:
+                              type: string
+                              description: The date of the first pull request created by the pull request creator
+                            first_pr_merged_at:
+                              type: string
+                              description: The date of the first merged pull request be merged into the repository
+                          additionalProperties: true
+                        example:
+                        - id: '1420062'
+                          login: tiancaiamao
+                          name: ''
+                          prs: '1300'
+                          first_pr_opened_at: 2016-06-20 14:08:39
+                          first_pr_merged_at: 2016-06-21 07:45:27
+                        - id: '3427324'
+                          login: hawkingrei
+                          name: Weizhen Wang
+                          prs: '927'
+                          first_pr_opened_at: 2017-05-17 15:00:50
+                          first_pr_merged_at: 2017-05-22 04:47:11
+                        - id: '26020263'
+                          login: crazycs520
+                          name: crazycs
+                          prs: '788'
+                          first_pr_opened_at: 2018-06-12 05:02:07
+                          first_pr_merged_at: 2018-06-29 03:01:35
+                        - id: '891222'
+                          login: coocood
+                          name: Evan Zhou
+                          prs: '779'
+                          first_pr_opened_at: 2015-09-06 05:58:15
+                          first_pr_merged_at: 2015-09-06 07:10:13
+                        - id: '4242506'
+                          login: zimulala
+                          name: Lynn
+                          prs: '774'
+                          first_pr_opened_at: 2015-09-06 10:51:19
+                          first_pr_merged_at: 2015-09-06 12:32:33
+                      result:
+                        type: object
+                        properties:
+                          code:
+                            type: number
+                            description: The code of the response.
+                          message:
+                            type: string
+                            description: The message of the response.
+                          start_ms:
+                            type: number
+                            description: The start time of the query in milliseconds.
+                          end_ms:
+                            type: number
+                            description: The end time of the query in milliseconds.
+                          latency:
+                            type: string
+                            description: The latency of the query.
+                          row_count:
+                            type: number
+                            description: The number of rows in the query result.
+                          row_affect:
+                            type: number
+                            description: The number of rows affected by the query.
+                          limit:
+                            type: number
+                            description: The maximum number of rows in the query result.
+                          databases:
+                            type: array
+                            description: The databases used in the query.
+                            items:
+                              type: string
+                        additionalProperties: true
+                        example:
+                          code: 200
+                          message: Query OK!
+                          start_ms: 1690957407469
+                          end_ms: 1690957407499
+                          latency: 30ms
+                          row_count: 5
+                          row_affect: 0
+                          limit: 50
+                          databases:
+                          - gharchive_dev
+  /repos/{owner}/{repo}/pull_request_creators/countries/:
+    get:
+      operationId: list-countries-of-pr-creators
+      summary: List countries/regions of PR creators
+      tags:
+      - Pull Request Creators
+      description: "List countries/regions of pull request creators for the specified repository.\n\n> **Notice**:\n> In the overall data, about **3.5%** of GitHub users provided valid country/region information.\n\n> **Note**: \n> By default, the API does not count users without valid country/region information. \n> If you need to count these users, you can set the `exclude_unknown` parameter to `false`.\n"
+      parameters:
+      - schema:
+          type: boolean
+          default: true
+        in: query
+        name: exclude_unknown
+        required: false
+        description: Whether to exclude issue creators with unknown country/region information
+      - schema:
+          type: string
+          default: 2000-01-01
+        in: query
+        name: from
+        required: false
+        description: The start date of the range.
+      - schema:
+          type: string
+          default: 2099-01-01
+        in: query
+        name: to
+        required: false
+        description: The end date of the range.
+      - schema:
+          type: string
+        example: pingcap
+        in: path
+        name: owner
+        required: true
+        description: The owner of the repo.
+      - schema:
+          type: string
+        example: tidb
+        in: path
+        name: repo
+        required: true
+        description: The name of the repo.
+      responses:
+        '200':
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - type
+                - data
+                properties:
+                  type:
+                    type: string
+                    description: The type of the endpoint.
+                    enum:
+                    - sql_endpoint
+                    example: sql_endpoint
+                  data:
+                    type: object
+                    required:
+                    - columns
+                    - rows
+                    - result
+                    properties:
+                      columns:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                          - col
+                          - data_type
+                          - nullable
+                          properties:
+                            col:
+                              type: string
+                              description: The name of the column in the query result.
+                            data_type:
+                              type: string
+                              enum:
+                              - CHAR
+                              - BIGINT
+                              - DECIMAL
+                              - INT
+                              - UNSIGNED BIGINT
+                              - TINYINT
+                              - TIMESTAMP
+                              - TEXT
+                              - VARCHAR
+                              - DATETIME
+                              - DOUBLE
+                              - FLOAT
+                              - DATE
+                              - TIME
+                              - YEAR
+                              - MEDIUMINT
+                              - SMALLINT
+                              - BIT
+                              - BINARY
+                              - VARBINARY
+                              - JSON
+                              - ENUM
+                              - SET
+                              - TINYTEXT
+                              - MEDIUMTEXT
+                              - LONGTEXT
+                              - TINYBLOB
+                              - MEDIUMBLOB
+                              - BLOB
+                              - LONGBLOB
+                              description: The data type of the column.
+                            nullable:
+                              type: boolean
+                              description: Whether the column is nullable.
+                          additionalProperties: true
+                        example:
+                        - col: country_code
+                          data_type: CHAR
+                        - col: pull_request_creators
+                          data_type: BIGINT
+                        - col: percentage
+                          data_type: DECIMAL
+                      rows:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            country_code:
+                              type: string
+                              description: Country/region code
+                            percentage:
+                              type: string
+                              description: Percentage of pull request creators from the country/region
+                            pull_request_creators:
+                              type: string
+                              description: Number of pull request creators from the country/region
+                        example:
+                        - country_code: CN
+                          percentage: '0.8802'
+                          pull_request_creators: '13619'
+                        - country_code: NL
+                          percentage: '0.0508'
+                          pull_request_creators: '786'
+                        - country_code: US
+                          percentage: '0.0400'
+                          pull_request_creators: '619'
+                      result:
+                        type: object
+                        properties:
+                          code:
+                            type: number
+                            description: The code of the response.
+                          message:
+                            type: string
+                            description: The message of the response.
+                          start_ms:
+                            type: number
+                            description: The start time of the query in milliseconds.
+                          end_ms:
+                            type: number
+                            description: The end time of the query in milliseconds.
+                          latency:
+                            type: string
+                            description: The latency of the query.
+                          row_count:
+                            type: number
+                            description: The number of rows in the query result.
+                          row_affect:
+                            type: number
+                            description: The number of rows affected by the query.
+                          limit:
+                            type: number
+                            description: The maximum number of rows in the query result.
+                          databases:
+                            type: array
+                            description: The databases used in the query.
+                            items:
+                              type: string
+                        additionalProperties: true
+                        example:
+                          code: 200
+                          message: Query OK!
+                          start_ms: 1690957407469
+                          end_ms: 1690957407499
+                          latency: 30ms
+                          row_count: 3
+                          row_affect: 0
+                          limit: 50
+                          databases:
+                          - gharchive_dev
+  /repos/{owner}/{repo}/pull_request_creators/history/:
+    get:
+      operationId: pull-request-creators-history
+      summary: Pull request creators history
+      tags:
+      - Pull Request Creators
+      description: Querying the historical trend of the number of pull request creators in a given repository.
+      parameters:
+      - schema:
+          type: string
+          enum:
+          - day
+          - week
+          - month
+          default: month
+        in: query
+        name: per
+        required: false
+        description: The time interval of the data points.
+      - schema:
+          type: string
+          default: 2000-01-01
+        in: query
+        name: from
+        required: false
+        description: The start date of the time range.
+      - schema:
+          type: string
+          default: 2099-01-01
+        in: query
+        name: to
+        required: false
+        description: The end date of the time range.
+      - schema:
+          type: string
+        example: pingcap
+        in: path
+        name: owner
+        required: true
+        description: The owner of the repo.
+      - schema:
+          type: string
+        example: tidb
+        in: path
+        name: repo
+        required: true
+        description: The name of the repo.
+      responses:
+        '200':
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - type
+                - data
+                properties:
+                  type:
+                    type: string
+                    description: The type of the endpoint.
+                    enum:
+                    - sql_endpoint
+                    example: sql_endpoint
+                  data:
+                    type: object
+                    required:
+                    - columns
+                    - rows
+                    - result
+                    properties:
+                      columns:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                          - col
+                          - data_type
+                          - nullable
+                          properties:
+                            col:
+                              type: string
+                              description: The name of the column in the query result.
+                            data_type:
+                              type: string
+                              enum:
+                              - CHAR
+                              - BIGINT
+                              - DECIMAL
+                              - INT
+                              - UNSIGNED BIGINT
+                              - TINYINT
+                              - TIMESTAMP
+                              - TEXT
+                              - VARCHAR
+                              - DATETIME
+                              - DOUBLE
+                              - FLOAT
+                              - DATE
+                              - TIME
+                              - YEAR
+                              - MEDIUMINT
+                              - SMALLINT
+                              - BIT
+                              - BINARY
+                              - VARBINARY
+                              - JSON
+                              - ENUM
+                              - SET
+                              - TINYTEXT
+                              - MEDIUMTEXT
+                              - LONGTEXT
+                              - TINYBLOB
+                              - MEDIUMBLOB
+                              - BLOB
+                              - LONGBLOB
+                              description: The data type of the column.
+                            nullable:
+                              type: boolean
+                              description: Whether the column is nullable.
+                          additionalProperties: true
+                        example:
+                        - col: date
+                          data_type: VARCHAR
+                        - col: pull_request_creators
+                          data_type: DECIMAL
+                      rows:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            date:
+                              type: string
+                              description: The date of the data point
+                            pull_request_creators:
+                              type: string
+                              description: The cumulative number of pull request creators
+                        example:
+                        - date: 2023-03-01
+                          pull_request_creators: '912'
+                        - date: 2023-04-01
+                          pull_request_creators: '915'
+                        - date: 2023-05-01
+                          pull_request_creators: '924'
+                        - date: 2023-06-01
+                          pull_request_creators: '932'
+                        - date: 2023-08-01
+                          pull_request_creators: '933'
+                      result:
+                        type: object
+                        properties:
+                          code:
+                            type: number
+                            description: The code of the response.
+                          message:
+                            type: string
+                            description: The message of the response.
+                          start_ms:
+                            type: number
+                            description: The start time of the query in milliseconds.
+                          end_ms:
+                            type: number
+                            description: The end time of the query in milliseconds.
+                          latency:
+                            type: string
+                            description: The latency of the query.
+                          row_count:
+                            type: number
+                            description: The number of rows in the query result.
+                          row_affect:
+                            type: number
+                            description: The number of rows affected by the query.
+                          limit:
+                            type: number
+                            description: The maximum number of rows in the query result.
+                          databases:
+                            type: array
+                            description: The databases used in the query.
+                            items:
+                              type: string
+                        additionalProperties: true
+                        example:
+                          code: 200
+                          message: Query OK!
+                          start_ms: 1690957407469
+                          end_ms: 1690957407499
+                          latency: 30ms
+                          row_count: 5
+                          row_affect: 0
+                          limit: 50
+                          databases:
+                          - gharchive_dev
+  /repos/{owner}/{repo}/pull_request_creators/organizations/:
+    get:
+      operationId: list-organizations-of-pr-creators
+      summary: List organizations of PR creators
+      tags:
+      - Pull Request Creators
+      description: "List organizations of pull request creators for the specified repository.\n\n> **Notice**:\n> In the overall data, about **5.62%** of GitHub users has valid organization information.\n\n> **Note**: \n> By default, the API does not count users without valid organization information. \n> If you need to count these users, you can set the `exclude_unknown` parameter to `false`.\n"
+      parameters:
+      - schema:
+          type: boolean
+          default: true
+        in: query
+        name: exclude_unknown
+        required: false
+        description: Whether to exclude PR creators with unknown organization information
+      - schema:
+          type: string
+          default: 2000-01-01
+        in: query
+        name: from
+        required: false
+        description: The start date of the range.
+      - schema:
+          type: string
+          default: 2099-01-01
+        in: query
+        name: to
+        required: false
+        description: The end date of the range.
+      - schema:
+          type: string
+        example: pingcap
+        in: path
+        name: owner
+        required: true
+        description: The owner of the repo.
+      - schema:
+          type: string
+        example: tidb
+        in: path
+        name: repo
+        required: true
+        description: The name of the repo.
+      responses:
+        '200':
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - type
+                - data
+                properties:
+                  type:
+                    type: string
+                    description: The type of the endpoint.
+                    enum:
+                    - sql_endpoint
+                    example: sql_endpoint
+                  data:
+                    type: object
+                    required:
+                    - columns
+                    - rows
+                    - result
+                    properties:
+                      columns:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                          - col
+                          - data_type
+                          - nullable
+                          properties:
+                            col:
+                              type: string
+                              description: The name of the column in the query result.
+                            data_type:
+                              type: string
+                              enum:
+                              - CHAR
+                              - BIGINT
+                              - DECIMAL
+                              - INT
+                              - UNSIGNED BIGINT
+                              - TINYINT
+                              - TIMESTAMP
+                              - TEXT
+                              - VARCHAR
+                              - DATETIME
+                              - DOUBLE
+                              - FLOAT
+                              - DATE
+                              - TIME
+                              - YEAR
+                              - MEDIUMINT
+                              - SMALLINT
+                              - BIT
+                              - BINARY
+                              - VARBINARY
+                              - JSON
+                              - ENUM
+                              - SET
+                              - TINYTEXT
+                              - MEDIUMTEXT
+                              - LONGTEXT
+                              - TINYBLOB
+                              - MEDIUMBLOB
+                              - BLOB
+                              - LONGBLOB
+                              description: The data type of the column.
+                            nullable:
+                              type: boolean
+                              description: Whether the column is nullable.
+                          additionalProperties: true
+                        example:
+                        - col: org_name
+                          data_type: VARCHAR
+                        - col: pull_request_creators
+                          data_type: BIGINT
+                        - col: percentage
+                          data_type: DECIMAL
+                      rows:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            org_name:
+                              type: string
+                              description: Name of the organization
+                            percentage:
+                              type: string
+                              description: Percentage of pull request creators from the organization
+                            pull_request_creators:
+                              type: string
+                              description: Number of pull request creators from the organization
+                        example:
+                        - org_name: pingcap
+                          percentage: '0.3064'
+                          pull_request_creators: '106'
+                        - org_name: bytedance
+                          percentage: '0.0318'
+                          pull_request_creators: '11'
+                        - org_name: alibaba
+                          percentage: '0.0260'
+                          pull_request_creators: '9'
+                        - org_name: tencent
+                          percentage: '0.0173'
+                          pull_request_creators: '6'
+                      result:
+                        type: object
+                        properties:
+                          code:
+                            type: number
+                            description: The code of the response.
+                          message:
+                            type: string
+                            description: The message of the response.
+                          start_ms:
+                            type: number
+                            description: The start time of the query in milliseconds.
+                          end_ms:
+                            type: number
+                            description: The end time of the query in milliseconds.
+                          latency:
+                            type: string
+                            description: The latency of the query.
+                          row_count:
+                            type: number
+                            description: The number of rows in the query result.
+                          row_affect:
+                            type: number
+                            description: The number of rows affected by the query.
+                          limit:
+                            type: number
+                            description: The maximum number of rows in the query result.
+                          databases:
+                            type: array
+                            description: The databases used in the query.
+                            items:
+                              type: string
+                        additionalProperties: true
+                        example:
+                          code: 200
+                          message: Query OK!
+                          start_ms: 1690957407469
+                          end_ms: 1690957407499
+                          latency: 30ms
+                          row_count: 4
+                          row_affect: 0
+                          limit: 50
+                          databases:
+                          - gharchive_dev

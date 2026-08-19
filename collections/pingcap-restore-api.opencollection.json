@@ -1,0 +1,97 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "TiDB Cloud Restore API",
+    "version": "v1-beta"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Restore",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List the restore tasks in a project.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.tidbcloud.com/api/v1beta/projects/:project_id/restores",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of your project. You can get the project ID from the response of [List all accessible projects.](#tag/Project/operation/ListProjects)."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The number of pages."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The size of a page."
+              }
+            ]
+          },
+          "docs": "\nFor TiDB Cloud Starter instances, you cannot create or manage restore tasks via API."
+        },
+        {
+          "info": {
+            "name": "Create a restore task.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.tidbcloud.com/api/v1beta/projects/:project_id/restores",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the project. You can get the project ID from the response of [List all accessible projects.](#tag/Project/operation/ListProjects)."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "You can use this endpoint to restore data from a previously created backup file to a new cluster. In this endpoint, you must specify the configuration of the new cluster you want to restore data to.\n\n**Limitations:**\n\n- For TiDB Cloud Dedicated clusters, you can only restore data from a smaller node size to a larger node size.\n\n- You cannot restore data from a TiDB Cloud Dedicated cluster to a TiDB Cloud Starter instance.\n\nFor TiDB Cloud Starter instances, you cannot create restore tasks via API"
+        },
+        {
+          "info": {
+            "name": "Get a restore task.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.tidbcloud.com/api/v1beta/projects/:project_id/restores/:restore_id",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of your project. You can get the project ID from the response of [List all accessible projects.](#tag/Project/operation/ListProjects)."
+              },
+              {
+                "name": "restore_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the restore task."
+              }
+            ]
+          },
+          "docs": "\nFor TiDB Cloud Starter instances, you cannot manage restore tasks via API."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

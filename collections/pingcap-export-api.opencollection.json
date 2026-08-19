@@ -1,0 +1,153 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "TiDB Cloud Starter and Essential Export API",
+    "version": "v1beta1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Export",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List export tasks for a TiDB Cloud Starter or Essential instance",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://serverless.tidbapi.com/v1beta1/clusters/:clusterId/exports",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the TiDB Cloud Starter or Essential instance to list export tasks for."
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of exports to return. If not specified, at most 10 exports will be returned. The maximum value is `100`. Values greater than `100` are set to `100`."
+              },
+              {
+                "name": "pageToken",
+                "value": "",
+                "type": "query",
+                "description": "The pagination token received from a previous [List export tasks](#tag/Export/operation/ExportService_ListExports) request. Use this token to retrieve the next page of results.\n\n**Note**: When paginating, all other parameters must match the original request."
+              },
+              {
+                "name": "orderBy",
+                "value": "",
+                "type": "query",
+                "description": "Specifies the sorting order of results. Use a comma-separated list of field names, optionally appending `desc` for descending order. For example, `createTime desc`. By default, fields are sorted in ascending order.\n\nSupported field: `createTime`."
+              }
+            ]
+          },
+          "docs": "List export tasks for a TiDB Cloud Starter or Essential instance"
+        },
+        {
+          "info": {
+            "name": "Create an export task",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://serverless.tidbapi.com/v1beta1/clusters/:clusterId/exports",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the TiDB Cloud Starter or Essential instance."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create an export task"
+        },
+        {
+          "info": {
+            "name": "Get details of an export task",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://serverless.tidbapi.com/v1beta1/clusters/:clusterId/exports/:exportId",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the TiDB Cloud Starter or Essential instance."
+              },
+              {
+                "name": "exportId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the export task to retrieve."
+              }
+            ]
+          },
+          "docs": "Get details of an export task"
+        },
+        {
+          "info": {
+            "name": "Delete an export task",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://serverless.tidbapi.com/v1beta1/clusters/:clusterId/exports/:exportId",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the TiDB Cloud Starter or Essential instance."
+              },
+              {
+                "name": "exportId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the export task to delete."
+              }
+            ]
+          },
+          "docs": "Delete an export task"
+        },
+        {
+          "info": {
+            "name": "Cancel an export task",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://serverless.tidbapi.com/v1beta1/clusters/:clusterId/exports/:exportId:cancel",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the TiDB Cloud Starter or Essential instance."
+              },
+              {
+                "name": "exportId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the export task to cancel."
+              }
+            ]
+          },
+          "docs": "Cancel an export task"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,58 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "TiDB Cloud Project API",
+    "version": "v1-beta"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Project",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List all accessible projects.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.tidbcloud.com/api/v1beta/projects",
+            "params": [
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The number of pages."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The size of a page."
+              }
+            ]
+          },
+          "docs": "List all accessible projects."
+        },
+        {
+          "info": {
+            "name": "Create a project.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.tidbcloud.com/api/v1beta/projects",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a project."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,110 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "TiDB Cloud Data Service OPEN Data Source API",
+    "version": "v1beta1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Data Source",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List all data sources in a Data App.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dataservice.tidbapi.com/v1beta1/dataApps/:dataAppId/dataSources",
+            "params": [
+              {
+                "name": "dataAppId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the Data App. You can get the ID from the response of [List all Data Apps in a project](#tag/Data-App/operation/DataApp_ListDataApps)."
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of items to return. If it is not set or set to `0`, the default value `100` will be used."
+              },
+              {
+                "name": "pageToken",
+                "value": "",
+                "type": "query",
+                "description": "The identifier of the current page, used to retrieve the next page of results. You can get this value from the `nextPageToken` field in the previous response. To access the first page of data, omit this field."
+              }
+            ]
+          },
+          "docs": "List all data sources in a Data App."
+        },
+        {
+          "info": {
+            "name": "Create a data source for a Data App.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dataservice.tidbapi.com/v1beta1/dataApps/:dataAppId/dataSources",
+            "params": [
+              {
+                "name": "dataAppId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the Data App. You can get the ID from the response of [List all Data Apps in a project](#tag/Data-App/operation/DataApp_ListDataApps)."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "With this endpoint, you can link a cluster to a Data App. Then, the Data App can access and manipulate data in the cluster."
+        },
+        {
+          "info": {
+            "name": "Get a data source by ID.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dataservice.tidbapi.com/v1beta1/dataApps/:dataAppId/dataSources/:clusterId",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the cluster that is linked to the Data App."
+              }
+            ]
+          },
+          "docs": "Get a data source by ID."
+        },
+        {
+          "info": {
+            "name": "Delete a data source for a Data App.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://dataservice.tidbapi.com/v1beta1/dataApps/:dataAppId/dataSources/:clusterId",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the cluster that is linked to the Data App."
+              }
+            ]
+          },
+          "docs": "With this endpoint, you can unlink a cluster from a Data App. Then, the existing endpoints in the Data App cannot access the cluster anymore."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

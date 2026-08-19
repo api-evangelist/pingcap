@@ -1,0 +1,688 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Pingcap Cluster API",
+    "version": "1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Cluster",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List clusters",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://you.domain.com/clusters",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "query",
+                "description": "The ID of the project. If not specified, the project ID of the default project is used."
+              },
+              {
+                "name": "clusterIds",
+                "value": "",
+                "type": "query",
+                "description": "A list of cluster IDs. If specified, only clusters matching these IDs are returned."
+              },
+              {
+                "name": "regionIds",
+                "value": "",
+                "type": "query",
+                "description": "A list of region IDs. If specified, only clusters in these regions are returned."
+              },
+              {
+                "name": "clusterStates",
+                "value": "",
+                "type": "query",
+                "description": "A list of cluster states. If specified, only clusters in these states are returned.\n\n`\"UPGRADING\"`, `\"IMPORTING\"`, `\"MODIFYING\"`, `\"PAUSING\"`, `\"PAUSED\"`, and `\"RESUMING\"` states are only available for [TiDB Cloud Dedicated](https://docs.pingcap.com/tidbcloud/select-cluster-tier/#tidb-cloud-dedicated) clusters.\n\n - CREATING: Cluster is being created.\n - DELETING: Cluster is being deleted.\n - ACTIVE: Cluster is active for use.\n - RESTORING: Cluster data is being restored.\n - MAINTENANCE: Cluster is under maintenance.\n - DELETED: Cluster has been deleted.\n - INACTIVE: Cluster is not active, but not being deleted.\n - UPGRADING: Cluster is being updated.\nOnly for Dedicated Cluster.\n - IMPORTING: Cluster is being imported.\nOnly for Dedicated Cluster.\n - MODIFYING: Cluster is being modified.\nOnly for Dedicated Cluster.\n - PAUSING: Cluster is being paused.\nOnly for Dedicated Cluster.\n - PAUSED: Cluster is paused.\nOnly for Dedicated Cluster.\n - RESUMING: Cluster is resuming.\nOnly for Dedicated Cluster."
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of clusters to return. If not specified, at most 10 clusters will be returned. The maximum value is `100`. Values greater than `100` are set to `100`."
+              },
+              {
+                "name": "pageToken",
+                "value": "",
+                "type": "query",
+                "description": "The pagination token received from a previous [List clusters](#tag/Cluster/operation/ClusterService_ListClusters) request. Use this token to retrieve the next page of results.\n\n**Note**: When paginating, all other parameters must match the original request."
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "The number of clusters to skip before returning results. If the value exceeds the total number of clusters, the response is `200` with an empty list and no `nextPageToken`."
+              }
+            ]
+          },
+          "docs": "Lists all clusters in your organization. You can filter results by project, region, cluster state, or specific cluster IDs."
+        },
+        {
+          "info": {
+            "name": "Create a cluster",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://you.domain.com/clusters",
+            "params": [
+              {
+                "name": "validateOnly",
+                "value": "",
+                "type": "query",
+                "description": "If set to `true`, the request is validated but not executed. Defaults to `false`."
+              }
+            ]
+          },
+          "docs": "Creates a new [TiDB Cloud Dedicated](https://docs.pingcap.com/tidbcloud/select-cluster-tier/#tidb-cloud-dedicated) cluster. Before creating a TiDB Cloud Dedicated cluster, you must set a [Project CIDR on TiDB Cloud console](https://docs.pingcap.com/tidbcloud/set-up-vpc-peering-connections/#prerequisite-set-a-cidr-for-a-region)."
+        },
+        {
+          "info": {
+            "name": "Get a cluster",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://you.domain.com/clusters/:clusterId",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the cluster."
+              }
+            ]
+          },
+          "docs": "Retrieves details of a specific cluster."
+        },
+        {
+          "info": {
+            "name": "Update a cluster",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://you.domain.com/clusters/:clusterId",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the cluster to update."
+              },
+              {
+                "name": "validateOnly",
+                "value": "",
+                "type": "query",
+                "description": "If set to `true`, the request is validated but not executed. Defaults to `false`."
+              }
+            ]
+          },
+          "docs": "Updates the configuration of a specific cluster. You can modify the following fields: `tidbNodeSetting`, `tikvNodeSetting`, `tiflashNodeSetting` and `displayName`."
+        },
+        {
+          "info": {
+            "name": "Delete a cluster",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://you.domain.com/clusters/:clusterId",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the cluster to delete."
+              },
+              {
+                "name": "validateOnly",
+                "value": "",
+                "type": "query",
+                "description": "If set to `true`, the request is validated but not executed. Defaults to `false`."
+              }
+            ]
+          },
+          "docs": "Deletes a cluster by `clusterId`."
+        },
+        {
+          "info": {
+            "name": "Pause a cluster",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://you.domain.com/clusters/:clusterId:pauseCluster",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the cluster to pause."
+              }
+            ]
+          },
+          "docs": "Pauses a cluster by ID."
+        },
+        {
+          "info": {
+            "name": "Resume a cluster",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://you.domain.com/clusters/:clusterId:resumeCluster",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the cluster to resume."
+              }
+            ]
+          },
+          "docs": "Resumes a paused cluster. Only clusters in the `PAUSED` state can be resumed."
+        },
+        {
+          "info": {
+            "name": "Reset the root password of a cluster",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://you.domain.com/clusters/:clusterId:resetRootPassword",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the cluster for which to reset the root password."
+              }
+            ]
+          },
+          "docs": "Sets a new password for the cluster's root user. The new password is not returned in the response for security reasons, so save your password in a secure location.\n\nThe cluster must be in the `READY` state. If the cluster is not `READY`, wait until it is before retrying."
+        },
+        {
+          "info": {
+            "name": "List node quotas for your organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://you.domain.com/clusters:showNodeQuota"
+          },
+          "docs": "Lists the node quotas for your organization, including the maximum number of nodes allowed for each component type."
+        },
+        {
+          "info": {
+            "name": "Get log redaction policy",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://you.domain.com/clusters/:clusterId/logRedactionPolicy",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the cluster for which to get the log redaction policy."
+              }
+            ]
+          },
+          "docs": "Gets the log redaction policy for a cluster."
+        },
+        {
+          "info": {
+            "name": "Update a TiDB Cloud Starter or Essential instance",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://you.domain.com/clusters/:cluster.clusterId",
+            "params": [
+              {
+                "name": "cluster.clusterId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the TiDB Cloud Starter or Essential instance to update."
+              }
+            ]
+          },
+          "docs": "Update a TiDB Cloud Starter or Essential instance"
+        },
+        {
+          "info": {
+            "name": "List available regions for an organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://you.domain.com/regions"
+          },
+          "docs": "Before creating a TiDB Cloud Starter or Essential instance, you can use this endpoint to list available regions in your organization."
+        },
+        {
+          "info": {
+            "name": "List the cloud providers, regions and available specifications.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://you.domain.com/api/v1beta/clusters/provider/regions"
+          },
+          "docs": "List the cloud providers, regions and available specifications."
+        },
+        {
+          "info": {
+            "name": "List AWS Customer-Managed Encryption Keys for a project.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://you.domain.com/api/v1beta/projects/:project_id/aws-cmek",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+              }
+            ]
+          },
+          "docs": "Customer-Managed Encryption Keys (CMEK) lets you protect your static data in a TiDB Cloud Dedicated cluster using a cryptographic key that is completely controlled by you. To create a project with CMEK enabled, use the [Create a project](#tag/Project/operation/CreateProject) endpoint and configure `aws_cmek_enabled` to `true`.\n\nFor more information, see [Encryption at Rest using CMEK](https://docs.pingcap.com/tidbcloud/tidb-cloud-encrypt-cmek)."
+        },
+        {
+          "info": {
+            "name": "Configure AWS Customer-Managed Encryption Keys for a project.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://you.domain.com/api/v1beta/projects/:project_id/aws-cmek",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+              }
+            ]
+          },
+          "docs": "Before using this API, make sure that the `aws_cmek_enabled` field is set to `true` when creating the project using the [Create a Project](#tag/Project/operation/CreateProject) endpoint. For more information, see [Encryption at Rest using CMEK](https://docs.pingcap.com/tidbcloud/tidb-cloud-encrypt-cmek).\n\nCurrently, this feature is only available upon request. If you need to try out this feature, contact [support](https://docs.pingcap.com/tidbcloud/tidb-cloud-support)."
+        },
+        {
+          "info": {
+            "name": "List all clusters in a project.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://you.domain.com/api/v1beta/projects/:project_id/clusters",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The number of pages."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The size of a page."
+              }
+            ]
+          },
+          "docs": "List all clusters in a project."
+        },
+        {
+          "info": {
+            "name": "Create a cluster.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://you.domain.com/api/v1beta/projects/:project_id/clusters",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+              }
+            ]
+          },
+          "docs": "Before creating a TiDB Cloud Dedicated cluster, you must [set a Project CIDR](https://docs.pingcap.com/tidbcloud/set-up-vpc-peering-connections#prerequisite-set-a-project-cidr) on [TiDB Cloud console](https://tidbcloud.com/)."
+        },
+        {
+          "info": {
+            "name": "Get a cluster by ID.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://you.domain.com/api/v1beta/projects/:project_id/clusters/:cluster_id",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+              },
+              {
+                "name": "cluster_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the cluster."
+              }
+            ]
+          },
+          "docs": "Get a cluster by ID."
+        },
+        {
+          "info": {
+            "name": "Modify a TiDB Cloud Dedicated cluster.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://you.domain.com/api/v1beta/projects/:project_id/clusters/:cluster_id",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+              },
+              {
+                "name": "cluster_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the cluster."
+              }
+            ]
+          },
+          "docs": "With this endpoint, you can modify the components of a cluster using the `config.components` parameter, or pause or resume a cluster using the `config.paused` parameter."
+        },
+        {
+          "info": {
+            "name": "Delete a cluster.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://you.domain.com/api/v1beta/projects/:project_id/clusters/:cluster_id",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+              },
+              {
+                "name": "cluster_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the cluster."
+              }
+            ]
+          },
+          "docs": "Delete a cluster."
+        },
+        {
+          "info": {
+            "name": "Retrieve the private endpoint service information for a cluster.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://you.domain.com/api/v1beta/projects/:project_id/clusters/:cluster_id/private_endpoint_service",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+              },
+              {
+                "name": "cluster_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the cluster."
+              }
+            ]
+          },
+          "docs": "- For TiDB Cloud Dedicated clusters, you can retrieve the private endpoint service information for a cluster.\n- For TiDB Cloud Starter instances, you cannot create or manage private endpoint service via API."
+        },
+        {
+          "info": {
+            "name": "Create a private endpoint service for a cluster.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://you.domain.com/api/v1beta/projects/:project_id/clusters/:cluster_id/private_endpoint_service",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+              },
+              {
+                "name": "cluster_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the cluster."
+              }
+            ]
+          },
+          "docs": "- For TiDB Cloud Dedicated clusters, you can create the [AWS PrivateLink](https://aws.amazon.com/privatelink/?privatelink-blogs.sort-by=item.additionalFields.createdDate&privatelink-blogs.sort-order=desc) or [Google Cloud Private Service Connect](https://cloud.google.com/vpc/docs/private-service-connect) service depending on where your cluster is hosted.\n- For TiDB Cloud Starter instances, you cannot create or manage private endpoint service via API."
+        },
+        {
+          "info": {
+            "name": "List all private endpoints for a cluster.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://you.domain.com/api/v1beta/projects/:project_id/clusters/:cluster_id/private_endpoints",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+              },
+              {
+                "name": "cluster_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the cluster."
+              }
+            ]
+          },
+          "docs": "List all private endpoints for a cluster."
+        },
+        {
+          "info": {
+            "name": "Create a private endpoint for a cluster.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://you.domain.com/api/v1beta/projects/:project_id/clusters/:cluster_id/private_endpoints",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+              },
+              {
+                "name": "cluster_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the cluster."
+              }
+            ]
+          },
+          "docs": "When creating a private endpoint, only the `endpoint_name` is required.\n- For TiDB Cloud Dedicated clusters, you can create a private endpoint resource in TiDB Cloud after you create the [AWS PrivateLink](https://aws.amazon.com/privatelink/?privatelink-blogs.sort-by=item.additionalFields.createdDate&privatelink-blogs.sort-order=desc) or [Google Cloud Private Service Connect](https://cloud.google.com/vpc/docs/private-service-connect) endpoint depending on where your cluster is hosted. In this way"
+        },
+        {
+          "info": {
+            "name": "Delete a private endpoint for a cluster.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://you.domain.com/api/v1beta/projects/:project_id/clusters/:cluster_id/private_endpoints/:endpoint_id",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+              },
+              {
+                "name": "cluster_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the cluster."
+              },
+              {
+                "name": "endpoint_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the private endpoint to be deleted. You can get the ID from the `endpoints.id` field in the response of [List all private endpoints in a project](#tag/Cluster/operation/ListPrivateEndpoints)."
+              }
+            ]
+          },
+          "docs": "- For TiDB Cloud Dedicated clusters, you can delete a private endpoint for a cluster.\n- For TiDB Cloud Starter instances, you cannot create or manage private endpoint via API."
+        },
+        {
+          "info": {
+            "name": "List all private endpoints in a project.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://you.domain.com/api/v1beta/projects/:project_id/private_endpoints",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+              }
+            ]
+          },
+          "docs": "List all private endpoints in a project."
+        },
+        {
+          "info": {
+            "name": "get cluster info such as cluster id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://you.domain.com/api/v1/cluster/info"
+          },
+          "docs": "get cluster info such as cluster id"
+        },
+        {
+          "info": {
+            "name": "update cluster info.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://you.domain.com/api/v1/cluster/info",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "update cluster info."
+        },
+        {
+          "info": {
+            "name": "get cluster master node list",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://you.domain.com/api/v1/cluster/masters"
+          },
+          "docs": "get cluster master node list"
+        },
+        {
+          "info": {
+            "name": "offline master node",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://you.domain.com/api/v1/cluster/masters/:master-name",
+            "params": [
+              {
+                "name": "master-name",
+                "value": "",
+                "type": "path",
+                "description": "master node name"
+              }
+            ]
+          },
+          "docs": "offline master node"
+        },
+        {
+          "info": {
+            "name": "get cluster worker node list",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://you.domain.com/api/v1/cluster/workers"
+          },
+          "docs": "get cluster worker node list"
+        },
+        {
+          "info": {
+            "name": "offline worker node",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://you.domain.com/api/v1/cluster/workers/:worker-name",
+            "params": [
+              {
+                "name": "worker-name",
+                "value": "",
+                "type": "path",
+                "description": "worker node name"
+              }
+            ]
+          },
+          "docs": "offline worker node"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

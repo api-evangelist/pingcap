@@ -1,0 +1,125 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "IAM System OPEN API Key API",
+    "version": "v1beta1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "API Key",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List API keys",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://iam.tidbapi.com/v1beta1/apikeys",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "query",
+                "description": "The ID of the project. If not specified, the project ID of the default project is used."
+              },
+              {
+                "name": "pageToken",
+                "value": "",
+                "type": "query",
+                "description": "The pagination token received from a previous [List API keys](#tag/API-Key/paths/~1apikeys/get) request. Use this token to retrieve the next page of results."
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of API keys to return. If not specified, at most 100 API keys will be returned."
+              }
+            ]
+          },
+          "docs": "Lists all API keys."
+        },
+        {
+          "info": {
+            "name": "Create a new API key",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://iam.tidbapi.com/v1beta1/apikeys",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new API key with the specified permissions and configuration."
+        },
+        {
+          "info": {
+            "name": "Get an API key",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://iam.tidbapi.com/v1beta1/apikeys/:accessKey",
+            "params": [
+              {
+                "name": "accessKey",
+                "value": "",
+                "type": "path",
+                "description": "The access key of the API key."
+              }
+            ]
+          },
+          "docs": "Retrieves the details of a specific API key using its `accessKey`."
+        },
+        {
+          "info": {
+            "name": "Update an API key",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://iam.tidbapi.com/v1beta1/apikeys/:accessKey",
+            "params": [
+              {
+                "name": "accessKey",
+                "value": "",
+                "type": "path",
+                "description": "The access key of the API key to update."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates an API key by modifying the specified fields."
+        },
+        {
+          "info": {
+            "name": "Delete an API key",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://iam.tidbapi.com/v1beta1/apikeys/:accessKey",
+            "params": [
+              {
+                "name": "accessKey",
+                "value": "",
+                "type": "path",
+                "description": "The access key of the API key to delete."
+              }
+            ]
+          },
+          "docs": "Deletes an API key."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

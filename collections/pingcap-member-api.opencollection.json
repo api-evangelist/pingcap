@@ -1,0 +1,170 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "IAM System OPEN Member API",
+    "version": "v1beta1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Member",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List members",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://iam.tidbapi.com/v1beta1/members",
+            "params": [
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of members to return. If not specified, at most 100 members will be returned."
+              },
+              {
+                "name": "pageToken",
+                "value": "",
+                "type": "query",
+                "description": "The pagination token received from a previous `List members` request. Use this token to retrieve the next page of results.\n\n**Note**: When paginating, all other parameters must match the original request."
+              },
+              {
+                "name": "email",
+                "value": "",
+                "type": "query",
+                "description": "Filters the results by email address. Only members whose email matches the specified value are returned."
+              },
+              {
+                "name": "roles",
+                "value": "",
+                "type": "query",
+                "description": "Filters the results by one or more roles. Only members assigned any of the specified roles are returned.\n\nTo specify multiple roles, repeat the `roles` parameter for each value. For example, `?roles=org:owner&roles=org:member`."
+              },
+              {
+                "name": "statuses",
+                "value": "",
+                "type": "query",
+                "description": "Filters the results by one or more member statuses. Only members in any of the specified statuses are returned.\n\nTo specify multiple statuses, repeat the `statuses` parameter for each value. For example, `?statuses=Active&statuses=Pending`."
+              },
+              {
+                "name": "orderBy",
+                "value": "",
+                "type": "query",
+                "description": "Specifies the sorting order of results. Use a supported field name, optionally followed by `asc` (ascending order) or `desc` (descending order). For example, `email desc`. By default, results are sorted in ascending order.\n\nSupported fields: `email`, `invite_time`, `login_time`."
+              },
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "query",
+                "description": "The ID of the project. If specified, only members assigned to the specified project are returned."
+              },
+              {
+                "name": "instanceId",
+                "value": "",
+                "type": "query",
+                "description": "The ID of the TiDB Cloud Starter, Essential, or Premium instance. If specified, only members assigned to the specified instance are returned."
+              }
+            ]
+          },
+          "docs": "Lists all members in your organization. You can filter the results by email address, role, status, project ID, or instance ID."
+        },
+        {
+          "info": {
+            "name": "Invite members",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://iam.tidbapi.com/v1beta1/members",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Invites one or more users to your organization. You can also assign organization, project, and instance roles to the invited members in the same request."
+        },
+        {
+          "info": {
+            "name": "Batch update members",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://iam.tidbapi.com/v1beta1/members/batchUpdate",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates the organization, project, and instance roles of multiple members in a single request. You can update at most 100 members per request."
+        },
+        {
+          "info": {
+            "name": "Update a member",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://iam.tidbapi.com/v1beta1/members/:user_id",
+            "params": [
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the member to update."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates the organization, project, and instance roles of a member. Project roles and instance roles are fully replaced when provided in the request."
+        },
+        {
+          "info": {
+            "name": "Delete a member",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://iam.tidbapi.com/v1beta1/members/:user_id",
+            "params": [
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the member to remove from your organization."
+              }
+            ]
+          },
+          "docs": "Removes a member from your organization. The member loses all roles within the organization."
+        },
+        {
+          "info": {
+            "name": "Resend an invitation",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://iam.tidbapi.com/v1beta1/members/:user_id/resendInvitation",
+            "params": [
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the member whose invitation email you want to resend."
+              }
+            ]
+          },
+          "docs": "Resends the invitation email to a user who has not yet accepted the invitation."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

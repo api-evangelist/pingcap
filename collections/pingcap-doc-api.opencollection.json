@@ -1,0 +1,40 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "DM OpenAPI Doc API",
+    "version": "6.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "doc",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "get doc html",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://you.domain.com/api/v1/docs"
+          },
+          "docs": "get doc html"
+        },
+        {
+          "info": {
+            "name": "get doc json",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://you.domain.com/api/v1/dm.json"
+          },
+          "docs": "get doc json"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

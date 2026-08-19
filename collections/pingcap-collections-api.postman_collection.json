@@ -1,0 +1,582 @@
+{
+  "item": [
+    {
+      "id": "cf94e549-b380-439a-a58c-25377cfd01e5",
+      "name": "Collections",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "e331f620-83f7-4179-bcdf-4eded7a160fd",
+          "name": "List collections",
+          "request": {
+            "name": "List collections",
+            "description": {
+              "content": "List collections.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "collections",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "4e348a7f-88d7-4bb2-bc86-29f460fd9db7",
+              "name": "Default Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "collections",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"sql_endpoint\",\n  \"data\": {\n    \"columns\": [\n      {\n        \"col\": \"string\",\n        \"data_type\": \"BIGINT\",\n        \"nullable\": false\n      },\n      {\n        \"col\": \"string\",\n        \"data_type\": \"FLOAT\",\n        \"nullable\": true\n      }\n    ],\n    \"rows\": [\n      {\n        \"name\": \"Static Site Generator\"\n      },\n      {\n        \"name\": \"Open Source Database\"\n      },\n      {\n        \"name\": \"CSS Framework\"\n      },\n      {\n        \"name\": \"Google Analytics Alternative\"\n      },\n      {\n        \"name\": \"Low Code Development Tool\"\n      }\n    ],\n    \"result\": {\n      \"code\": 200,\n      \"message\": \"Query OK!\",\n      \"start_ms\": 1690957407469,\n      \"end_ms\": 1690957407499,\n      \"latency\": \"30ms\",\n      \"row_count\": 5,\n      \"row_affect\": 0,\n      \"limit\": 50,\n      \"databases\": [\n        \"gharchive_dev\"\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "fafc99af-dada-4712-8db8-109affb40139",
+          "name": "List hot collections",
+          "request": {
+            "name": "List hot collections",
+            "description": {
+              "content": "List hot collections with top repositories of the collection.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "collections",
+                "hot",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "84890d50-ee66-4a94-8bcb-a728561db342",
+              "name": "Default Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "collections",
+                    "hot",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"sql_endpoint\",\n  \"data\": {\n    \"columns\": [\n      {\n        \"col\": \"string\",\n        \"data_type\": \"TINYINT\",\n        \"nullable\": true\n      },\n      {\n        \"col\": \"string\",\n        \"data_type\": \"TINYINT\",\n        \"nullable\": true\n      }\n    ],\n    \"rows\": [\n      {\n        \"name\": \"Artificial Intelligence\",\n        \"repos\": \"36\",\n        \"repo_id\": \"155220641\",\n        \"repo_name\": \"huggingface/transformers\",\n        \"repo_current_period_rank\": \"1\",\n        \"repo_past_period_rank\": \"1\",\n        \"repo_rank_changes\": \"0\"\n      },\n      {\n        \"name\": \"Artificial Intelligence\",\n        \"repos\": \"36\",\n        \"repo_id\": \"65600975\",\n        \"repo_name\": \"pytorch/pytorch\",\n        \"repo_current_period_rank\": \"3\",\n        \"repo_past_period_rank\": \"4\",\n        \"repo_rank_changes\": \"1\"\n      },\n      {\n        \"name\": \"Artificial Intelligence\",\n        \"repos\": \"36\",\n        \"repo_id\": \"458588993\",\n        \"repo_name\": \"nebuly-ai/nebullvm\",\n        \"repo_current_period_rank\": \"2\",\n        \"repo_past_period_rank\": \"2\",\n        \"repo_rank_changes\": \"0\"\n      },\n      {\n        \"name\": \"ChatGPT Apps\",\n        \"repos\": \"36\",\n        \"repo_id\": \"599394820\",\n        \"repo_name\": \"Chanzhaoyu/chatgpt-web\",\n        \"repo_current_period_rank\": \"3\",\n        \"repo_past_period_rank\": \"6\",\n        \"repo_rank_changes\": \"3\"\n      },\n      {\n        \"name\": \"ChatGPT Apps\",\n        \"repos\": \"36\",\n        \"repo_id\": \"609416865\",\n        \"repo_name\": \"yetone/openai-translator\",\n        \"repo_current_period_rank\": \"2\",\n        \"repo_past_period_rank\": \"\",\n        \"repo_rank_changes\": \"\"\n      },\n      {\n        \"name\": \"ChatGPT Apps\",\n        \"repos\": \"36\",\n        \"repo_id\": \"608555244\",\n        \"repo_name\": \"microsoft/visual-chatgpt\",\n        \"repo_current_period_rank\": \"1\",\n        \"repo_past_period_rank\": \"\",\n        \"repo_rank_changes\": \"\"\n      }\n    ],\n    \"result\": {\n      \"code\": 200,\n      \"message\": \"Query OK!\",\n      \"start_ms\": 1690957407469,\n      \"end_ms\": 1690957407499,\n      \"latency\": \"30ms\",\n      \"row_count\": 6,\n      \"row_affect\": 0,\n      \"limit\": 50,\n      \"databases\": [\n        \"gharchive_dev\"\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9b2ccf01-399f-41c5-8133-c8fe2bc6b6fc",
+          "name": "Repository ranking by issues",
+          "request": {
+            "name": "Repository ranking by issues",
+            "description": {
+              "content": "Rank the GitHub repositories in the specified collection according to the number of issues.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "collections",
+                ":collection_id",
+                "ranking_by_issues",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "period",
+                  "value": "past_28_days",
+                  "description": "The period of the range."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<number>",
+                  "key": "collection_id",
+                  "description": "(Required) The ID of collection"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "c66d47a5-7905-471c-9563-86765cc98779",
+              "name": "Default Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "collections",
+                    ":collection_id",
+                    "ranking_by_issues",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "period",
+                      "value": "past_28_days"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "collection_id",
+                      "description": "(Required) The ID of collection"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"sql_endpoint\",\n  \"data\": {\n    \"columns\": [\n      {\n        \"col\": \"string\",\n        \"data_type\": \"DATETIME\",\n        \"nullable\": true\n      },\n      {\n        \"col\": \"string\",\n        \"data_type\": \"CHAR\",\n        \"nullable\": false\n      }\n    ],\n    \"rows\": [\n      {\n        \"repo_id\": \"16563587\",\n        \"repo_name\": \"cockroachdb/cockroach\",\n        \"current_period_growth\": \"677\",\n        \"past_period_growth\": \"729\",\n        \"growth_pop\": \"-7.13\",\n        \"rank_pop\": \"0\",\n        \"total\": \"54541\",\n        \"current_period_rank\": \"1\",\n        \"past_period_rank\": \"1\"\n      },\n      {\n        \"repo_id\": \"60246359\",\n        \"repo_name\": \"clickhouse/clickhouse\",\n        \"current_period_growth\": \"268\",\n        \"past_period_growth\": \"296\",\n        \"growth_pop\": \"-9.46\",\n        \"rank_pop\": \"-1\",\n        \"total\": \"16732\",\n        \"current_period_rank\": \"2\",\n        \"past_period_rank\": \"3\"\n      },\n      {\n        \"repo_id\": \"41986369\",\n        \"repo_name\": \"pingcap/tidb\",\n        \"current_period_growth\": \"263\",\n        \"past_period_growth\": \"214\",\n        \"growth_pop\": \"22.90\",\n        \"rank_pop\": \"-3\",\n        \"total\": \"15622\",\n        \"current_period_rank\": \"3\",\n        \"past_period_rank\": \"6\"\n      },\n      {\n        \"repo_id\": \"105944401\",\n        \"repo_name\": \"yugabyte/yugabyte-db\",\n        \"current_period_growth\": \"246\",\n        \"past_period_growth\": \"298\",\n        \"growth_pop\": \"-17.45\",\n        \"rank_pop\": \"2\",\n        \"total\": \"15079\",\n        \"current_period_rank\": \"4\",\n        \"past_period_rank\": \"2\"\n      },\n      {\n        \"repo_id\": \"208728772\",\n        \"repo_name\": \"milvus-io/milvus\",\n        \"current_period_growth\": \"234\",\n        \"past_period_growth\": \"237\",\n        \"growth_pop\": \"-1.27\",\n        \"rank_pop\": \"0\",\n        \"total\": \"8675\",\n        \"current_period_rank\": \"5\",\n        \"past_period_rank\": \"5\"\n      },\n      {\n        \"repo_id\": \"507775\",\n        \"repo_name\": \"elastic/elasticsearch\",\n        \"current_period_growth\": \"214\",\n        \"past_period_growth\": \"144\",\n        \"growth_pop\": \"48.61\",\n        \"rank_pop\": \"-3\",\n        \"total\": \"31578\",\n        \"current_period_rank\": \"6\",\n        \"past_period_rank\": \"9\"\n      }\n    ],\n    \"result\": {\n      \"code\": 200,\n      \"message\": \"Query OK!\",\n      \"start_ms\": 1690957407469,\n      \"end_ms\": 1690957407499,\n      \"latency\": \"30ms\",\n      \"row_count\": 7,\n      \"row_affect\": 0,\n      \"limit\": 50,\n      \"databases\": [\n        \"gharchive_dev\"\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0a06cb1a-bda5-47ff-b8d4-157658355d92",
+          "name": "Repository ranking by prs",
+          "request": {
+            "name": "Repository ranking by prs",
+            "description": {
+              "content": "Rank the GitHub repositories in the specified collection according to the number of pull requests.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "collections",
+                ":collection_id",
+                "ranking_by_prs",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "period",
+                  "value": "past_28_days",
+                  "description": "The period of the range."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<number>",
+                  "key": "collection_id",
+                  "description": "(Required) The ID of collection"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "38ff26de-2f4f-4083-9315-ec9e77615ccf",
+              "name": "Default Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "collections",
+                    ":collection_id",
+                    "ranking_by_prs",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "period",
+                      "value": "past_28_days"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "collection_id",
+                      "description": "(Required) The ID of collection"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"sql_endpoint\",\n  \"data\": {\n    \"columns\": [\n      {\n        \"col\": \"string\",\n        \"data_type\": \"BLOB\",\n        \"nullable\": false\n      },\n      {\n        \"col\": \"string\",\n        \"data_type\": \"CHAR\",\n        \"nullable\": false\n      }\n    ],\n    \"rows\": [\n      {\n        \"repo_id\": \"16563587\",\n        \"repo_name\": \"cockroachdb/cockroach\",\n        \"current_period_growth\": \"677\",\n        \"past_period_growth\": \"729\",\n        \"growth_pop\": \"-7.13\",\n        \"rank_pop\": \"0\",\n        \"total\": \"54541\",\n        \"current_period_rank\": \"1\",\n        \"past_period_rank\": \"1\"\n      },\n      {\n        \"repo_id\": \"60246359\",\n        \"repo_name\": \"clickhouse/clickhouse\",\n        \"current_period_growth\": \"268\",\n        \"past_period_growth\": \"296\",\n        \"growth_pop\": \"-9.46\",\n        \"rank_pop\": \"-1\",\n        \"total\": \"16732\",\n        \"current_period_rank\": \"2\",\n        \"past_period_rank\": \"3\"\n      },\n      {\n        \"repo_id\": \"41986369\",\n        \"repo_name\": \"pingcap/tidb\",\n        \"current_period_growth\": \"263\",\n        \"past_period_growth\": \"214\",\n        \"growth_pop\": \"22.90\",\n        \"rank_pop\": \"-3\",\n        \"total\": \"15622\",\n        \"current_period_rank\": \"3\",\n        \"past_period_rank\": \"6\"\n      },\n      {\n        \"repo_id\": \"105944401\",\n        \"repo_name\": \"yugabyte/yugabyte-db\",\n        \"current_period_growth\": \"246\",\n        \"past_period_growth\": \"298\",\n        \"growth_pop\": \"-17.45\",\n        \"rank_pop\": \"2\",\n        \"total\": \"15079\",\n        \"current_period_rank\": \"4\",\n        \"past_period_rank\": \"2\"\n      },\n      {\n        \"repo_id\": \"208728772\",\n        \"repo_name\": \"milvus-io/milvus\",\n        \"current_period_growth\": \"234\",\n        \"past_period_growth\": \"237\",\n        \"growth_pop\": \"-1.27\",\n        \"rank_pop\": \"0\",\n        \"total\": \"8675\",\n        \"current_period_rank\": \"5\",\n        \"past_period_rank\": \"5\"\n      },\n      {\n        \"repo_id\": \"507775\",\n        \"repo_name\": \"elastic/elasticsearch\",\n        \"current_period_growth\": \"214\",\n        \"past_period_growth\": \"144\",\n        \"growth_pop\": \"48.61\",\n        \"rank_pop\": \"-3\",\n        \"total\": \"31578\",\n        \"current_period_rank\": \"6\",\n        \"past_period_rank\": \"9\"\n      }\n    ],\n    \"result\": {\n      \"code\": 200,\n      \"message\": \"Query OK!\",\n      \"start_ms\": 1690957407469,\n      \"end_ms\": 1690957407499,\n      \"latency\": \"30ms\",\n      \"row_count\": 7,\n      \"row_affect\": 0,\n      \"limit\": 50,\n      \"databases\": [\n        \"gharchive_dev\"\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1af04912-83a7-45a1-9b6d-7446ca16076f",
+          "name": "Repository ranking by stars",
+          "request": {
+            "name": "Repository ranking by stars",
+            "description": {
+              "content": "Rank the GitHub repositories in the specified collection according to the number of stars.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "collections",
+                ":collection_id",
+                "ranking_by_stars",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "period",
+                  "value": "past_28_days",
+                  "description": "The period of the range."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<number>",
+                  "key": "collection_id",
+                  "description": "(Required) The ID of collection"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "3462e80a-d389-4f24-8579-96cbace8e281",
+              "name": "Default Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "collections",
+                    ":collection_id",
+                    "ranking_by_stars",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "period",
+                      "value": "past_28_days"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "collection_id",
+                      "description": "(Required) The ID of collection"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"sql_endpoint\",\n  \"data\": {\n    \"columns\": [\n      {\n        \"col\": \"string\",\n        \"data_type\": \"TINYINT\",\n        \"nullable\": true\n      },\n      {\n        \"col\": \"string\",\n        \"data_type\": \"MEDIUMBLOB\",\n        \"nullable\": false\n      }\n    ],\n    \"rows\": [\n      {\n        \"repo_id\": \"208728772\",\n        \"repo_name\": \"milvus-io/milvus\",\n        \"current_period_growth\": \"612\",\n        \"current_period_rank\": \"1\",\n        \"growth_pop\": \"-20.31\",\n        \"past_period_growth\": \"768\",\n        \"past_period_rank\": \"1\",\n        \"rank_pop\": \"0\",\n        \"total\": \"23803\"\n      },\n      {\n        \"repo_id\": \"60246359\",\n        \"repo_name\": \"clickhouse/clickhouse\",\n        \"current_period_growth\": \"418\",\n        \"current_period_rank\": \"2\",\n        \"growth_pop\": \"-9.72\",\n        \"past_period_growth\": \"463\",\n        \"past_period_rank\": \"2\",\n        \"rank_pop\": \"0\",\n        \"total\": \"30935\"\n      },\n      {\n        \"repo_id\": \"507775\",\n        \"repo_name\": \"elastic/elasticsearch\",\n        \"current_period_growth\": \"377\",\n        \"current_period_rank\": \"3\",\n        \"growth_pop\": \"2.45\",\n        \"past_period_growth\": \"368\",\n        \"past_period_rank\": \"4\",\n        \"rank_pop\": \"-1\",\n        \"total\": \"69228\"\n      },\n      {\n        \"repo_id\": \"138754790\",\n        \"repo_name\": \"duckdb/duckdb\",\n        \"current_period_growth\": \"335\",\n        \"current_period_rank\": \"4\",\n        \"growth_pop\": \"-15.83\",\n        \"past_period_growth\": \"398\",\n        \"past_period_rank\": \"3\",\n        \"rank_pop\": \"1\",\n        \"total\": \"11408\"\n      },\n      {\n        \"repo_id\": \"99919302\",\n        \"repo_name\": \"apache/incubator-doris\",\n        \"current_period_growth\": \"329\",\n        \"current_period_rank\": \"5\",\n        \"growth_pop\": \"28.02\",\n        \"past_period_growth\": \"257\",\n        \"past_period_rank\": \"6\",\n        \"rank_pop\": \"-1\",\n        \"total\": \"9310\"\n      },\n      {\n        \"repo_id\": \"927442\",\n        \"repo_name\": \"postgres/postgres\",\n        \"current_period_growth\": \"210\",\n        \"current_period_rank\": \"6\",\n        \"growth_pop\": \"4.48\",\n        \"past_period_growth\": \"201\",\n        \"past_period_rank\": \"10\",\n        \"rank_pop\": \"-4\",\n        \"total\": \"13731\"\n      },\n      {\n        \"repo_id\": \"41986369\",\n        \"repo_name\": \"pingcap/tidb\",\n        \"current_period_growth\": \"202\",\n        \"current_period_rank\": \"7\",\n        \"growth_pop\": \"-3.81\",\n        \"past_period_growth\": \"210\",\n        \"past_period_rank\": \"8\",\n        \"rank_pop\": \"-1\",\n        \"total\": \"36325\"\n      }\n    ],\n    \"result\": {\n      \"code\": 200,\n      \"message\": \"Query OK!\",\n      \"start_ms\": 1690957407469,\n      \"end_ms\": 1690957407499,\n      \"latency\": \"30ms\",\n      \"row_count\": 7,\n      \"row_affect\": 0,\n      \"limit\": 50,\n      \"databases\": [\n        \"gharchive_dev\"\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "84016aae-42eb-4471-947e-a1206c6e2f0c",
+          "name": "List collection repositories",
+          "request": {
+            "name": "List collection repositories",
+            "description": {
+              "content": "List the repositories of collection.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "collections",
+                ":collection_id",
+                "repos",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<number>",
+                  "key": "collection_id",
+                  "description": "(Required) The ID of collection"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "49066641-18fd-4bf7-af1f-afe5300871f1",
+              "name": "Default Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "collections",
+                    ":collection_id",
+                    "repos",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "collection_id",
+                      "description": "(Required) The ID of collection"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"sql_endpoint\",\n  \"data\": {\n    \"columns\": [\n      {\n        \"col\": \"string\",\n        \"data_type\": \"SMALLINT\",\n        \"nullable\": false\n      },\n      {\n        \"col\": \"string\",\n        \"data_type\": \"DOUBLE\",\n        \"nullable\": true\n      }\n    ],\n    \"rows\": [\n      {\n        \"repo_id\": \"507775\",\n        \"repo_name\": \"elastic/elasticsearch\"\n      },\n      {\n        \"repo_id\": \"41986369\",\n        \"repo_name\": \"pingcap/tidb\"\n      },\n      {\n        \"repo_id\": \"60246359\",\n        \"repo_name\": \"clickhouse/clickhouse\"\n      },\n      {\n        \"repo_id\": \"108110\",\n        \"repo_name\": \"mongodb/mongo\"\n      },\n      {\n        \"repo_id\": \"48833910\",\n        \"repo_name\": \"tikv/tikv\"\n      }\n    ],\n    \"result\": {\n      \"code\": 200,\n      \"message\": \"Query OK!\",\n      \"start_ms\": 1690957407469,\n      \"end_ms\": 1690957407499,\n      \"latency\": \"30ms\",\n      \"row_count\": 5,\n      \"row_affect\": 0,\n      \"limit\": 50,\n      \"databases\": [\n        \"gharchive_dev\"\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.ossinsight.io/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "4c8296fb-c9c8-485a-9a38-bd4f587f7911",
+    "name": "OSSInsight Public Collections API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "\nOSSInsight Public APIs (beta) provide a convenient way to access insight data for open source projects on GitHub, supplementing the existing GitHub API.\n\nIt provides data query in different dimensions, including:\n\n```mdx-code-block\nimport DocCardList from '@theme/DocCardList';\nimport {useCurrentSidebarCategory} from '@docusaurus/theme-common';\n\n<DocCardList items={useCurrentSidebarCategory().items.filter((item) => {\n    // Exclude Introduction and Showcase pages\n    return item.docId !== 'api/showcase' && item.docId !== 'api/ossinsight-public-api';\n})}/>\n```\n\n## Usage\n\nThe OSSInsight Public API is designed to follow the OpenAPI specification and can be accessed by initiating HTTP requests using the command line `curl` or web request libraries in different programming languages.\n\n### Base URL\n\nAll API requests are based on the following URL:\n\n```shell\nhttps://api.ossinsight.io/v1\n```\n\n### Authentication\n\nNo authentication is required for beta version of public APIs, but there are [rate limits](#rate-limit) for API requests.\n\n> Note:\n> We will add authentication way for larger API requests in future releases.\n\n### Rate Limit\n\nFor each IP address, the rate limit allows for up to **600 requests per hour**, which can be checked by the following fields in the Response Header to see the current usage:\n\n```\nx-ratelimit-limit: 600\nx-ratelimit-remaining: 599\n```\n\nIn addition, we have also set up a global rate limit of up to **1000 requests per minute**, which can be checked by the following fields in the Response Header to see the current usage:\n\n```\nx-ratelimit-limit-minute: 1000\nx-ratelimit-remaining-minute: 97\n```\n\n### Example\n\nFor example, if you want to know what countries the stargazers in the `pingcap/tidb` repository are located in, you can make a request using the curl command as follows:\n\n```shell\ncurl https://api.ossinsight.io/v1/repos/pingcap/tidb/stargazers/countries\n```\n\n<details>\n\n<summary>Example Response</summary>\n\n```json\n{\n  \"type\": \"sql_endpoint\",\n  \"data\": {\n    \"columns\": [\n      {\n        \"col\": \"country_or_area\",\n        \"data_type\": \"CHAR\",\n        \"nullable\": true\n      },\n      {\n        \"col\": \"count\",\n        \"data_type\": \"BIGINT\",\n        \"nullable\": true\n      },\n      {\n        \"col\": \"percentage\",\n        \"data_type\": \"DECIMAL\",\n        \"nullable\": true\n      }\n    ],\n    \"rows\": [\n      {\n        \"count\": \"9183\",\n        \"country_or_area\": \"CN\",\n        \"percentage\": \"0.5936\"\n      },\n      {\n        \"count\": \"1542\",\n        \"country_or_area\": \"US\",\n        \"percentage\": \"0.0997\"\n      },\n      {\n        \"count\": \"471\",\n        \"country_or_area\": \"JP\",\n        \"percentage\": \"0.0304\"\n      }\n    ],\n    \"result\": {\n      \"code\": 200,\n      \"message\": \"Query OK!\",\n      \"start_ms\": 1690351487809,\n      \"end_ms\": 1690351487930,\n      \"latency\": \"121ms\",\n      \"row_count\": 132,\n      \"row_affect\": 0,\n      \"limit\": 300,\n      \"databases\": [\n        \"gharchive_dev\"\n      ]\n    }\n  }\n}\n```\n\n</details>\n\n## Request New API \n\nIf the API in the documentation does not meet your query requirements, please contact us as follows:\n\n- Email us at ossinsight@pingcap.com\n- Open an issue in the [OSSInsight GitHub repository](https://github.com/pingcap/ossinsight/issues/new?assignees=&labels=type%2Ffeature&projects=&template=feature_request.md&title=New%20API)\n",
+      "type": "text/plain"
+    }
+  }
+}

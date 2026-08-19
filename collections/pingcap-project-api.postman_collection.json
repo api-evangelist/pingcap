@@ -1,0 +1,854 @@
+{
+  "item": [
+    {
+      "id": "6e78eeab-dbcd-4834-af76-5d9792c82b4f",
+      "name": "Project",
+      "description": {
+        "content": "List projects.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "60478e16-e2b0-4517-889e-62000b417f8f",
+          "name": "List all accessible projects.",
+          "request": {
+            "name": "List all accessible projects.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1beta",
+                "projects"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "1",
+                  "description": "The number of pages."
+                },
+                {
+                  "disabled": false,
+                  "key": "page_size",
+                  "value": "10",
+                  "description": "The size of a page."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "1b4889ec-2a48-4cca-b944-cc7d8542aab0",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"total\": 1,\n  \"items\": [\n    {\n      \"id\": \"1\",\n      \"org_id\": \"1\",\n      \"name\": \"default_project\",\n      \"cluster_count\": 4,\n      \"user_count\": 10,\n      \"create_timestamp\": \"1656991448\",\n      \"aws_cmek_enabled\": false,\n      \"type\": \"dedicated\"\n    },\n    {\n      \"id\": \"1\",\n      \"org_id\": \"1\",\n      \"name\": \"default_project\",\n      \"cluster_count\": 4,\n      \"user_count\": 10,\n      \"create_timestamp\": \"1656991448\",\n      \"aws_cmek_enabled\": false,\n      \"type\": \"dedicated\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "48220723-524b-4787-8c8a-699203d5f00b",
+              "name": "A request field is invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 9556,\n  \"message\": \"string\",\n  \"details\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c9077106-a783-4bb6-abcf-edf4f6396316",
+              "name": "The API key cannot be authenticated.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "77d9aa87-cae4-499e-9b60-5421cdbdc18c",
+              "name": "The API key does not have permission to access the resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 9556,\n  \"message\": \"string\",\n  \"details\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "72a9d380-08d0-4d15-a49c-dcf674f47ca2",
+              "name": "The requested resource does not exist.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 9556,\n  \"message\": \"string\",\n  \"details\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7cad162a-b07b-493b-8cc9-eaf895d0e4cb",
+              "name": "You have exceed the rate limit.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 9556,\n  \"message\": \"string\",\n  \"details\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f077349e-ff54-4688-91b5-b92d6d906eee",
+              "name": "Server error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 9556,\n  \"message\": \"string\",\n  \"details\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "effa34a3-cb46-45b7-a21e-db188cfa083a",
+              "name": "An unexpected error response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 9094,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"@type\": \"string\"\n    },\n    {\n      \"@type\": \"string\",\n      \"key_0\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d5ef6ee5-4a24-4144-adbf-e6de412a94ac",
+          "name": "Create a project.",
+          "request": {
+            "name": "Create a project.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1beta",
+                "projects"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"aws_cmek_enabled\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "6091964e-6f05-4144-85d7-f06b17c57fd0",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Project0\",\n  \"aws_cmek_enabled\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"1\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ea0f6408-d0ad-4191-91c5-7d437fdf5bf4",
+              "name": "A request field is invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Project0\",\n  \"aws_cmek_enabled\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 9556,\n  \"message\": \"string\",\n  \"details\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "943f629b-4bc4-4b0a-b9b8-598fbf68bc5f",
+              "name": "The API key cannot be authenticated.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Project0\",\n  \"aws_cmek_enabled\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0bbc41a7-b974-48bd-bc9a-3bf70905d000",
+              "name": "The API key does not have permission to access the resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Project0\",\n  \"aws_cmek_enabled\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 9556,\n  \"message\": \"string\",\n  \"details\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bb984eba-6497-432a-83d9-a0e680ff2d98",
+              "name": "The requested resource does not exist.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Project0\",\n  \"aws_cmek_enabled\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 9556,\n  \"message\": \"string\",\n  \"details\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1818f2b6-cfc5-4fc0-80b1-779d4da3beed",
+              "name": "You have exceed the rate limit.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Project0\",\n  \"aws_cmek_enabled\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 9556,\n  \"message\": \"string\",\n  \"details\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4be5205c-111e-413e-af84-99e3c19bbc9d",
+              "name": "Server error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Project0\",\n  \"aws_cmek_enabled\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 9556,\n  \"message\": \"string\",\n  \"details\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d9685a98-47e9-489f-8e25-ac6391c3ef28",
+              "name": "An unexpected error response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Project0\",\n  \"aws_cmek_enabled\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 9094,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"@type\": \"string\"\n    },\n    {\n      \"@type\": \"string\",\n      \"key_0\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.tidbcloud.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "ec316254-94b0-4493-b70d-b047774a3b59",
+    "name": "TiDB Cloud Project API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "*TiDB Cloud API is in beta.*\n\n# Overview\n\nThe TiDB Cloud API is a [REST interface](https://en.wikipedia.org/wiki/Representational_state_transfer) that provides you with programmatic access to manage administrative objects within TiDB Cloud. Through this API, you can manage resources automatically and efficiently:\n\n* Projects\n* Clusters\n* Backups\n* Restores\n* Imports (Deprecated)\n\nThe API has the following features:\n\n- **JSON entities.** All entities are expressed in JSON.\n- **HTTPS-only.** You can only access the API via HTTPS, ensuring all the data sent over the network is encrypted with TLS.\n- **Key-based access and digest authentication.** Before you access TiDB Cloud API, you must generate an API key. All requests are authenticated through [HTTP Digest Authentication](https://en.wikipedia.org/wiki/Digest_access_authentication), ensuring the API key is never sent over the network.\n\n# Get Started\n\nThis guide helps you make your first API call to TiDB Cloud API. You'll learn how to authenticate a request, build a request, and interpret the response. The [List all accessible projects](#tag/Project/operation/ListProjects) endpoint is used in this guide as an example.\n\n## Prerequisites\n\nTo complete this guide, you need to perform the following tasks:\n\n- Create a [TiDB Cloud account](https://tidbcloud.com/free-trial)\n- Install [curl](https://curl.se/)\n\n## Step 1. Create an API key\n\nTo create an API key, log in to your TiDB Cloud console. Navigate to the [**API Keys**](https://tidbcloud.com/org-settings/api-keys) page, and create an API key.\n\nAn API key contains a public key and a private key. Copy and save them in a secure location. You will need to use the API key later in this guide.\n\nFor more details about creating an API key, refer to [API Key Management](#section/Authentication/API-Key-Management).\n\n## Step 2. Make your first API call\n\n### Build an API call\n\nTiDB Cloud API call consists of the following components:\n\n- **A host.** The host for TiDB Cloud API is <https://api.tidbcloud.com>.\n- **An API Key**. The public key and the private key are required for authentication.\n- **A request.** When submitting data to a resource via `POST`, `PATCH`, or `PUT`, you must submit your payload in JSON.\n\nIn this guide, you call the [List all accessible projects](#tag/Project/operation/ListProjects) endpoint. For the detailed description of the endpoint, see the [API reference](#tag/Project/operation/ListProjects).\n\n### Call an API endpoint\n\nTo get all projects in your organization, run the following command in your terminal. Remember to change `YOUR_PUBLIC_KEY` to your public key and `YOUR_PRIVATE_KEY` to your private key.\n\n```shell\ncurl --digest \\\n  --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --request GET \\\n  --url https://api.tidbcloud.com/api/v1beta/projects\n```\n\n## Step 3. Check the response\n\nAfter making the API call, if the status code in response is `200` and you see details about all the projects in your organization, your request is successful. Here is an example of a successful response.\n\n```log\n{\n  \"items\": [\n    {\n      \"id\": \"{project_id}\",\n      \"org_id\": \"{org_id}\",\n      \"name\": \"MyProject\",\n      \"cluster_count\": 3,\n      \"user_count\": 1,\n      \"create_timestamp\": \"1652407748\"\n    }\n  ],\n  \"total\": 1\n}\n```\n\nIf your API call is not successful, you will receive a status code other than `200` and the response looks similar to the following example. To troubleshoot the failed call, you can check the `message` in the response.\n\n```log\n{\n  \"code\": 49900001,\n  \"message\": \"public_key not found\",\n  \"details\": []\n}\n```\n\n## Code samples\n\nThis section walks you through the quickest way to get started with TiDB Cloud API using programming languages. In these examples, you will learn how to use Python to create a cluster, backup and restore data, and scale out a cluster.\n\nYou can view the [full code examples](https://github.com/tidbcloud/tidbcloud-api-samples) of Python and Golang on GitHub or clone the repository to your local machine.\n\n```git\ngit clone https://github.com/tidbcloud/tidbcloud-api-samples.git\n```\n\n### Create and connect to a TiDB cluster\n\nThe following code examples show how to create a TiDB cluster and connect to the cluster. The whole process takes five steps:\n\n1. Get all projects.\n2. Get the cloud providers, regions and specifications.\n3. Create a cluster in your specified project.\n4. Get the new cluster information.\n5. Connect to the cluster using a MySQL client.\n\n#### Step 1: Get all projects\n\nBefore you create a cluster, you need to get the ID of the project that you want to create a cluster in.\n\nTo view the information of all available projects, you can use the [List all accessible projects](#tag/Project/operation/ListProjects) endpoint.\n\n```python\nimport requests\nfrom requests.auth import HTTPDigestAuth\n\nHOST = \"https://api.tidbcloud.com\"\n\n\ndef get_all_projects(public_key: str, private_key: str) -> dict:\n    \"\"\"\n    Get all projects\n    :param public_key: Your public key\n    :param private_key: Your private key\n    :return: Projects detail\n    \"\"\"\n    url = f\"{HOST}/api/v1beta/projects\"\n    resp = requests.get(url=url, auth=HTTPDigestAuth(public_key, private_key))\n    if resp.status_code != 200:\n        print(f\"request invalid, code : {resp.status_code}, message : {resp.text}\")\n        raise Exception(f\"request invalid, code : {resp.status_code}, message : {resp.text}\")\n    return resp.json()\n\n\nif __name__ == \"__main__\":\n    # Replace YOUR_PUBLIC_KEY and YOUR_PRIVATE_KEY\n    project = get_all_projects(\"{YOUR_PUBLIC_KEY}\", \"{YOUR_PRIVATE_KEY}\")\n    print(project)\n```\n\nFor more details about the request and response, see [List all accessible projects](#tag/Project/operation/ListProjects).\n\n#### Step 2: Get the cloud providers, regions and specifications\n\nBefore you create a cluster, you need to get the list of available cloud providers, regions, and specifications.\n\n```python\nimport requests\nfrom requests.auth import HTTPDigestAuth\n\nHOST = \"https://api.tidbcloud.com\"\n\n\ndef get_provider_regions_specifications(public_key: str, private_key: str) -> dict:\n    \"\"\"\n    Get cloud providers, regions and available specifications.\n    :param public_key: Your public key\n    :param private_key: Your private key\n    :return: List the cloud providers, regions and available specifications.\n    \"\"\"\n    url = f\"{HOST}/api/v1beta/clusters/provider/regions\"\n    resp = requests.get(url=url, auth=HTTPDigestAuth(public_key, private_key))\n    if resp.status_code != 200:\n        print(f\"request invalid, code : {resp.status_code}, message : {resp.text}\")\n        raise Exception(f\"request invalid, code : {resp.status_code}, message : {resp.text}\")\n    return resp.json()\n\n\nif __name__ == \"__main__\":\n    # Replace YOUR_PUBLIC_KEY and YOUR_PRIVATE_KEY\n    provider_regions_specifications = get_provider_regions_specifications(\"{YOUR_PUBLIC_KEY}\", \"{YOUR_PRIVATE_KEY}\")\n    print(provider_regions_specifications)\n```\n\nFor more details about the request and response, see [List the cloud providers, regions and available specifications](#tag/Cluster/operation/ListProviderRegions).\n\n#### Step 3: Create a cluster in your specified project and cloud provider\n\nThe following example uses the [Create a cluster](#tag/Cluster/operation/CreateCluster) endpoint to create a TiDB Cloud Dedicated cluster. A configuration example is provided in the code; you can replace the parameters using the information you get in the previous two steps.\n\n```python\nimport requests\nimport time\nimport json\nfrom requests.auth import HTTPDigestAuth\n\nHOST = \"https://api.tidbcloud.com\"\n\n\ndef create_dedicated_cluster(public_key: str, private_key: str, project_id: str) -> dict:\n    \"\"\"\n    Create a dedicated cluster in your specified project.\n    `data_config` below is a demo. You should fill in the field according to\n    your own situation\n    :param public_key: Your public key\n    :param private_key: Your private key\n    :param project_id: The project id\n    :return: Dedicated cluster id\n    \"\"\"\n    url = f\"{HOST}/api/v1beta/projects/{project_id}/clusters\"\n    ts = int(time.time())\n    data_config = \\\n        {\n            \"name\": f\"tidbcloud-sample-{ts}\",\n            \"cluster_type\": \"DEDICATED\",\n            \"cloud_provider\": \"AWS\",\n            \"region\": \"us-west-2\",\n            \"config\":\n                {\n                    \"root_password\": \"input_your_password\",\n                    \"port\": 4000,\n                    \"components\":\n                        {\n                            \"tidb\":\n                                {\n                                    \"node_size\": \"8C16G\",\n                                    \"node_quantity\": 1\n                                },\n                            \"tikv\":\n                                {\"node_size\": \"8C32G\",\n                                 \"storage_size_gib\": 500,\n                                 \"node_quantity\": 3\n                                 }\n                        },\n                    \"ip_access_list\":\n                        [\n                            {\n                                \"cidr\": \"0.0.0.0/0\",\n                                \"description\": \"Allow Access from Anywhere.\"\n                            }\n                        ]\n\n                }\n        }\n    data_config_json = json.dumps(data_config)\n    resp = requests.post(url=url,\n                         auth=HTTPDigestAuth(public_key, private_key),\n                         data=data_config_json)\n    if resp.status_code != 200:\n        print(f\"request invalid, code : {resp.status_code}, message : {resp.text}\")\n        raise Exception(f\"request invalid, code : {resp.status_code}, message : {resp.text}\")\n    return resp.json()\n\n\nif __name__ == \"__main__\":\n    # Replace YOUR_PUBLIC_KEY, YOUR_PRIVATE_KEY and YOUR_PROJECT_ID\n    cluster = create_dedicated_cluster(\"{YOUR_PUBLIC_KEY}\", \"{YOUR_PRIVATE_KEY}\", \"{YOUR_PROJECT_ID}\")\n    print(cluster)\n```\n\nThis request returns the ID of the cluster that you just created. For more details about the request and response, see [Create a cluster](#tag/Cluster/operation/CreateCluster).\n\n#### Step 4: Get the new cluster information\n\nAfter you successfully create a cluster, you can use the [Get cluster by ID](#tag/Cluster/operation/GetCluster) endpoint to get the information of the cluster.\n\n```python\nimport requests\nfrom requests.auth import HTTPDigestAuth\n\nHOST = \"https://api.tidbcloud.com\"\n\n\ndef get_cluster_by_id(public_key: str, private_key: str, project_id: str, cluster_id: str) -> dict:\n    \"\"\"\n    Get the cluster detail.\n    You will get `connection_strings` from the response after the cluster's status is`AVAILABLE`.\n    Then, you can connect to TiDB using the default user, host, and port in `connection_strings`\n    :param public_key: Your public key\n    :param private_key: Your private key\n    :param project_id: The project id\n    :param cluster_id: The cluster id\n    :return: The cluster detail\n    \"\"\"\n    url = f\"{HOST}/api/v1beta/projects/{project_id}/clusters/{cluster_id}\"\n    resp = requests.get(url=url,\n                        auth=HTTPDigestAuth(public_key, private_key))\n    if resp.status_code != 200:\n        print(f\"request invalid, code : {resp.status_code}, message : {resp.text}\")\n        raise Exception(f\"request invalid, code : {resp.status_code}, message : {resp.text}\")\n    return resp.json()\n\n\nif __name__ == \"__main__\":\n    # Replace YOUR_PUBLIC_KEY, YOUR_PRIVATE_KEY, YOUR_PROJECT_ID and YOUR_CLUSTER_ID\n    cluster = get_cluster_by_id(\"{YOUR_PUBLIC_KEY}\", \"{YOUR_PRIVATE_KEY}\", \"{YOUR_PROJECT_ID}\",\n                                       \"{YOUR_CLUSTER_ID}\")\n    print(cluster)\n```\n\nIn the response, you can see the `connection_strings` field, which will be used later for connecting to the TiDB cluster. However, if your cluster status is `CREATING`, the `connection_strings` field might be empty. In such cases, you need to wait a while until the cluster status becomes `AVAILABLE` so that you can move on to the next step.\n\nFor more details about the request and response, see [Get a cluster by ID](#tag/Cluster/operation/GetCluster).\n\n#### Step 5: Connect to the cluster using a MySQL client\n\nAfter the cluster becomes `AVAILABLE`, you can get the connection strings. With the connection strings, you can connect to the cluster using a MySQL client.\n\nThe connection strings contain three fields:\n\n- `default_user`, the username you use to connect to TiDB.\n- `standard` connection string. In this guide, you'll use the `standard` connection.\n- `vpc_peering` connection string.\n\nThe `standard` connection string contains a `host` and a `port`. In the following command, replace `${default_user}` and `${host}` with the actual values in the connection strings. Run the command to connect to the TiDB cluster.\n\n```shell\nmysql --connect-timeout 15 -u ${default_user} -h ${host} -P 4000 -D test -p\n```\n\nFor more details on connection, see [Connect to TiDB Cluster](https://docs.pingcap.com/tidbcloud/connect-to-tidb-cluster).\n\n### Manage backups for your clusters\n\nThe following example shows how to create a manual backup and restore the last backup data to a new cluster.\n\n#### Step 1: Create a manual backup\n\nTo create a manual backup, you can use the [Create a backup for a cluster](#tag/Backup/operation/CreateBackup) endpoint.\n\n```python\nimport requests\nimport json\nimport datetime\nfrom requests.auth import HTTPDigestAuth\n\nHOST = \"https://api.tidbcloud.com\"\n\n\ndef create_manual_backup(public_key: str, private_key: str, project_id: str, cluster_id: str) -> dict:\n    \"\"\"\n    Create manual backup\n    `data_for_backup` below is a demo. You should fill in the field according to\n    your own situation\n    :param public_key: Your public key\n    :param private_key: Your private key\n    :param project_id: The project id\n    :param cluster_id: The dedicated cluster id\n    :return: The backup id\n    \"\"\"\n    url = f\"{HOST}/api/v1beta/projects/{project_id}/clusters/{cluster_id}/backups\"\n    cur_date = datetime.datetime.now().strftime(\"%Y-%m-%d\")\n    data_for_backup = {\"name\": f\"tidbcloud-backup-{cur_date}\", \"description\": f\"tidbcloud-backup-{cur_date}\"}\n    data_for_backup_json = json.dumps(data_for_backup)\n    resp = requests.post(url=url,\n                         data=data_for_backup_json,\n                         auth=HTTPDigestAuth(public_key, private_key))\n    if resp.status_code != 200:\n        print(f\"request invalid, code : {resp.status_code}, message : {resp.text}\")\n        raise Exception(f\"request invalid, code : {resp.status_code}, message : {resp.text}\")\n    return resp.json()\n\n\nif __name__ == \"__main__\":\n    # Replace YOUR_PUBLIC_KEY, YOUR_PRIVATE_KEY, YOUR_PROJECT_ID and YOUR_CLUSTER_ID\n    backup = create_manual_backup(\"{YOUR_PUBLIC_KEY}\", \"{YOUR_PRIVATE_KEY}\", \"{YOUR_PROJECT_ID}\",\n                                  \"{YOUR_CLUSTER_ID}\")\n    print(backup)\n```\n\n#### Step 2: Restore the last backup data to a new cluster\n\nTo restore the last backup data to a new cluster, you can use the [Create a restore task](#tag/Restore/operation/CreateRestoreTask) endpoint.\n\n```python\nimport requests\nimport json\nimport datetime\nfrom requests.auth import HTTPDigestAuth\n\nHOST = \"https://api.tidbcloud.com\"\n\n\ndef create_restore_task(public_key: str, private_key: str, project_id: str, back_up_id: str) -> dict:\n    \"\"\"\n    Create restore task\n    `data_for_restore` below is a demo. You should fill in the field according to\n    your own situation\n    :param private_key: Your public key\n    :param public_key: Your private key\n    :param project_id: The project id\n    :param back_up_id: The backup id\n    :return: The restore task id\n    \"\"\"\n    url = f\"{HOST}/api/v1beta/projects/{project_id}/restores\"\n    cur_date = datetime.datetime.now().strftime(\"%Y-%m-%d\")\n    data_for_restore = \\\n        {\n            \"backup_id\": f\"{back_up_id}\",\n            \"name\": f\"tidbcloud-restore-{cur_date}\",\n            \"config\":\n                {\n                    \"root_password\": \"input_your_password\",\n                    \"port\": 4000,\n                    \"components\":\n                        {\n                            \"tidb\":\n                                {\n                                    \"node_size\": \"8C16G\",\n                                    \"node_quantity\": 1\n                                },\n                            \"tikv\":\n                                {\n                                    \"node_size\": \"8C32G\",\n                                    \"storage_size_gib\": 500,\n                                    \"node_quantity\": 3\n                                }\n                        },\n                    \"ip_access_list\":\n                        [\n                            {\n                                \"cidr\": \"0.0.0.0/0\",\n                                \"description\": \"Allow Access from Anywhere.\"\n                            }\n                        ]\n\n                }\n        }\n    data_for_restore_json = json.dumps(data_for_restore)\n    resp = requests.post(url=url,\n                         auth=HTTPDigestAuth(public_key, private_key),\n                         data=data_for_restore_json)\n    if resp.status_code != 200:\n        print(f\"request invalid, code : {resp.status_code}, message : {resp.text}\")\n        raise Exception(f\"request invalid, code : {resp.status_code}, message : {resp.text}\")\n    return resp.json()\n\n\nif __name__ == \"__main__\":\n    # Replace YOUR_PUBLIC_KEY, YOUR_PRIVATE_KEY, YOUR_PROJECT_ID and YOUR_BACKUP_ID\n    restore = create_restore_task(\"{YOUR_PUBLIC_KEY}\", \"{YOUR_PRIVATE_KEY}\", \"{YOUR_PROJECT_ID}\",\n                                  \"{YOUR_BACKUP_ID}\")\n    print(restore)\n```\n\n#### Step 3: Get the restored cluster information\n\nTo get the information of the restored cluster, you can use the [Get a cluster by ID](#tag/Cluster/operation/GetCluster) endpoint.\n\n```python\nimport requests\nfrom requests.auth import HTTPDigestAuth\n\nHOST = \"https://api.tidbcloud.com\"\n\n\ndef get_cluster_by_id(public_key: str, private_key: str, project_id: str, cluster_id: str) -> dict:\n    \"\"\"\n    Get the cluster detail.\n    You will get `connection_strings` from the response after the cluster's status is`AVAILABLE`.\n    Then, you can connect to TiDB using the default user, host, and port in `connection_strings`\n    :param public_key: Your public key\n    :param private_key: Your private key\n    :param project_id: The project id\n    :param cluster_id: The cluster id\n    :return: The cluster detail\n    \"\"\"\n    url = f\"{HOST}/api/v1beta/projects/{project_id}/clusters/{cluster_id}\"\n    resp = requests.get(url=url,\n                        auth=HTTPDigestAuth(public_key, private_key))\n    if resp.status_code != 200:\n        print(f\"request invalid, code : {resp.status_code}, message : {resp.text}\")\n        raise Exception(f\"request invalid, code : {resp.status_code}, message : {resp.text}\")\n    return resp.json()\n\n\nif __name__ == \"__main__\":\n    # Replace YOUR_PUBLIC_KEY, YOUR_PRIVATE_KEY, YOUR_PROJECT_ID and YOUR_CLUSTER_ID\n    cluster = get_cluster_by_id(\"{YOUR_PUBLIC_KEY}\", \"{YOUR_PRIVATE_KEY}\", \"{YOUR_PROJECT_ID}\",\n                                       \"{YOUR_CLUSTER_ID}\")\n    print(cluster)\n```\n\n### Scale out one TiFlash node for an existing cluster\n\nThe following example shows how to scale out one TiFlash node for an existing cluster.\n\n#### Step 1: Add one TiFlash node for the specified cluster\n\nTo add a TiFlash node for the TiDB Cloud Dedicated cluster, you can use the [Modify a TiDB Cloud Dedicated cluster](#tag/Cluster/operation/UpdateCluster) endpoint.\n\n```python\nimport requests\nimport json\nfrom requests.auth import HTTPDigestAuth\n\nHOST = \"https://api.tidbcloud.com\"\n\n\ndef modify_cluster(public_key: str, private_key: str, project_id: str, cluster_id: str, tiflash_num: int) -> dict:\n    \"\"\"\n    Add one TiFlash node for specified cluster\n    If the vCPUs of TiDB or TiKV component is 4, then the cluster does not support TiFlash.\n    `data_add_tiflash` below is a demo. You should fill in the field according to\n    your own situation\n    :param public_key: Your public key\n    :param private_key: Your private key\n    :param project_id: The project id\n    :param cluster_id: The cluster id\n    :param tiflash_num: The tiflash num\n    :return: If success, return None. Else, return message\n    \"\"\"\n    url = f\"{HOST}/api/v1beta/projects/{project_id}/clusters/{cluster_id}\"\n    data_add_tiflash = \\\n        {\n            \"config\":\n                {\n                    \"components\":\n                        {\n                            \"tidb\":\n                                {\n                                    \"node_quantity\": 1\n                                },\n                            \"tikv\":\n                                {\n                                    \"node_quantity\": 3\n                                },\n                            \"tiflash\":\n                                {\n                                    \"node_quantity\": f\"{tiflash_num}\",\n                                    \"node_size\": \"8C64G\",\n                                    \"storage_size_gib\": 500\n                                }\n                        }\n                }\n        }\n    data_add_tiflash_json = json.dumps(data_add_tiflash)\n    resp = requests.patch(url=url,\n                          auth=HTTPDigestAuth(public_key, private_key),\n                          data=data_add_tiflash_json)\n    if resp.status_code != 200:\n        print(f\"request invalid, code : {resp.status_code}, message : {resp.text}\")\n        raise Exception(f\"request invalid, code : {resp.status_code}, message : {resp.text}\")\n    return resp.json()\n\n\nif __name__ == \"__main__\":\n    # Replace YOUR_PUBLIC_KEY, YOUR_PRIVATE_KEY, YOUR_PROJECT_ID, YOUR_CLUSTER_ID and MODIFY_TIFLASH_NUM\n    modify_cluster(\"{YOUR_PUBLIC_KEY}\", \"{YOUR_PRIVATE_KEY}\", \"{YOUR_PROJECT_ID}\",\n                   \"{YOUR_CLUSTER_ID}\", \"{MODIFY_TIFLASH_NUM}\")\n```\n\n#### Step 2: View the scale-out progress\n\nTo view the scale-out progress, you can use the [Get a cluster by ID](#tag/Cluster/operation/GetCluster) endpoint.\n\n```python\nimport requests\nfrom requests.auth import HTTPDigestAuth\n\nHOST = \"https://api.tidbcloud.com\"\n\n\ndef get_cluster_by_id(public_key: str, private_key: str, project_id: str, cluster_id: str) -> dict:\n    \"\"\"\n    Get the cluster detail.\n    You will get `connection_strings` from the response after the cluster's status is`AVAILABLE`.\n    Then, you can connect to TiDB using the default user, host, and port in `connection_strings`\n    :param public_key: Your public key\n    :param private_key: Your private key\n    :param project_id: The project id\n    :param cluster_id: The cluster id\n    :return: The cluster detail\n    \"\"\"\n    url = f\"{HOST}/api/v1beta/projects/{project_id}/clusters/{cluster_id}\"\n    resp = requests.get(url=url,\n                        auth=HTTPDigestAuth(public_key, private_key))\n    if resp.status_code != 200:\n        print(f\"request invalid, code : {resp.status_code}, message : {resp.text}\")\n        raise Exception(f\"request invalid, code : {resp.status_code}, message : {resp.text}\")\n    return resp.json()\n\n\nif __name__ == \"__main__\":\n    # Replace YOUR_PUBLIC_KEY, YOUR_PRIVATE_KEY, YOUR_PROJECT_ID and YOUR_CLUSTER_ID\n    cluster = get_cluster_by_id(\"{YOUR_PUBLIC_KEY}\", \"{YOUR_PRIVATE_KEY}\", \"{YOUR_PROJECT_ID}\",\n                                       \"{YOUR_CLUSTER_ID}\")\n    print(cluster)\n```\n\n# Authentication\n\nThe TiDB Cloud API uses [HTTP Digest Authentication](https://en.wikipedia.org/wiki/Digest_access_authentication). It protects your private key from being sent over the network. For more details about HTTP Digest Authentication, refer to the [IETF RFC](https://datatracker.ietf.org/doc/html/rfc7616).\n\n## API key overview\n\n- The API key contains a public key and a private key, which act as the username and password required in the HTTP Digest Authentication. The private key only displays upon the key creation.\n- The API key belongs to your organization and acts as the `Organization Owner` role. You can check [permissions of owner](https://docs.pingcap.com/tidbcloud/manage-user-access#configure-member-roles).\n- You must provide the correct API key in every request. Otherwise, the TiDB Cloud responds with a `401` error.\n\n## API key management\n\n### Create an API key\n\nOnly the **owner** of an organization can create an API key.\n\nTo create an API key in an organization, perform the following steps:\n\n1. In the [TiDB Cloud console](https://tidbcloud.com), switch to your target organization using the combo box in the upper-left corner.\n2. In the left navigation pane, click **Organization Settings** > **API Keys**.\n3. On the **API Keys** page, click **Create API Key**.\n4. Enter a description for your API key.\n5. Configure the role and scope for the API key. For more information about the permissions of a role, see [User roles](https://docs.pingcap.com/tidbcloud/manage-user-access/#user-roles).\n6. Click **Generate API Key**. Copy and save the public key and the private key.\n7. Make sure that you have copied and saved the private key in a secure location. The private key only displays upon the creation. After leaving this page, you will not be able to get the full private key again.\n8. Click **Done**.\n\n### View details of an API key\n\nTo view details of an API key, perform the following steps:\n\n1. In the [TiDB Cloud console](https://tidbcloud.com), switch to your target organization using the combo box in the upper-left corner.\n2. In the left navigation pane, click **Organization Settings** > **API Keys**.\n3. You can view the details of the API keys on the page.\n\n### Edit an API key\n\nOnly the **owner** of an organization can modify an API key.\n\nTo edit an API key in an organization, perform the following steps:\n\n1. In the [TiDB Cloud console](https://tidbcloud.com), switch to your target organization using the combo box in the upper-left corner.\n2. In the left navigation pane, click **Organization Settings** > **API Keys**.\n3. On the **API Keys** page, click **...** in the API key row that you want to change, and then click **Update Role**.\n4. You can update the description and role of the API key.\n5. Click **Update**.\n\n### Delete an API key\n\nOnly the **owner** of an organization can delete an API key.\n\nTo delete an API key in an organization, perform the following steps:\n\n1. In the [TiDB Cloud console](https://tidbcloud.com), switch to your target organization using the combo box in the upper-left corner.\n2. In the left navigation pane, click **Organization Settings** > **API Keys**.\n3. On the **API Keys** page, click **...** in the API key row that you want to delete, and then click **Delete**.\n4. Click **I understand, delete it.**\n\n# Rate Limiting\n\nThe TiDB Cloud API allows up to 100 requests per minute per API key. If you exceed the rate limit, the API returns a `429` error. For more quota, you can [submit a request](https://support.pingcap.com/hc/en-us/requests/new?ticket_form_id=7800003722519) to contact our support team.\n\nEach API request returns the following headers about the limit.\n\n- `X-Ratelimit-Limit-Minute`: The number of requests allowed per minute. It is 100 currently.\n- `X-Ratelimit-Remaining-Minute`: The number of remaining requests in the current minute. When it reaches `0`, the API returns a `429` error and indicates that you exceed the rate limit.\n- `X-Ratelimit-Reset`: The time in seconds at which the current rate limit resets.\n\nIf you exceed the rate limit, an error response returns like this.\n\n```\n> HTTP/2 429\n> date: Fri, 22 Jul 2022 05:28:37 GMT\n> content-type: application/json\n> content-length: 66\n> x-ratelimit-reset: 23\n> x-ratelimit-remaining-minute: 0\n> x-ratelimit-limit-minute: 100\n> x-kong-response-latency: 2\n> server: kong/2.8.1\n\n> {\"details\":[],\"code\":49900007,\"message\":\"The request exceeded the limit of 100 times per apikey per minute. For more quota, please contact us: https://support.pingcap.com/hc/en-us/requests/new?ticket_form_id=7800003722519\"}\n```\n\n# API Changelog\n\nThis changelog lists all changes to the TiDB Cloud API.\n\n<!-- In reverse chronological order -->\n\n## 20260414\n\n- Add a `type` field to the [List all accessible projects](#tag/Project/operation/ListProjects) endpoint.\n\n    - If your application only reads the `id` and `name` fields from project responses, no changes are required.\n    - If you need to distinguish between [project types](https://docs.pingcap.com/tidbcloud/tidbx-instance-move-faq/?plan=starter#what-project-types-are-available-in-tidb-cloud) (for example, to filter dedicated projects, TiDB X projects, or the TiDB X virtual project), start reading the `type` field. For more information, see [Project API Migration Guide for TiDB Cloud Starter and Essential](https://docs.pingcap.com/tidbcloud/tidbx-starter-essential-project-api-migration-guide).\n\n- Rename TiDB Cloud Starter clusters to TiDB Cloud Starter instances. This is only a terminology change in the API descriptions, which does not affect your API usage.\n\n## 20250812\n\n- Rename the cloud product option \"TiDB Cloud Serverless\" to \"TiDB Cloud Starter\".\n\n## 20240910\n\n- Rename the two cloud product options as follows:\n\n    - \"TiDB Serverless\" is renamed to \"TiDB Cloud Serverless\".\n    - \"TiDB Dedicated\" is renamed to \"TiDB Cloud Dedicated\".\n\n## 20240416\n\n- Update the OpenAPI specification to indicate that all optional fields can accept null values. This change improves flexibility by allowing the omission of a parameter when it is not required.\n\n## 20230905\n\n- Add six new endpoints for managing the private endpoint service and private endpoints:\n\n    - [Create a private endpoint service for a cluster](#tag/Cluster/operation/CreatePrivateEndpointService)\n    - [Retrieve the private endpoint service information for a cluster](#tag/Cluster/operation/GetPrivateEndpointService)\n    - [Create a private endpoint for a cluster](#tag/Cluster/operation/CreatePrivateEndpoint)\n    - [List all private endpoints for a cluster](#tag/Cluster/operation/ListPrivateEndpoints)\n    - [List all private endpoints in a project](#tag/Cluster/operation/ListPrivateEndpointsOfProject)\n    - [Delete a private endpoint for a cluster](#tag/Cluster/operation/DeletePrivateEndpoint)\n\n## 20230801\n\n- Add one cluster status: `\"PAUSING\"`.\n\n## 20230602\n\n- Rename the two tier options as follows:\n\n    - \"Serverless Tier\" is renamed to \"TiDB Serverless\".\n    - \"Dedicated Tier\" is renamed to \"TiDB Dedicated\".\n\n## 20230328\n\n- Add three new endpoints:\n\n    - [Create a project](#tag/Project/operation/CreateProject)\n    - [List AWS Customer-Managed Encryption Keys for a project](#tag/Cluster/operation/ListAwsCmek)\n    - [Configure AWS Customer-Managed Encryption Keys for a project](#tag/Cluster/operation/CreateAwsCmek)\n\n## 20230321\n\n- Update three fields of the [Modify a Dedicated Tier cluster](#tag/Cluster/operation/UpdateCluster) endpoint. These fields now support decreasing the size of TiDB, TiKV, or TiFlash nodes.\n\n    - `config.components.tidb.node_size`\n    - `config.components.tikv.node_size`\n    - `config.components.tiflash.node_size`\n\n## 20230228\n\n- Add the `imports` resource, including the following endpoints:\n\n    - [List all import tasks for a cluster](#tag/Import/operation/ListImportTasks)\n    - [Get an import task](#tag/Import/operation/GetImportTask)\n    - [Create an import task](#tag/Import/operation/CreateImportTask)\n    - [Update an import task](#tag/Import/operation/UpdateImportTask)\n    - [Upload a local file for an import task](#tag/Import/operation/UploadLocalFile)\n    - [Preview data before starting an import task](#tag/Import/operation/PreviewImportData)\n    - [Retrieve the role information for import tasks on a cluster](#tag/Import/operation/GetImportTaskRoleInfo)\n\n## 20230214\n\n- Update two fields of the [Modify a Dedicated Tier cluster](#tag/Cluster/operation/UpdateCluster) endpoint. These fields now support decreasing TiKV or TiFlash nodes.\n\n    - `config.components.tikv.node_quantity`\n    - `config.components.tiflash.node_quantity`\n\n## 20230104\n\n- Add three fields to the [Modify a Dedicated Tier cluster](#tag/Cluster/operation/UpdateCluster) endpoint. These fields support scaling up node sizes, but not scaling down.\n\n    - `config.components.tidb.node_size`\n    - `config.components.tikv.node_size`\n    - `config.components.tiflash.node_size`\n\n## 20221028\n\n- [Developer Tier is upgraded to Serverless Tier](https://docs.pingcap.com/tidbcloud/release-notes-2022#october-28-2022). Serverless Tier is still in beta and free to use.\n\n    [Creating a cluster](#tag/Cluster/operation/CreateCluster) with the `cluster_type` field set to `DEVELOPER` creates a Serverless Tier cluster now.\n\n## 20220920\n\n- The API is now in public beta and available to all users.\n\n## 20220906\n\n- Add a `config.components.tikv.storage_size_gib` field to the [Modify a Dedicated Tier cluster](#tag/Cluster/operation/UpdateCluster) endpoint.\n- Modify the `config.components.tikv.node_quantity` and `config.components.tiflash.node_quantity` fields from `required` to `optional` for the [Modify a Dedicated Tier cluster](#tag/Cluster/operation/UpdateCluster) endpoint.\n- Remove the \"Can not modify `storage_size_gib` of an existing cluster\" limitation of the `config.components.tiflash.storage_size_gib` field for the [Create a cluster](#tag/Cluster/operation/CreateCluster) and [Modify a Dedicated Tier cluster](#tag/Cluster/operation/UpdateCluster) endpoints.\n\n## 20220823\n\n- Add a `config.paused` field to the [Modify a Dedicated Tier cluster](#tag/Cluster/operation/UpdateCluster) endpoint.\n- Add two cluster statuses: `\"IMPORTING\"` and `\"UNAVAILABLE\"`.\n\n## 20220809\n\n- Initial release of the TiDB Cloud API (v1beta) in private beta, including the following resources and endpoints:\n\n    - Project:\n\n        - [List all accessible projects](#tag/Project/operation/ListProjects)\n\n    - Cluster:\n        - [List the cloud providers, regions and available specifications](#tag/Cluster/operation/ListProviderRegions)\n        - [List all clusters in a project](/#tag/Cluster/operation/ListClustersOfProject)\n        - [Create a cluster](#tag/Cluster/operation/CreateCluster)\n        - [Get a cluster by ID](#tag/Cluster/operation/GetCluster)\n        - [Delete a cluster](#tag/Cluster/operation/DeleteCluster)\n        - [Modify a Dedicated Tier cluster](#tag/Cluster/operation/UpdateCluster)\n    - Backup:\n        - [List all backups for a cluster](#tag/Backup/operation/ListBackUpOfCluster)\n        - [Create a backup for a cluster](#tag/Backup/operation/CreateBackup)\n        - [Get a backup for a cluster](#tag/Backup/operation/GetBackupOfCluster)\n        - [Delete a backup for a cluster](#tag/Backup/operation/DeleteBackup)\n    - Restore:\n        - [List the restore tasks in a project](#tag/Restore/operation/ListRestoreTasks)\n        - [Create a restore task](#tag/Restore/operation/CreateRestoreTask)\n        - [Get a restore task](#tag/Restore/operation/GetRestoreTask)\n",
+      "type": "text/plain"
+    }
+  }
+}

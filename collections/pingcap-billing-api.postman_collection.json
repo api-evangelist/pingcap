@@ -1,0 +1,538 @@
+{
+  "item": [
+    {
+      "id": "310f023b-ebdf-4f5c-8ce6-d04fe45d8b54",
+      "name": "Billing",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "7c2f5519-45ab-49dd-b701-fa277eb544fb",
+          "name": "Return organization monthly bills",
+          "request": {
+            "name": "Return organization monthly bills",
+            "description": {
+              "content": "This endpoint retrieves the bill for the given month of a specific organization. You can query a bill up to 6 months prior to the current month. The bill is returned in JSON format.To use this resource, the requesting API Key must have the Organization Billing Admin or Organization Owner role.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "bills",
+                ":billedMonth"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "billedMonth",
+                  "description": "(Required) The month of this bill happens for the specified organization, format is YYYY-MM, for example '2023-08'."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "f2e7bbc5-8bcf-4017-9a2c-990609aba58e",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bills",
+                    ":billedMonth"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "billedMonth",
+                      "description": "(Required) The month of this bill happens for the specified organization, format is YYYY-MM, for example '2023-08'."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"overview\": {\n    \"billedMonth\": \"2023-09\",\n    \"credits\": \"0.00\",\n    \"discounts\": \"0.00\",\n    \"runningTotal\": \"0.00\",\n    \"totalCost\": \"0.00\"\n  },\n  \"summaryByProject\": {\n    \"otherCharges\": [\n      {\n        \"chargeName\": \"Support Plan\",\n        \"credits\": \"0.00\",\n        \"discounts\": \"0.00\",\n        \"runningTotal\": \"0.00\",\n        \"totalCost\": \"0.00\"\n      },\n      {\n        \"chargeName\": \"Support Plan\",\n        \"credits\": \"0.00\",\n        \"discounts\": \"0.00\",\n        \"runningTotal\": \"0.00\",\n        \"totalCost\": \"0.00\"\n      }\n    ],\n    \"projects\": [\n      {\n        \"credits\": \"0.00\",\n        \"discounts\": \"0.00\",\n        \"projectName\": \"prod-project\",\n        \"runningTotal\": \"0.00\",\n        \"totalCost\": \"0.00\"\n      },\n      {\n        \"credits\": \"0.00\",\n        \"discounts\": \"0.00\",\n        \"projectName\": \"prod-project\",\n        \"runningTotal\": \"0.00\",\n        \"totalCost\": \"0.00\"\n      }\n    ]\n  },\n  \"summaryByService\": [\n    {\n      \"credits\": \"0.00\",\n      \"discounts\": \"0.00\",\n      \"runningTotal\": \"0.00\",\n      \"serviceCosts\": [\n        {\n          \"value\": \"<Circular reference to #/components/schemas/forms.BillsServiceCosts detected>\"\n        },\n        {\n          \"value\": \"<Circular reference to #/components/schemas/forms.BillsServiceCosts detected>\"\n        }\n      ],\n      \"serviceName\": \"TiDB Dedicated\",\n      \"totalCost\": \"0.00\"\n    },\n    {\n      \"credits\": \"0.00\",\n      \"discounts\": \"0.00\",\n      \"runningTotal\": \"0.00\",\n      \"serviceCosts\": [\n        {\n          \"value\": \"<Circular reference to #/components/schemas/forms.BillsServiceCosts detected>\"\n        },\n        {\n          \"value\": \"<Circular reference to #/components/schemas/forms.BillsServiceCosts detected>\"\n        }\n      ],\n      \"serviceName\": \"TiDB Dedicated\",\n      \"totalCost\": \"0.00\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1b9578c6-d992-4df1-b10c-1f87c0e9e074",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bills",
+                    ":billedMonth"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "billedMonth",
+                      "description": "(Required) The month of this bill happens for the specified organization, format is YYYY-MM, for example '2023-08'."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"error\": \"\",\n  \"msgPrefix\": \"string\",\n  \"status\": 5921\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "455f2236-a61e-4c77-b8eb-94a1854d03e4",
+          "name": "Return the usage details according to a cost explorer query",
+          "request": {
+            "name": "Return the usage details according to a cost explorer query",
+            "description": {
+              "content": "This endpoint executes a cost explorer query and returns the usage details. Cost Explorer query:",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "billsCostExplorer"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"filter\": {\n    \"clusters\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"projects\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"providers\": [\n      {\n        \"name\": \"<string>\",\n        \"regions\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      },\n      {\n        \"name\": \"<string>\",\n        \"regions\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      }\n    ],\n    \"services\": [\n      {\n        \"category\": \"<string>\",\n        \"component\": \"<string>\",\n        \"product\": \"<string>\",\n        \"service\": \"<string>\"\n      },\n      {\n        \"category\": \"<string>\",\n        \"component\": \"<string>\",\n        \"product\": \"<string>\",\n        \"service\": \"<string>\"\n      }\n    ],\n    \"timeRange\": {\n      \"endDate\": \"<string>\",\n      \"startDate\": \"<string>\"\n    }\n  },\n  \"groups\": {\n    \"groupBy\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"timeGranularity\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "bb54ab75-386e-4786-91f1-dc23618ff5a8",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "billsCostExplorer"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"filter\": {\n    \"clusters\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"projects\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"providers\": [\n      {\n        \"name\": \"<string>\",\n        \"regions\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      },\n      {\n        \"name\": \"<string>\",\n        \"regions\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      }\n    ],\n    \"services\": [\n      {\n        \"category\": \"<string>\",\n        \"component\": \"<string>\",\n        \"product\": \"<string>\",\n        \"service\": \"<string>\"\n      },\n      {\n        \"category\": \"<string>\",\n        \"component\": \"<string>\",\n        \"product\": \"<string>\",\n        \"service\": \"<string>\"\n      }\n    ],\n    \"timeRange\": {\n      \"endDate\": \"<string>\",\n      \"startDate\": \"<string>\"\n    }\n  },\n  \"groups\": {\n    \"groupBy\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"timeGranularity\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"credits\": \"0.00\",\n  \"discounts\": \"0.00\",\n  \"elements\": [\n    {\n      \"billedDate\": \"string\",\n      \"breakdown\": [\n        {\n          \"billedDate\": \"string\",\n          \"credits\": \"0.00\",\n          \"detailKey\": \"string\",\n          \"detailName\": \"string\",\n          \"discounts\": \"0.00\",\n          \"runningTotal\": \"0.00\",\n          \"totalCost\": \"0.00\"\n        },\n        {\n          \"billedDate\": \"string\",\n          \"credits\": \"0.00\",\n          \"detailKey\": \"string\",\n          \"detailName\": \"string\",\n          \"discounts\": \"0.00\",\n          \"runningTotal\": \"0.00\",\n          \"totalCost\": \"0.00\"\n        }\n      ],\n      \"credits\": \"0.00\",\n      \"discounts\": \"0.00\",\n      \"runningTotal\": \"0.00\",\n      \"totalCost\": \"0.00\"\n    },\n    {\n      \"billedDate\": \"string\",\n      \"breakdown\": [\n        {\n          \"billedDate\": \"string\",\n          \"credits\": \"0.00\",\n          \"detailKey\": \"string\",\n          \"detailName\": \"string\",\n          \"discounts\": \"0.00\",\n          \"runningTotal\": \"0.00\",\n          \"totalCost\": \"0.00\"\n        },\n        {\n          \"billedDate\": \"string\",\n          \"credits\": \"0.00\",\n          \"detailKey\": \"string\",\n          \"detailName\": \"string\",\n          \"discounts\": \"0.00\",\n          \"runningTotal\": \"0.00\",\n          \"totalCost\": \"0.00\"\n        }\n      ],\n      \"credits\": \"0.00\",\n      \"discounts\": \"0.00\",\n      \"runningTotal\": \"0.00\",\n      \"totalCost\": \"0.00\"\n    }\n  ],\n  \"runningTotal\": \"0.00\",\n  \"totalCost\": \"0.00\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "87b81d6f-0123-4cff-9f01-becff027e590",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "billsCostExplorer"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"filter\": {\n    \"clusters\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"projects\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"providers\": [\n      {\n        \"name\": \"<string>\",\n        \"regions\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      },\n      {\n        \"name\": \"<string>\",\n        \"regions\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      }\n    ],\n    \"services\": [\n      {\n        \"category\": \"<string>\",\n        \"component\": \"<string>\",\n        \"product\": \"<string>\",\n        \"service\": \"<string>\"\n      },\n      {\n        \"category\": \"<string>\",\n        \"component\": \"<string>\",\n        \"product\": \"<string>\",\n        \"service\": \"<string>\"\n      }\n    ],\n    \"timeRange\": {\n      \"endDate\": \"<string>\",\n      \"startDate\": \"<string>\"\n    }\n  },\n  \"groups\": {\n    \"groupBy\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"timeGranularity\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"error\": \"\",\n  \"msgPrefix\": \"string\",\n  \"status\": 5921\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4ddfcfbc-d8b2-4245-9ef5-d5997e4c893c",
+          "name": "Return basic info of a specific organization, which contains the key info to execute a cost explorer query",
+          "request": {
+            "name": "Return basic info of a specific organization, which contains the key info to execute a cost explorer query",
+            "description": {
+              "content": "This endpoint retrieves the basic info for a specific organization, including service info, cloud provider info, project info, and cluster info.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "billsCostExplorer",
+                "args"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "b4fe3654-bf61-4823-90a8-f85733a8c51b",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "billsCostExplorer",
+                    "args"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"clusters\": [\n    {\n      \"ProjectID\": \"0\",\n      \"id\": \"0\",\n      \"name\": \"string\",\n      \"regionName\": \"string\",\n      \"status\": \"string\"\n    },\n    {\n      \"ProjectID\": \"0\",\n      \"id\": \"0\",\n      \"name\": \"string\",\n      \"regionName\": \"string\",\n      \"status\": \"string\"\n    }\n  ],\n  \"projects\": [\n    {\n      \"id\": \"0\",\n      \"name\": \"string\",\n      \"status\": \"string\"\n    },\n    {\n      \"id\": \"0\",\n      \"name\": \"string\",\n      \"status\": \"string\"\n    }\n  ],\n  \"providers\": [\n    {\n      \"name\": \"string\",\n      \"regions\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"name\": \"string\",\n      \"regions\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ],\n  \"services\": [\n    {\n      \"category\": \"<string>\",\n      \"component\": \"<string>\",\n      \"product\": \"<string>\",\n      \"service\": \"<string>\"\n    },\n    {\n      \"category\": \"<string>\",\n      \"component\": \"<string>\",\n      \"product\": \"<string>\",\n      \"service\": \"<string>\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f38f820c-0471-4ea5-b77b-aec35f98d71a",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "billsCostExplorer",
+                    "args"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"error\": \"\",\n  \"msgPrefix\": \"string\",\n  \"status\": 5921\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "46486580-3c19-4e3f-b9dd-ac30f7791b94",
+          "name": "Return the monthly bill of the organization with daily usage details",
+          "request": {
+            "name": "Return the monthly bill of the organization with daily usage details",
+            "description": {
+              "content": "This endpoint retrieves the bill for the given month of a specific organization with daily usage details. You can query a bill up to 6 months prior to the current month. The bill is returned in JSON format. To use this resource, the requesting API Key must have the Organization Billing Admin or Organization Owner role.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "billsDetails",
+                ":billedMonth"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "billedMonth",
+                  "description": "(Required) The month of this bill happens for the specified organization. The format is `YYYY-MM`, for example '2024-05'."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "ef761955-e067-4045-9248-fb7a8c725af9",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "billsDetails",
+                    ":billedMonth"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "billedMonth",
+                      "description": "(Required) The month of this bill happens for the specified organization. The format is `YYYY-MM`, for example '2024-05'."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"details\": [\n    {\n      \"billedDate\": \"string\",\n      \"clusterName\": \"string\",\n      \"credits\": \"0.00\",\n      \"discounts\": \"0.00\",\n      \"projectName\": \"string\",\n      \"runningTotal\": \"0.00\",\n      \"servicePathName\": \"string\",\n      \"totalCost\": \"0.00\"\n    },\n    {\n      \"billedDate\": \"string\",\n      \"clusterName\": \"string\",\n      \"credits\": \"0.00\",\n      \"discounts\": \"0.00\",\n      \"projectName\": \"string\",\n      \"runningTotal\": \"0.00\",\n      \"servicePathName\": \"string\",\n      \"totalCost\": \"0.00\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e48b0a62-0f9c-462c-9f50-12ed7c5a8caf",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "billsDetails",
+                    ":billedMonth"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "billedMonth",
+                      "description": "(Required) The month of this bill happens for the specified organization. The format is `YYYY-MM`, for example '2024-05'."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"error\": \"\",\n  \"msgPrefix\": \"string\",\n  \"status\": 5921\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://billing.tidbapi.com/v1beta1",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "39eaca3e-b7bc-4800-9d95-c28415ce7b5a",
+    "name": "System OPEN Billing API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "*TiDB Cloud API is in beta.*\n\n# Overview\n\nThe TiDB Cloud API is a [REST interface](https://en.wikipedia.org/wiki/Representational_state_transfer) that provides you with programmatic access to manage administrative objects within TiDB Cloud.\n\nThe API has the following features:\n\n- **JSON entities.** All entities are expressed in JSON.\n- **HTTPS-only.** You can only access the API via HTTPS, ensuring all the data sent over the network is encrypted with TLS.\n- **Key-based access and digest authentication.** Before you access TiDB Cloud API, you must generate an API key. All requests are authenticated through [HTTP Digest Authentication](https://en.wikipedia.org/wiki/Digest_access_authentication), ensuring the API key is never sent over the network.\n\n# Get Started\n\nThis guide helps you make your first API call to TiDB Cloud API. You'll learn how to authenticate a request, build a request, and interpret the response.\n\n## Prerequisites\n\nTo complete this guide, you need to perform the following tasks:\n\n- Create a [TiDB Cloud account](https://tidbcloud.com/free-trial)\n- Install [curl](https://curl.se/)\n\n## Step 1. Create an API key\n\nTo create an API key, log in to your TiDB Cloud console. Navigate to the [**API Keys**](https://tidbcloud.com/org-settings/api-keys) page of your organization, and create an API key.\n\nAn API key contains a public key and a private key. Copy and save them in a secure location. You will need to use the API key later in this guide.\n\nFor more details about creating API keys, refer to [API Key Management](#section/Authentication/API-Key-Management).\n\n## Step 2. Make your first API call\n\n### Build an API call\n\nTiDB Cloud API call consists of the following components:\n\n- **A host.** The host for TiDB Cloud API is <https://billing.tidbapi.com>.\n- **An API Key**. The public key and the private key are required for authentication.\n- **A request.** When submitting data to a resource via `POST`, `PATCH`, or `PUT`, you must submit your payload in JSON.\n\nIn this guide, you call the [List all accessible projects](#tag/Project/operation/ListProjects) endpoint. For the detailed description of the endpoint, see the [API reference](#tag/Project/operation/ListProjects).\n\n### Call an API endpoint\n\nTo get all projects in your organization, run the following command in your terminal. Remember to change `YOUR_PUBLIC_KEY` to your public key and `YOUR_PRIVATE_KEY` to your private key.\n\n```shell\ncurl --digest \\\n  --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --request GET \\\n  --url https://billing.tidbapi.com/v1beta1/bills/2023-09\n```\n\n## Step 3. Check the response\n\nAfter making the API call, if the status code in response is `200` and you see details about all the projects in your organization, your request is successful. Here is an example of a successful response.\n\n```log\n{\n  \"overview\": {\n    \"billedMonth\": \"2023-09\",\n    \"credits\": \"0.00\",\n    \"discounts\": \"0.00\",\n    \"runningTotal\": \"0.00\",\n    \"totalCost\": \"0.00\"\n  },\n  \"summaryByProject\": {\n    \"otherCharges\": [\n      {\n        \"credits\": \"0.00\",\n        \"discounts\": \"0.00\",\n        \"otherName\": \"Support Plan\",\n        \"runningTotal\": \"0.00\",\n        \"totalCost\": \"0.00\"\n      }\n    ],\n    \"projects\": [\n      {\n        \"credits\": \"0.00\",\n        \"discounts\": \"0.00\",\n        \"projectName\": \"prod-project\",\n        \"runningTotal\": \"0.00\",\n        \"totalCost\": \"0.00\"\n      }\n    ]\n  },\n  \"summaryByService\": [\n    {\n      \"credits\": \"0.00\",\n      \"discounts\": \"0.00\",\n      \"runningTotal\": \"0.00\",\n      \"serviceCosts\": [\n        {}\n      ],\n      \"serviceName\": \"TiDB Dedicated\",\n      \"totalCost\": \"0.00\"\n    }\n  ]\n}\n``` \n# Authentication\n\nThe TiDB Cloud API uses [HTTP Digest Authentication](https://en.wikipedia.org/wiki/Digest_access_authentication). It protects your private key from being sent over the network. For more details about HTTP Digest Authentication, refer to the [IETF RFC](https://datatracker.ietf.org/doc/html/rfc7616).\n\n## API key overview\n\n- The API key contains a public key and a private key, which act as the username and password required in the HTTP Digest Authentication. The private key only displays upon the key creation.\n- The API key belongs to your organization and acts as the `Organization Owner` role. You can check [permissions of owner](https://docs.pingcap.com/tidbcloud/manage-user-access#configure-member-roles).\n- You must provide the correct API key in every request. Otherwise, TiDB Cloud responds with a `401` error.\n\n## API key management\n\n### Create an API key\n\nOnly the **owner** of an organization can create an API key.\n\nTo create an API key in an organization, perform the following steps:\n\n1. In the [TiDB Cloud console](https://tidbcloud.com), switch to your target organization using the combo box in the upper-left corner.\n2. In the left navigation pane, click **Organization Settings** > **API Keys**.\n3. On the **API Keys** page, click **Create API Key**.\n4. Enter a description for your API key.\n5. Configure the role and scope for the API key. For more information about the permissions of a role, see [User roles](https://docs.pingcap.com/tidbcloud/manage-user-access/#user-roles).\n6. Click **Generate API Key**. Copy and save the public key and the private key.\n7. Make sure that you have copied and saved the private key in a secure location. The private key only displays upon the creation. After leaving this page, you will not be able to get the full private key again.\n8. Click **Done**.\n\n### View details of an API key\n\nTo view details of an API key, perform the following steps:\n\n1. In the [TiDB Cloud console](https://tidbcloud.com), switch to your target organization using the combo box in the upper-left corner.\n2. In the left navigation pane, click **Organization Settings** > **API Keys**.\n3. You can view the details of the API keys on the page.\n\n### Edit an API key\n\nOnly the **owner** of an organization can modify an API key.\n\nTo edit an API key in an organization, perform the following steps:\n\n1. In the [TiDB Cloud console](https://tidbcloud.com), switch to your target organization using the combo box in the upper-left corner.\n2. In the left navigation pane, click **Organization Settings** > **API Keys**.\n3. On the **API Keys** page, click **...** in the API key row that you want to change, and then click **Update Role**.\n4. You can update the description and role of the API key.\n5. Click **Update**.\n\n### Delete an API key\n\nOnly the **owner** of an organization can delete an API key.\n\nTo delete an API key in an organization, perform the following steps:\n\n1. In the [TiDB Cloud console](https://tidbcloud.com), switch to your target organization using the combo box in the upper-left corner.\n2. In the left navigation pane, click **Organization Settings** > **API Keys**.\n3. On the **API Keys** page, click **...** in the API key row that you want to delete, and then click **Delete**.\n4. Click **I understand, delete it.**\n\n# Rate Limiting\n\nThe TiDB Cloud API allows up to 100 requests per minute per API key. If you exceed the rate limit, the API returns a `429` error. For more quota, you can [submit a request](https://support.pingcap.com/hc/en-us/requests/new?ticket_form_id=7800003722519) to contact our support team.\n\nEach API request returns the following headers about the limit.\n\n- `X-Ratelimit-Limit-Minute`: The number of requests allowed per minute. It is 100 currently.\n- `X-Ratelimit-Remaining-Minute`: The number of remaining requests in the current minute. When it reaches `0`, the API returns a `429` error and indicates that you exceed the rate limit.\n- `X-Ratelimit-Reset`: The time in seconds at which the current rate limit resets.\n\nIf you exceed the rate limit, an error response returns like this.\n\n```\n> HTTP/2 429\n> date: Fri, 22 Jul 2022 05:28:37 GMT\n> content-type: application/json\n> content-length: 66\n> x-ratelimit-reset: 23\n> x-ratelimit-remaining-minute: 0\n> x-ratelimit-limit-minute: 100\n> x-kong-response-latency: 2\n> server: kong/2.8.1\n\n> {\"details\":[],\"code\":49900007,\"message\":\"The request exceeded the limit of 100 times per apikey per minute. For more quota, please contact us: https://support.pingcap.com/hc/en-us/requests/new?ticket_form_id=7800003722519\"}\n```\n\n# API Changelog\n\nThis changelog lists all changes to the TiDB Cloud API.\n\n<!-- In reverse chronological order -->\n\n## 20250812\n\n- \"TiDB Cloud Serverless\" is renamed to \"TiDB Cloud Starter\".\n\n## 2024-05-23\n\n- Add the [Return the monthly bill with daily usage details](#tag/Billing/paths/~1billsDetails~1%7BbilledMonth%7D/get) endpoint.\n- Add the [Return the usage details according to a cost explorer query](#tag/Billing/paths/~1billsCostExplorer/post) endpoint.\n- Add the [Return basic info of a specific organization](#tag/Billing/paths/~1billsCostExplorer~1args/get) endpoint.\n## 2023-09-28\n\n- Add the [Return monthly bill](#tag/bills/paths/~1bills~1%7BYYYY-MM%7D/get) endpoint.\n",
+      "type": "text/plain"
+    }
+  }
+}

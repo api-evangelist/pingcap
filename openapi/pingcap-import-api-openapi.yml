@@ -1,0 +1,3348 @@
+openapi: 3.2.0
+info:
+  title: Pingcap Import API
+  version: '1.0'
+  description: 'Operations tagged Import across 3 of this provider''s published API definitions: pingcap-tidb-cloud-dedicated-v1beta1-openapi-original.json, pingcap-tidb-cloud-starter-essential-v1beta1-openapi-original.json, pingcap-tidb-cloud-v1beta-openapi-original.json. Each path carries the servers of the definition it was published in.'
+basePath: /v1beta1
+schemes:
+- https
+tags:
+- name: Import
+  description: List import tasks, create an import task, get an import task, and cancel an import task.
+paths:
+  /clusters/{clusterId}/imports:
+    get:
+      summary: List import tasks
+      description: Lists all import tasks for a cluster. You can use query parameters to control sorting, pagination, and the number of results returned.
+      operationId: ListImports
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1beta1ListImportsResponse'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+      - name: clusterId
+        description: The ID of the cluster to list import tasks for.
+        in: path
+        required: true
+        type: string
+      - name: pageToken
+        description: The pagination token received from a previous [List import tasks](#tag/Import/operation/ListImports) request. Use this token to retrieve the next page of results.
+        in: query
+        required: false
+        type: string
+      - name: pageSize
+        description: The maximum number of import tasks to return. If not specified, at most 10 node specs will be returned.
+        in: query
+        required: false
+        type: integer
+        format: int32
+        default: 10
+        minimum: 1
+        maximum: 100
+      - name: orderBy
+        description: Specifies the sorting order of results. Use a comma-separated list of field names, optionally appending `desc` for descending order. For example, `createTime, name desc`. By default, fields are sorted in ascending order.
+        in: query
+        required: false
+        type: string
+      tags:
+      - Import
+      x-code-samples:
+      - lang: curl
+        label: curl
+        source: "curl --digest --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --location 'https://dedicated.tidbapi.com/v1beta1/clusters/{clusterId}/imports'"
+    post:
+      summary: Create an import task
+      description: Creates an import task to import data into a cluster.
+      operationId: CreateImport
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1beta1Import'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+      - name: clusterId
+        description: The ID of the target cluster where data will be imported.
+        in: path
+        required: true
+        type: string
+      - name: import
+        description: The configuration details of the import task to be created.
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/v1beta1Import'
+      tags:
+      - Import
+      x-code-samples:
+      - lang: curl
+        label: curl
+        source: "curl --digest --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --location 'https://dedicated.tidbapi.com/v1beta1/clusters/{clusterId}/imports' --header 'Content-Type: application/json' --data '{\n    \"creationDetails\": {\n        \"importOptions\": {\n            \"fileType\": \"CSV\"\n        },\n        \"source\": {\n            \"type\": \"S3\",\n            \"s3\": {\n                \"uri\": \"s3://{bucket_name}/{path_to_data}/\",\n                \"authType\": \"ACCESS_KEY\",\n                \"accessKey\": {\n                    \"id\": \"YOUR_ACCESS_KEY\",\n                    \"secret\": \"YOUR_SECRET_KEY\"\n                }\n            }\n        }\n    }\n}'"
+  /clusters/{clusterId}/imports/{importId}:
+    get:
+      summary: Get an import task
+      description: Retrieves details of a specific import task by its ID.
+      operationId: GetImport
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1beta1Import'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+      - name: clusterId
+        description: The ID of the cluster that contains the import task.
+        in: path
+        required: true
+        type: string
+      - name: importId
+        description: The ID of the import task to retrieve.
+        in: path
+        required: true
+        type: string
+      tags:
+      - Import
+      x-code-samples:
+      - lang: curl
+        label: curl
+        source: "curl --digest --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --location 'https://dedicated.tidbapi.com/v1beta1/clusters/{clusterId}/imports/{importId}'"
+  /clusters/{clusterId}/imports/{importId}:cancel:
+    post:
+      summary: Cancel an import task
+      description: Cancels a running import task by its ID.
+      operationId: CancelImport
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties: {}
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+      - name: clusterId
+        description: The ID of the cluster that contains the import task.
+        in: path
+        required: true
+        type: string
+      - name: importId
+        description: The ID of the import task to cancel.
+        in: path
+        required: true
+        type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          type: object
+          description: The ID of the import task.
+      tags:
+      - Import
+      x-code-samples:
+      - lang: curl
+        label: curl
+        source: "curl --digest --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --location --request POST 'https://dedicated.tidbapi.com/v1beta1/clusters/{clusterId}/imports/{importId}:cancel'"
+  /clusters/{clusterId}/imports/{id}:
+    get:
+      summary: Get details of an import task
+      operationId: ImportService_GetImport
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1beta1Import_2'
+        '400':
+          description: A request field is invalid.
+          schema:
+            $ref: '#/definitions/googlerpcStatus'
+        '401':
+          description: The API key cannot be authenticated.
+          schema:
+            $ref: '#/definitions/googlerpcStatus'
+        '403':
+          description: The API key does not have permission to access the resource.
+          schema:
+            $ref: '#/definitions/googlerpcStatus'
+        '429':
+          description: You have exceed the rate limit.
+          schema:
+            $ref: '#/definitions/googlerpcStatus'
+        '500':
+          description: Internal server error.
+          schema:
+            $ref: '#/definitions/googlerpcStatus'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/googlerpcStatus'
+      parameters:
+      - name: clusterId
+        description: The ID of the TiDB Cloud Starter or Essential instance.
+        in: path
+        required: true
+        type: string
+      - name: id
+        description: The ID of the import task.
+        in: path
+        required: true
+        type: string
+      tags:
+      - Import
+      x-codeSamples:
+      - label: curl
+        lang: cURL
+        source: 'curl --location ''https://serverless.tidbapi.com/v1beta1/clusters/{cluster_id}/imports/{import_id}'' \
+
+          --digest --user ''YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY'' \
+
+          --header ''Accept: application/json'''
+  /clusters/{clusterId}/imports/{id}:cancel:
+    post:
+      summary: Cancel an import task
+      operationId: ImportService_CancelImport
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties: {}
+        '400':
+          description: A request field is invalid.
+          schema:
+            $ref: '#/definitions/googlerpcStatus'
+        '401':
+          description: The API key cannot be authenticated.
+          schema:
+            $ref: '#/definitions/googlerpcStatus'
+        '403':
+          description: The API key does not have permission to access the resource.
+          schema:
+            $ref: '#/definitions/googlerpcStatus'
+        '429':
+          description: You have exceed the rate limit.
+          schema:
+            $ref: '#/definitions/googlerpcStatus'
+        '500':
+          description: Internal server error.
+          schema:
+            $ref: '#/definitions/googlerpcStatus'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/googlerpcStatus'
+      parameters:
+      - name: clusterId
+        description: The ID of the TiDB Cloud Starter or Essential instance.
+        in: path
+        required: true
+        type: string
+      - name: id
+        description: The ID of the import task.
+        in: path
+        required: true
+        type: string
+      tags:
+      - Import
+      x-codeSamples:
+      - label: curl
+        lang: cURL
+        source: 'curl --location --request POST ''https://serverless.tidbapi.com/v1beta1/clusters/{cluster_id}/imports/{import_id}:cancel'' \
+
+          --digest --user ''YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY'' \
+
+          --header ''Accept: application/json'''
+  /api/v1beta/projects/{project_id}/clusters/{cluster_id}/imports:
+    get:
+      summary: List all import tasks for a cluster.
+      operationId: ListImportTasks
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              items:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    metadata:
+                      description: The metadata of the import task.
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          format: uint64
+                          example: '1'
+                          description: The ID of the import task.
+                        name:
+                          type: string
+                          example: my_import
+                          description: The name of the import task.
+                        create_timestamp:
+                          type: string
+                          format: timestamp
+                          example: '1676450597'
+                          description: The creation time of the import task in Unix timestamp seconds (epoch time).
+                      title: ImportMetadata
+                      required:
+                      - id
+                      - create_timestamp
+                    spec:
+                      description: The specification of the import task.
+                      type: object
+                      properties:
+                        source:
+                          description: The data source settings of the import task.
+                          type: object
+                          properties:
+                            type:
+                              example: S3
+                              description: 'The data source type of an import task.
+
+
+                                - `"S3"`: import data from Amazon S3
+
+                                - `"GCS"`: import data from Google Cloud Storage (only available for [TiDB Cloud Dedicated](https://docs.pingcap.com/tidbcloud/select-cluster-tier#tidb-cloud-dedicated) clusters)
+
+                                - `"LOCAL_FILE"`: import data from a local file (only available for [TiDB Cloud Starter](https://docs.pingcap.com/tidbcloud/select-cluster-tier/#tidb-cloud-serverless) clusters). Before you import from a local file, you need to first upload the file using the [Upload a local file for an import task](#tag/Import/operation/UploadLocalFile) endpoint.
+
+
+                                **Note:** Currently, if this import spec is used for a [preview](#tag/Import/operation/PreviewImportData) request, only the `LOCAL_FILE` source type is supported.'
+                              type: string
+                              enum:
+                              - S3
+                              - GCS
+                              - LOCAL_FILE
+                            uri:
+                              type: string
+                              example: s3://example-bucket/example-source-data/
+                              description: 'The data source URI of an import task. The URI scheme must match the data source type. Here are the scheme of each source type:
+
+                                * `S3`: `s3://`
+
+                                * `GCS`: `gs://`
+
+                                * `LOCAL_FILE`: `file://`.
+
+
+                                **Note:** If the import source type is `LOCAL_FILE`, just provide the `upload_stub_id` of the uploaded file from the response of [Upload a local file for an import task](#tag/Import/operation/UploadLocalFile), and make it as the data source folder. For example: `file://12345/`.
+
+
+                                **Limitation**: If the import source type is `LOCAL_FILE`, only the `CSV` source format type is supported.'
+                            aws_assume_role_access:
+                              description: 'The settings to access the S3 data by assuming a specific AWS role. This field is only needed if you need to access S3 data by assuming an AWS role.
+
+
+                                **Note:** Provide only one of `aws_assume_role_access` and `aws_key_access`. If both `aws_assume_role_access` and `aws_key_access` are provided, an error will be reported.'
+                              type: object
+                              properties:
+                                assume_role:
+                                  type: string
+                                  example: arn:aws:iam::999999999999:role/sample-role
+                                  description: The specific AWS role ARN that needs to be assumed to access the Amazon S3 data source.
+                              title: AwsAssumeRoleAccess
+                              required:
+                              - assume_role
+                            aws_key_access:
+                              description: 'The settings to access the S3 data with an access key. This field is only needed if you want to access the S3 data with an access key.
+
+
+                                **Note:** Provide only one of `aws_assume_role_access` and `aws_key_access`. If both `aws_assume_role_access` and `aws_key_access` are provided, an error will be reported.'
+                              type: object
+                              properties:
+                                access_key_id:
+                                  type: string
+                                  example: YOUR_ACCESS_KEY_ID
+                                  description: The access key ID of the account to access the data. This information will be redacted when it is retrieved to obtain the import task information.
+                                secret_access_key:
+                                  type: string
+                                  example: YOUR_SECRET_ACCESS_KEY
+                                  description: The secret access key for the account to access the data. This information will be redacted when it is retrieved to obtain the import task information.
+                              title: AwsKeyAccess
+                              required:
+                              - access_key_id
+                              - secret_access_key
+                            format:
+                              description: The format settings of the import data source.
+                              type: object
+                              properties:
+                                type:
+                                  example: CSV
+                                  description: The format type of an import source.
+                                  type: string
+                                  enum:
+                                  - CSV
+                                  - PARQUET
+                                  - SQL
+                                  - AURORA_SNAPSHOT
+                                csv_config:
+                                  description: The CSV format settings to parse the source CSV files. This field is only needed if the source format is CSV.
+                                  type: object
+                                  properties:
+                                    delimiter:
+                                      type: string
+                                      default: ','
+                                      description: The delimiter character used to separate fields in the CSV data.
+                                    quote:
+                                      type: string
+                                      default: '"'
+                                      description: The character used to quote the fields in the CSV data.
+                                    backslash_escape:
+                                      type: boolean
+                                      default: true
+                                      description: 'Whether a backslash (`\`) symbol followed by a character should be combined as a whole and treated as an escape sequence in a CSV field. For example, if this parameter is set to `true`, `\n` will be treated as a ''new-line'' character. If it is set to `false`, `\n` will be treated as two separate characters: backslash and `n`.
+
+
+                                        Currently, these are several supported escape sequences: `\0`, `\b`, `\n`, `\r`, `\t`, and `\Z`. If the parameter is set to `true`, but the backslash escape sequence is not recognized, the backslash character is ignored.'
+                                    has_header_row:
+                                      type: boolean
+                                      default: true
+                                      description: Whether the CSV data has a header row, which is not part of the data. If it is set to `true`, the import task will use the column names in the header row to match the column names in the target table.
+                                  title: ImportSourceCSVConfig
+                              title: ImportSourceFormat
+                              required:
+                              - type
+                          title: ImportSource
+                          required:
+                          - type
+                          - uri
+                          - format
+                        target:
+                          description: The target settings of the import task.
+                          type: object
+                          properties:
+                            tables:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  database_name:
+                                    type: string
+                                    example: db01
+                                    description: The target database name.
+                                  table_name:
+                                    type: string
+                                    example: table01
+                                    description: The target table name.
+                                  file_name_pattern:
+                                    type: string
+                                    example: data/db01/table01.*.csv
+                                    description: 'The filename pattern used to map the files in the data source to this target table. The pattern should be a simple glob pattern. Here are some examples:
+
+                                      * `my-data?.csv`: all CSV files starting with `my-data` and one character (such as `my-data1.csv` and `my-data2.csv`) will be imported into the same target table.
+
+                                      * `my-data*.csv`: all CSV files starting with `my-data` will be imported into the same target table.
+
+
+                                      If no pattern is specified, a default pattern is used. The default pattern will try to find files with this naming convention as the data files for this table: `${db_name}.${table_name}.[numeric_index].${format_suffix}`.
+
+
+                                      Here are some examples of filenames that can be matched as data files for the table `db01.table01`: `db01.table01.csv`, `db01.table01.00001.csv`.
+
+
+                                      For more information about the custom file pattern and the default pattern, refer to [Import CSV Files from Amazon S3 or GCS into TiDB Cloud](https://docs.pingcap.com/tidbcloud/import-csv-files).
+
+
+                                      **Note:** For `LOCAL_FILE` import tasks, use the local file name for this field. The local file name must match the local file name in [Upload a local file for an import task](#tag/Import/operation/UploadLocalFile).'
+                                description: ImportTargetTable represents the settings for importing source data into a single target table of an import task.
+                                title: ImportTargetTable
+                                required:
+                                - database_name
+                                - table_name
+                              description: 'The settings for each target table that is being imported for the import task. If you leave it empty, the system will scan all the files in the data source using the default file patterns and collect all the tables to import. The files include data files, table schema files, and DB schema files. If you provide a list of tables, only those tables will be imported. For more information about the default file pattern, see [Import CSV Files from Amazon S3 or GCS into TiDB Cloud](https://docs.pingcap.com/tidbcloud/import-csv-files).
+
+
+                                **Limitations:**
+
+                                * Currently, if you want to use a custom filename pattern, you can only specify one table. If all the tables use the default filename pattern, you can specify more than one target table in `tables`.
+
+                                * It is recommended that you pre-create the target tables before creating an import task. You can do this either by executing the `CREATE TABLE` statement in the cluster or by specifying the table definition in the table creation options.
+
+                                * If a target table is not created, the import module tries to find a **TABLE SCHEMA FILE** containing the `CREATE TABLE` statement of the table in the data source folder with the name `${db_name}.${table_name}-schema.sql` (for example, `db01.tbl01-schema.sql`). If this file is found, the `CREATE TABLE` statement is automatically executed if the table doesn''t exist before the actual import process starts. If the table is still missing after this pre-create step, an error will occur.'
+                          title: ImportTarget
+                      title: ImportSpec
+                      required:
+                      - source
+                      - target
+                    status:
+                      description: The status of the import task.
+                      type: object
+                      properties:
+                        phase:
+                          example: IMPORTING
+                          description: The current phase that the import task is in.
+                          type: string
+                          enum:
+                          - PREPARING
+                          - IMPORTING
+                          - COMPLETED
+                          - FAILED
+                          - CANCELING
+                          - CANCELED
+                        error_message:
+                          type: string
+                          example: some error occurs
+                          description: The error message of the import task.
+                        start_timestamp:
+                          type: string
+                          format: timestamp
+                          example: '1676450597'
+                          description: The start timestamp of the import task. The format is Unix timestamp (the seconds elapsed since the Unix epoch)
+                        end_timestamp:
+                          type: string
+                          format: timestamp
+                          example: '1676450897'
+                          description: The end timestamp of the import task. The format is Unix timestamp (the seconds elapsed since the Unix epoch).
+                        progress:
+                          description: The progress of the import task.
+                          type: object
+                          properties:
+                            import_progress:
+                              type: number
+                              format: double
+                              example: 59
+                              description: The overall importing progress of the import task.
+                              maximum: 100
+                            validation_progress:
+                              type: number
+                              format: double
+                              example: 59
+                              description: The overall validation progress of the import task after the data has been imported into the target cluster.
+                              maximum: 100
+                          title: ImportProgress
+                          required:
+                          - import_progress
+                          - validation_progress
+                        source_total_size_bytes:
+                          type: string
+                          format: uint64
+                          example: '10737418240'
+                          description: The total size of the import task's data source. The unit is bytes.
+                      title: ImportStatus
+                      required:
+                      - phase
+                  description: ImportItem represents the information of a single import task.
+                  title: ImportItem
+                description: The import tasks in the cluster in the request page area.
+              total:
+                type: integer
+                format: int64
+                example: 20
+                description: The total number of import tasks in the cluster.
+            description: ListImportTasksResp is the response for listing the import tasks of a cluster.
+            title: ListImportTasksResp
+            required:
+            - items
+            - total
+        '400':
+          description: A request field is invalid.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: integer
+                description: Error code returned with this error.
+                title: code
+              message:
+                type: string
+                description: Error message returned with this error.
+                title: message
+              details:
+                type: array
+                items:
+                  type: string
+                description: Error details returned with this error.
+                title: details
+        '401':
+          description: The API key cannot be authenticated.
+          schema: {}
+        '403':
+          description: The API key does not have permission to access the resource.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: integer
+                description: Error code returned with this error.
+                title: code
+              message:
+                type: string
+                description: Error message returned with this error.
+                title: message
+              details:
+                type: array
+                items:
+                  type: string
+                description: Error details returned with this error.
+                title: details
+        '404':
+          description: The requested resource does not exist.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: integer
+                description: Error code returned with this error.
+                title: code
+              message:
+                type: string
+                description: Error message returned with this error.
+                title: message
+              details:
+                type: array
+                items:
+                  type: string
+                description: Error details returned with this error.
+                title: details
+        '429':
+          description: You have exceed the rate limit.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: integer
+                description: Error code returned with this error.
+                title: code
+              message:
+                type: string
+                description: Error message returned with this error.
+                title: message
+              details:
+                type: array
+                items:
+                  type: string
+                description: Error details returned with this error.
+                title: details
+        '500':
+          description: Server error.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: integer
+                description: Error code returned with this error.
+                title: code
+              message:
+                type: string
+                description: Error message returned with this error.
+                title: message
+              details:
+                type: array
+                items:
+                  type: string
+                description: Error details returned with this error.
+                title: details
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+      - name: project_id
+        description: The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects).
+        in: path
+        required: true
+        type: string
+        format: uint64
+      - name: cluster_id
+        description: The ID of your cluster. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject).
+        in: path
+        required: true
+        type: string
+        format: uint64
+      - name: page
+        description: The number of pages.
+        in: query
+        required: false
+        type: integer
+        format: int64
+        default: 1
+      - name: page_size
+        description: The size of a page.
+        in: query
+        required: false
+        type: integer
+        format: int64
+        default: 10
+      tags:
+      - Import
+      x-code-samples:
+      - lang: curl
+        source: "curl --digest \\\n  --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --request GET \\\n  --url 'https://api.tidbcloud.com/api/v1beta/projects/{project_id}/clusters/{cluster_id}/imports?page=1&page_size=10'"
+    post:
+      summary: Create an import task.
+      operationId: CreateImportTask
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uint64
+                example: '12345'
+                description: The ID of the import task.
+            description: CreateImportTaskResp is the response to the creation of an import task.
+            title: CreateImportTaskResp
+            required:
+            - id
+        '400':
+          description: A request field is invalid.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: integer
+                description: Error code returned with this error.
+                title: code
+              message:
+                type: string
+                description: Error message returned with this error.
+                title: message
+              details:
+                type: array
+                items:
+                  type: string
+                description: Error details returned with this error.
+                title: details
+        '401':
+          description: The API key cannot be authenticated.
+          schema: {}
+        '403':
+          description: The API key does not have permission to access the resource.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: integer
+                description: Error code returned with this error.
+                title: code
+              message:
+                type: string
+                description: Error message returned with this error.
+                title: message
+              details:
+                type: array
+                items:
+                  type: string
+                description: Error details returned with this error.
+                title: details
+        '404':
+          description: The requested resource does not exist.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: integer
+                description: Error code returned with this error.
+                title: code
+              message:
+                type: string
+                description: Error message returned with this error.
+                title: message
+              details:
+                type: array
+                items:
+                  type: string
+                description: Error details returned with this error.
+                title: details
+        '429':
+          description: You have exceed the rate limit.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: integer
+                description: Error code returned with this error.
+                title: code
+              message:
+                type: string
+                description: Error message returned with this error.
+                title: message
+              details:
+                type: array
+                items:
+                  type: string
+                description: Error details returned with this error.
+                title: details
+        '500':
+          description: Server error.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: integer
+                description: Error code returned with this error.
+                title: code
+              message:
+                type: string
+                description: Error message returned with this error.
+                title: message
+              details:
+                type: array
+                items:
+                  type: string
+                description: Error details returned with this error.
+                title: details
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+      - name: project_id
+        description: The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects).
+        in: path
+        required: true
+        type: string
+        format: uint64
+      - name: cluster_id
+        description: The ID of your cluster that you want to start an import job. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject).
+        in: path
+        required: true
+        type: string
+        format: uint64
+      - name: body
+        in: body
+        required: true
+        schema:
+          type: object
+          properties:
+            name:
+              type: string
+              example: import_2023-01-01T00:00:30Z
+              description: 'The name of an import task. The maximum length of the name is 64 characters.
+
+
+                It is recommended that you use a unique name, so that you can easily identify the import task when you list all import tasks. If the name is not provided, a default name is generated with an `import_` prefix followed by a time string representing the creation time of the import task. For example, `import_2023-01-01T00:00:30Z`.'
+              maxLength: 64
+            spec:
+              description: The specifications of the import task.
+              type: object
+              properties:
+                source:
+                  description: The data source settings of the import task.
+                  type: object
+                  properties:
+                    type:
+                      example: S3
+                      description: 'The data source type of an import task.
+
+
+                        - `"S3"`: import data from Amazon S3
+
+                        - `"GCS"`: import data from Google Cloud Storage (only available for [TiDB Cloud Dedicated](https://docs.pingcap.com/tidbcloud/select-cluster-tier#tidb-cloud-dedicated) clusters)
+
+                        - `"LOCAL_FILE"`: import data from a local file (only available for [TiDB Cloud Starter](https://docs.pingcap.com/tidbcloud/select-cluster-tier/#tidb-cloud-serverless) clusters). Before you import from a local file, you need to first upload the file using the [Upload a local file for an import task](#tag/Import/operation/UploadLocalFile) endpoint.
+
+
+                        **Note:** Currently, if this import spec is used for a [preview](#tag/Import/operation/PreviewImportData) request, only the `LOCAL_FILE` source type is supported.'
+                      type: string
+                      enum:
+                      - S3
+                      - GCS
+                      - LOCAL_FILE
+                    uri:
+                      type: string
+                      example: s3://example-bucket/example-source-data/
+                      description: 'The data source URI of an import task. The URI scheme must match the data source type. Here are the scheme of each source type:
+
+                        * `S3`: `s3://`
+
+                        * `GCS`: `gs://`
+
+                        * `LOCAL_FILE`: `file://`.
+
+
+                        **Note:** If the import source type is `LOCAL_FILE`, just provide the `upload_stub_id` of the uploaded file from the response of [Upload a local file for an import task](#tag/Import/operation/UploadLocalFile), and make it as the data source folder. For example: `file://12345/`.
+
+
+                        **Limitation**: If the import source type is `LOCAL_FILE`, only the `CSV` source format type is supported.'
+                    aws_assume_role_access:
+                      description: 'The settings to access the S3 data by assuming a specific AWS role. This field is only needed if you need to access S3 data by assuming an AWS role.
+
+
+                        **Note:** Provide only one of `aws_assume_role_access` and `aws_key_access`. If both `aws_assume_role_access` and `aws_key_access` are provided, an error will be reported.'
+                      type: object
+                      properties:
+                        assume_role:
+                          type: string
+                          example: arn:aws:iam::999999999999:role/sample-role
+                          description: The specific AWS role ARN that needs to be assumed to access the Amazon S3 data source.
+                      title: AwsAssumeRoleAccess
+                      required:
+                      - assume_role
+                    aws_key_access:
+                      description: 'The settings to access the S3 data with an access key. This field is only needed if you want to access the S3 data with an access key.
+
+
+                        **Note:** Provide only one of `aws_assume_role_access` and `aws_key_access`. If both `aws_assume_role_access` and `aws_key_access` are provided, an error will be reported.'
+                      type: object
+                      properties:
+                        access_key_id:
+                          type: string
+                          example: YOUR_ACCESS_KEY_ID
+                          description: The access key ID of the account to access the data. This information will be redacted when it is retrieved to obtain the import task information.
+                        secret_access_key:
+                          type: string
+                          example: YOUR_SECRET_ACCESS_KEY
+                          description: The secret access key for the account to access the data. This information will be redacted when it is retrieved to obtain the import task information.
+                      title: AwsKeyAccess
+                      required:
+                      - access_key_id
+                      - secret_access_key
+                    format:
+                      description: The format settings of the import data source.
+                      type: object
+                      properties:
+                        type:
+                          example: CSV
+                          description: The format type of an import source.
+                          type: string
+                          enum:
+                          - CSV
+                          - PARQUET
+                          - SQL
+                          - AURORA_SNAPSHOT
+                        csv_config:
+                          description: The CSV format settings to parse the source CSV files. This field is only needed if the source format is CSV.
+                          type: object
+                          properties:
+                            delimiter:
+                              type: string
+                              default: ','
+                              description: The delimiter character used to separate fields in the CSV data.
+                            quote:
+                              type: string
+                              default: '"'
+                              description: The character used to quote the fields in the CSV data.
+                            backslash_escape:
+                              type: boolean
+                              default: true
+                              description: 'Whether a backslash (`\`) symbol followed by a character should be combined as a whole and treated as an escape sequence in a CSV field. For example, if this parameter is set to `true`, `\n` will be treated as a ''new-line'' character. If it is set to `false`, `\n` will be treated as two separate characters: backslash and `n`.
+
+
+                                Currently, these are several supported escape sequences: `\0`, `\b`, `\n`, `\r`, `\t`, and `\Z`. If the parameter is set to `true`, but the backslash escape sequence is not recognized, the backslash character is ignored.'
+                            has_header_row:
+                              type: boolean
+                              default: true
+                              description: Whether the CSV data has a header row, which is not part of the data. If it is set to `true`, the import task will use the column names in the header row to match the column names in the target table.
+                          title: ImportSourceCSVConfig
+                      title: ImportSourceFormat
+                      required:
+                      - type
+                  title: ImportSource
+                  required:
+                  - type
+                  - uri
+                  - format
+                target:
+                  description: The target settings of the import task.
+                  type: object
+                  properties:
+                    tables:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          database_name:
+                            type: string
+                            example: db01
+                            description: The target database name.
+                          table_name:
+                            type: string
+                            example: table01
+                            description: The target table name.
+                          file_name_pattern:
+                            type: string
+                            example: data/db01/table01.*.csv
+                            description: 'The filename pattern used to map the files in the data source to this target table. The pattern should be a simple glob pattern. Here are some examples:
+
+                              * `my-data?.csv`: all CSV files starting with `my-data` and one character (such as `my-data1.csv` and `my-data2.csv`) will be imported into the same target table.
+
+                              * `my-data*.csv`: all CSV files starting with `my-data` will be imported into the same target table.
+
+
+                              If no pattern is specified, a default pattern is used. The default pattern will try to find files with this naming convention as the data files for this table: `${db_name}.${table_name}.[numeric_index].${format_suffix}`.
+
+
+                              Here are some examples of filenames that can be matched as data files for the table `db01.table01`: `db01.table01.csv`, `db01.table01.00001.csv`.
+
+
+                              For more information about the custom file pattern and the default pattern, refer to [Import CSV Files from Amazon S3 or GCS into TiDB Cloud](https://docs.pingcap.com/tidbcloud/import-csv-files).
+
+
+                              **Note:** For `LOCAL_FILE` import tasks, use the local file name for this field. The local file name must match the local file name in [Upload a local file for an import task](#tag/Import/operation/UploadLocalFile).'
+                        description: ImportTargetTable represents the settings for importing source data into a single target table of an import task.
+                        title: ImportTargetTable
+                        required:
+                        - database_name
+                        - table_name
+                      description: 'The settings for each target table that is being imported for the import task. If you leave it empty, the system will scan all the files in the data source using the default file patterns and collect all the tables to import. The files include data files, table schema files, and DB schema files. If you provide a list of tables, only those tables will be imported. For more information about the default file pattern, see [Import CSV Files from Amazon S3 or GCS into TiDB Cloud](https://docs.pingcap.com/tidbcloud/import-csv-files).
+
+
+                        **Limitations:**
+
+                        * Currently, if you want to use a custom filename pattern, you can only specify one table. If all the tables use the default filename pattern, you can specify more than one target table in `tables`.
+
+                        * It is recommended that you pre-create the target tables before creating an import task. You can do this either by executing the `CREATE TABLE` statement in the cluster or by specifying the table definition in the table creation options.
+
+                        * If a target table is not created, the import module tries to find a **TABLE SCHEMA FILE** containing the `CREATE TABLE` statement of the table in the data source folder with the name `${db_name}.${table_name}-schema.sql` (for example, `db01.tbl01-schema.sql`). If this file is found, the `CREATE TABLE` statement is automatically executed if the table doesn''t exist before the actual import process starts. If the table is still missing after this pre-create step, an error will occur.'
+                  title: ImportTarget
+              title: ImportSpec
+              required:
+              - source
+              - target
+            options:
+              description: The additional options for creating an import task.
+              type: object
+              properties:
+                pre_create_tables:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      database_name:
+                        type: string
+                        example: db01
+                        description: The database name of the table.
+                      table_name:
+                        type: string
+                        example: table01
+                        description: The table name of the table.
+                      schema:
+                        description: The schema for the table.
+                        type: object
+                        properties:
+                          column_definitions:
+                            type: array
+                            example:
+                            - column_name: id
+                              column_type: INTEGER
+                            - column_name: column01
+                              column_type: VARCHAR(255)
+                            items:
+                              type: object
+                              properties:
+                                column_name:
+                                  type: string
+                                  example: column01
+                                  description: The column name.
+                                column_type:
+                                  type: string
+                                  example: VARCHAR(255)
+                                  description: The column type.
+                              description: ColumnDefinition is the definition of a column in a table.
+                              title: ColumnDefinition
+                              required:
+                              - column_name
+                              - column_type
+                            description: The column definition for each column in the table.
+                          primary_key_columns:
+                            type: array
+                            example:
+                            - id
+                            items:
+                              type: string
+                            description: The primary key column names for the table. This is optional. The primary key is taken into account when the table is pre-created before an import task is started.
+                        title: TableSchema
+                        required:
+                        - column_definitions
+                    description: TableDefinition is the definition of a table so that the table can be created with this information.
+                    title: TableDefinition
+                    required:
+                    - database_name
+                    - table_name
+                    - schema
+                  description: 'The table definition of pre-created tables.
+
+
+                    **Note**: The name of the pre-created tables should match one of the target tables. Otherwise, the table will be ignored and won''t be created'
+              title: CreateImportTaskOptions
+          description: CreateImportTaskReq is the request to create an import task for a cluster.
+          title: CreateImportTaskReq
+          required:
+          - spec
+      tags:
+      - Import
+      x-code-samples:
+      - lang: curl
+        source: "curl --digest \\\n  --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --request POST \\\n  --url https://api.tidbcloud.com/api/v1beta/projects/{project_id}/clusters/{cluster_id}/imports \\\n  --header 'content-type: application/json' \\\n  --data '{\"name\":\"import_2023-01-01T00:00:30Z\",\"spec\":{\"source\":{\"type\":\"S3\",\"uri\":\"s3://example-bucket/example-source-data/\",\"aws_assume_role_access\":{\"assume_role\":\"arn:aws:iam::999999999999:role/sample-role\"},\"aws_key_access\":{\"access_key_id\":\"YOUR_ACCESS_KEY_ID\",\"secret_access_key\":\"YOUR_SECRET_ACCESS_KEY\"},\"format\":{\"type\":\"CSV\",\"csv_config\":{\"delimiter\":\",\",\"quote\":\"\\\"\",\"backslash_escape\":true,\"has_header_row\":true}}},\"target\":{\"tables\":[{\"database_name\":\"db01\",\"table_name\":\"table01\",\"file_name_pattern\":\"data/db01/table01.*.csv\"}]}},\"options\":{\"pre_create_tables\":[{\"database_name\":\"db01\",\"table_name\":\"table01\",\"schema\":{\"column_definitions\":[{\"column_name\":\"id\",\"column_type\":\"INTEGER\"},{\"column_name\":\"column01\",\"column_type\":\"VARCHAR(255)\"}],\"primary_key_columns\":[\"id\"]}}]}}'"
+  /api/v1beta/projects/{project_id}/clusters/{cluster_id}/imports/preview:
+    post:
+      summary: Preview data before starting an import task.
+      description: Before you create an import task, you can preview the data using this endpoint and make sure that the import task is configured as intended. The preview result is organized by tables.
+      operationId: PreviewImportData
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              table_previews:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    database_name:
+                      type: string
+                      example: db01
+                      description: The database name of the preview table.
+                    table_name:
+                      type: string
+                      example: table01
+                      description: The table name of the preview table.
+                    schema_preview:
+                      description: The schema for the preview table.
+                      type: object
+                      properties:
+                        column_definitions:
+                          type: array
+                          example:
+                          - column_name: id
+                            column_type: INTEGER
+                          - column_name: column01
+                            column_type: VARCHAR(255)
+                          items:
+                            type: object
+                            properties:
+                              column_name:
+                                type: string
+                                example: column01
+                                description: The column name.
+                              column_type:
+                                type: string
+                                example: VARCHAR(255)
+                                description: The column type.
+                            description: ColumnDefinition is the definition of a column in a table.
+                            title: ColumnDefinition
+                            required:
+                            - column_name
+                            - column_type
+                          description: The column definition for each column in the table.
+                        primary_key_columns:
+                          type: array
+                          example:
+                          - id
+                          items:
+                            type: string
+                          description: The primary key column names for the table. This is optional. The primary key is taken into account when the table is pre-created before an import task is started.
+                      title: TableSchema
+                      required:
+                      - column_definitions
+                    data_preview:
+                      description: The data sample for the preview table.
+                      type: object
+                      properties:
+                        column_names:
+                          type: array
+                          example:
+                          - id
+                          - column01
+                          items:
+                            type: string
+                          description: The column names for the following data samples from a table.
+                        rows:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              columns:
+                                type: array
+                                example:
+                                - '1'
+                                - abc
+                                items:
+                                  type: string
+                                description: The columns extracted from a table row.
+                            description: TableDataRow is a single row in a table.
+                            title: TableDataRow
+                            required:
+                            - columns
+                          description: The rows sampled from a table.
+                      title: TableData
+                      required:
+                      - rows
+                  description: TablePreview is the preview result for a single table.
+                  title: TablePreview
+                  required:
+                  - database_name
+                  - table_name
+                  - data_preview
+                description: The preview results for each target table from the import task specification.
+            description: PreviewImportDataResp is the response of the source data preview before starting an import task.
+            title: PreviewImportDataResp
+        '400':
+          description: A request field is invalid.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: integer
+                description: Error code returned with this error.
+                title: code
+              message:
+                type: string
+                description: Error message returned with this error.
+                title: message
+              details:
+                type: array
+                items:
+                  type: string
+                description: Error details returned with this error.
+                title: details
+        '401':
+          description: The API key cannot be authenticated.
+          schema: {}
+        '403':
+          description: The API key does not have permission to access the resource.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: integer
+                description: Error code returned with this error.
+                title: code
+              message:
+                type: string
+                description: Error message returned with this error.
+                title: message
+              details:
+                type: array
+                items:
+                  type: string
+                description: Error details returned with this error.
+                title: details
+        '404':
+          description: The requested resource does not exist.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: integer
+                description: Error code returned with this error.
+                title: code
+              message:
+                type: string
+                description: Error message returned with this error.
+                title: message
+              details:
+                type: array
+                items:
+                  type: string
+                description: Error details returned with this error.
+                title: details
+        '429':
+          description: You have exceed the rate limit.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: integer
+                description: Error code returned with this error.
+                title: code
+              message:
+                type: string
+                description: Error message returned with this error.
+                title: message
+              details:
+                type: array
+                items:
+                  type: string
+                description: Error details returned with this error.
+                title: details
+        '500':
+          description: Server error.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: integer
+                description: Error code returned with this error.
+                title: code
+              message:
+                type: string
+                description: Error message returned with this error.
+                title: message
+              details:
+                type: array
+                items:
+                  type: string
+                description: Error details returned with this error.
+                title: details
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+      - name: project_id
+        description: The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects).
+        in: path
+        required: true
+        type: string
+        format: uint64
+      - name: cluster_id
+        description: The ID of your cluster that you want to start an import task. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject).
+        in: path
+        required: true
+        type: string
+        format: uint64
+      - name: body
+        in: body
+        required: true
+        schema:
+          type: object
+          properties:
+            spec:
+              description: 'The specifications of the import task.
+
+
+                **Note:** Currently, you can only preview locally uploaded files. This means that only data sources with the `LOCAL_FILE` source type are supported. If you specify a data source other than `LOCAL_FILE`, errors will occur.'
+              type: object
+              properties:
+                source:
+                  description: The data source settings of the import task.
+                  type: object
+                  properties:
+                    type:
+                      example: S3
+                      description: 'The data source type of an import task.
+
+
+                        - `"S3"`: import data from Amazon S3
+
+                        - `"GCS"`: import data from Google Cloud Storage (only available for [TiDB Cloud Dedicated](https://docs.pingcap.com/tidbcloud/select-cluster-tier#tidb-cloud-dedicated) clusters)
+
+                        - `"LOCAL_FILE"`: import data from a local file (only available for [TiDB Cloud Starter](https://docs.pingcap.com/tidbcloud/select-cluster-tier/#tidb-cloud-serverless) clusters). Before you import from a local file, you need to first upload the file using the [Upload a local file for an import task](#tag/Import/operation/UploadLocalFile) endpoint.
+
+
+                        **Note:** Currently, if this import spec is used for a [preview](#tag/Import/operation/PreviewImportData) request, only the `LOCAL_FILE` source type is supported.'
+                      type: string
+                      enum:
+                      - S3
+                      - GCS
+                      - LOCAL_FILE
+                    uri:
+                      type: string
+                      example: s3://example-bucket/example-source-data/
+                      description: 'The data source URI of an import task. The URI scheme must match the data source type. Here are the scheme of each source type:
+
+                        * `S3`: `s3://`
+
+                        * `GCS`: `gs://`
+
+                        * `LOCAL_FILE`: `file://`.
+
+
+                        **Note:** If the import source type is `LOCAL_FILE`, just provide the `upload_stub_id` of the uploaded file from the response of [Upload a local file for an import task](#tag/Import/operation/UploadLocalFile), and make it as the data source folder. For example: `file://12345/`.
+
+
+                        **Limitation**: If the import source type is `LOCAL_FILE`, only the `CSV` source format type is supported.'
+                    aws_assume_role_access:
+                      description: 'The settings to access the S3 data by assuming a specific AWS role. This field is only needed if you need to access S3 data by assuming an AWS role.
+
+
+                        **Note:** Provide only one of `aws_assume_role_access` and `aws_key_access`. If both `aws_assume_role_access` and `aws_key_access` are provided, an error will be reported.'
+                      type: object
+                      properties:
+                        assume_role:
+                          type: string
+                          example: arn:aws:iam::999999999999:role/sample-role
+                          description: The specific AWS role ARN that needs to be assumed to access the Amazon S3 data source.
+                      title: AwsAssumeRoleAccess
+                      required:
+                      - assume_role
+                    aws_key_access:
+                      description: 'The settings to access the S3 data with an access key. This field is only needed if you want to access the S3 data with an access key.
+
+
+                        **Note:** Provide only one of `aws_assume_role_access` and `aws_key_access`. If both `aws_assume_role_access` and `aws_key_access` are provided, an error will be reported.'
+                      type: object
+                      properties:
+                        access_key_id:
+                          type: string
+                          example: YOUR_ACCESS_KEY_ID
+                          description: The access key ID of the account to access the data. This information will be redacted when it is retrieved to obtain the import task information.
+                        secret_access_key:
+                          type: string
+                          example: YOUR_SECRET_ACCESS_KEY
+                          description: The secret access key for the account to access the data. This information will be redacted when it is retrieved to obtain the import task information.
+                      title: AwsKeyAccess
+                      required:
+                      - access_key_id
+                      - secret_access_key
+                    format:
+                      description: The format settings of the import data source.
+                      type: object
+                      properties:
+                        type:
+                          example: CSV
+                          description: The format type of an import source.
+                          type: string
+                          enum:
+                          - CSV
+                          - PARQUET
+                          - SQL
+                          - AURORA_SNAPSHOT
+                        csv_config:
+                          description: The CSV format settings to parse the source CSV files. This field is only needed if the source format is CSV.
+                          type: object
+                          properties:
+                            delimiter:
+                              type: string
+                              default: ','
+                              description: The delimiter character used to separate fields in the CSV data.
+                            quote:
+                              type: string
+                              default: '"'
+                              description: The character used to quote the fields in the CSV data.
+                            backslash_escape:
+                              type: boolean
+                              default: true
+                              description: 'Whether a backslash (`\`) symbol followed by a character should be combined as a whole and treated as an escape sequence in a CSV field. For example, if this parameter is set to `true`, `\n` will be treated as a ''new-line'' character. If it is set to `false`, `\n` will be treated as two separate characters: backslash and `n`.
+
+
+                                Currently, these are several supported escape sequences: `\0`, `\b`, `\n`, `\r`, `\t`, and `\Z`. If the parameter is set to `true`, but the backslash escape sequence is not recognized, the backslash character is ignored.'
+                            has_header_row:
+                              type: boolean
+                              default: true
+                              description: Whether the CSV data has a header row, which is not part of the data. If it is set to `true`, the import task will use the column names in the header row to match the column names in the target table.
+                          title: ImportSourceCSVConfig
+                      title: ImportSourceFormat
+                      required:
+                      - type
+                  title: ImportSource
+                  required:
+                  - type
+                  - uri
+                  - format
+                target:
+                  description: The target settings of the import task.
+                  type: object
+                  properties:
+                    tables:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          database_name:
+                            type: string
+                            example: db01
+                            description: The target database name.
+                          table_name:
+                            type: string
+                            example: table01
+                            description: The target table name.
+                          file_name_pattern:
+                            type: string
+                            example: data/db01/table01.*.csv
+                            description: 'The filename pattern used to map the files in the data source to this target table. The pattern should be a simple glob pattern. Here are some examples:
+
+                              * `my-data?.csv`: all CSV files starting with `my-data` and one character (such as `my-data1.csv` and `my-data2.csv`) will be imported into the same target table.
+
+                              * `my-data*.csv`: all CSV files starting with `my-data` will be imported into the same target table.
+
+
+                              If no pattern is specified, a default pattern is used. The default pattern will try to find files with this naming convention as the data files for this table: `${db_name}.${table_name}.[numeric_index].${format_suffix}`.
+
+
+                              Here are some examples of filenames that can be matched as data files for the table `db01.table01`: `db01.table01.csv`, `db01.table01.00001.csv`.
+
+
+                              For more information about the custom file pattern and the default pattern, refer to [Import CSV Files from Amazon S3 or GCS into TiDB Cloud](https://docs.pingcap.com/tidbcloud/import-csv-files).
+
+
+                              **Note:** For `LOCAL_FILE` import tasks, use the local file name for this field. The local file name must match the local file name in [Upload a local file for an import task](#tag/Import/operation/UploadLocalFile).'
+                        description: ImportTargetTable represents the settings for importing source data into a single target table of an import task.
+                        title: ImportTargetTable
+                        required:
+                        - database_name
+                        - table_name
+                      description: 'The settings for each target table that is being imported for the import task. If you leave it empty, the system will scan all the files in the data source using the default file patterns and collect all the tables to import. The files include data files, table schema files, and DB schema files. If you provide a list of tables, only those tables will be imported. For more information about the default file pattern, see [Import CSV Files from Amazon S3 or GCS into TiDB Cloud](https://docs.pingcap.com/tidbcloud/import-csv-files).
+
+
+                        **Limitations:**
+
+                        * Currently, if you want to use a custom filename pattern, you can only specify one table. If all the tables use the default filename pattern, you can specify more than one target table in `tables`.
+
+                        * It is recommended that you pre-create the target tables before creating an import task. You can do this either by executing the `CREATE TABLE` statement in the cluster or by specifying the table definition in the table creation options.
+
+                        * If a target table is not created, the import module tries to find a **TABLE SCHEMA FILE** containing the `CREATE TABLE` statement of the table in the data source folder with the name `${db_name}.${table_name}-schema.sql` (for example, `db01.tbl01-schema.sql`). If this file is found, the `CREATE TABLE` statement is automatically executed if the table doesn''t exist before the actual import process starts. If the table is still missing after this pre-create step, an error will occur.'
+                  title: ImportTarget
+              title: ImportSpec
+              required:
+              - source
+              - target
+            limit_rows_count:
+              type: integer
+              format: int64
+              x-nullable: true
+              example: 10
+              default: 10
+              description: The maximum number of rows to preview for each table.
+              maximum: 20
+              minimum: 1
+          description: PreviewImportDataReq is the request to preview the source data before starting an import task for a cluster.
+          title: PreviewImportDataReq
+          required:
+          - spec
+      tags:
+      - Import
+      x-code-samples:
+      - lang: curl
+        source: "curl --digest \\\n  --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --request POST \\\n  --url https://api.tidbcloud.com/api/v1beta/projects/{project_id}/clusters/{cluster_id}/imports/preview \\\n  --header 'content-type: application/json' \\\n  --data '{\"spec\":{\"source\":{\"type\":\"S3\",\"uri\":\"s3://example-bucket/example-source-data/\",\"aws_assume_role_access\":{\"assume_role\":\"arn:aws:iam::999999999999:role/sample-role\"},\"aws_key_access\":{\"access_key_id\":\"YOUR_ACCESS_KEY_ID\",\"secret_access_key\":\"YOUR_SECRET_ACCESS_KEY\"},\"format\":{\"type\":\"CSV\",\"csv_config\":{\"delimiter\":\",\",\"quote\":\"\\\"\",\"backslash_escape\":true,\"has_header_row\":true}}},\"target\":{\"tables\":[{\"database_name\":\"db01\",\"table_name\":\"table01\",\"file_name_pattern\":\"data/db01/table01.*.csv\"}]}},\"limit_rows_count\":10}'"
+  /api/v1beta/projects/{project_id}/clusters/{cluster_id}/imports/role_info:
+    get:
+      summary: Retrieve the role information for import tasks on a cluster.
+      description: Retrieve the role information for import tasks on a cluster, so that you can configure the access for the import tasks to retrieve the data from the data source. For more information on how to configure the access for the import tasks, refer to [Configure Amazon S3 Access and GCS Access](https://docs.pingcap.com/tidbcloud/config-s3-and-gcs-access).
+      operationId: GetImportTaskRoleInfo
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              aws_import_role:
+                description: The import role information for an AWS cluster. Only TiDB clusters on AWS return this information. If the TiDB cluster is deployed on GCP, this field is not returned.
+                type: object
+                properties:
+                  account_id:
+                    type: string
+                    example: '999999999999'
+                    description: The account ID under which the import tasks for this cluster are running.
+                  external_id:
+                    type: string
+                    example: abcdefghijklmnopqrstuvwxyz0123456789xxxxxxxxxxxxxx
+                    description: The unique external ID that binds to the cluster, which is a long string. When an import task starts and attempts to assume a specified role, it automatically attaches this external ID. This means that you can configure this external ID in the assumed role's trust relationship, so that only the import task of that specified cluster can access the data by assuming the role. This can provide additional security.
+                title: AwsImportTaskRoleInfo
+                required:
+                - account_id
+                - external_id
+              gcp_import_role:
+                description: The import role information for a GCP cluster. Only TiDB clusters on GCP return this information. If the TiDB cluster is deployed on AWS, this field is not returned.
+                type: object
+                properties:
+                  account_id:
+                    type: string
+                    example: example-account@example.com
+                    description: The account ID under which the import tasks for this cluster are running.
+                title: GcpImportTaskRoleInfo
+                required:
+                - account_id
+            description: ImportTaskRoleInfo is the role information for import tasks on a cluster. You can use this information to configure the access for the import tasks to retrieve the data from the data source.
+            title: ImportTaskRoleInfo
+        '400':
+          description: A request field is invalid.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: integer
+                description: Error code returned with this error.
+                title: code
+              message:
+                type: string
+                description: Error message returned with this error.
+                title: message
+              details:
+                type: array
+                items:
+                  type: string
+                description: Error details returned with this error.
+                title: details
+        '401':
+          description: The API key cannot be authenticated.
+          schema: {}
+        '403':
+          description: The API key does not have permission to access the resource.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: integer
+                description: Error code returned with this error.
+                title: code
+              message:
+                type: string
+                description: Error message returned with this error.
+                title: message
+              details:
+                type: array
+                items:
+                  type: string
+                description: Error details returned with this error.
+                title: details
+        '404':
+          description: The requested resource does not exist.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: integer
+                description: Error code returned with this error.
+                title: code
+              message:
+                type: string
+                description: Error message returned with this error.
+                title: message
+              details:
+                type: array
+                items:
+                  type: string
+                description: Error details returned with this error.
+                title: details
+        '429':
+          description: You have exceed the rate limit.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: integer
+                description: Error code returned with this error.
+                title: code
+              message:
+                type: string
+                description: Error message returned with this error.
+                title: message
+              details:
+                type: array
+                items:
+                  type: string
+                description: Error details returned with this error.
+                title: details
+        '500':
+          description: Server error.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: integer
+                description: Error code returned with this error.
+                title: code
+              message:
+                type: string
+                description: Error message returned with this error.
+                title: message
+              details:
+                type: array
+                items:
+                  type: string
+                description: Error details returned with this error.
+                title: details
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+      - name: project_id
+        description: The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects).
+        in: path
+        required: true
+        type: string
+        format: uint64
+      - name: cluster_id
+        description: The ID of your cluster. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject).
+        in: path
+        required: true
+        type: string
+        format: uint64
+      tags:
+      - Import
+      x-code-samples:
+      - lang: curl
+        source: "curl --digest \\\n  --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --request GET \\\n  --url https://api.tidbcloud.com/api/v1beta/projects/{project_id}/clusters/{cluster_id}/imports/role_info"
+  /api/v1beta/projects/{project_id}/clusters/{cluster_id}/imports/upload_file:
+    post:
+      summary: Upload a local file for an import task.
+      description: 'If you need to import data from a local file, you must first upload the file using this endpoint before you create an import task using the [Create an import task](#tag/Import/operation/CreateImportTask) endpoint.
+
+
+        Uploading a local file is only available for TiDB Cloud Starter instances.'
+      operationId: UploadLocalFile
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              upload_stub_id:
+                type: string
+                format: uint64
+                example: '123'
+                description: The stub ID for the uploaded file. You can use this stub ID to [create an import task](#tag/Import/operation/CreateImportTask).
+            description: UploadLocalFileResp is the response to upload an import task.
+            title: UploadLocalFileResp
+            required:
+            - upload_stub_id
+        '400':
+          description: A request field is invalid.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: integer
+                description: Error code returned with this error.
+                title: code
+              message:
+                type: string
+                description: Error message returned with this error.
+                title: message
+              details:
+                type: array
+                items:
+                  type: string
+                description: Error details returned with this error.
+                title: details
+        '401':
+          description: The API key cannot be authenticated.
+          schema: {}
+        '403':
+          description: The API key does not have permission to access the resource.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: integer
+                description: Error code returned with this error.
+                title: code
+              message:
+                type: string
+                description: Error message returned with this error.
+                title: message
+              details:
+                type: array
+                items:
+                  type: string
+                description: Error details returned with this error.
+                title: details
+        '404':
+          description: The requested resource does not exist.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: integer
+                description: Error code returned with this error.
+                title: code
+              message:
+                type: string
+                description: Error message returned with this error.
+                title: message
+              details:
+                type: array
+                items:
+                  type: string
+                description: Error details returned with this error.
+                title: details
+        '429':
+          description: You have exceed the rate limit.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: integer
+                description: Error code returned with this error.
+                title: code
+              message:
+                type: string
+                description: Error message returned with this error.
+                title: message
+              details:
+                type: array
+                items:
+                  type: string
+                description: Error details returned with this error.
+                title: details
+        '500':
+          description: Server error.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: integer
+                description: Error code returned with this error.
+                title: code
+              message:
+                type: string
+                description: Error message returned with this error.
+                title: message
+              details:
+                type: array
+                items:
+                  type: string
+                description: Error details returned with this error.
+                title: details
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+      - name: project_id
+        description: The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects).
+        in: path
+        required: true
+        type: string
+        format: uint64
+      - name: cluster_id
+        description: The ID of your cluster. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject).
+        in: path
+        required: true
+        type: string
+        format: uint64
+      - name: body
+        in: body
+        required: true
+        schema:
+          type: object
+          properties:
+            local_file_name:
+              type: string
+              example: test.csv
+              description: 'The local file name to be uploaded. Only CSV files are supported. The maximum length of the file name is 255 characters.
+
+
+                **Note:**
+
+                * Provide only the basename of the file. For example, instead of specifying `/foo/bar/example_file.csv`, specify only `example_file.csv`. If you do specify a full file path, this endpoint will only use the basename as the file name.
+
+                * The directory name is not supported. For example: `/foobar/` is invalid.'
+              maxLength: 255
+            payload:
+              description: The payload to upload the local file content for an import task.
+              type: object
+              properties:
+                total_size_bytes:
+                  type: string
+                  format: uint64
+                  example: '83'
+                  description: 'The total size of the **ACTUAL** local file contents, not the total size of the `content` field.
+
+
+                    The unit is byte, and the maximum value is `52428800` (50 MiB). If the given value of `total_size_bytes` exceeds the maximum value, an error will be reported.'
+                  maximum: 52428800
+                content:
+                  type: string
+                  format: byte
+                  example: H4sIABbP9mMAAyXHOwoAIQwFwN5jvPoh5neggI2w9Z7fSJqBOZt/fvLQIURmLgFlrqE9BbVmPQOt5j0HvRa9AKN2AUwss6dTAAAA
+                  description: 'The base64-encoded content of the local file to be imported. The maximum size of the file should be 52428800 (50 MiB).
+
+
+                    **Note:** Before providing the content, process the file by taking the following steps:
+
+                    1. Compress the file using the **gzip** algorithm.
+
+                    2. Encode the compressed data using the **base64** algorithm.'
+                  maxLength: 52428800
+              title: LocalFilePayload
+              required:
+              - total_size_bytes
+              - content
+          description: UploadLocalFileReq is the request to upload an import task.
+          title: UploadLocalFileReq
+          required:
+          - local_file_name
+          - payload
+      tags:
+      - Import
+      x-code-samples:
+      - lang: curl
+        source: "curl --digest \\\n  --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --request POST \\\n  --url https://api.tidbcloud.com/api/v1beta/projects/{project_id}/clusters/{cluster_id}/imports/upload_file \\\n  --header 'content-type: application/json' \\\n  --data '{\"local_file_name\":\"test.csv\",\"payload\":{\"total_size_bytes\":\"83\",\"content\":\"H4sIABbP9mMAAyXHOwoAIQwFwN5jvPoh5neggI2w9Z7fSJqBOZt/fvLQIURmLgFlrqE9BbVmPQOt5j0HvRa9AKN2AUwss6dTAAAA\"}}'"
+  /api/v1beta/projects/{project_id}/clusters/{cluster_id}/imports/{import_id}:
+    get:
+      summary: Get an import task.
+      operationId: GetImportTask
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              metadata:
+                description: The metadata of the import task.
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uint64
+                    example: '1'
+                    description: The ID of the import task.
+                  name:
+                    type: string
+                    example: my_import
+                    description: The name of the import task.
+                  create_timestamp:
+                    type: string
+                    format: timestamp
+                    example: '1676450597'
+                    description: The creation time of the import task in Unix timestamp seconds (epoch time).
+                title: ImportMetadata
+                required:
+                - id
+                - create_timestamp
+              spec:
+                description: The specification of the import task.
+                type: object
+                properties:
+                  source:
+                    description: The data source settings of the import task.
+                    type: object
+                    properties:
+                      type:
+                        example: S3
+                        description: 'The data source type of an import task.
+
+
+                          - `"S3"`: import data from Amazon S3
+
+                          - `"GCS"`: import data from Google Cloud Storage (only available for [TiDB Cloud Dedicated](https://docs.pingcap.com/tidbcloud/select-cluster-tier#tidb-cloud-dedicated) clusters)
+
+                          - `"LOCAL_FILE"`: import data from a local file (only available for [TiDB Cloud Starter](https://docs.pingcap.com/tidbcloud/select-cluster-tier/#tidb-cloud-serverless) clusters). Before you import from a local file, you need to first upload the file using the [Upload a local file for an import task](#tag/Import/operation/UploadLocalFile) endpoint.
+
+
+                          **Note:** Currently, if this import spec is used for a [preview](#tag/Import/operation/PreviewImportData) request, only the `LOCAL_FILE` source type is supported.'
+                        type: string
+                        enum:
+                        - S3
+                        - GCS
+                        - LOCAL_FILE
+                      uri:
+                        type: string
+                        example: s3://example-bucket/example-source-data/
+                        description: 'The data source URI of an import task. The URI scheme must match the data source type. Here are the scheme of each source type:
+
+                          * `S3`: `s3://`
+
+                          * `GCS`: `gs://`
+
+                          * `LOCAL_FILE`: `file://`.
+
+
+                          **Note:** If the import source type is `LOCAL_FILE`, just provide the `upload_stub_id` of the uploaded file from the response of [Upload a local file for an import task](#tag/Import/operation/UploadLocalFile), and make it as the data source folder. For example: `file://12345/`.
+
+
+                          **Limitation**: If the import source type is `LOCAL_FILE`, only the `CSV` source format type is supported.'
+                      aws_assume_role_access:
+                        description: 'The settings to access the S3 data by assuming a specific AWS role. This field is only needed if you need to access S3 data by assuming an AWS role.
+
+
+                          **Note:** Provide only one of `aws_assume_role_access` and `aws_key_access`. If both `aws_assume_role_access` and `aws_key_access` are provided, an error will be reported.'
+                        type: object
+                        properties:
+                          assume_role:
+                            type: string
+                            example: arn:aws:iam::999999999999:role/sample-role
+                            description: The specific AWS role ARN that needs to be assumed to access the Amazon S3 data source.
+                        title: AwsAssumeRoleAccess
+                        required:
+                        - assume_role
+                      aws_key_access:
+                        description: 'The settings to access the S3 data with an access key. This field is only needed if you want to access the S3 data with an access key.
+
+
+                          **Note:** Provide only one of `aws_assume_role_access` and `aws_key_access`. If both `aws_assume_role_access` and `aws_key_access` are provided, an error will be reported.'
+                        type: object
+                        properties:
+                          access_key_id:
+                            type: string
+                            example: YOUR_ACCESS_KEY_ID
+                            description: The access key ID of the account to access the data. This information will be redacted when it is retrieved to obtain the import task information.
+                          secret_access_key:
+                            type: string
+                            example: YOUR_SECRET_ACCESS_KEY
+                            description: The secret access key for the account to access the data. This information will be redacted when it is retrieved to obtain the import task information.
+                        title: AwsKeyAccess
+                        required:
+                        - access_key_id
+                        - secret_access_key
+                      format:
+                        description: The format settings of the import data source.
+                        type: object
+                        properties:
+                          type:
+                            example: CSV
+                            description: The format type of an import source.
+                            type: string
+                            enum:
+                            - CSV
+                            - PARQUET
+                            - SQL
+                            - AURORA_SNAPSHOT
+                          csv_config:
+                            description: The CSV format settings to parse the source CSV files. This field is only needed if the source format is CSV.
+                            type: object
+                            properties:
+                              delimiter:
+                                type: string
+                                default: ','
+                                description: The delimiter character used to separate fields in the CSV data.
+                              quote:
+                                type: string
+                                default: '"'
+                                description: The character used to quote the fields in the CSV data.
+                              backslash_escape:
+                                type: boolean
+                                default: true
+                                description: 'Whether a backslash (`\`) symbol followed by a character should be combined as a whole and treated as an escape sequence in a CSV field. For example, if this parameter is set to `true`, `\n` will be treated as a ''new-line'' character. If it is set to `false`, `\n` will be treated as two separate characters: backslash and `n`.
+
+
+                                  Currently, these are several supported escape sequences: `\0`, `\b`, `\n`, `\r`, `\t`, and `\Z`. If the parameter is set to `true`, but the backslash escape sequence is not recognized, the backslash character is ignored.'
+                              has_header_row:
+                                type: boolean
+                                default: true
+                                description: Whether the CSV data has a header row, which is not part of the data. If it is set to `true`, the import task will use the column names in the header row to match the column names in the target table.
+                            title: ImportSourceCSVConfig
+                        title: ImportSourceFormat
+                        required:
+                        - type
+                    title: ImportSource
+                    required:
+                    - type
+                    - uri
+                    - format
+                  target:
+                    description: The target settings of the import task.
+                    type: object
+                    properties:
+                      tables:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            database_name:
+                              type: string
+                              example: db01
+                              description: The target database name.
+                            table_name:
+                              type: string
+                              example: table01
+                              description: The target table name.
+                            file_name_pattern:
+                              type: string
+                              example: data/db01/table01.*.csv
+                              description: 'The filename pattern used to map the files in the data source to this target table. The pattern should be a simple glob pattern. Here are some examples:
+
+                                * `my-data?.csv`: all CSV files starting with `my-data` and one character (such as `my-data1.csv` and `my-data2.csv`) will be imported into the same target table.
+
+                                * `my-data*.csv`: all CSV files starting with `my-data` will be imported into the same target table.
+
+
+                                If no pattern is specified, a default pattern is used. The default pattern will try to find files with this naming convention as the data files for this table: `${db_name}.${table_name}.[numeric_index].${format_suffix}`.
+
+
+                                Here are some examples of filenames that can be matched as data files for the table `db01.table01`: `db01.table01.csv`, `db01.table01.00001.csv`.
+
+
+                                For more information about the custom file pattern and the default pattern, refer to [Import CSV Files from Amazon S3 or GCS into TiDB Cloud](https://docs.pingcap.com/tidbcloud/import-csv-files).
+
+
+                                **Note:** For `LOCAL_FILE` import tasks, use the local file name for this field. The local file name must match the local file name in [Upload a local file for an import task](#tag/Import/operation/UploadLocalFile).'
+                          description: ImportTargetTable represents the settings for importing source data into a single target table of an import task.
+                          title: ImportTargetTable
+                          required:
+                          - database_name
+                          - table_name
+                        description: 'The settings for each target table that is being imported for the import task. If you leave it empty, the system will scan all the files in the data source using the default file patterns and collect all the tables to import. The files include data files, table schema files, and DB schema files. If you provide a list of tables, only those tables will be imported. For more information about the default file pattern, see [Import CSV Files from Amazon S3 or GCS into TiDB Cloud](https://docs.pingcap.com/tidbcloud/import-csv-files).
+
+
+                          **Limitations:**
+
+                          * Currently, if you want to use a custom filename pattern, you can only specify one table. If all the tables use the default filename pattern, you can specify more than one target table in `tables`.
+
+                          * It is recommended that you pre-create the target tables before creating an import task. You can do this either by executing the `CREATE TABLE` statement in the cluster or by specifying the table definition in the table creation options.
+
+                          * If a target table is not created, the import module tries to find a **TABLE SCHEMA FILE** containing the `CREATE TABLE` statement of the table in the data source folder with the name `${db_name}.${table_name}-schema.sql` (for example, `db01.tbl01-schema.sql`). If this file is found, the `CREATE TABLE` statement is automatically executed if the table doesn''t exist before the actual import process starts. If the table is still missing after this pre-create step, an error will occur.'
+                    title: ImportTarget
+                title: ImportSpec
+                required:
+                - source
+                - target
+              status:
+                description: The status of the import task.
+                type: object
+                properties:
+                  phase:
+                    example: IMPORTING
+                    description: The current phase that the import task is in.
+                    type: string
+                    enum:
+                    - PREPARING
+                    - IMPORTING
+                    - COMPLETED
+                    - FAILED
+                    - CANCELING
+                    - CANCELED
+                  error_message:
+                    type: string
+                    example: some error occurs
+                    description: The error message of the import task.
+                  start_timestamp:
+                    type: string
+                    format: timestamp
+                    example: '1676450597'
+                    description: The start timestamp of the import task. The format is Unix timestamp (the seconds elapsed since the Unix epoch)
+                  end_timestamp:
+                    type: string
+                    format: timestamp
+                    example: '1676450897'
+                    description: The end timestamp of the import task. The format is Unix timestamp (the seconds elapsed since the Unix epoch).
+                  progress:
+                    description: The progress of the import task.
+                    type: object
+                    properties:
+                      import_progress:
+                        type: number
+                        format: double
+                        example: 59
+                        description: The overall importing progress of the import task.
+                        maximum: 100
+                      validation_progress:
+                        type: number
+                        format: double
+                        example: 59
+                        description: The overall validation progress of the import task after the data has been imported into the target cluster.
+                        maximum: 100
+                    title: ImportProgress
+                    required:
+                    - import_progress
+                    - validation_progress
+                  source_total_size_bytes:
+                    type: string
+                    format: uint64
+                    example: '10737418240'
+                    description: The total size of the import task's data source. The unit is bytes.
+                title: ImportStatus
+                required:
+                - phase
+            description: ImportItem represents the information of a single import task.
+            title: ImportItem
+        '400':
+          description: A request field is invalid.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: integer
+                description: Error code returned with this error.
+                title: code
+              message:
+                type: string
+                description: Error message returned with this error.
+                title: message
+              details:
+                type: array
+                items:
+                  type: string
+                description: Error details returned with this error.
+                title: details
+        '401':
+          description: The API key cannot be authenticated.
+          schema: {}
+        '403':
+          description: The API key does not have permission to access the resource.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: integer
+                description: Error code returned with this error.
+                title: code
+              message:
+                type: string
+                description: Error message returned with this error.
+                title: message
+              details:
+                type: array
+                items:
+                  type: string
+                description: Error details returned with this error.
+                title: details
+        '404':
+          description: The requested resource does not exist.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: integer
+                description: Error code returned with this error.
+                title: code
+              message:
+                type: string
+                description: Error message returned with this error.
+                title: message
+              details:
+                type: array
+                items:
+                  type: string
+                description: Error details returned with this error.
+                title: details
+        '429':
+          description: You have exceed the rate limit.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: integer
+                description: Error code returned with this error.
+                title: code
+              message:
+                type: string
+                description: Error message returned with this error.
+                title: message
+              details:
+                type: array
+                items:
+                  type: string
+                description: Error details returned with this error.
+                title: details
+        '500':
+          description: Server error.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: integer
+                description: Error code returned with this error.
+                title: code
+              message:
+                type: string
+                description: Error message returned with this error.
+                title: message
+              details:
+                type: array
+                items:
+                  type: string
+                description: Error details returned with this error.
+                title: details
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+      - name: project_id
+        description: The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects).
+        in: path
+        required: true
+        type: string
+        format: uint64
+      - name: cluster_id
+        description: The ID of your cluster. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject).
+        in: path
+        required: true
+        type: string
+        format: uint64
+      - name: import_id
+        description: The ID of your import task. You can get the import ID from the response of [List import tasks for a cluster](#tag/Project/operation/ListImportTasks).
+        in: path
+        required: true
+        type: string
+        format: uint64
+      tags:
+      - Import
+      x-code-samples:
+      - lang: curl
+        source: "curl --digest \\\n  --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --request GET \\\n  --url https://api.tidbcloud.com/api/v1beta/projects/{project_id}/clusters/{cluster_id}/imports/{import_id}"
+    patch:
+      summary: Update an import task.
+      description: Update an import task from a cluster. Currently, this endpoint only supports canceling the import task if the current phase of the import task is `PREPARING` or `IMPORTING`.
+      operationId: UpdateImportTask
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties: {}
+        '400':
+          description: A request field is invalid.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: integer
+                description: Error code returned with this error.
+                title: code
+              message:
+                type: string
+                description: Error message returned with this error.
+                title: message
+              details:
+                type: array
+                items:
+                  type: string
+                description: Error details returned with this error.
+                title: details
+        '401':
+          description: The API key cannot be authenticated.
+          schema: {}
+        '403':
+          description: The API key does not have permission to access the resource.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: integer
+                description: Error code returned with this error.
+                title: code
+              message:
+                type: string
+                description: Error message returned with this error.
+                title: message
+              details:
+                type: array
+                items:
+                  type: string
+                description: Error details returned with this error.
+                title: details
+        '404':
+          description: The requested resource does not exist.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: integer
+                description: Error code returned with this error.
+                title: code
+              message:
+                type: string
+                description: Error message returned with this error.
+                title: message
+              details:
+                type: array
+                items:
+                  type: string
+                description: Error details returned with this error.
+                title: details
+        '429':
+          description: You have exceed the rate limit.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: integer
+                description: Error code returned with this error.
+                title: code
+              message:
+                type: string
+                description: Error message returned with this error.
+                title: message
+              details:
+                type: array
+                items:
+                  type: string
+                description: Error details returned with this error.
+                title: details
+        '500':
+          description: Server error.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: integer
+                description: Error code returned with this error.
+                title: code
+              message:
+                type: string
+                description: Error message returned with this error.
+                title: message
+              details:
+                type: array
+                items:
+                  type: string
+                description: Error details returned with this error.
+                title: details
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+      - name: project_id
+        description: The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects).
+        in: path
+        required: true
+        type: string
+        format: uint64
+      - name: cluster_id
+        description: The ID of your cluster. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject).
+        in: path
+        required: true
+        type: string
+        format: uint64
+      - name: import_id
+        description: The ID of the import task. You can get the import ID from the response of [List import tasks for a cluster](#tag/Project/operation/ListImportTasks).
+        in: path
+        required: true
+        type: string
+        format: uint64
+      - name: body
+        in: body
+        required: true
+        schema:
+          type: object
+          properties:
+            action:
+              example: CANCEL
+              description: 'The action to apply to the import task.
+
+
+                **Limitation:**
+
+                Currently, only `CANCEL` is supported when the import task is in the `PREPARING` or `IMPORTING` phase, meaning that the import task will be cancelled.'
+              type: string
+              enum:
+              - CANCEL
+          description: UpdateImportTaskReq is the request to update an import task.
+          title: UpdateImportTaskReq
+          required:
+          - action
+      tags:
+      - Import
+      x-code-samples:
+      - lang: curl
+        source: "curl --digest \\\n  --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --request PATCH \\\n  --url https://api.tidbcloud.com/api/v1beta/projects/{project_id}/clusters/{cluster_id}/imports/{import_id} \\\n  --header 'content-type: application/json' \\\n  --data '{\"action\":\"CANCEL\"}'"
+definitions:
+  v1beta1ImportFileTypeEnum:
+    type: string
+    enum:
+    - UNSPECIFIED
+    - CSV
+    - SQL
+    - AURORA_SNAPSHOT
+    - PARQUET
+    default: UNSPECIFIED
+    description: "The type of the file.\n\n - UNSPECIFIED: The type of the file is unknown.\n - CSV: CSV type.\n - SQL: SQL type.\n - AURORA_SNAPSHOT: Aurora snapshot type.\n - PARQUET: Parquet type."
+  v1beta1S3SourceAccessKey:
+    type: object
+    properties:
+      id:
+        type: string
+        description: The access key ID for accessing the S3 source.
+      secret:
+        type: string
+        description: The secret access key for accessing the S3 source.
+    required:
+    - id
+    - secret
+  rpcStatus:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+      details:
+        type: array
+        items:
+          $ref: '#/definitions/protobufAny'
+  v1beta1ImportSourceTypeEnum_2:
+    type: string
+    enum:
+    - S3
+    - GCS
+    - AZURE_BLOB
+    - S3_COMPATIBLE
+    - OSS
+    description: " - S3: S3 source.\n - GCS: gcs source.\n - AZURE_BLOB: azure blob source.\n - S3_COMPATIBLE: S3 compatible source.\n - OSS: OSS source."
+  v1beta1GCSSource:
+    type: object
+    properties:
+      uri:
+        type: string
+        example: gs://bucket-name/path/
+        description: The Google Cloud Storage URI of the import source.
+      authType:
+        example: SERVICE_ACCOUNT_KEY
+        description: The authentication method for accessing the Google Cloud Storage source.
+        allOf:
+        - $ref: '#/definitions/v1beta1ImportGcsAuthTypeEnum'
+      serviceAccountKey:
+        type: string
+        description: The service account key for accessing the Google Cloud Storage source.
+    description: The Google Cloud Storage source of the import.
+    required:
+    - uri
+    - authType
+  v1beta1DuplicationHandlingForSQLEnum:
+    type: string
+    enum:
+    - UNSPECIFIED
+    - REPLACE
+    - IGNORE
+    - ERROR
+    default: UNSPECIFIED
+    description: "The duplication handling for SQL.\n\n - UNSPECIFIED: The duplication handling for SQL is unknown.\n - REPLACE: The duplication handling for SQL is replace.\n - IGNORE: The duplication handling for SQL is ignore.\n - ERROR: The duplication handling for SQL is error."
+  v1beta1ImportS3AuthTypeEnum_2:
+    type: string
+    enum:
+    - ROLE_ARN
+    - ACCESS_KEY
+    description: " - ROLE_ARN: The access method is role arn.\n - ACCESS_KEY: The access method is access key."
+  v1beta1S3CompatibleSourceAccessKey:
+    type: object
+    properties:
+      id:
+        type: string
+        description: The access key ID for accessing the S3-compatible storage.
+      secret:
+        type: string
+        description: The secret access key for accessing the S3-compatible storage.
+    required:
+    - id
+    - secret
+  v1beta1ImportStateEnum:
+    type: string
+    enum:
+    - UNSPECIFIED
+    - PREPARING
+    - IMPORTING
+    - COMPLETED
+    - FAILED
+    - CANCELING
+    - CANCELED
+    default: UNSPECIFIED
+    description: "The state of the import.\n\n - UNSPECIFIED: Indicates that the import state is not specified.\n - PREPARING: Indicates that the import is being prepared.\n - IMPORTING: Indicates that the import is in progress.\n - COMPLETED: Indicates that the import is completed successfully.\n - FAILED: Indicates that the import has failed.\n - CANCELING: Indicates that the import is in the process of being canceled.\n - CANCELED: Indicates that the import has been canceled."
+  v1beta1ImportAzureBlobAuthTypeEnum_2:
+    type: string
+    enum:
+    - SAS_TOKEN
+    description: ' - SAS_TOKEN: The access method is sas token.'
+  v1beta1Import:
+    type: object
+    properties:
+      name:
+        type: string
+        example: clusters/1/imports/1
+        description: The name of the import task, in the format of `clusters/{cluster_id}/imports/{import_id}`.
+        readOnly: true
+      clusterId:
+        type: string
+        example: '1'
+        description: The ID of the target cluster for the import.
+        readOnly: true
+      totalSize:
+        type: string
+        format: int64
+        example: 0
+        description: The total size of the data to be imported, in bytes.
+        readOnly: true
+      createTime:
+        type: string
+        format: date-time
+        example: '2023-10-01T12:00:00Z'
+        description: The timestamp when the import task was created, in the [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format.
+        readOnly: true
+      completeTime:
+        type: string
+        format: date-time
+        example: '2023-10-01T12:01:00Z'
+        description: The timestamp when the import task was completed, in the [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format.
+        readOnly: true
+      state:
+        example: COMPLETED
+        description: The state of the import task.
+        readOnly: true
+        allOf:
+        - $ref: '#/definitions/v1beta1ImportStateEnum'
+      completePercent:
+        type: integer
+        format: int32
+        example: 100
+        minimum: 0
+        maximum: 100
+        description: The percentage of import progress, excluding post-processing.
+        readOnly: true
+      message:
+        type: string
+        example: ''
+        description: An error message if the import task failed. Otherwise, empty.
+        readOnly: true
+      creator:
+        type: string
+        example: test@example.com
+        description: The email address of the user who creates the import task.
+        readOnly: true
+      creationDetails:
+        description: The additional details about how the import task is created.
+        allOf:
+        - $ref: '#/definitions/v1beta1CreationDetails'
+      importId:
+        type: string
+        example: '1'
+        description: The unique identifier of the import task.
+        readOnly: true
+    description: The import.
+    required:
+    - creationDetails
+  v1beta1ImportOSSAuthTypeEnum:
+    type: string
+    enum:
+    - ACCESS_KEY
+    description: ' - ACCESS_KEY: The access method is access key.'
+  v1beta1ImportGcsAuthTypeEnum_2:
+    type: string
+    enum:
+    - SERVICE_ACCOUNT_KEY
+    description: ' - SERVICE_ACCOUNT_KEY: The access method is service account key.'
+  v1beta1ImportGcsAuthTypeEnum:
+    type: string
+    enum:
+    - UNSPECIFIED
+    - SERVICE_ACCOUNT_KEY
+    default: UNSPECIFIED
+    description: "The type of the access method.\n\n - UNSPECIFIED: The access method is unknown.\n - SERVICE_ACCOUNT_KEY: The access method is service account key."
+  v1beta1GCSSource_2:
+    type: object
+    properties:
+      uri:
+        type: string
+        description: The Google Cloud Storage URI of the import source.
+      authType:
+        description: The authentication method for accessing the Google Cloud Storage source.
+        allOf:
+        - $ref: '#/definitions/v1beta1ImportGcsAuthTypeEnum_2'
+      serviceAccountKey:
+        type: string
+        description: The service account key for accessing the Google Cloud Storage source.
+    required:
+    - uri
+    - authType
+  googlerpcStatus:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+        description: The error code returned with this error.
+      message:
+        type: string
+        description: The error message returned with this error.
+      details:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/protobufAny'
+        description: A list of messages with additional error details.
+    description: 'The `Status` type defines a logical error model that is suitable for
+
+      different programming environments, including REST APIs and RPC APIs. It is
+
+      used by [gRPC](https://github.com/grpc). Each `Status` message contains
+
+      three pieces of data: error code, error message, and error details.
+
+
+      You can find out more about this error model and how to work with it in the
+
+      [API Design Guide](https://cloud.google.com/apis/design/errors).'
+  v1beta1ImportS3CompatibleAuthTypeEnum:
+    type: string
+    enum:
+    - ACCESS_KEY
+    description: ' - ACCESS_KEY: The access method is access key.'
+  S3SourceAccessKey:
+    type: object
+    properties:
+      id:
+        type: string
+        example: AKIAIOSFODNN7EXAMPLE
+        description: The access key ID for accessing the S3 source.
+      secret:
+        type: string
+        example: THESECRETKEY
+        description: The secret access key for accessing the S3 source. This field is input-only and not returned in responses.
+    description: The access key of the import source.
+    required:
+    - id
+    - secret
+  v1beta1ImportAzureBlobAuthTypeEnum:
+    type: string
+    enum:
+    - UNSPECIFIED
+    - SAS_TOKEN
+    default: UNSPECIFIED
+    description: "The type of the access method.\n\n - UNSPECIFIED: The access method is unknown.\n - SAS_TOKEN: The access method is sas token."
+  v1beta1OSSSourceAccessKey:
+    type: object
+    properties:
+      id:
+        type: string
+        description: The AccessKey ID for accessing Alibaba Cloud OSS.
+      secret:
+        type: string
+        description: The AccessKey secret for accessing Alibaba Cloud OSS.
+    required:
+    - id
+    - secret
+  v1beta1CSVFormat:
+    type: object
+    properties:
+      separator:
+        type: string
+        example: ','
+        default: ','
+        description: The character used to separate values in the CSV file.
+      delimiter:
+        type: string
+        example: '"'
+        default: '"'
+        description: The character used to enclose string values in the CSV file.
+      header:
+        type: boolean
+        example: true
+        default: true
+        description: Indicates whether the first row of the CSV file contains column headers.
+      notNull:
+        type: boolean
+        example: false
+        default: false
+        description: Indicates whether the columns in the CSV file can be NULL.
+      nullValue:
+        type: string
+        example: \N
+        default: \N
+        description: The string representation of NULL values in the CSV file.
+      backslashEscape:
+        type: boolean
+        example: true
+        default: true
+        description: Indicates whether to escape backslashes in the CSV file.
+      trimLastSeparator:
+        type: boolean
+        example: false
+        default: false
+        description: Indicates whether to remove trailing separators from each row in the CSV file.
+    description: The format of the CSV file.
+  v1beta1Import_2:
+    type: object
+    properties:
+      id:
+        type: string
+        description: '**Deprecated.** Use `importId` instead. The ID of the import task.'
+        readOnly: true
+      name:
+        type: string
+        description: The name of the import task.
+        readOnly: true
+      clusterId:
+        type: string
+        description: The ID of the target TiDB Cloud Starter or Essential instance for the import.
+        readOnly: true
+      totalSize:
+        type: string
+        format: uint64
+        description: The total size of the data to be imported, in bytes.
+        readOnly: true
+      createTime:
+        type: string
+        format: date-time
+        description: The timestamp when the import task was created, in the [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format.
+        readOnly: true
+      completeTime:
+        type: string
+        format: date-time
+        x-nullable: true
+        description: The timestamp when the import task was completed, in the [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format.
+        readOnly: true
+      state:
+        description: The state of the import task.
+        readOnly: true
+        allOf:
+        - $ref: '#/definitions/v1beta1ImportStateEnum_2'
+      completePercent:
+        type: integer
+        format: int64
+        description: The percentage of import progress, excluding post-processing.
+        readOnly: true
+      message:
+        type: string
+        description: An error message if the import task failed. Otherwise, empty.
+        readOnly: true
+      createdBy:
+        type: string
+        description: The email address of the user who create the import task.
+        readOnly: true
+      creationDetails:
+        description: The additional details about how the import task is created.
+        readOnly: true
+        allOf:
+        - $ref: '#/definitions/v1beta1CreationDetails_2'
+      importId:
+        type: string
+        description: The ID of the import task.
+        readOnly: true
+  v1beta1ImportSource_2:
+    type: object
+    properties:
+      type:
+        description: The source from which data is imported.
+        allOf:
+        - $ref: '#/definitions/v1beta1ImportSourceTypeEnum_2'
+      s3:
+        description: The configuration details for importing from Amazon S3.
+        allOf:
+        - $ref: '#/definitions/v1beta1S3Source_2'
+      gcs:
+        description: The configuration details for importing from Google Cloud Storage.
+        allOf:
+        - $ref: '#/definitions/v1beta1GCSSource_2'
+      azureBlob:
+        description: The configuration details for importing from Azure Blob Storage.
+        allOf:
+        - $ref: '#/definitions/v1beta1AzureBlobSource_2'
+      s3Compatible:
+        description: The configuration details for importing from a S3-compatible storage service.
+        allOf:
+        - $ref: '#/definitions/v1beta1S3CompatibleSource'
+      oss:
+        description: The configuration details for importing from Alibaba Cloud Object Storage Service (OSS).
+        allOf:
+        - $ref: '#/definitions/v1beta1OSSSource'
+    required:
+    - type
+  v1beta1ImportValidationItem:
+    type: string
+    enum:
+    - IMPORT_VALIDATION_ITEM_UNSPECIFIED
+    - SOURCE_ACCESS_CHECK
+    - TARGET_ACCESS_CHECK
+    - FILTER_AND_RULE_CHECK
+    - IMPORT_PRECHECK
+    - TARGET_TABLE_EMPTY_CHECK
+    - ESTIMATE_SIZE
+    - IMPORT_DATA_ONLY_CHECK
+    default: IMPORT_VALIDATION_ITEM_UNSPECIFIED
+    description: "The validation item of the import.\n\n - IMPORT_VALIDATION_ITEM_UNSPECIFIED: The validation item is unspecified.\n - SOURCE_ACCESS_CHECK: The validation item is source access check.\n - TARGET_ACCESS_CHECK: The validation item is target access check.(deprecated)\n - FILTER_AND_RULE_CHECK: The validation item is filter and rule check.(deprecated)\n - IMPORT_PRECHECK: The validation item is import precheck.\n - TARGET_TABLE_EMPTY_CHECK: The validation item is target table empty check.\n - ESTIMATE_SIZE: The validation item is estimate size.(deprecated)\n - IMPORT_DATA_ONLY_CHECK: The validation item is import data only check."
+  v1beta1ImportTargetTableInfo:
+    type: object
+    properties:
+      targetTable:
+        description: The target table where the data is imported.
+        allOf:
+        - $ref: '#/definitions/commonTable'
+      customFile:
+        type: string
+        example: s3://mybucket/myfolder/my-data1.csv
+        description: The custom file URI to import data into the target table. If not specified, TiDB Cloud Dedicated uses the default naming conventions to match files to tables.
+      matchedUri:
+        type: string
+        description: The actual source file URI that is matched to this table during import processing.
+    description: The target table info of the import task.
+  v1beta1ImportSourceTypeEnum:
+    type: string
+    enum:
+    - UNSPECIFIED
+    - S3
+    - GCS
+    - AZURE_BLOB
+    default: UNSPECIFIED
+    description: "The source type of the import.\n\n - UNSPECIFIED: Indicates that the import source is not specified.\n - S3: Indicates that the import source is an AWS S3 resource.\n - GCS: Indicates that the import source is a Google Cloud Storage resource.\n - AZURE_BLOB: Indicates that the import source is an Azure Blob Storage resource."
+  v1beta1S3Source:
+    type: object
+    properties:
+      uri:
+        type: string
+        example: s3://bucket-name/path/
+        description: The S3 URI of the import source.
+      authType:
+        example: ROLE_ARN
+        description: The authentication method for accessing the S3 bucket.
+        allOf:
+        - $ref: '#/definitions/v1beta1ImportS3AuthTypeEnum'
+      roleArn:
+        type: string
+        example: arn:aws:iam::123456789012:role/MyRole
+        description: The AWS IAM role ARN used for access. This is required when `authType` is set to `"ROLE_ARN"`.
+      accessKey:
+        description: The AWS access key credentials used for access. This is required when `authType` is set to `"ACCESS_KEY"`.
+        allOf:
+        - $ref: '#/definitions/S3SourceAccessKey'
+    description: The S3 source of the import.
+    required:
+    - uri
+    - authType
+  v1beta1ImportFileTypeEnum_2:
+    type: string
+    enum:
+    - CSV
+    - SQL
+    - AURORA_SNAPSHOT
+    - PARQUET
+    description: " - CSV: CSV type.\n - SQL: SQL type.\n - AURORA_SNAPSHOT: Aurora snapshot type.\n - PARQUET: Parquet type."
+  commonTable:
+    type: object
+    properties:
+      schema:
+        type: string
+        example: database_name
+        description: The name of the database containing the target table.
+      table:
+        type: string
+        example: table_name
+        description: The name of the table within the database.
+  v1beta1AzureBlobSource:
+    type: object
+    properties:
+      authType:
+        example: SAS_TOKEN
+        description: The authentication method for accessing the Azure Blob Storage source.
+        allOf:
+        - $ref: '#/definitions/v1beta1ImportAzureBlobAuthTypeEnum'
+      sasToken:
+        type: string
+        example: ?sv=2020-08-04&ss=b&srt=sco&sp=rwdlacup&se=2023-10-01T12:00:00Z&st=2023-09-30T12:00:00Z&spr=https&sig=example
+        description: The Shared Access Signature (SAS) token for accessing the Azure Blob Storage source. This field is input-only and not returned in responses.
+      uri:
+        type: string
+        example: azure://myaccount.blob.core.windows.net/mycontainer/mypath/
+        description: The Azure Blob Storage URI of the import source, in the format of `azure://<account>.blob.core.windows.net/<container>/<path>` or `https://<account>.blob.core.windows.net/<container>/<path>`.
+    description: The Azure Blob Storage source of the import.
+    required:
+    - authType
+    - uri
+  v1beta1S3Source_2:
+    type: object
+    properties:
+      uri:
+        type: string
+        description: The S3 URI of the import source.
+      authType:
+        description: The authentication method for accessing the S3 bucket.
+        allOf:
+        - $ref: '#/definitions/v1beta1ImportS3AuthTypeEnum_2'
+      roleArn:
+        type: string
+        description: The AWS IAM role ARN used for access.
+      accessKey:
+        description: The AWS access key credentials used for access.
+        allOf:
+        - $ref: '#/definitions/v1beta1S3SourceAccessKey'
+    required:
+    - uri
+    - authType
+  v1beta1ListImportsResponse:
+    type: object
+    properties:
+      imports:
+        type: array
+        items:
+          $ref: '#/definitions/v1beta1Import'
+        description: The list of import tasks.
+        readOnly: true
+      totalSize:
+        type: integer
+        format: int32
+        example: 1
+        description: The total number of import tasks.
+        readOnly: true
+      nextPageToken:
+        type: string
+        example: next_page_token
+        description: The token to retrieve the next page of results. Use this value as the `pageToken` parameter in the next request. This field is empty when there are no more pages.
+        readOnly: true
+    description: The response message for listing imports.
+  protobufAny:
+    type: object
+    properties:
+      '@type':
+        type: string
+        description: A URL or resource name that uniquely identifies the type of the serialized protocol buffer message.
+    additionalProperties: {}
+    description: "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n    // or ...\n    if (any.isSameTypeAs(Foo.getDefaultInstance())) {\n      foo = any.unpack(Foo.getDefaultInstance());\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := anypb.New(foo)\n     if err != nil {\n       ...\n     }\n     ...\n     foo := &pb.Foo{}\n     if err := any.UnmarshalTo(foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
+  v1beta1CreationDetails_2:
+    type: object
+    properties:
+      importOptions:
+        description: The configuration options for the import task.
+        readOnly: true
+        allOf:
+        - $ref: '#/definitions/v1beta1ImportOptions_2'
+      source:
+        description: The data source for the import task.
+        readOnly: true
+        allOf:
+        - $ref: '#/definitions/v1beta1ImportSource_2'
+  v1beta1S3CompatibleSource:
+    type: object
+    properties:
+      uri:
+        type: string
+        description: The S3-compatible storage URI of the import source.
+      authType:
+        description: The authentication method for accessing the S3-compatible storage.
+        allOf:
+        - $ref: '#/definitions/v1beta1ImportS3CompatibleAuthTypeEnum'
+      accessKey:
+        description: The access key credentials used for accessing the S3-compatible storage.
+        allOf:
+        - $ref: '#/definitions/v1beta1S3CompatibleSourceAccessKey'
+      endpoint:
+        type: string
+        x-nullable: true
+        description: 'The custom HTTPS endpoint for S3-compatible storage, which is used to connect to non-AWS storage providers, such as Cloudflare.
+
+          Must be a valid HTTPS URL, such as `https://custom-s3.example.com`.'
+    required:
+    - uri
+    - authType
+  v1beta1OSSSource:
+    type: object
+    properties:
+      uri:
+        type: string
+        description: The Alibaba Cloud OSS URI of the import source.
+      authType:
+        description: The authentication method for accessing the Alibaba Cloud OSS source.
+        allOf:
+        - $ref: '#/definitions/v1beta1ImportOSSAuthTypeEnum'
+      accessKey:
+        description: The access key credentials used for accessing the Alibaba Cloud OSS source.
+        allOf:
+        - $ref: '#/definitions/v1beta1OSSSourceAccessKey'
+    required:
+    - uri
+    - authType
+  v1beta1CreationDetails:
+    type: object
+    properties:
+      importOptions:
+        description: The configuration options for the import task.
+        allOf:
+        - $ref: '#/definitions/v1beta1ImportOptions'
+      source:
+        description: The data source for the import task.
+        allOf:
+        - $ref: '#/definitions/v1beta1ImportSource'
+      targetTableInfos:
+        type: array
+        items:
+          $ref: '#/definitions/v1beta1ImportTargetTableInfo'
+        description: A list of destination tables and their configurations for the import.
+      checkItems:
+        type: array
+        example: []
+        items:
+          $ref: '#/definitions/v1beta1ImportValidationItem'
+        description: A list of validation items that are checked during the import process.
+    description: The details of the import.
+    required:
+    - importOptions
+    - source
+  v1beta1ImportSource:
+    type: object
+    properties:
+      type:
+        example: S3
+        description: 'The source from which data is imported.
+
+
+          When this field is set, the corresponding configuration field must also be provided. For example, if type is `S3`, the `s3` field must be specified.
+
+
+          - `"UNSPECIFIED"`: the import source is not specified.
+
+
+          - `"S3"`: import from Amazon S3.
+
+
+          - `"GCS"`: import from Google Cloud Storage.
+
+
+          - `"AZURE_BLOB"`: import from Azure Blob Storage.'
+        allOf:
+        - $ref: '#/definitions/v1beta1ImportSourceTypeEnum'
+      s3:
+        description: The configuration details for importing from Amazon S3. This is required when `type` is `S3`.
+        allOf:
+        - $ref: '#/definitions/v1beta1S3Source'
+      gcs:
+        description: The configuration details for importing from Google Cloud Storage. This is required when `type` is `GCS`.
+        allOf:
+        - $ref: '#/definitions/v1beta1GCSSource'
+      azureBlob:
+        description: The configuration details for importing from Azure Blob Storage. This is required when `type` is `AZURE_BLOB`.
+        allOf:
+        - $ref: '#/definitions/v1beta1AzureBlobSource'
+    description: The source of the import.
+    required:
+    - type
+  v1beta1ImportOptions:
+    type: object
+    properties:
+      fileType:
+        example: CSV
+        description: 'The format of the file to import.
+
+
+          - `"CSV"`: CSV files. For more information, see [Import CSV Files from Cloud Storage into TiDB Cloud Dedicated](https://docs.pingcap.com/tidbcloud/import-csv-files/).
+
+
+          - `"PARQUET"`: Apache Parquet files. For more information, see [Import Apache Parquet Files from Cloud Storage into TiDB Cloud Dedicated](https://docs.pingcap.com/tidbcloud/import-parquet-files/).
+
+
+          - `"SQL"`: SQL files.
+
+
+          - `"AURORA_SNAPSHOT"`: Amazon Aurora snapshot files.'
+        allOf:
+        - $ref: '#/definitions/v1beta1ImportFileTypeEnum'
+      csvFormat:
+        description: The format specification for CSV files.
+        allOf:
+        - $ref: '#/definitions/v1beta1CSVFormat'
+      duplicationHandling:
+        example: REPLACE
+        description: 'Specifies how to handle duplicate records when importing SQL files.
+
+
+          - `"UNSPECIFIED"`: the behavior is undefined.
+
+
+          - `"REPLACE"`: existing rows are replaced with new data from the import file.
+
+
+          - `"IGNORE"`: duplicate rows are skipped.
+
+
+          - `"ERROR"`: the import fails if a duplicate row is found.'
+        allOf:
+        - $ref: '#/definitions/v1beta1DuplicationHandlingForSQLEnum'
+      validateOnly:
+        type: boolean
+        example: false
+        description: If set to `true`, the request is validated but not executed. Defaults to `false`.
+    description: The options of the import task.
+    required:
+    - fileType
+  v1beta1AzureBlobSource_2:
+    type: object
+    properties:
+      authType:
+        description: The authentication method for accessing the Azure Blob Storage source.
+        allOf:
+        - $ref: '#/definitions/v1beta1ImportAzureBlobAuthTypeEnum_2'
+      sasToken:
+        type: string
+        description: The Shared Access Signature (SAS) token for accessing the Azure Blob Storage source.
+      uri:
+        type: string
+        description: The Azure Blob Storage URI of the import source, in the format of `azure://<account>.blob.core.windows.net/<container>/<path>` or `https://<account>.blob.core.windows.net/<container>/<path>`.
+    required:
+    - authType
+    - uri
+  v1beta1ImportOptionsCSVFormat:
+    type: object
+    properties:
+      separator:
+        type: string
+        default: ','
+        description: The character used to separate values in the CSV file.
+      delimiter:
+        type: string
+        default: '"'
+        x-nullable: true
+        description: The character used to enclose string values in the CSV file.
+      header:
+        type: boolean
+        default: true
+        x-nullable: true
+        description: Indicates whether the CSV file contains column headers in the first row.
+      notNull:
+        type: boolean
+        default: false
+        x-nullable: true
+        description: Indicates whether the columns in the CSV file can be NULL.
+      'null':
+        type: string
+        default: \N
+        x-nullable: true
+        description: The string representation of NULL values in the CSV file.
+      backslashEscape:
+        type: boolean
+        default: true
+        x-nullable: true
+        description: Indicates whether to escape backslashes in the CSV file.
+      trimLastSeparator:
+        type: boolean
+        default: false
+        x-nullable: true
+        description: Indicates whether to remove trailing separators from each row in the CSV file.
+  v1beta1ImportStateEnum_2:
+    type: string
+    enum:
+    - PREPARING
+    - IMPORTING
+    - COMPLETED
+    - FAILED
+    - CANCELING
+    - CANCELED
+    description: " - PREPARING: The import is preparing.\n - IMPORTING: The import is importing.\n - COMPLETED: The import is completed.\n - FAILED: The import is failed.\n - CANCELING: The import is canceling.\n - CANCELED: The import is canceled."
+  v1beta1ImportOptions_2:
+    type: object
+    properties:
+      fileType:
+        description: The format of the file to import.
+        allOf:
+        - $ref: '#/definitions/v1beta1ImportFileTypeEnum_2'
+      csvFormat:
+        description: The format specification for CSV files.
+        allOf:
+        - $ref: '#/definitions/v1beta1ImportOptionsCSVFormat'
+    required:
+    - fileType
+  v1beta1ImportS3AuthTypeEnum:
+    type: string
+    enum:
+    - UNSPECIFIED
+    - ROLE_ARN
+    - ACCESS_KEY
+    default: UNSPECIFIED
+    description: "The type of the access method.\n\n - UNSPECIFIED: The access method is unknown.\n - ROLE_ARN: The access method is role arn.\n - ACCESS_KEY: The access method is access key."
+x-refined-from:
+- pingcap-tidb-cloud-dedicated-v1beta1-openapi-original.json
+- pingcap-tidb-cloud-starter-essential-v1beta1-openapi-original.json
+- pingcap-tidb-cloud-v1beta-openapi-original.json

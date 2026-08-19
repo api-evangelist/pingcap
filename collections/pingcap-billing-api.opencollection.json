@@ -1,0 +1,82 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "System OPEN Billing API",
+    "version": "v1beta1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Billing",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Return organization monthly bills",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://billing.tidbapi.com/v1beta1/bills/:billedMonth",
+            "params": [
+              {
+                "name": "billedMonth",
+                "value": "",
+                "type": "path",
+                "description": "The month of this bill happens for the specified organization, format is YYYY-MM, for example '2023-08'."
+              }
+            ]
+          },
+          "docs": "This endpoint retrieves the bill for the given month of a specific organization. You can query a bill up to 6 months prior to the current month. The bill is returned in JSON format.To use this resource, the requesting API Key must have the Organization Billing Admin or Organization Owner role."
+        },
+        {
+          "info": {
+            "name": "Return the usage details according to a cost explorer query",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://billing.tidbapi.com/v1beta1/billsCostExplorer",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint executes a cost explorer query and returns the usage details. Cost Explorer query:"
+        },
+        {
+          "info": {
+            "name": "Return basic info of a specific organization, which contains the key info to execute a cost explorer query",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://billing.tidbapi.com/v1beta1/billsCostExplorer/args"
+          },
+          "docs": "This endpoint retrieves the basic info for a specific organization, including service info, cloud provider info, project info, and cluster info."
+        },
+        {
+          "info": {
+            "name": "Return the monthly bill of the organization with daily usage details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://billing.tidbapi.com/v1beta1/billsDetails/:billedMonth",
+            "params": [
+              {
+                "name": "billedMonth",
+                "value": "",
+                "type": "path",
+                "description": "The month of this bill happens for the specified organization. The format is `YYYY-MM`, for example '2024-05'."
+              }
+            ]
+          },
+          "docs": "This endpoint retrieves the bill for the given month of a specific organization with daily usage details. You can query a bill up to 6 months prior to the current month. The bill is returned in JSON format. To use this resource, the requesting API Key must have the Organization Billing Admin or Organization Owner role."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

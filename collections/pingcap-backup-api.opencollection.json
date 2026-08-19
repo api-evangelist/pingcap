@@ -1,0 +1,146 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "TiDB Cloud Backup API",
+    "version": "v1-beta"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Backup",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List all backups for a cluster.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.tidbcloud.com/api/v1beta/projects/:project_id/clusters/:cluster_id/backups",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of your project. You can get the project ID from the response of [List all accessible projects.](#tag/Project/operation/ListProjects)."
+              },
+              {
+                "name": "cluster_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of your cluster. You can get the cluster ID from the response of [Get all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The number of pages."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The size of a page."
+              }
+            ]
+          },
+          "docs": "For TiDB Cloud Starter instances, you cannot manage backups via API. You can use [Dumpling](https://docs.pingcap.com/tidb/stable/dumpling-overview) to export your data as backups."
+        },
+        {
+          "info": {
+            "name": "Create a backup for a cluster.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.tidbcloud.com/api/v1beta/projects/:project_id/clusters/:cluster_id/backups",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of your project. You can get the project ID from the response of [List all accessible projects.](#tag/Project/operation/ListProjects)."
+              },
+              {
+                "name": "cluster_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of your cluster that you want to take a manual backup. You can get the cluster ID from the response of [Get all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "- For TiDB Cloud Dedicated clusters, you can create as many manual backups as you need.\n- For TiDB Cloud Starter instances, you cannot create backups via API. You can use [Dumpling](https://docs.pingcap.com/tidb/stable/dumpling-overview) to export your data as backups."
+        },
+        {
+          "info": {
+            "name": "Get a backup for a cluster.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.tidbcloud.com/api/v1beta/projects/:project_id/clusters/:cluster_id/backups/:backup_id",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of your project. You can get the project ID from the response of [List all accessible projects.](#tag/Project/operation/ListProjects)."
+              },
+              {
+                "name": "cluster_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of your cluster. You can get the cluster ID from the response of [Get all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+              },
+              {
+                "name": "backup_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the backup."
+              }
+            ]
+          },
+          "docs": "For TiDB Cloud Starter instances, you cannot manage backups via API. You can use [Dumpling](https://docs.pingcap.com/tidb/stable/dumpling-overview) to export your data as backups."
+        },
+        {
+          "info": {
+            "name": "Delete a backup for a cluster.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.tidbcloud.com/api/v1beta/projects/:project_id/clusters/:cluster_id/backups/:backup_id",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of your project. You can get the project ID from the response of [List all accessible projects.](#tag/Project/operation/ListProjects)."
+              },
+              {
+                "name": "cluster_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of your cluster. You can get the cluster ID from the response of [Get all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+              },
+              {
+                "name": "backup_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the backup. You can get the backup ID from the response of [List all backups for a cluster](#tag/Project/operation/ListBackUpOfCluster)."
+              }
+            ]
+          },
+          "docs": "For TiDB Cloud Starter instances, you cannot manage backups via API. You can use [Dumpling](https://docs.pingcap.com/tidb/stable/dumpling-overview) to export your data as backups."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

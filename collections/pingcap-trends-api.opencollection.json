@@ -1,0 +1,43 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "OSSInsight Public Trends API",
+    "version": "v1beta"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Trends",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List trending repos",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.ossinsight.io/v1/trends/repos/",
+            "params": [
+              {
+                "name": "period",
+                "value": "",
+                "type": "query",
+                "description": "Specify the period of time to calculate trending repos."
+              },
+              {
+                "name": "language",
+                "value": "",
+                "type": "query",
+                "description": "Specify using which programming language to filter trending repos. If not specified, all languages will be included."
+              }
+            ]
+          },
+          "docs": "Trending repos is an open source alternative to GitHub trends, which showcases recently popular open source projects in the GitHub community.\n\n> **Note**\n>\n> Please URI encode the requested parameters, e.g. `C++` needs to be encoded as `C%2B%2B`.\n \n☁️ Daily run on [TiDB Cloud](https://tidbcloud.com/?utm_source=ossinsight&utm_medium=ossinsight_api), analyze upon dataset that has over 6 billion GitHub events."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

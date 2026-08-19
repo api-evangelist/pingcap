@@ -1,0 +1,776 @@
+openapi: 3.2.0
+info:
+  title: TiDB Cloud Starter and Essential Export API
+  description: "*TiDB Cloud API is in beta.*\n\nThis API manages [TiDB Cloud Starter](https://docs.pingcap.com/tidbcloud/select-cluster-tier/#tidb-cloud-serverless) and [TiDB Cloud Essential](https://docs.pingcap.com/tidbcloud/select-cluster-tier/#essential) instances. For [TiDB Cloud Dedicated](https://docs.pingcap.com/tidbcloud/select-cluster-tier/#tidb-cloud-dedicated) clusters, use the [TiDB Cloud Dedicated API](https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/). For more information about TiDB Cloud API, see [TiDB Cloud API Overview](https://docs.pingcap.com/tidbcloud/api-overview/).\n\n# Overview\n\nThe TiDB Cloud Starter and Essential API is a [REST interface](https://en.wikipedia.org/wiki/Representational_state_transfer) that provides you with programmatic access to manage TiDB Cloud Starter and Essential instances and related resources within TiDB Cloud.\n\nThe API has the following features:\n\n- **JSON entities.** All entities are expressed in JSON.\n- **HTTPS-only.** You can only access the API via HTTPS, ensuring all the data sent over the network is encrypted with TLS.\n- **Key-based access and digest authentication.** Before you access TiDB Cloud API, you must generate an API key. All requests are authenticated through [HTTP Digest Authentication](https://en.wikipedia.org/wiki/Digest_access_authentication), ensuring the API key is never sent over the network.\n\n# Get Started\n\nThis guide helps you make your first API call to TiDB Cloud API. You'll learn how to authenticate a request, build a request, and interpret the response.\n\n## Prerequisites\n\nTo complete this guide, you need to perform the following tasks:\n\n- Create a [TiDB Cloud account](https://tidbcloud.com/free-trial)\n- Install [curl](https://curl.se/)\n\n## Step 1. Create an API key\n\nTo create an API key, log in to your TiDB Cloud console. Navigate to the [**API Keys**](https://tidbcloud.com/org-settings/api-keys) page of your organization, and create an API key.\n\nAn API key contains a public key and a private key. Copy and save them in a secure location. You will need to use the API key later in this guide.\n\nFor more details about creating API keys, refer to [API Key Management](#section/Authentication/API-Key-Management).\n\n## Step 2. Make your first API call\n\n### Build an API call\n\nTiDB Cloud API call consists of the following components:\n\n- **A host**. The host for TiDB Cloud API is <https://serverless.tidbapi.com>.\n- **An API Key**. The public key and the private key are required for authentication.\n- **A request**. When submitting data to a resource via `POST`, `PATCH`, or `PUT`, you must submit your payload in JSON.\n\nIn this guide, you call the [List all clusters](#tag/Cluster/operation/ClusterService_ListClusters) endpoint. For the detailed description of the endpoint, see the [API reference](#tag/Cluster/operation/ClusterService_ListClusters).\n\n### Call an API endpoint\n\nTo get all TiDB Cloud Starter and Essential instances in your organization, run the following command in your terminal. Remember to change `YOUR_PUBLIC_KEY` to your public key and `YOUR_PRIVATE_KEY` to your private key.\n\n```shell\ncurl --digest \\\n --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n --request GET \\\n --url 'https://serverless.tidbapi.com/v1beta1/clusters'\n```\n\n## Step 3. Check the response\n\nAfter making the API call, if the status code in response is `200` and you see details about all TiDB Cloud Starter and Essential instances in your organization, your request is successful.\n\n# Authentication\n\nThe TiDB Cloud API uses [HTTP Digest Authentication](https://en.wikipedia.org/wiki/Digest_access_authentication). It protects your private key from being sent over the network. For more details about HTTP Digest Authentication, refer to the [IETF RFC](https://datatracker.ietf.org/doc/html/rfc7616).\n\n## API key overview\n\n- The API key contains a public key and a private key, which act as the username and password required in the HTTP Digest Authentication. The private key only displays upon the key creation.\n- The API key belongs to your organization and acts as the `Organization Owner` role. You can check [permissions of owner](https://docs.pingcap.com/tidbcloud/manage-user-access#configure-member-roles).\n- You must provide the correct API key in every request. Otherwise, TiDB Cloud responds with a `401` error.\n\n## API key management\n\n### Create an API key\n\nOnly the **owner** of an organization can create an API key.\n\nTo create an API key in an organization, perform the following steps:\n\n1. In the [TiDB Cloud console](https://tidbcloud.com), switch to your target organization using the combo box in the upper-left corner.\n2. In the left navigation pane, click **Organization Settings** > **API Keys**.\n3. On the **API Keys** page, click **Create API Key**.\n4. Enter a description for your API key.\n5. Configure the role and scope for the API key. For more information about the permissions of a role, see [User roles](https://docs.pingcap.com/tidbcloud/manage-user-access/#user-roles).\n6. Click **Generate API Key**. Copy and save the public key and the private key.\n7. Make sure that you have copied and saved the private key in a secure location. The private key only displays upon the creation. After leaving this page, you will not be able to get the full private key again.\n8. Click **Done**.\n\n### View details of an API key\n\nTo view details of an API key, perform the following steps:\n\n1. In the [TiDB Cloud console](https://tidbcloud.com), switch to your target organization using the combo box in the upper-left corner.\n2. In the left navigation pane, click **Organization Settings** > **API Keys**.\n3. You can view the details of the API keys on the page.\n\n### Edit an API key\n\nOnly the **owner** of an organization can modify an API key.\n\nTo edit an API key in an organization, perform the following steps:\n\n1. In the [TiDB Cloud console](https://tidbcloud.com), switch to your target organization using the combo box in the upper-left corner.\n2. In the left navigation pane, click **Organization Settings** > **API Keys**.\n3. On the **API Keys** page, click **...** in the API key row that you want to change, and then click **Update Role**.\n4. You can update the description and role of the API key.\n5. Click **Update**.\n\n### Delete an API key\n\nOnly the **owner** of an organization can delete an API key.\n\nTo delete an API key in an organization, perform the following steps:\n\n1. In the [TiDB Cloud console](https://tidbcloud.com), switch to your target organization using the combo box in the upper-left corner.\n2. In the left navigation pane, click **Organization Settings** > **API Keys**.\n3. On the **API Keys** page, click **...** in the API key row that you want to delete, and then click **Delete**.\n4. Click **I understand, delete it.**\n\n# Rate Limiting\n\nThe TiDB Cloud API allows up to 100 requests per minute per API key. If you exceed the rate limit, the API returns a `429` error. For more quota, you can [submit a request](https://support.pingcap.com/hc/en-us/requests/new?ticket_form_id=7800003722519) to contact our support team.\n\nEach API request returns the following headers about the limit.\n\n- `X-Ratelimit-Limit-Minute`: The number of requests allowed per minute. It is 100 currently.\n- `X-Ratelimit-Remaining-Minute`: The number of remaining requests in the current minute. When it reaches `0`, the API returns a `429` error and indicates that you exceed the rate limit.\n- `X-Ratelimit-Reset`: The time in seconds at which the current rate limit resets.\n\nIf you exceed the rate limit, an error response returns like this.\n\n```\n> HTTP/2 429\n> date: Fri, 22 Jul 2022 05:28:37 GMT\n> content-type: application/json\n> content-length: 66\n> x-ratelimit-reset: 23\n> x-ratelimit-remaining-minute: 0\n> x-ratelimit-limit-minute: 100\n> x-kong-response-latency: 2\n> server: kong/2.8.1\n\n> {\"details\":[],\"code\":49900007,\"message\":\"The request exceeded the limit of 100 times per apikey per minute. For more quota, please contact us: https://support.pingcap.com/hc/en-us/requests/new?ticket_form_id=7800003722519\"}\n```\n\n# API Changelog\n\nThis changelog lists all changes to the TiDB Cloud API.\n\n<!-- In reverse chronological order -->\n\n## 20260414\n\n- Rename TiDB Cloud Starter and Essential clusters to TiDB Cloud Starter and Essential instances. This is only a terminology change in the API descriptions, which does not affect your API usage.\n\n## 20250812\n\n- Initial release of the TiDB Cloud Starter and Essential API, including the following resources and endpoints:\n\n    - Cluster:\n        - [List TiDB Cloud Starter and Essential instances](#tag/Cluster/operation/ClusterService_ListClusters)\n        - [Create a new TiDB Cloud Starter or Essential instance](#tag/Cluster/operation/ClusterService_CreateCluster)\n        - [Get details of a TiDB Cloud Starter or Essential instance](#tag/Cluster/operation/ClusterService_GetCluster)\n        - [Delete a TiDB Cloud Starter or Essential instance](#tag/Cluster/operation/ClusterService_DeleteCluster)\n        - [Update a TiDB Cloud Starter or Essential instance](#tag/Cluster/operation/ClusterService_PartialUpdateCluster)\n        - [List available regions for an organization](#tag/Cluster/operation/ClusterService_ListRegions)\n    - Branch:\n        - [List branches](#tag/Branch/operation/BranchService_ListBranches)\n        - [Create a branch](#tag/Branch/operation/BranchService_CreateBranch)\n        - [Get details of a branch](#tag/Branch/operation/BranchService_GetBranch)\n        - [Delete a branch](#tag/Branch/operation/BranchService_DeleteBranch)\n        - [Reset a branch](#tag/Branch/operation/BranchService_ResetBranch)\n    - Export:\n        - [List export tasks for a cluster](#tag/Export/operation/ExportService_ListExports)\n        - [Create an export task](#tag/Export/operation/ExportService_CreateExport)\n        - [Get details of an export task](#tag/Export/operation/ExportService_GetExport)\n        - [Delete an export task](#tag/Export/operation/ExportService_DeleteExport)\n        - [Cancel an export task](#tag/Export/operation/ExportService_CancelExport)\n    - Import:\n        - [List import tasks for a cluster](#tag/Import/operation/ImportService_ListImports)\n        - [Create an import task](#tag/Import/operation/ImportService_CreateImport)\n        - [Get an import task](#tag/Import/operation/ImportService_GetImport)\n        - [Cancel an import task](#tag/Import/operation/ImportService_CancelImport)\n"
+  version: v1beta1
+servers:
+- url: https://serverless.tidbapi.com/v1beta1
+tags:
+- name: Export
+paths:
+  /clusters/{clusterId}/exports:
+    get:
+      summary: List export tasks for a TiDB Cloud Starter or Essential instance
+      operationId: ExportService_ListExports
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1beta1ListExportsResponse'
+        '400':
+          description: A request field is invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        '401':
+          description: The API key cannot be authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        '403':
+          description: The API key does not have permission to access the resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        '429':
+          description: You have exceed the rate limit.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+      parameters:
+      - name: clusterId
+        description: The ID of the TiDB Cloud Starter or Essential instance to list export tasks for.
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: pageSize
+        description: The maximum number of exports to return. If not specified, at most 10 exports will be returned. The maximum value is `100`. Values greater than `100` are set to `100`.
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 10
+          maximum: 100
+          minimum: 1
+      - name: pageToken
+        description: 'The pagination token received from a previous [List export tasks](#tag/Export/operation/ExportService_ListExports) request. Use this token to retrieve the next page of results.
+
+
+          **Note**: When paginating, all other parameters must match the original request.'
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: orderBy
+        description: 'Specifies the sorting order of results. Use a comma-separated list of field names, optionally appending `desc` for descending order. For example, `createTime desc`. By default, fields are sorted in ascending order.
+
+
+          Supported field: `createTime`.'
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Export
+      x-codeSamples:
+      - label: curl
+        lang: cURL
+        source: "curl --location 'https://serverless.tidbapi.com/v1beta1/clusters/{cluster_id}/exports' \\\n--digest --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n--header 'Content-Type: application/json' \\\n--header 'Accept: application/json' \\\n--data '{\n  \"exportOptions\": {\n    \"fileType\": \"PARQUET\",\n    \"filter\": {\n      \"table\": {\n        \"patterns\": [\n            \"test.*\"\n        ]\n      }\n    },\n    \"parquetFormat\": {\n      \"compression\": \"GZIP\"\n    }\n  },\n  \"target\": {\n    \"type\": \"LOCAL\"\n  }\n}'"
+    post:
+      summary: Create an export task
+      operationId: ExportService_CreateExport
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1beta1Export'
+        '400':
+          description: A request field is invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        '401':
+          description: The API key cannot be authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        '403':
+          description: The API key does not have permission to access the resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        '429':
+          description: You have exceed the rate limit.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+      parameters:
+      - name: clusterId
+        description: The ID of the TiDB Cloud Starter or Essential instance.
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Export
+      x-codeSamples:
+      - label: curl
+        lang: cURL
+        source: "curl --location 'https://serverless.tidbapi.com/v1beta1/clusters/{cluster_id}/exports' \\\n--digest --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n--header 'Content-Type: application/json' \\\n--header 'Accept: application/json' \\\n--data '{\n  \"exportOptions\": {\n    \"fileType\": \"PARQUET\",\n    \"filter\": {\n      \"table\": {\n        \"patterns\": [\n            \"test.*\"\n        ]\n      }\n    },\n    \"parquetFormat\": {\n      \"compression\": \"GZIP\"\n    }\n  },\n  \"target\": {\n    \"type\": \"LOCAL\"\n  }\n}'"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExportServiceCreateExportBody'
+        required: true
+  /clusters/{clusterId}/exports/{exportId}:
+    get:
+      summary: Get details of an export task
+      operationId: ExportService_GetExport
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1beta1Export'
+        '400':
+          description: A request field is invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        '401':
+          description: The API key cannot be authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        '403':
+          description: The API key does not have permission to access the resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        '429':
+          description: You have exceed the rate limit.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+      parameters:
+      - name: clusterId
+        description: The ID of the TiDB Cloud Starter or Essential instance.
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: exportId
+        description: The ID of the export task to retrieve.
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Export
+      x-codeSamples:
+      - label: curl
+        lang: cURL
+        source: 'curl --location ''https://serverless.tidbapi.com/v1beta1/clusters/{cluster_id}/exports/{export_id}'' \
+
+          --digest --user ''YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY'' \
+
+          --header ''Accept: application/json'''
+    delete:
+      summary: Delete an export task
+      operationId: ExportService_DeleteExport
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1beta1Export'
+        '400':
+          description: A request field is invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        '401':
+          description: The API key cannot be authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        '403':
+          description: The API key does not have permission to access the resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        '429':
+          description: You have exceed the rate limit.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+      parameters:
+      - name: clusterId
+        description: The ID of the TiDB Cloud Starter or Essential instance.
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: exportId
+        description: The ID of the export task to delete.
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Export
+      x-codeSamples:
+      - label: curl
+        lang: cURL
+        source: 'curl --location --request DELETE ''https://serverless.tidbapi.com/v1beta1/clusters/{cluster_id}/exports/{export_id}'' \
+
+          --digest --user ''YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY'' \
+
+          --header ''Accept: application/json'''
+  /clusters/{clusterId}/exports/{exportId}:cancel:
+    post:
+      summary: Cancel an export task
+      operationId: ExportService_CancelExport
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1beta1Export'
+        '400':
+          description: A request field is invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        '401':
+          description: The API key cannot be authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        '403':
+          description: The API key does not have permission to access the resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        '429':
+          description: You have exceed the rate limit.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+      parameters:
+      - name: clusterId
+        description: The ID of the TiDB Cloud Starter or Essential instance.
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: exportId
+        description: The ID of the export task to cancel.
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Export
+      x-codeSamples:
+      - label: curl
+        lang: cURL
+        source: 'curl --location --request POST ''https://serverless.tidbapi.com/v1beta1/clusters/{cluster_id}/exports/{export_id}:cancel'' \
+
+          --digest --user ''YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY'' \
+
+          --header ''Accept: application/json'''
+components:
+  schemas:
+    v1beta1ExportS3AuthTypeEnum:
+      type: string
+      enum:
+      - ROLE_ARN
+      - ACCESS_KEY
+      description: " - ROLE_ARN: The access method is role arn.\n - ACCESS_KEY: The access method is access key."
+    v1beta1ExportOptionsCSVFormat:
+      type: object
+      properties:
+        separator:
+          type: string
+          default: ','
+          description: 'The character used to separate values in the CSV file.
+
+            It is recommended to use uncommon separators like `|+|` to avoid conflicts.'
+        delimiter:
+          type:
+          - string
+          - 'null'
+          default: '"'
+          description: The character used to enclose string values in the CSV file.
+        nullValue:
+          type:
+          - string
+          - 'null'
+          default: \N
+          description: The string representation of NULL values in the CSV file.
+        skipHeader:
+          type: boolean
+          default: false
+          description: Indicates whether to omit the header row in exported CSV files.
+    v1beta1ExportOptionsFilter:
+      type: object
+      properties:
+        sql:
+          type: string
+          description: Filters the exported data with the SQL statement.
+        table:
+          description: Filters the exported data with table filter patterns.
+          allOf:
+          - $ref: '#/components/schemas/ExportOptionsFilterTable'
+    v1beta1ListExportsResponse:
+      type: object
+      properties:
+        exports:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/v1beta1Export'
+          description: A list of export tasks that match the query.
+        nextPageToken:
+          type: string
+          description: The token to retrieve the next page of results. Use this value as the `pageToken` parameter in the next request. This field is empty when there are no more pages.
+        totalSize:
+          type: integer
+          format: int64
+          description: The total number of exports that match the query.
+    v1beta1ExportOSSAuthTypeEnum:
+      type: string
+      enum:
+      - ACCESS_KEY
+      description: ' - ACCESS_KEY: The access method is access key.'
+    v1beta1ExportGcsAuthTypeEnum:
+      type: string
+      enum:
+      - SERVICE_ACCOUNT_KEY
+      description: ' - SERVICE_ACCOUNT_KEY: The access method is service account key.'
+    v1beta1ExportParquetCompressionTypeEnum:
+      type: string
+      enum:
+      - GZIP
+      - SNAPPY
+      - ZSTD
+      - NONE
+      default: ZSTD
+      description: " - GZIP: The parquet compression type is GZIP.\n - SNAPPY: The parquet compression type is SNAPPY.\n - ZSTD: The parquet compression type is ZSTD.\n - NONE: No compression."
+    v1beta1S3TargetAccessKey:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The access key ID for accessing the S3 bucket.
+        secret:
+          type: string
+          description: The secret access key for accessing the S3 bucket.
+      required:
+      - id
+      - secret
+    ExportServiceCreateExportBody:
+      type: object
+      properties:
+        exportOptions:
+          description: The configuration options for the export task.
+          allOf:
+          - $ref: '#/components/schemas/v1beta1ExportOptions'
+        target:
+          description: The destination configuration for where the exported data is stored.
+          allOf:
+          - $ref: '#/components/schemas/v1beta1ExportTarget'
+        displayName:
+          type: string
+          default: SNAPSHOT_{snapshot_time}
+          description: The display name of the export task.
+    ExportOptionsParquetFormat:
+      type: object
+      properties:
+        compression:
+          description: The Parquet compression algorithm.
+          allOf:
+          - $ref: '#/components/schemas/v1beta1ExportParquetCompressionTypeEnum'
+    v1beta1ExportOptions:
+      type: object
+      properties:
+        fileType:
+          description: The export file type.
+          allOf:
+          - $ref: '#/components/schemas/v1beta1ExportFileTypeEnum'
+        compression:
+          description: The compression algorithm of the export file.
+          allOf:
+          - $ref: '#/components/schemas/v1beta1ExportCompressionTypeEnum'
+        filter:
+          description: Defines which tables to include in the export. If not specified, all tables in the TiDB Cloud Starter or Essential instance are exported.
+          allOf:
+          - $ref: '#/components/schemas/v1beta1ExportOptionsFilter'
+        csvFormat:
+          description: The format specification for the CSV file.
+          allOf:
+          - $ref: '#/components/schemas/v1beta1ExportOptionsCSVFormat'
+        parquetFormat:
+          description: The format specification for the Parquet file.
+          allOf:
+          - $ref: '#/components/schemas/ExportOptionsParquetFormat'
+    v1beta1ExportStateEnum:
+      type: string
+      enum:
+      - RUNNING
+      - SUCCEEDED
+      - FAILED
+      - CANCELED
+      - DELETED
+      - EXPIRED
+      description: "Export State.\n\n - RUNNING: The export task is being created.\n - SUCCEEDED: The export task is success.\n - FAILED: The export task is failed.\n - CANCELED: The export task is canceled.\n - DELETED: The export task is deleted.\n - EXPIRED: The export is expired, only local export will be expired."
+    v1beta1ExportFileTypeEnum:
+      type: string
+      enum:
+      - SQL
+      - CSV
+      - PARQUET
+      default: CSV
+      description: " - SQL: SQL type.\n - CSV: CSV type.\n - PARQUET: PARQUET type."
+    protobufAny:
+      type: object
+      properties:
+        '@type':
+          type: string
+          description: A URL or resource name that uniquely identifies the type of the serialized protocol buffer message.
+      additionalProperties: {}
+      description: "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n    // or ...\n    if (any.isSameTypeAs(Foo.getDefaultInstance())) {\n      foo = any.unpack(Foo.getDefaultInstance());\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := anypb.New(foo)\n     if err != nil {\n       ...\n     }\n     ...\n     foo := &pb.Foo{}\n     if err := any.UnmarshalTo(foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
+    v1beta1ExportTargetTypeEnum:
+      type: string
+      enum:
+      - LOCAL
+      - S3
+      - GCS
+      - AZURE_BLOB
+      - OSS
+      default: LOCAL
+      description: " - LOCAL: Local target.\n - S3: S3 target.\n - GCS: gcs target.\n - AZURE_BLOB: azure blob target.\n - OSS: OSS target."
+    v1beta1OSSTargetAccessKey:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The AccessKey ID for accessing Alibaba Cloud OSS.
+        secret:
+          type: string
+          description: The AccessKey secret for accessing Alibaba Cloud OSS.
+      required:
+      - id
+      - secret
+    v1beta1OSSTarget:
+      type: object
+      properties:
+        uri:
+          type: string
+          description: The Alibaba Cloud OSS URI of the export target.
+        authType:
+          description: The authentication method for accessing Alibaba Cloud OSS.
+          allOf:
+          - $ref: '#/components/schemas/v1beta1ExportOSSAuthTypeEnum'
+        accessKey:
+          description: The Alibaba Cloud OSS access key credentials used for access.
+          allOf:
+          - $ref: '#/components/schemas/v1beta1OSSTargetAccessKey'
+      required:
+      - uri
+      - authType
+    v1beta1ExportCompressionTypeEnum:
+      type: string
+      enum:
+      - GZIP
+      - SNAPPY
+      - ZSTD
+      - NONE
+      default: GZIP
+      description: " - GZIP: Gzip compression.\n - SNAPPY: Snappy compression.\n - ZSTD: Zstd compression.\n - NONE: No compression."
+    googlerpcStatus:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+          description: The error code returned with this error.
+        message:
+          type: string
+          description: The error message returned with this error.
+        details:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/protobufAny'
+          description: A list of messages with additional error details.
+      description: 'The `Status` type defines a logical error model that is suitable for
+
+        different programming environments, including REST APIs and RPC APIs. It is
+
+        used by [gRPC](https://github.com/grpc). Each `Status` message contains
+
+        three pieces of data: error code, error message, and error details.
+
+
+        You can find out more about this error model and how to work with it in the
+
+        [API Design Guide](https://cloud.google.com/apis/design/errors).'
+    v1beta1AzureBlobTarget:
+      type: object
+      properties:
+        authType:
+          description: The authentication method for accessing Azure Blob Storage.
+          allOf:
+          - $ref: '#/components/schemas/v1beta1ExportAzureBlobAuthTypeEnum'
+        sasToken:
+          type: string
+          description: The Shared Access Signature (SAS) token for accessing Azure Blob Storage.
+        uri:
+          type: string
+          description: The Azure Blob URI of the export target, in the format of `azure://<account>.blob.core.windows.net/<container>/<path>` or `https://<account>.blob.core.windows.net/<container>/<path>`.
+      required:
+      - authType
+      - uri
+    v1beta1Export:
+      type: object
+      properties:
+        exportId:
+          type: string
+          description: The unique ID of the export task.
+          readOnly: true
+        name:
+          type: string
+          description: The unique identifier for the export task.
+          readOnly: true
+        clusterId:
+          type: string
+          description: The ID of the TiDB Cloud Starter or Essential instance to which the export task belongs.
+        createdBy:
+          type: string
+          description: The email address of the user who create the export task.
+          readOnly: true
+        state:
+          description: The state of the export task.
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/v1beta1ExportStateEnum'
+        exportOptions:
+          description: The configuration options for the export task.
+          allOf:
+          - $ref: '#/components/schemas/v1beta1ExportOptions'
+        target:
+          description: The destination configuration for where the exported data is stored.
+          allOf:
+          - $ref: '#/components/schemas/v1beta1ExportTarget'
+        reason:
+          type:
+          - string
+          - 'null'
+          description: An error message if the export task failed. Otherwise, empty.
+          readOnly: true
+        displayName:
+          type: string
+          default: SNAPSHOT_{snapshot_time}
+          description: The display name of the export task.
+        createTime:
+          type: string
+          format: date-time
+          description: The timestamp when the export task was created, in the [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format.
+          readOnly: true
+        updateTime:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: The timestamp when the export task was last updated, in the [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format.
+          readOnly: true
+        completeTime:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: The timestamp when the export task was completed, in the [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format.
+          readOnly: true
+        snapshotTime:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: The timestamp when the data snapshot was captured for this export.
+          readOnly: true
+        expireTime:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: The timestamp when the export will expire and become unavailable.
+          readOnly: true
+      description: Message for export task.
+      required:
+      - clusterId
+    v1beta1S3Target:
+      type: object
+      properties:
+        uri:
+          type: string
+          description: The S3 URI of the export target.
+        authType:
+          description: The authentication method for accessing the S3 bucket.
+          allOf:
+          - $ref: '#/components/schemas/v1beta1ExportS3AuthTypeEnum'
+        accessKey:
+          description: The AWS access key credentials used for access.
+          allOf:
+          - $ref: '#/components/schemas/v1beta1S3TargetAccessKey'
+        roleArn:
+          type: string
+          description: The AWS IAM role ARN used for access.
+      required:
+      - authType
+    v1beta1GCSTarget:
+      type: object
+      properties:
+        uri:
+          type: string
+          description: The Google Cloud Storage URI of the export target.
+        authType:
+          description: The authentication method for accessing Google Cloud Storage.
+          allOf:
+          - $ref: '#/components/schemas/v1beta1ExportGcsAuthTypeEnum'
+        serviceAccountKey:
+          type: string
+          description: The service account key for accessing Google Cloud Storage.
+      required:
+      - uri
+      - authType
+    ExportOptionsFilterTable:
+      type: object
+      properties:
+        patterns:
+          type: array
+          items:
+            type: string
+          description: A list of [table-filter](https://docs.pingcap.com/tidb/stable/table-filter/#syntax) patterns.
+        where:
+          type: string
+          description: Filters the exported tables with the `WHERE` condition.
+    v1beta1ExportTarget:
+      type: object
+      properties:
+        type:
+          description: The export target.
+          allOf:
+          - $ref: '#/components/schemas/v1beta1ExportTargetTypeEnum'
+        s3:
+          description: The configuration details for exporting data to Amazon S3. This is required when `type` is `S3`.
+          allOf:
+          - $ref: '#/components/schemas/v1beta1S3Target'
+        gcs:
+          description: The configuration details for exporting data to Google Cloud Storage. This is required when `type` is `GCS`.
+          allOf:
+          - $ref: '#/components/schemas/v1beta1GCSTarget'
+        azureBlob:
+          description: The configuration details for exporting data to Azure Blob Storage. This is required when `type` is `AZURE_BLOB`.
+          allOf:
+          - $ref: '#/components/schemas/v1beta1AzureBlobTarget'
+        oss:
+          description: The configuration details for exporting data to Alibaba Cloud Object Storage Service (OSS). This is required when `type` is `OSS`.
+          allOf:
+          - $ref: '#/components/schemas/v1beta1OSSTarget'
+    v1beta1ExportAzureBlobAuthTypeEnum:
+      type: string
+      enum:
+      - SAS_TOKEN
+      description: ' - SAS_TOKEN: The access method is sas token.'

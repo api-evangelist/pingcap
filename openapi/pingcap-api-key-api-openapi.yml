@@ -1,0 +1,241 @@
+openapi: 3.2.0
+info:
+  description: "*TiDB Cloud API is in beta.*\n\n# Overview\n\nThe TiDB Cloud API is a [REST interface](https://en.wikipedia.org/wiki/Representational_state_transfer) that provides you with programmatic access to manage administrative objects within TiDB Cloud.\n\nThe API has the following features:\n\n- **JSON entities.** All entities are expressed in JSON.\n- **HTTPS-only.** You can only access the API via HTTPS, ensuring all the data sent over the network is encrypted with TLS.\n- **Key-based access and digest authentication.** Before you access TiDB Cloud API, you must generate an API key. All requests are authenticated through [HTTP Digest Authentication](https://en.wikipedia.org/wiki/Digest_access_authentication), ensuring the API key is never sent over the network.\n\n# Get Started\n\nThis guide helps you make your first API call to TiDB Cloud API. You'll learn how to authenticate a request, build a request, and interpret the response.\n\n## Prerequisites\n\nTo complete this guide, you need to perform the following tasks:\n\n- Create a [TiDB Cloud account](https://tidbcloud.com/free-trial)\n- Install [curl](https://curl.se/)\n\n## Step 1. Create an API key\n\nTo create an API key, log in to your TiDB Cloud console. Navigate to the [**API Keys**](https://tidbcloud.com/org-settings/api-keys) page of your organization, and create an API key.\n\nAn API key contains a public key and a private key. Copy and save them in a secure location. You will need to use the API key later in this guide.\n\nFor more details about creating API keys, refer to [API Key Management](#section/Authentication/API-Key-Management).\n\n## Step 2. Make your first API call\n\n### Build an API call\n\nTiDB Cloud API call consists of the following components:\n\n- **A host.** The host for TiDB Cloud API is <https://iam.tidbapi.com>.\n- **An API Key**. The public key and the private key are required for authentication.\n- **A request.** When submitting data to a resource via `POST`, `PATCH`, or `PUT`, you must submit your payload in JSON.\n\nIn this guide, you call the [List all accessible API Keys](#tag/API-Key/paths/~1apikeys/get) endpoint. For the detailed description of the endpoint, see the [API reference](#tag/API-Key/paths/~1apikeys/get).\n\n### Call an API endpoint\n\nTo get all projects in your organization, run the following command in your terminal. Remember to change `YOUR_PUBLIC_KEY` to your public key and `YOUR_PRIVATE_KEY` to your private key.\n\n```shell\ncurl --digest \\\n  --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --request GET \\\n  --url https://iam.tidbapi.com/v1beta1/apikeys\n```\n\n## Step 3. Check the response\n\nAfter making the API call, if the status code in response is `200` and you see details about all the API keys in your organization, your request is successful. Here is an example of a successful response.\n\n```log\n{\n\t\"apiKeys\": [{\n\t\t\"name\": \"orgs/1/apiKeys/2\",\n\t\t\"accessKey\": \"ABCDEFGH\",\n\t\t\"secretKey\": \"********************************0000\",\n\t\t\"displayName\": \"New Key\",\n\t\t\"role\": \"org:owner\"\n\t}],\n\t\"nextPageToken\": \"\"\n}\n``` \n\n# Authentication\n\nThe TiDB Cloud API uses [HTTP Digest Authentication](https://en.wikipedia.org/wiki/Digest_access_authentication). It protects your private key from being sent over the network. For more details about HTTP Digest Authentication, refer to the [IETF RFC](https://datatracker.ietf.org/doc/html/rfc7616).\n\n## API key overview\n\n- The API key contains a public key and a private key, which act as the username and password required in the HTTP Digest Authentication. The private key only displays upon the key creation.\n- The API key belongs to your organization and acts as the `Organization Owner` role. You can check [permissions of owner](https://docs.pingcap.com/tidbcloud/manage-user-access#configure-member-roles).\n- You must provide the correct API key in every request. Otherwise, TiDB Cloud responds with a `401` error.\n\n## API key management\n\n### Create an API key\n\nOnly the **owner** of an organization can create an API key.\n\nTo create an API key in an organization, perform the following steps:\n\n1. In the [TiDB Cloud console](https://tidbcloud.com), switch to your target organization using the combo box in the upper-left corner.\n2. In the left navigation pane, click **Organization Settings** > **API Keys**.\n3. On the **API Keys** page, click **Create API Key**.\n4. Enter a description for your API key.\n5. Configure the role and scope for the API key. For more information about the permissions of a role, see [User roles](https://docs.pingcap.com/tidbcloud/manage-user-access/#user-roles).\n6. Click **Generate API Key**. Copy and save the public key and the private key.\n7. Make sure that you have copied and saved the private key in a secure location. The private key only displays upon the creation. After leaving this page, you will not be able to get the full private key again.\n8. Click **Done**.\n\n### View details of an API key\n\nTo view details of an API key, perform the following steps:\n\n1. In the [TiDB Cloud console](https://tidbcloud.com), switch to your target organization using the combo box in the upper-left corner.\n2. In the left navigation pane, click **Organization Settings** > **API Keys**.\n3. You can view the details of the API keys on the page.\n\n### Edit an API key\n\nOnly the **owner** of an organization can modify an API key.\n\nTo edit an API key in an organization, perform the following steps:\n\n1. In the [TiDB Cloud console](https://tidbcloud.com), switch to your target organization using the combo box in the upper-left corner.\n2. In the left navigation pane, click **Organization Settings** > **API Keys**.\n3. On the **API Keys** page, click **...** in the API key row that you want to change, and then click **Update Role**.\n4. You can update the description and role of the API key.\n5. Click **Update**.\n\n### Delete an API key\n\nOnly the **owner** of an organization can delete an API key.\n\nTo delete an API key in an organization, perform the following steps:\n\n1. In the [TiDB Cloud console](https://tidbcloud.com), switch to your target organization using the combo box in the upper-left corner.\n2. In the left navigation pane, click **Organization Settings** > **API Keys**.\n3. On the **API Keys** page, click **...** in the API key row that you want to delete, and then click **Delete**.\n4. Click **I understand, delete it.**\n\n# Rate Limiting\n\nThe TiDB Cloud API allows up to 100 requests per minute per API key. If you exceed the rate limit, the API returns a `429` error. For more quota, you can [submit a request](https://support.pingcap.com/hc/en-us/requests/new?ticket_form_id=7800003722519) to contact our support team.\n\nEach API request returns the following headers about the limit.\n\n- `X-Ratelimit-Limit-Minute`: The number of requests allowed per minute. It is 100 currently.\n- `X-Ratelimit-Remaining-Minute`: The number of remaining requests in the current minute. When it reaches `0`, the API returns a `429` error and indicates that you exceed the rate limit.\n- `X-Ratelimit-Reset`: The time in seconds at which the current rate limit resets.\n\nIf you exceed the rate limit, an error response returns like this.\n\n```\n> HTTP/2 429\n> date: Fri, 22 Jul 2022 05:28:37 GMT\n> content-type: application/json\n> content-length: 66\n> x-ratelimit-reset: 23\n> x-ratelimit-remaining-minute: 0\n> x-ratelimit-limit-minute: 100\n> x-kong-response-latency: 2\n> server: kong/2.8.1\n\n> {\"details\":[],\"code\":49900007,\"message\":\"The request exceeded the limit of 100 times per apikey per minute. For more quota, please contact us: https://support.pingcap.com/hc/en-us/requests/new?ticket_form_id=7800003722519\"}\n```\n\n# API Changelog\n\nThis changelog lists all changes to the TiDB Cloud API.\n\n<!-- In reverse chronological order -->\n\n## 20260526\n- Introduce the following endpoints for managing organization members:\n    - [List members](#tag/Member/paths/~1members/get)\n    - [Invite members](#tag/Member/paths/~1members/post)\n    - [Batch update members](#tag/Member/paths/~1members~1batchUpdate/post)\n    - [Delete a member](#tag/Member/paths/~1members~1%7Buser_id%7D/delete)\n    - [Update a member](#tag/Member/paths/~1members~1%7Buser_id%7D/patch)\n    - [Resend an invitation](#tag/Member/paths/~1members~1%7Buser_id%7D~1resendInvitation/post)\n\n## 20251209\n- Add the [List console audit logs](#tag/Audit-Log/paths/~1auditLogs/get) endpoint.\n## 20250812\n- Add the role-based access control (RBAC) for API key management at both the organization and project levels.\n## 20240116\n- Add the [Create a new API key](#tag/API-Key/paths/~1apikeys/post) endpoint.\n- Add the [Get a single API key](#tag/API-Key/paths/~1apikeys~1%7BaccessKey%7D/get) endpoint.\n- Add the [List API keys](#tag/API-Key/paths/~1apikeys/get) endpoint.\n- Add the [Update an API key](#tag/API-Key/paths/~1apikeys~1%7BaccessKey%7D/patch) endpoint.\n- Add the [Delete an API key](#tag/API-Key/paths/~1apikeys~1%7BaccessKey%7D/delete) endpoint.\n"
+  title: IAM System OPEN API Key API
+  contact: {}
+  version: v1beta1
+servers:
+- url: https://iam.tidbapi.com/v1beta1
+tags:
+- name: API Key
+paths:
+  /apikeys:
+    get:
+      description: Lists all API keys.
+      tags:
+      - API Key
+      summary: List API keys
+      parameters:
+      - description: The ID of the project. If not specified, the project ID of the default project is used.
+        name: projectId
+        in: query
+        schema:
+          type: integer
+      - description: The pagination token received from a previous [List API keys](#tag/API-Key/paths/~1apikeys/get) request. Use this token to retrieve the next page of results.
+        name: pageToken
+        in: query
+        schema:
+          type: string
+      - description: The maximum number of API keys to return. If not specified, at most 100 API keys will be returned.
+        name: pageSize
+        in: query
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.OpenApiListApiKeyRsp'
+        '400':
+          description: A request field is invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.OpenApiError'
+      x-code-samples:
+      - lang: curl
+        label: curl
+        source: "curl --digest --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --location 'https://iam.tidbapi.com/v1beta1/apikeys'"
+    post:
+      description: Creates a new API key with the specified permissions and configuration.
+      tags:
+      - API Key
+      summary: Create a new API key
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.OpenApiApiKey'
+        '400':
+          description: A request field is invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.OpenApiError'
+      x-code-samples:
+      - lang: curl
+        label: curl
+        source: "curl --digest --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --location 'https://iam.tidbapi.com/v1beta1/apikeys' --header 'Content-Type: application/json' --data '{\n    \"displayName\": \"YOUR_API_NAME\",\n    \"role\": \"org:owner\"\n}'"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/api.OpenApiCreateApiKeyReq'
+        required: true
+  /apikeys/{accessKey}:
+    get:
+      description: Retrieves the details of a specific API key using its `accessKey`.
+      tags:
+      - API Key
+      summary: Get an API key
+      parameters:
+      - description: The access key of the API key.
+        name: accessKey
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.OpenApiApiKey'
+        '400':
+          description: A request field is invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.OpenApiError'
+      x-code-samples:
+      - lang: curl
+        label: curl
+        source: "curl --digest --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --location 'https://iam.tidbapi.com/v1beta1/apikeys/{YOUR_ACCESS_KEY}'"
+    delete:
+      description: Deletes an API key.
+      tags:
+      - API Key
+      summary: Delete an API key
+      parameters:
+      - description: The access key of the API key to delete.
+        name: accessKey
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: A successful response.
+        '400':
+          description: A request field is invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.OpenApiError'
+      x-code-samples:
+      - lang: curl
+        label: curl
+        source: "curl --digest --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --location --request DELETE 'https://iam.tidbapi.com/v1beta1/apikeys/{YOUR_ACCESS_KEY}'"
+    patch:
+      description: Updates an API key by modifying the specified fields.
+      tags:
+      - API Key
+      summary: Update an API key
+      parameters:
+      - description: The access key of the API key to update.
+        name: accessKey
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: A successful response.
+        '400':
+          description: A request field is invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.OpenApiError'
+      x-code-samples:
+      - lang: curl
+        label: curl
+        source: "curl --digest --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --location --request PATCH 'https://iam.tidbapi.com/v1beta1/apikeys/{YOUR_ACCESS_KEY}' --header 'Content-Type: application/json' --data '{\n    \"displayName\": \"YOUR_UPDATED_API_NAME\"\n}'"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/api.OpenApiUpdateApiKeyReq'
+        required: true
+components:
+  schemas:
+    api.OpenApiError:
+      type: object
+      properties:
+        code:
+          type: string
+        error: {}
+        msgPrefix:
+          type: string
+        status:
+          type: integer
+    api.OpenApiListApiKeyRsp:
+      type: object
+      properties:
+        apiKeys:
+          description: A list of API keys that match the query.
+          type: array
+          items:
+            $ref: '#/components/schemas/api.OpenApiApiKey'
+        nextPageToken:
+          description: The token to retrieve the next page of results. Use this value as the `pageToken` parameter in the next request. This field is empty when there are no more pages.
+          type: string
+          example: 498c7f44-656f-4944-b455-0695faa5d4f9
+    api.OpenApiUpdateApiKeyReq:
+      type: object
+      properties:
+        displayName:
+          description: The display name of the API key.
+          type: string
+          example: New Key
+        projectId:
+          description: The project to which the API key belongs. If not set, the API key belongs to org.
+          type: integer
+          example: 123456
+        role:
+          description: "The role of API key.\n\n- If `projectId` is set to `0`, use an [organization role](https://docs.pingcap.com/tidbcloud/manage-user-access/#organization-roles):\n\n  - `org:owner`: indicates the `Organization Owner` role.\n\n  - `org:member`: indicates the `Organization Viewer` role.\n\n  - `org:billing_admin`: indicates the `Organization Billing Manager` role.\n\n  - `org:billing_viewer`: indicates the `Organization Billing Viewer` role.\n\n  - `org:audit_admin`: indicates the `Organization Console Audit Manager` role.\n\n- if `projectId` is not set to `0`, use a [project role](https://docs.pingcap.com/tidbcloud/manage-user-access/#project-roles):\n\n  - `project:owner`: indicates the `Project Owner` role.\n\n  - `project:dev`: indicates the `Project Data Access Read-Write` role.\n\n  - `project:readonly`: indicates the `Project Data Access Read-Only` role.\n\n  - `project:ctl_plane_viewer`: indicates the `Project Viewer` role."
+          type: string
+          example: org:owner
+    api.OpenApiCreateApiKeyReq:
+      type: object
+      properties:
+        displayName:
+          description: The display name of API key.
+          type: string
+          example: New Key
+        projectId:
+          description: The ID of the project. If not specified, the project ID of the default project is used.
+          type: integer
+          example: 123456
+        role:
+          description: "The role of API key.\n\n- If `projectId` is set to `0`, use an [organization role](https://docs.pingcap.com/tidbcloud/manage-user-access/#organization-roles):\n\n  - `org:owner`: indicates the `Organization Owner` role.\n\n  - `org:member`: indicates the `Organization Viewer` role.\n\n  - `org:billing_admin`: indicates the `Organization Billing Manager` role.\n\n  - `org:billing_viewer`: indicates the `Organization Billing Viewer` role.\n\n  - `org:audit_admin`: indicates the `Organization Console Audit Manager` role.\n\n- if `projectId` is not set to `0`, use a [project role](https://docs.pingcap.com/tidbcloud/manage-user-access/#project-roles):\n\n  - `project:owner`: indicates the `Project Owner` role.\n\n  - `project:dev`: indicates the `Project Data Access Read-Write` role.\n\n  - `project:readonly`: indicates the `Project Data Access Read-Only` role.\n\n  - `project:ctl_plane_viewer`: indicates the `Project Viewer` role."
+          type: string
+          example: org:owner
+    api.OpenApiApiKey:
+      type: object
+      properties:
+        accessKey:
+          description: The access key of the API key.
+          type: string
+          example: ABCDEFGH
+        displayName:
+          description: The display name of the API key.
+          type: string
+          example: New Key
+        name:
+          description: The name of the API key.
+          type: string
+          example: orgs/1/apiKeys/2
+        role:
+          description: The role of the API key.
+          type: string
+          example: org:owner
+        secretKey:
+          description: The secret key of the API key.
+          type: string
+          example: 498c7f44-656f-4944-b455-0695faa5d4f9

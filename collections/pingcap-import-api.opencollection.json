@@ -1,0 +1,373 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Pingcap Import API",
+    "version": "1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Import",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List import tasks",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/clusters/:clusterId/imports",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the cluster to list import tasks for."
+              },
+              {
+                "name": "pageToken",
+                "value": "",
+                "type": "query",
+                "description": "The pagination token received from a previous [List import tasks](#tag/Import/operation/ListImports) request. Use this token to retrieve the next page of results."
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of import tasks to return. If not specified, at most 10 node specs will be returned."
+              },
+              {
+                "name": "orderBy",
+                "value": "",
+                "type": "query",
+                "description": "Specifies the sorting order of results. Use a comma-separated list of field names, optionally appending `desc` for descending order. For example, `createTime, name desc`. By default, fields are sorted in ascending order."
+              }
+            ]
+          },
+          "docs": "Lists all import tasks for a cluster. You can use query parameters to control sorting, pagination, and the number of results returned."
+        },
+        {
+          "info": {
+            "name": "Create an import task",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/clusters/:clusterId/imports",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the target cluster where data will be imported."
+              }
+            ]
+          },
+          "docs": "Creates an import task to import data into a cluster."
+        },
+        {
+          "info": {
+            "name": "Get an import task",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/clusters/:clusterId/imports/:importId",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the cluster that contains the import task."
+              },
+              {
+                "name": "importId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the import task to retrieve."
+              }
+            ]
+          },
+          "docs": "Retrieves details of a specific import task by its ID."
+        },
+        {
+          "info": {
+            "name": "Cancel an import task",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/clusters/:clusterId/imports/:importId:cancel",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the cluster that contains the import task."
+              },
+              {
+                "name": "importId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the import task to cancel."
+              }
+            ]
+          },
+          "docs": "Cancels a running import task by its ID."
+        },
+        {
+          "info": {
+            "name": "Get details of an import task",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/clusters/:clusterId/imports/:id",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the TiDB Cloud Starter or Essential instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the import task."
+              }
+            ]
+          },
+          "docs": "Get details of an import task"
+        },
+        {
+          "info": {
+            "name": "Cancel an import task",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/clusters/:clusterId/imports/:id:cancel",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the TiDB Cloud Starter or Essential instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the import task."
+              }
+            ]
+          },
+          "docs": "Cancel an import task"
+        },
+        {
+          "info": {
+            "name": "List all import tasks for a cluster.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1beta/projects/:project_id/clusters/:cluster_id/imports",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+              },
+              {
+                "name": "cluster_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of your cluster. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The number of pages."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The size of a page."
+              }
+            ]
+          },
+          "docs": "List all import tasks for a cluster."
+        },
+        {
+          "info": {
+            "name": "Create an import task.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1beta/projects/:project_id/clusters/:cluster_id/imports",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+              },
+              {
+                "name": "cluster_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of your cluster that you want to start an import job. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+              }
+            ]
+          },
+          "docs": "Create an import task."
+        },
+        {
+          "info": {
+            "name": "Preview data before starting an import task.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1beta/projects/:project_id/clusters/:cluster_id/imports/preview",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+              },
+              {
+                "name": "cluster_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of your cluster that you want to start an import task. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+              }
+            ]
+          },
+          "docs": "Before you create an import task, you can preview the data using this endpoint and make sure that the import task is configured as intended. The preview result is organized by tables."
+        },
+        {
+          "info": {
+            "name": "Retrieve the role information for import tasks on a cluster.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1beta/projects/:project_id/clusters/:cluster_id/imports/role_info",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+              },
+              {
+                "name": "cluster_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of your cluster. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+              }
+            ]
+          },
+          "docs": "Retrieve the role information for import tasks on a cluster, so that you can configure the access for the import tasks to retrieve the data from the data source. For more information on how to configure the access for the import tasks, refer to [Configure Amazon S3 Access and GCS Access](https://docs.pingcap.com/tidbcloud/config-s3-and-gcs-access)."
+        },
+        {
+          "info": {
+            "name": "Upload a local file for an import task.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1beta/projects/:project_id/clusters/:cluster_id/imports/upload_file",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+              },
+              {
+                "name": "cluster_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of your cluster. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+              }
+            ]
+          },
+          "docs": "If you need to import data from a local file, you must first upload the file using this endpoint before you create an import task using the [Create an import task](#tag/Import/operation/CreateImportTask) endpoint.\n\nUploading a local file is only available for TiDB Cloud Starter instances."
+        },
+        {
+          "info": {
+            "name": "Get an import task.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1beta/projects/:project_id/clusters/:cluster_id/imports/:import_id",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+              },
+              {
+                "name": "cluster_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of your cluster. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+              },
+              {
+                "name": "import_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of your import task. You can get the import ID from the response of [List import tasks for a cluster](#tag/Project/operation/ListImportTasks)."
+              }
+            ]
+          },
+          "docs": "Get an import task."
+        },
+        {
+          "info": {
+            "name": "Update an import task.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/v1beta/projects/:project_id/clusters/:cluster_id/imports/:import_id",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+              },
+              {
+                "name": "cluster_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of your cluster. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+              },
+              {
+                "name": "import_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the import task. You can get the import ID from the response of [List import tasks for a cluster](#tag/Project/operation/ListImportTasks)."
+              }
+            ]
+          },
+          "docs": "Update an import task from a cluster. Currently, this endpoint only supports canceling the import task if the current phase of the import task is `PREPARING` or `IMPORTING`."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

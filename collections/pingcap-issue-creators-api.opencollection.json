@@ -1,0 +1,196 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "OSSInsight Public Issue Creators API",
+    "version": "v1beta"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Issue Creators",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List issue creators",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.ossinsight.io/v1/repos/:owner/:repo/issue_creators/",
+            "params": [
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Specify the field by which to sort the issue creators list (values with a `-desc` suffix indicate descending sorting)"
+              },
+              {
+                "name": "exclude_bots",
+                "value": "",
+                "type": "query",
+                "description": "Whether to exclude robot accounts (includes GitHub App and normal users whose username matches the pattern, for example: `ti-chi-bot`)."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number of the results to fetch."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The number of results per page (max 100)."
+              },
+              {
+                "name": "owner",
+                "value": "pingcap",
+                "type": "path",
+                "description": "The owner of the repo."
+              },
+              {
+                "name": "repo",
+                "value": "tidb",
+                "type": "path",
+                "description": "The name of the repo."
+              }
+            ]
+          },
+          "docs": "Querying the issue creators for a given repository."
+        },
+        {
+          "info": {
+            "name": "List countries/regions of issue creators",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.ossinsight.io/v1/repos/:owner/:repo/issue_creators/countries/",
+            "params": [
+              {
+                "name": "exclude_unknown",
+                "value": "",
+                "type": "query",
+                "description": "Whether to exclude issue creators with unknown country/region information"
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "The start date of the range."
+              },
+              {
+                "name": "to",
+                "value": "",
+                "type": "query",
+                "description": "The end date of the range."
+              },
+              {
+                "name": "owner",
+                "value": "pingcap",
+                "type": "path",
+                "description": "The owner of the repo."
+              },
+              {
+                "name": "repo",
+                "value": "tidb",
+                "type": "path",
+                "description": "The name of the repo."
+              }
+            ]
+          },
+          "docs": "List countries/regions of stargazers for the specified repository.\n  \n> **Notice**:\n> In the overall data, about **3.5%** of GitHub users provided valid country/region information.\n\n> **Note**: \n> By default, the API does not count users without valid country/region information. \n> If you need to count these users, you can set the `exclude_unknown` parameter to `false`.\n"
+        },
+        {
+          "info": {
+            "name": "Issue creators history",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.ossinsight.io/v1/repos/:owner/:repo/issue_creators/history/",
+            "params": [
+              {
+                "name": "per",
+                "value": "",
+                "type": "query",
+                "description": "The time interval of the data points."
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "The start date of the time range."
+              },
+              {
+                "name": "to",
+                "value": "",
+                "type": "query",
+                "description": "The end date of the time range."
+              },
+              {
+                "name": "owner",
+                "value": "pingcap",
+                "type": "path",
+                "description": "The owner of the repo."
+              },
+              {
+                "name": "repo",
+                "value": "tidb",
+                "type": "path",
+                "description": "The name of the repo."
+              }
+            ]
+          },
+          "docs": "Querying the historical trend of the number of issue creators in a given repository."
+        },
+        {
+          "info": {
+            "name": "List organizations of stargazers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.ossinsight.io/v1/repos/:owner/:repo/issue_creators/organizations/",
+            "params": [
+              {
+                "name": "exclude_unknown",
+                "value": "",
+                "type": "query",
+                "description": "Whether to exclude issue creators with unknown organization information"
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "The start date of the range."
+              },
+              {
+                "name": "to",
+                "value": "",
+                "type": "query",
+                "description": "The end date of the range."
+              },
+              {
+                "name": "owner",
+                "value": "pingcap",
+                "type": "path",
+                "description": "The owner of the repo."
+              },
+              {
+                "name": "repo",
+                "value": "tidb",
+                "type": "path",
+                "description": "The name of the repo."
+              }
+            ]
+          },
+          "docs": "List organizations of stargazers for the specified repository. \n\n> **Notice**:\n> In the overall data, about **5.62%** of GitHub users provided valid organization information.\n\n> **Note**: \n> By default, the API does not count users without valid organization information. \n> If you need to count these users, you can set the `exclude_unknown` parameter to `false`.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

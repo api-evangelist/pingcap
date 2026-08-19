@@ -1,0 +1,1421 @@
+openapi: 3.2.0
+info:
+  title: TiDB Cloud Dedicated Changefeed API
+  description: "*TiDB Cloud API is in beta.*\n\nThis API manages [TiDB Cloud Dedicated](https://docs.pingcap.com/tidbcloud/select-cluster-tier/#tidb-cloud-dedicated) clusters. For TiDB Cloud Starter or TiDB Cloud Essential instances, use the [TiDB Cloud Starter and Essential API](https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless). For more information about TiDB Cloud API, see [TiDB Cloud API Overview](https://docs.pingcap.com/tidbcloud/api-overview/).\n\n# Overview\n\nThe TiDB Cloud API is a [REST interface](https://en.wikipedia.org/wiki/Representational_state_transfer) that provides you with programmatic access to manage clusters and related resources within TiDB Cloud.\n\nThe API has the following features:\n\n- **JSON entities.** All entities are expressed in JSON.\n- **HTTPS-only.** You can only access the API via HTTPS, ensuring all the data sent over the network is encrypted with TLS.\n- **Key-based access and digest authentication.** Before you access TiDB Cloud API, you must generate an API key. All requests are authenticated through [HTTP Digest Authentication](https://en.wikipedia.org/wiki/Digest_access_authentication), ensuring the API key is never sent over the network.\n\n# Get Started\n\nThis guide helps you make your first API call to TiDB Cloud API. You'll learn how to authenticate a request, build a request, and interpret the response.\n\n## Prerequisites\n\nTo complete this guide, you need to perform the following tasks:\n\n- Create a [TiDB Cloud account](https://tidbcloud.com/free-trial)\n- Install [curl](https://curl.se/)\n\n## Step 1. Create an API key\n\nTo create an API key, log in to your TiDB Cloud console. Navigate to the [**API Keys**](https://tidbcloud.com/org-settings/api-keys) page of your organization, and create an API key.\n\nAn API key contains a public key and a private key. Copy and save them in a secure location. You will need to use the API key later in this guide.\n\nFor more details about creating API keys, refer to [API Key Management](#section/Authentication/API-Key-Management).\n\n## Step 2. Make your first API call\n\n### Build an API call\n\nTiDB Cloud API call consists of the following components:\n\n- **A host**. The host for TiDB Cloud API is <https://dedicated.tidbapi.com>.\n- **An API Key**. The public key and the private key are required for authentication.\n- **A request**. When submitting data to a resource via `POST`, `PATCH`, or `PUT`, you must submit your payload in JSON.\n\nIn this guide, you call the [List clusters](#tag/Cluster/operation/ClusterService_ListClusters) endpoint. For the detailed description of the endpoint, see the [API reference](#tag/Cluster/operation/ClusterService_ListClusters).\n\n### Call an API endpoint\n\nTo get all clusters in your organization, run the following command in your terminal. Remember to change `YOUR_PUBLIC_KEY` to your public key and `YOUR_PRIVATE_KEY` to your private key.\n\n```shell\ncurl --digest \\\n --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n --request GET \\\n --url 'https://dedicated.tidbapi.com/v1beta1/clusters'\n```\n\n## Step 3. Check the response\n\nAfter making the API call, if the status code in response is `200` and you see details about all clusters in your organization, your request is successful.\n\n# Authentication\n\nThe TiDB Cloud API uses [HTTP Digest Authentication](https://en.wikipedia.org/wiki/Digest_access_authentication). It protects your private key from being sent over the network. For more details about HTTP Digest Authentication, refer to the [IETF RFC](https://datatracker.ietf.org/doc/html/rfc7616).\n\n## API key overview\n\n- The API key contains a public key and a private key, which act as the username and password required in the HTTP Digest Authentication. The private key only displays upon the key creation.\n- The API key belongs to your organization and acts as the `Organization Owner` role. You can check [permissions of owner](https://docs.pingcap.com/tidbcloud/manage-user-access#configure-member-roles).\n- You must provide the correct API key in every request. Otherwise, TiDB Cloud responds with a `401` error.\n\n## API key management\n\n### Create an API key\n\nOnly the **owner** of an organization can create an API key.\n\nTo create an API key in an organization, perform the following steps:\n\n1. In the [TiDB Cloud console](https://tidbcloud.com), switch to your target organization using the combo box in the upper-left corner.\n2. In the left navigation pane, click **Organization Settings** > **API Keys**.\n3. On the **API Keys** page, click **Create API Key**.\n4. Enter a description for your API key.\n5. Configure the role and scope for the API key. For more information about the permissions of a role, see [User roles](https://docs.pingcap.com/tidbcloud/manage-user-access/#user-roles).\n6. Click **Generate API Key**. Copy and save the public key and the private key.\n7. Make sure that you have copied and saved the private key in a secure location. The private key only displays upon the creation. After leaving this page, you will not be able to get the full private key again.\n8. Click **Done**.\n\n### View details of an API key\n\nTo view details of an API key, perform the following steps:\n\n1. In the [TiDB Cloud console](https://tidbcloud.com), switch to your target organization using the combo box in the upper-left corner.\n2. In the left navigation pane, click **Organization Settings** > **API Keys**.\n3. You can view the details of the API keys on the page.\n\n### Edit an API key\n\nOnly the **owner** of an organization can modify an API key.\n\nTo edit an API key in an organization, perform the following steps:\n\n1. In the [TiDB Cloud console](https://tidbcloud.com), switch to your target organization using the combo box in the upper-left corner.\n2. In the left navigation pane, click **Organization Settings** > **API Keys**.\n3. On the **API Keys** page, click **...** in the API key row that you want to change, and then click **Update Role**.\n4. You can update the description and role of the API key.\n5. Click **Update**.\n\n### Delete an API key\n\nOnly the **owner** of an organization can delete an API key.\n\nTo delete an API key in an organization, perform the following steps:\n\n1. In the [TiDB Cloud console](https://tidbcloud.com), switch to your target organization using the combo box in the upper-left corner.\n2. In the left navigation pane, click **Organization Settings** > **API Keys**.\n3. On the **API Keys** page, click **...** in the API key row that you want to delete, and then click **Delete**.\n4. Click **I understand, delete it.**\n\n# Rate Limiting\n\nThe TiDB Cloud API allows up to 100 requests per minute per API key. If you exceed the rate limit, the API returns a `429` error. For more quota, you can [submit a request](https://support.pingcap.com/hc/en-us/requests/new?ticket_form_id=7800003722519) to contact our support team.\n\nEach API request returns the following headers about the limit.\n\n- `X-Ratelimit-Limit-Minute`: The number of requests allowed per minute. It is 100 currently.\n- `X-Ratelimit-Remaining-Minute`: The number of remaining requests in the current minute. When it reaches `0`, the API returns a `429` error and indicates that you exceed the rate limit.\n- `X-Ratelimit-Reset`: The time in seconds at which the current rate limit resets.\n\nIf you exceed the rate limit, an error response returns like this.\n\n```\n> HTTP/2 429\n> date: Fri, 22 Jul 2022 05:28:37 GMT\n> content-type: application/json\n> content-length: 66\n> x-ratelimit-reset: 23\n> x-ratelimit-remaining-minute: 0\n> x-ratelimit-limit-minute: 100\n> x-kong-response-latency: 2\n> server: kong/2.8.1\n\n> {\"details\":[],\"code\":49900007,\"message\":\"The request exceeded the limit of 100 times per apikey per minute. For more quota, please contact us: https://support.pingcap.com/hc/en-us/requests/new?ticket_form_id=7800003722519\"}\n```\n\n# API Changelog\n\nThis changelog lists all changes to the TiDB Cloud API.\n\n<!-- In reverse chronological order -->\n\n## 20260707\n\n- Introduce the following Changefeed endpoints for managing changefeeds:\n\t* [List changefeed RCU options](#tag/Changefeed/operation/ListChangefeedRCUs)\n\t* [List changefeeds](#tag/Changefeed/operation/ListChangefeeds)\n\t* [Create a changefeed](#tag/Changefeed/operation/CreateChangefeed)\n\t* [Get a changefeed](#tag/Changefeed/operation/GetChangefeed)\n\t* [Delete a changefeed](#tag/Changefeed/operation/DeleteChangefeed)\n\t* [Update a changefeed downstream config](#tag/Changefeed/operation/EditChangefeedDownstreamConfig)\n\t* [Pause a changefeed](#tag/Changefeed/operation/PauseChangefeed)\n\t* [Resume a changefeed](#tag/Changefeed/operation/ResumeChangefeed)\n\t* [Scale a changefeed](#tag/Changefeed/operation/ScaleChangefeed)\n\n## 20251028\n\n- Introduce the following TiDB Cloud Dedicated API endpoints for managing third-party monitoring integrations:\n\t* [List integrations](#tag/Integration/operation/IntegrationService_ListIntegrations)\n\t* [Create an integration](#tag/Integration/operation/IntegrationService_CreateIntegration)\n\t* [Delete an integration](#tag/Integration/operation/IntegrationService_DeleteIntegration)\n\n## 20250812\n\n- Initial release of the TiDB Cloud Dedicated API, including the following resources and endpoints:\n\t* Cluster\n\t\t* [List clusters](#tag/Cluster/operation/ClusterService_ListClusters)\n\t\t* [Create a cluster](#tag/Cluster/operation/ClusterService_CreateCluster)\n\t\t* [Get a cluster](#tag/Cluster/operation/ClusterService_GetCluster)\n\t\t* [Delete a cluster](#tag/Cluster/operation/ClusterService_DeleteCluster)\n\t\t* [Update a cluster](#tag/Cluster/operation/ClusterService_UpdateCluster)\n\t\t* [Pause a cluster](#tag/Cluster/operation/ClusterService_PauseCluster)\n\t\t* [Resume a cluster](#tag/Cluster/operation/ClusterService_ResumeCluster)\n\t\t* [Reset the root password of a cluster](#tag/Cluster/operation/ClusterService_ResetRootPassword)\n\t\t* [List node quotas for your organization](#tag/Cluster/operation/ClusterService_ShowNodeQuota)\n\t\t* [Get log redaction policy](#tag/Cluster/operation/ClusterService_GetLogRedactionPolicy)\n\t* Region\n\t\t* [List regions](#tag/Region/operation/RegionService_ListRegions)\n\t\t* [Get a region](#tag/Region/operation/RegionService_GetRegion)\n\t\t* [List cloud providers](#tag/Region/operation/RegionService_ShowCloudProviders)\n\t\t* [List node specs](#tag/Region/operation/RegionService_ListNodeSpecs)\n\t\t* [Get a node spec](#tag/Region/operation/RegionService_GetNodeSpec)\n\t* Private Endpoint Connection\n\t\t* [Get private link service for a TiDB node group](#tag/Private-Endpoint-Connection/operation/PrivateEndpointConnectionService_GetPrivateLinkService)\n\t\t* [Create a private endpoint connection](#tag/Private-Endpoint-Connection/operation/PrivateEndpointConnectionService_CreatePrivateEndpointConnection)\n\t\t* [List private endpoint connections](#tag/Private-Endpoint-Connection/operation/PrivateEndpointConnectionService_ListPrivateEndpointConnections)\n\t\t* [Get a private endpoint connection](#tag/Private-Endpoint-Connection/operation/PrivateEndpointConnectionService_GetPrivateEndpointConnection)\n\t\t* [Delete a private endpoint connection](#tag/Private-Endpoint-Connection/operation/PrivateEndpointConnectionService_DeletePrivateEndpointConnection)\n\t* Import\n\t\t* [List import tasks](#tag/Import/operation/ListImports)\n\t\t* [Create an import task](#tag/Import/operation/CreateImport)\n\t\t* [Get an import task](#tag/Import/operation/GetImport)\n\t\t* [Cancel an import task](#tag/Import/operation/CancelImport)\n\t\n"
+  version: v1beta1
+servers:
+- url: https://dedicated.tidbapi.com/v1beta1
+tags:
+- name: Changefeed
+  description: List changefeed RCU options, list changefeeds, create a changefeed, get a changefeed, delete a changefeed, update a changefeed downstream config, pause a changefeed, resume a changefeed, and scale a changefeed.
+paths:
+  /changefeedRCUs:
+    get:
+      summary: List changefeed RCU options
+      description: Lists the available changefeed RCU options that can be selected for a changefeed.
+      operationId: ListChangefeedRCUs
+      responses:
+        '200':
+          description: The list of available changefeed RCU options.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1beta1ListChangefeedRCUsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+        '400':
+          description: The request is invalid. Check the request parameters.
+        '401':
+          description: Authentication failed. Provide a valid API key.
+        '403':
+          description: You do not have permission to perform this operation.
+        '404':
+          description: The specified resource was not found.
+        '429':
+          description: You have exceeded the rate limit. Retry after the specified period.
+        '500':
+          description: An internal server error occurred. Contact support if the issue persists.
+      tags:
+      - Changefeed
+      x-code-samples:
+      - lang: curl
+        source: "curl \\\n    -X GET \\\n    'https://dedicated.tidbapi.com/v1beta1/changefeedRCUs'"
+        label: curl
+      x-codeSamples:
+      - lang: curl
+        source: curl -X GET 'https://dedicated.tidbapi.com/v1beta1/changefeedRCUs'
+  /changefeeds:
+    get:
+      summary: List changefeeds
+      description: Lists the changefeeds for a cluster. Results can be filtered by downstream type and paginated using the page token.
+      operationId: ListChangefeeds
+      responses:
+        '200':
+          description: The list of changefeeds matching the query.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1beta1ListChangefeedsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+        '400':
+          description: The request is invalid. Check the request parameters.
+        '401':
+          description: Authentication failed. Provide a valid API key.
+        '403':
+          description: You do not have permission to perform this operation.
+        '404':
+          description: The specified resource was not found.
+        '429':
+          description: You have exceeded the rate limit. Retry after the specified period.
+        '500':
+          description: An internal server error occurred. Contact support if the issue persists.
+      parameters:
+      - name: clusterId
+        description: The ID of the cluster to list changefeeds for.
+        in: query
+        required: true
+        x-example: '1234567890123'
+        schema:
+          type: string
+      - name: downstreamType
+        description: The downstream type to filter by. When not specified, returns all types.
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - DOWNSTREAM_TYPE_UNSPECIFIED
+          - KAFKA
+          - MYSQL
+          - S3
+          - GCS
+          - AZURE_BLOB
+          default: DOWNSTREAM_TYPE_UNSPECIFIED
+      - name: pageSize
+        description: The maximum number of changefeeds to return. The default value is 20.
+        in: query
+        required: false
+        x-example: 20
+        schema:
+          type: integer
+          format: int32
+      - name: pageToken
+        description: The page token from a previous ListChangefeeds response, used to retrieve the next page.
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Changefeed
+      x-code-samples:
+      - lang: curl
+        source: "curl \\\n    -X GET \\\n    'https://dedicated.tidbapi.com/v1beta1/changefeeds?clusterId=12345678901234567890'"
+        label: curl
+      x-codeSamples:
+      - lang: curl
+        source: curl -X GET 'https://dedicated.tidbapi.com/v1beta1/changefeeds?clusterId=10534137955852385357'
+    post:
+      summary: Create a changefeed
+      description: Creates a changefeed to replicate data from a TiDB cluster to a downstream system. Supports Kafka, MySQL, S3, GCS, and Azure Blob downstream types.
+      operationId: CreateChangefeed
+      responses:
+        '200':
+          description: The newly created changefeed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1beta1Changefeed'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+        '400':
+          description: The request is invalid. Check the request parameters.
+        '401':
+          description: Authentication failed. Provide a valid API key.
+        '403':
+          description: You do not have permission to perform this operation.
+        '404':
+          description: The specified resource was not found.
+        '429':
+          description: You have exceeded the rate limit. Retry after the specified period.
+        '500':
+          description: An internal server error occurred. Contact support if the issue persists.
+      tags:
+      - Changefeed
+      x-code-samples:
+      - lang: curl
+        source: "curl \\\n    -X POST \\\n    'https://dedicated.tidbapi.com/v1beta1/changefeeds' \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n  \"changefeed\": {\n    \"clusterId\": \"12345678901234567890\",\n    \"name\": \"my-changefeed-s3\",\n    \"replicationCapacity\": \"4rcu\",\n    \"downstreamType\": \"S3\",\n    \"tableConfig\": {\n      \"filterRules\": [\n        \"*.*\"\n      ],\n      \"mode\": \"IGNORE_NOT_SUPPORT_TABLE\",\n      \"caseSensitive\": true\n    },\n    \"startPosition\": {\n      \"mode\": \"FROM_NOW\"\n    },\n    \"s3\": {\n      \"endpoint\": {\n        \"s3Uri\": \"s3://bucket_name/prefix/\",\n        \"authType\": \"S3_AUTH_TYPE_AK_SK\",\n        \"accessKey\": \"YOUR_ACCESS_KEY\",\n        \"secretKey\": \"YOUR_SECRET_KEY\"\n      },\n      \"dataFormat\": {\n        \"protocol\": \"PROTOCOL_CANAL_JSON\"\n      }\n    }\n  },\n  \"dryRun\": false\n}'"
+        label: curl for s3
+      - lang: curl
+        source: "curl \\\n    -X POST \\\n    'https://dedicated.tidbapi.com/v1beta1/changefeeds' \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n  \"changefeed\": {\n    \"clusterId\": \"12345678901234567890\",\n    \"name\": \"my-changefeed-mysql\",\n    \"replicationCapacity\": \"4rcu\",\n    \"downstreamType\": \"MYSQL\",\n    \"tableConfig\": {\n      \"filterRules\": [\n        \"*.*\"\n      ],\n      \"mode\": \"IGNORE_NOT_SUPPORT_TABLE\",\n      \"caseSensitive\": true\n    },\n    \"startPosition\": {\n      \"mode\": \"FROM_NOW\"\n    },\n    \"mysql\": {\n      \"connection\": {\n        \"endpoint\": \"your-mysql-host.example.com:3306\",\n        \"username\": \"your_db_user\",\n        \"password\": \"YOUR_DB_PASSWORD\"\n      }\n    }\n  },\n  \"dryRun\": false\n}'"
+        label: curl for mysql
+      - lang: curl
+        source: "curl \\\n    -X POST \\\n    'https://dedicated.tidbapi.com/v1beta1/changefeeds' \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n  \"changefeed\": {\n    \"clusterId\": \"12345678901234567890\",\n    \"name\": \"my-changefeed-kafka\",\n    \"replicationCapacity\": \"4rcu\",\n    \"downstreamType\": \"KAFKA\",\n    \"tableConfig\": {\n      \"filterRules\": [\n        \"*.*\"\n      ],\n      \"mode\": \"IGNORE_NOT_SUPPORT_TABLE\",\n      \"caseSensitive\": true\n    },\n    \"startPosition\": {\n      \"mode\": \"FROM_NOW\"\n    },\n    \"kafka\": {\n      \"broker\": {\n        \"version\": \"KAFKA_VERSION_2XX\",\n        \"brokerEndpoints\": \"your-kafka-broker.example.com:9094\"\n      },\n      \"authentication\": {\n        \"authType\": \"DISABLE\"\n      },\n      \"dataFormat\": {\n        \"protocol\": \"PROTOCOL_CANAL_JSON\"\n      },\n      \"topicPartitionConfig\": {\n        \"dispatchType\": \"DISPATCH_TYPE_ONE_TOPIC\",\n        \"defaultTopic\": \"cdc-events\",\n        \"replicationFactor\": 1,\n        \"partitionNum\": 6\n      }\n    }\n  },\n  \"dryRun\": false\n}'"
+        label: curl for kafka
+      x-codeSamples:
+      - lang: curl
+        label: curl (S3)
+        source: "curl -X POST 'https://dedicated.tidbapi.com/v1beta1/changefeeds' -d '{\n  \"changefeed\": {\n    \"clusterId\": \"10449877348102958363\",\n    \"name\": \"my-changefeed-s3-aksk-02\",\n    \"replicationCapacity\": \"4rcu\",\n    \"downstreamType\": \"S3\",\n    \"tableConfig\": {\n      \"filterRules\": [\n        \"*.*\"\n      ],\n      \"mode\": \"IGNORE_NOT_SUPPORT_TABLE\",\n      \"caseSensitive\": true\n    },\n    \"startPosition\": {\n      \"mode\": \"FROM_NOW\"\n    },\n    \"s3\": {\n      \"endpoint\": {\n        \"s3Uri\": \"s3://ticdc-test/cdc-api/s3-aksk-02/\",\n        \"authType\": \"S3_AUTH_TYPE_AK_SK\",\n        \"accessKey\": \"AKIA*******************\",\n        \"secretKey\": \"********************************\"\n      },\n      \"dataFormat\": {\n        \"protocol\": \"PROTOCOL_CANAL_JSON\"\n      }\n    }\n  },\n  \"dryRun\": false\n}'"
+      - lang: curl
+        label: curl (MySQL)
+        source: "curl -X POST 'https://dedicated.tidbapi.com/v1beta1/changefeeds' -d '{\n  \"changefeed\": {\n    \"clusterId\": \"10534137955852385357\",\n    \"name\": \"my-changefeed-mysql-public\",\n    \"replicationCapacity\": \"2rcu\",\n    \"downstreamType\": \"MYSQL\",\n    \"tableConfig\": {\n      \"filterRules\": [\n        \"*.*\"\n      ],\n      \"mode\": \"IGNORE_NOT_SUPPORT_TABLE\",\n      \"caseSensitive\": true\n    },\n    \"startPosition\": {\n      \"mode\": \"FROM_NOW\"\n    },\n    \"mysql\": {\n      \"connection\": {\n        \"endpoint\": \"127.0.0.1:3306\",\n        \"username\": \"********\",\n        \"password\": \"********\"\n      }\n    }\n  },\n  \"dryRun\": false\n}'"
+      - lang: curl
+        label: curl (Kafka)
+        source: "curl -X POST 'https://dedicated.tidbapi.com/v1beta1/changefeeds' -d '{\n  \"changefeed\": {\n    \"clusterId\": \"10449877348102958363\",\n    \"name\": \"my-changefeed-kafka-public\",\n    \"replicationCapacity\": \"2rcu\",\n    \"downstreamType\": \"KAFKA\",\n    \"tableConfig\": {\n      \"filterRules\": [\n        \"*.*\"\n      ],\n      \"mode\": \"IGNORE_NOT_SUPPORT_TABLE\",\n      \"caseSensitive\": true\n    },\n    \"startPosition\": {\n      \"mode\": \"FROM_NOW\"\n    },\n    \"kafka\": {\n      \"broker\": {\n        \"version\": \"KAFKA_VERSION_2XX\",\n        \"brokerEndpoints\": \"0.0.0.0:9094\"\n      },\n      \"authentication\": {\n        \"authType\": \"DISABLE\"\n      },\n      \"dataFormat\": {\n        \"protocol\": \"PROTOCOL_CANAL_JSON\"\n      },\n      \"topicPartitionConfig\": {\n        \"dispatchType\": \"DISPATCH_TYPE_ONE_TOPIC\",\n        \"defaultTopic\": \"cdc-events\",\n        \"replicationFactor\": 1,\n        \"partitionNum\": 6\n      }\n    }\n  },\n  \"dryRun\": false\n}'"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/v1beta1CreateChangefeedRequest'
+        description: The request for creating a changefeed.
+        required: true
+  /changefeeds/{changefeedId}:
+    get:
+      summary: Get a changefeed
+      description: Gets the details of a changefeed by its ID, including its state, configuration, and checkpoint information.
+      operationId: GetChangefeed
+      responses:
+        '200':
+          description: The changefeed details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1beta1Changefeed'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+        '400':
+          description: The request is invalid. Check the request parameters.
+        '401':
+          description: Authentication failed. Provide a valid API key.
+        '403':
+          description: You do not have permission to perform this operation.
+        '404':
+          description: The specified resource was not found.
+        '429':
+          description: You have exceeded the rate limit. Retry after the specified period.
+        '500':
+          description: An internal server error occurred. Contact support if the issue persists.
+      parameters:
+      - name: changefeedId
+        description: The ID of the changefeed to retrieve.
+        in: path
+        required: true
+        x-example: cf-12345
+        schema:
+          type: string
+      - name: invalidateCache
+        description: Indicates whether to bypass the cache and return the real-time checkpoint information.
+        in: query
+        required: false
+        schema:
+          type: boolean
+      tags:
+      - Changefeed
+      x-code-samples:
+      - lang: curl
+        source: "curl \\\n    -X GET \\\n    'https://dedicated.tidbapi.com/v1beta1/changefeeds/1234567890123456789'"
+        label: curl
+      x-codeSamples:
+      - lang: curl
+        source: curl -X GET 'https://dedicated.tidbapi.com/v1beta1/changefeeds/2068955910051614720'
+    delete:
+      summary: Delete a changefeed
+      description: Deletes a changefeed by its ID. This operation cannot be undone. The changefeed must be in a deletable state.
+      operationId: DeleteChangefeed
+      responses:
+        '200':
+          description: The empty response indicating successful deletion.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+        '400':
+          description: The request is invalid. Check the request parameters.
+        '401':
+          description: Authentication failed. Provide a valid API key.
+        '403':
+          description: You do not have permission to perform this operation.
+        '404':
+          description: The specified resource was not found.
+        '429':
+          description: You have exceeded the rate limit. Retry after the specified period.
+        '500':
+          description: An internal server error occurred. Contact support if the issue persists.
+      parameters:
+      - name: changefeedId
+        description: The ID of the changefeed to delete.
+        in: path
+        required: true
+        x-example: cf-12345
+        schema:
+          type: string
+      tags:
+      - Changefeed
+      x-code-samples:
+      - lang: curl
+        source: "curl \\\n    -X DELETE \\\n    'https://dedicated.tidbapi.com/v1beta1/changefeeds/1234567890123456789'"
+        label: curl
+      x-codeSamples:
+      - lang: curl
+        source: curl -X DELETE 'https://dedicated.tidbapi.com/v1beta1/changefeeds/2068955910051614720'
+  /changefeeds/{changefeedId}:editDownstreamConfig:
+    post:
+      summary: Update a changefeed downstream config
+      description: Updates the mutable configuration of an existing changefeed. The changefeed must be in the PAUSED state.
+      operationId: EditChangefeedDownstreamConfig
+      responses:
+        '200':
+          description: The updated changefeed configuration.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1beta1Changefeed'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+        '400':
+          description: The request is invalid. Check the request parameters.
+        '401':
+          description: Authentication failed. Provide a valid API key.
+        '403':
+          description: You do not have permission to perform this operation.
+        '404':
+          description: The specified resource was not found.
+        '429':
+          description: You have exceeded the rate limit. Retry after the specified period.
+        '500':
+          description: An internal server error occurred. Contact support if the issue persists.
+      parameters:
+      - name: changefeedId
+        description: The ID of the changefeed to update.
+        in: path
+        required: true
+        x-example: cf-12345
+        schema:
+          type: string
+      tags:
+      - Changefeed
+      x-code-samples:
+      - lang: curl
+        source: "curl \\\n    -X POST \\\n    'https://dedicated.tidbapi.com/v1beta1/changefeeds/1234567890123456789:editDownstreamConfig' \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n  \"downstreamType\": \"S3\",\n  \"tableConfig\": {\n    \"filterRules\": [\n      \"test.*\"\n    ],\n    \"mode\": \"IGNORE_NOT_SUPPORT_TABLE\",\n    \"caseSensitive\": true\n  },\n  \"dryRun\": false\n}'"
+        label: curl
+      x-codeSamples:
+      - lang: curl
+        source: "curl -X POST 'https://dedicated.tidbapi.com/v1beta1/changefeeds/2068955910051614720:editDownstreamConfig' -d '{\n  \"downstreamType\": \"S3\",\n  \"tableConfig\": {\n    \"filterRules\": [\n      \"test.*\"\n    ],\n    \"mode\": \"IGNORE_NOT_SUPPORT_TABLE\",\n    \"caseSensitive\": true\n  },\n  \"dryRun\": false\n}'"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                dryRun:
+                  type: boolean
+                  example: true
+                  description: Indicates whether to run dry-run validation only without applying the update.
+                tableConfig:
+                  description: The updated table filtering and event filter configuration.
+                  allOf:
+                  - $ref: '#/components/schemas/v1beta1TableConfig'
+                downstreamType:
+                  $ref: '#/components/schemas/v1beta1DownstreamType'
+                kafka:
+                  description: The updated Kafka downstream configuration.
+                  allOf:
+                  - $ref: '#/components/schemas/v1beta1KafkaDownstreamConfig'
+                mysql:
+                  description: The updated MySQL downstream configuration.
+                  allOf:
+                  - $ref: '#/components/schemas/v1beta1MySQLDownstreamConfig'
+                s3:
+                  description: The updated S3 downstream configuration.
+                  allOf:
+                  - $ref: '#/components/schemas/v1beta1S3DownstreamConfig'
+                gcs:
+                  description: The updated GCS downstream configuration.
+                  allOf:
+                  - $ref: '#/components/schemas/v1beta1GcsDownstreamConfig'
+                azureBlob:
+                  description: The updated Azure Blob downstream configuration.
+                  allOf:
+                  - $ref: '#/components/schemas/v1beta1AzureBlobDownstreamConfig'
+              description: The request for updating a changefeed downstream configuration.
+              required:
+              - downstreamType
+        description: The request for updating a changefeed downstream configuration.
+        required: true
+  /changefeeds/{changefeedId}:pause:
+    post:
+      summary: Pause a changefeed
+      description: Pauses a running changefeed. While paused, the changefeed stops replicating data but retains its configuration and checkpoint.
+      operationId: PauseChangefeed
+      responses:
+        '200':
+          description: The empty response indicating the changefeed is pausing.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+        '400':
+          description: The request is invalid. Check the request parameters.
+        '401':
+          description: Authentication failed. Provide a valid API key.
+        '403':
+          description: You do not have permission to perform this operation.
+        '404':
+          description: The specified resource was not found.
+        '429':
+          description: You have exceeded the rate limit. Retry after the specified period.
+        '500':
+          description: An internal server error occurred. Contact support if the issue persists.
+      parameters:
+      - name: changefeedId
+        description: The ID of the changefeed to pause.
+        in: path
+        required: true
+        x-example: cf-12345
+        schema:
+          type: string
+      tags:
+      - Changefeed
+      x-code-samples:
+      - lang: curl
+        source: "curl \\\n    -X POST \\\n    'https://dedicated.tidbapi.com/v1beta1/changefeeds/1234567890123456789:pause' \\\n    -H 'Content-Type: application/json' \\\n    -d '{ }'"
+        label: curl
+      x-codeSamples:
+      - lang: curl
+        source: curl -X POST 'https://dedicated.tidbapi.com/v1beta1/changefeeds/2068955910051614720:pause' -d '{ }'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              description: The request for pausing a changefeed.
+        description: The request for pausing a changefeed.
+        required: true
+  /changefeeds/{changefeedId}:resume:
+    post:
+      summary: Resume a changefeed
+      description: Resumes a paused changefeed. The changefeed continues replicating data from its last checkpoint.
+      operationId: ResumeChangefeed
+      responses:
+        '200':
+          description: The empty response indicating the changefeed is resuming.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+        '400':
+          description: The request is invalid. Check the request parameters.
+        '401':
+          description: Authentication failed. Provide a valid API key.
+        '403':
+          description: You do not have permission to perform this operation.
+        '404':
+          description: The specified resource was not found.
+        '429':
+          description: You have exceeded the rate limit. Retry after the specified period.
+        '500':
+          description: An internal server error occurred. Contact support if the issue persists.
+      parameters:
+      - name: changefeedId
+        description: The ID of the changefeed to resume.
+        in: path
+        required: true
+        x-example: cf-12345
+        schema:
+          type: string
+      tags:
+      - Changefeed
+      x-code-samples:
+      - lang: curl
+        source: "curl \\\n    -X POST \\\n    'https://dedicated.tidbapi.com/v1beta1/changefeeds/1234567890123456789:resume' \\\n    -H 'Content-Type: application/json' \\\n    -d '{ }'"
+        label: curl
+      x-codeSamples:
+      - lang: curl
+        source: curl -X POST 'https://dedicated.tidbapi.com/v1beta1/changefeeds/2068955910051614720:resume' -d '{ }'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              description: The request for resuming a changefeed.
+        description: The request for resuming a changefeed.
+        required: true
+  /changefeeds/{changefeedId}:scale:
+    post:
+      summary: Scale a changefeed
+      description: Scales a changefeed to a different replication capacity (RCU). The new capacity takes effect after the operation completes.
+      operationId: ScaleChangefeed
+      responses:
+        '200':
+          description: The updated changefeed with the new replication capacity.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1beta1Changefeed'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+        '400':
+          description: The request is invalid. Check the request parameters.
+        '401':
+          description: Authentication failed. Provide a valid API key.
+        '403':
+          description: You do not have permission to perform this operation.
+        '404':
+          description: The specified resource was not found.
+        '429':
+          description: You have exceeded the rate limit. Retry after the specified period.
+        '500':
+          description: An internal server error occurred. Contact support if the issue persists.
+      parameters:
+      - name: changefeedId
+        description: The ID of the changefeed to scale.
+        in: path
+        required: true
+        x-example: cf-12345
+        schema:
+          type: string
+      tags:
+      - Changefeed
+      x-code-samples:
+      - lang: curl
+        source: "curl \\\n    -X POST \\\n    'https://dedicated.tidbapi.com/v1beta1/changefeeds/1234567890123456789:scale' \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n  \"replicationCapacity\": \"4rcu\"\n}'"
+        label: curl
+      x-codeSamples:
+      - lang: curl
+        source: "curl -X POST 'https://dedicated.tidbapi.com/v1beta1/changefeeds/2068955910051614720:scale' -d '{\n  \"replicationCapacity\": \"2rcu\"\n}'"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                replicationCapacity:
+                  type: string
+                  example: 8rcu
+                  description: The target replication capacity (RCU) to scale to. Call ListChangefeedRCUs to get the available RCU options.
+              description: The request for scaling a changefeed.
+              required:
+              - replicationCapacity
+        description: The request for scaling a changefeed.
+        required: true
+components:
+  schemas:
+    KafkaDownstreamConfigBroker:
+      type: object
+      properties:
+        version:
+          example: KAFKA_VERSION_3XX
+          allOf:
+          - $ref: '#/components/schemas/KafkaDownstreamConfigKafkaVersion'
+        brokerEndpoints:
+          type: string
+          example: broker1:9092,broker2:9092
+          description: The comma-separated list of Kafka broker addresses. Required for PUBLIC and VPC_PEERING network types. Not required for PRIVATE_LINK.
+        useTls:
+          type: boolean
+          description: Indicates whether to use TLS for the Kafka connection. The default value is false.
+          example: false
+        insecureSkipVerify:
+          type: boolean
+          description: Indicates whether to skip TLS certificate verification. The default value is false.
+          example: false
+        compression:
+          example: NONE
+          allOf:
+          - $ref: '#/components/schemas/KafkaDownstreamConfigCompressionType'
+      description: The Kafka broker connection configuration.
+      required:
+      - version
+    S3DataFormatBinaryEncodingMethod:
+      type: string
+      enum:
+      - BINARY_ENCODING_METHOD_UNSPECIFIED
+      - BASE64
+      - HEX
+      default: BINARY_ENCODING_METHOD_UNSPECIFIED
+      description: "The binary encoding method.\n\n - `BASE64`: Base64 encoding.\n - `HEX`: Hexadecimal encoding."
+    v1beta1ChangefeedRCU:
+      type: object
+      properties:
+        name:
+          type: string
+          example: 4rcu
+          description: The name of the RCU option.
+          readOnly: true
+        displayName:
+          type: string
+          example: 4 RCUs
+          description: The human-readable display name of the RCU option.
+          readOnly: true
+        rcuNum:
+          type: integer
+          format: int64
+          example: 4
+          description: The number of RCUs (Resource Capacity Units).
+          readOnly: true
+        rpsLimit:
+          type: integer
+          format: int64
+          example: 10000
+          description: The maximum rows per second for the RCU option. This value is for reference only and may vary by workload.
+          readOnly: true
+      description: The changefeed RCU option.
+    v1beta1MySQLDownstreamConfig:
+      type: object
+      properties:
+        connection:
+          $ref: '#/components/schemas/v1beta1Connection'
+      description: The MySQL downstream configuration.
+      required:
+      - connection
+    v1beta1S3DownstreamConfigEndpoint:
+      type: object
+      properties:
+        s3Uri:
+          type: string
+          example: s3://bucket/prefix/
+          description: The S3 bucket URI. For example, `s3://bucket/prefix/`. The URI must end with a trailing slash.
+        authType:
+          example: S3_AUTH_TYPE_AK_SK
+          allOf:
+          - $ref: '#/components/schemas/EndpointS3AuthType'
+        accessKey:
+          type: string
+          description: The access key for S3 authentication. This field is required when authType is S3_AUTH_TYPE_AK_SK.
+          example: AKIA...A1B2C3
+        secretKey:
+          type: string
+          description: The secret key for S3 authentication. This field is required when authType is S3_AUTH_TYPE_AK_SK. This field is input-only and not returned in responses.
+          example: A1B2C3...
+        iamAssumedRoleArn:
+          type: string
+          description: The IAM assumed role ARN for S3 authentication. This field is required when authType is S3_AUTH_TYPE_ASSUME_ROLE.
+          example: arn:aws:iam::123456789012:role/redacted
+      description: The S3 endpoint configuration.
+      required:
+      - s3Uri
+      - authType
+    v1beta1CreateChangefeedRequest:
+      type: object
+      properties:
+        changefeed:
+          allOf:
+          - $ref: '#/components/schemas/v1beta1Changefeed'
+          description: The changefeed configuration to create.
+        dryRun:
+          type: boolean
+          example: true
+          description: Indicates whether to run dry-run validation only without creating the changefeed.
+      description: The request for creating a changefeed.
+      required:
+      - changefeed
+    v1beta1S3DownstreamConfig:
+      type: object
+      properties:
+        endpoint:
+          $ref: '#/components/schemas/v1beta1S3DownstreamConfigEndpoint'
+        dataFormat:
+          $ref: '#/components/schemas/v1beta1S3DataFormat'
+        storageFlushConfig:
+          $ref: '#/components/schemas/v1beta1StorageFlushConfig'
+      description: The S3 downstream configuration.
+      required:
+      - endpoint
+      - dataFormat
+    v1beta1StorageFlushConfig:
+      type: object
+      properties:
+        interval:
+          type: string
+          example: 1m
+          description: The flush interval. The range is from 2s to 10m. The default value is 1m.
+        fileSize:
+          type: string
+          format: uint64
+          example: '67108864'
+          description: The file size threshold in bytes. The range is from 1048576 (1 MB) to 536870912 (512 MB). The default value is 67108864 (64 MB).
+          maximum: 536870912
+          minimum: 1048576
+      description: The storage flush configuration.
+    v1beta1GcsDownstreamConfigEndpoint:
+      type: object
+      properties:
+        gcsUri:
+          type: string
+          example: gs://my-bucket/cdc-data
+          description: The GCS bucket URI. For example, `gs://my-bucket/cdc-data`.
+      description: The GCS endpoint configuration.
+      required:
+      - gcsUri
+    KafkaDownstreamConfigAuthentication:
+      type: object
+      properties:
+        authType:
+          example: SASL_SCRAM_SHA_256
+          allOf:
+          - $ref: '#/components/schemas/AuthenticationAuthType'
+        username:
+          type: string
+          description: The SASL username for Kafka authentication.
+        password:
+          type: string
+          description: The SASL password for Kafka authentication.
+      description: The Kafka authentication configuration.
+      required:
+      - authType
+    AvroConfigDecimalHandlingMode:
+      type: string
+      enum:
+      - DECIMAL_HANDLING_MODE_UNSPECIFIED
+      - DECIMAL_HANDLING_MODE_PRECISE
+      - DECIMAL_HANDLING_MODE_STRING
+      default: DECIMAL_HANDLING_MODE_UNSPECIFIED
+      description: "The decimal serialization mode.\n\n - `DECIMAL_HANDLING_MODE_PRECISE`: Use precise decimal representation.\n - `DECIMAL_HANDLING_MODE_STRING`: Use string representation."
+    AvroConfigBigintUnsignedHandlingMode:
+      type: string
+      enum:
+      - BIGINT_UNSIGNED_HANDLING_MODE_LONG
+      - BIGINT_UNSIGNED_HANDLING_MODE_STRING
+      default: BIGINT_UNSIGNED_HANDLING_MODE_LONG
+      description: "The handling mode for BIGINT UNSIGNED values.\n\n - `BIGINT_UNSIGNED_HANDLING_MODE_LONG`: Use 64-bit integer (may overflow for very large values).\n - `BIGINT_UNSIGNED_HANDLING_MODE_STRING`: Use string representation (safe for all values)."
+    TopicPartitionConfigPartitionDispatcherConfig:
+      type: object
+      properties:
+        partitionType:
+          example: TABLE
+          allOf:
+          - $ref: '#/components/schemas/TopicPartitionConfigPartitionDispatcher'
+        matcher:
+          type: array
+          items:
+            type: string
+          description: The table name patterns to match for the dispatcher.
+        indexName:
+          type: string
+          description: The index name for the INDEX_VALUE partition dispatcher.
+        columns:
+          type: array
+          items:
+            type: string
+          description: The column names for the COLUMNS partition dispatcher.
+      description: The custom partition dispatcher configuration.
+      required:
+      - partitionType
+    v1beta1TableConfig:
+      type: object
+      properties:
+        filterRules:
+          type: array
+          items:
+            type: string
+          description: The table filter rules. Uses the TiCDC table filter syntax.
+        mode:
+          example: IGNORE_NOT_SUPPORT_TABLE
+          allOf:
+          - $ref: '#/components/schemas/v1beta1TableConfigMode'
+        caseSensitive:
+          type: boolean
+          description: Indicates whether the filter rules are case-sensitive.
+        eventFilters:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1beta1EventFilter'
+          description: The event filter rules for fine-grained control.
+      description: The table filtering and event filter configuration.
+    NetworkInfoNetworkType:
+      type: string
+      enum:
+      - NETWORK_TYPE_UNSPECIFIED
+      - NETWORK_TYPE_PUBLIC
+      - NETWORK_TYPE_VPC_PEERING
+      - NETWORK_TYPE_PRIVATE_LINK
+      default: NETWORK_TYPE_UNSPECIFIED
+      description: "The network type for downstream connectivity.\n\n - `NETWORK_TYPE_UNSPECIFIED`: Default value.\n - `NETWORK_TYPE_PUBLIC`: Public internet access.\n - `NETWORK_TYPE_VPC_PEERING`: AWS VPC Peering.\n - `NETWORK_TYPE_PRIVATE_LINK`: Private endpoint connectivity managed by TiDB Cloud."
+    v1beta1ListChangefeedRCUsResponse:
+      type: object
+      properties:
+        rcus:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1beta1ChangefeedRCU'
+          description: The list of available RCU options.
+          readOnly: true
+      description: The response for listing changefeed RCU options.
+    v1beta1TableConfigMode:
+      type: string
+      enum:
+      - MODE_UNSPECIFIED
+      - IGNORE_NOT_SUPPORT_TABLE
+      - FORCE_SYNC
+      default: MODE_UNSPECIFIED
+      description: "The mode for handling unsupported tables.\n\n - `IGNORE_NOT_SUPPORT_TABLE`: Skip unsupported tables silently.\n - `FORCE_SYNC`: Force sync all tables (may fail on unsupported tables)."
+    v1beta1S3DataFormat:
+      type: object
+      properties:
+        protocol:
+          example: PROTOCOL_CANAL_JSON
+          allOf:
+          - $ref: '#/components/schemas/v1beta1S3DataFormatProtocol'
+        terminator:
+          type: string
+          description: The row terminator used to separate data change events. This configuration is only used for storage sinks. The default value is "" (empty string), which means `\r\n` is used.
+        dateSeparator:
+          description: 'The date separator for the directory structure.
+
+
+            - `NONE`: No date separator (default).
+
+            - `YEAR`: Separate by year.
+
+            - `MONTH`: Separate by month.
+
+            - `DAY`: Separate by day.'
+          example: DAY
+          allOf:
+          - $ref: '#/components/schemas/S3DataFormatDateSeparator'
+        enableTidbExtension:
+          type: boolean
+          description: Indicates whether to enable TiDB extension fields in Canal-JSON messages. The default value is false.
+          example: false
+        delimiter:
+          type: string
+          description: The field delimiter for CSV files. The value must be an ASCII character. The default value is `,`.
+        quote:
+          type: string
+          description: The quotation character for CSV fields. The default value is `"`. When the value is empty, no quotation is used.
+        'null':
+          type: string
+          description: The null representation for CSV columns. The default value is `\N`.
+        includeCommitTs:
+          type: boolean
+          description: Indicates whether to include the commit timestamp in CSV rows. The default value is false.
+          example: false
+        binaryEncodingMethod:
+          example: BASE64
+          allOf:
+          - $ref: '#/components/schemas/S3DataFormatBinaryEncodingMethod'
+        outputRawChangeEvent:
+          type: boolean
+          description: Indicates whether to output raw change events. The default value is false. For more information, see https://docs.pingcap.com/tidb/stable/ticdc-split-update-behavior/#split-update-events-for-mysql-sinks.
+          example: false
+        outputFieldHeader:
+          type: boolean
+          description: Indicates whether to include the CSV field header. The default value is false.
+          example: false
+      description: The S3 data format configuration.
+      required:
+      - protocol
+    v1beta1S3DataFormatProtocol:
+      type: string
+      enum:
+      - PROTOCOL_UNSPECIFIED
+      - PROTOCOL_CSV
+      - PROTOCOL_CANAL_JSON
+      - PROTOCOL_PARQUET
+      default: PROTOCOL_UNSPECIFIED
+      description: "Protocol defines the supported output protocols for cloud storage sinks.\n\n - PROTOCOL_CSV: CSV format.\n - PROTOCOL_CANAL_JSON: Canal JSON format.\n - PROTOCOL_PARQUET: Apache Parquet format."
+    v1beta1StartPositionMode:
+      type: string
+      enum:
+      - MODE_UNSPECIFIED
+      - FROM_NOW
+      - FROM_TSO
+      - FROM_UTC
+      default: MODE_UNSPECIFIED
+      description: "The start position mode.\n\n - `FROM_NOW`: Start from the current time.\n - `FROM_TSO`: Start from a specific TSO.\n - `FROM_UTC`: Start from a specific UTC timestamp."
+    KafkaDownstreamConfigDataFormat:
+      type: object
+      properties:
+        protocol:
+          example: PROTOCOL_CANAL_JSON
+          allOf:
+          - $ref: '#/components/schemas/KafkaDownstreamConfigDataFormatProtocol'
+        debeziumConfig:
+          $ref: '#/components/schemas/DataFormatDebeziumConfig'
+        avroConfig:
+          $ref: '#/components/schemas/DataFormatAvroConfig'
+        enableTidbExtension:
+          type: boolean
+          description: Indicates whether to enable TiDB extension fields. The default value is false. For more information, see https://docs.pingcap.com/tidb/stable/ticdc-avro-protocol/#tidb-extension-fields.
+          example: false
+        outputRawChangeEvent:
+          type: boolean
+          description: Indicates whether to output raw change events. The default value is false. For more information, see https://docs.pingcap.com/tidb/stable/ticdc-split-update-behavior/#split-update-events-for-mysql-sinks.
+          example: false
+      description: The Kafka message format and serialization configuration.
+      required:
+      - protocol
+    protobufAny:
+      type: object
+      properties:
+        '@type':
+          type: string
+          description: A URL or resource name that uniquely identifies the type of the serialized protocol buffer message.
+      additionalProperties: {}
+      description: "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n    // or ...\n    if (any.isSameTypeAs(Foo.getDefaultInstance())) {\n      foo = any.unpack(Foo.getDefaultInstance());\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := anypb.New(foo)\n     if err != nil {\n       ...\n     }\n     ...\n     foo := &pb.Foo{}\n     if err := any.UnmarshalTo(foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
+    KafkaDownstreamConfigColumnSelector:
+      type: object
+      properties:
+        matcher:
+          type: array
+          items:
+            type: string
+          description: The table name patterns to match for column selection.
+        columns:
+          type: array
+          items:
+            type: string
+          description: The column names to include for the matched tables.
+      description: The column filtering configuration for specific tables.
+    v1beta1EventFilter:
+      type: object
+      properties:
+        tableMatchers:
+          type: array
+          example:
+          - mydb.orders
+          - mydb.user_*
+          items:
+            type: string
+          description: The table name patterns to match. Uses the same syntax as TiCDC table filter. Supports wildcards. Matches database name, so be careful with database-level DDLs.
+        ignoredEvents:
+          type: array
+          example:
+          - insert
+          - delete
+          - alter table
+          items:
+            type: string
+          description: The event types to ignore.
+        ignoredSqlStatements:
+          type: array
+          example:
+          - ^drop
+          - add column
+          items:
+            type: string
+          description: The SQL statement patterns to ignore. Only applies to DDL statements. Supports regular expressions.
+        ignoredInsertValueExpression:
+          type: string
+          example: status = 'deleted'
+          description: The SQL expression to filter INSERT events by column value. Uses SQL expressions in default SQL mode. All tables matched by `table_matchers` must contain all columns referenced.
+        ignoredUpdateOldValueExpression:
+          type: string
+          example: status = 'archived'
+          description: The SQL expression to filter UPDATE events by the old column value. Uses SQL expressions in default SQL mode. All tables matched by `table_matchers` must contain all columns referenced.
+        ignoredUpdateNewValueExpression:
+          type: string
+          example: status = 'deleted'
+          description: The SQL expression to filter UPDATE events by the new column value. Uses SQL expressions in default SQL mode. All tables matched by `table_matchers` must contain all columns referenced.
+        ignoredDeleteValueExpression:
+          type: string
+          example: soft_delete = true
+          description: The SQL expression to filter DELETE events by column value. Uses SQL expressions in default SQL mode. All tables matched by `table_matchers` must contain all columns referenced.
+      description: The event filter configuration for fine-grained control.
+    v1beta1DownstreamType:
+      type: string
+      enum:
+      - DOWNSTREAM_TYPE_UNSPECIFIED
+      - KAFKA
+      - MYSQL
+      - S3
+      - GCS
+      - AZURE_BLOB
+      default: DOWNSTREAM_TYPE_UNSPECIFIED
+      description: "The downstream type for a changefeed.\n\n - `KAFKA`: Apache Kafka.\n - `MYSQL`: MySQL-compatible database.\n - `S3`: Amazon S3 or S3-compatible storage.\n - `GCS`: Google Cloud Storage.\n - `AZURE_BLOB`: Azure Blob Storage."
+    ChangefeedState:
+      type: string
+      enum:
+      - STATE_UNSPECIFIED
+      - RUNNING
+      - FAILED
+      - ERROR
+      - CREATING
+      - PAUSING
+      - PAUSED
+      - DELETING
+      - DELETED
+      - EDITING
+      - WARNING
+      - SCALING
+      default: STATE_UNSPECIFIED
+      description: 'The state of a changefeed.
+
+
+        - `STATE_UNSPECIFIED`: Default value. Should not be used.
+
+        - `RUNNING`: The changefeed is actively replicating data.
+
+        - `FAILED`: The changefeed encountered a fatal error and stopped.
+
+        - `ERROR`: The changefeed encountered an error but may recover.
+
+        - `CREATING`: The changefeed is being created.
+
+        - `PAUSING`: The changefeed is in the process of pausing.
+
+        - `PAUSED`: The changefeed is paused.
+
+        - `DELETING`: The changefeed is being deleted.
+
+        - `DELETED`: The changefeed has been deleted.
+
+        - `EDITING`: The changefeed configuration is being updated.
+
+        - `WARNING`: The changefeed is running but has warnings.
+
+        - `SCALING`: The changefeed is being scaled.'
+    TopicPartitionConfigPartitionDispatcher:
+      type: string
+      enum:
+      - PARTITION_DISPATCHER_UNSPECIFIED
+      - TABLE
+      - INDEX_VALUE
+      - Timestamp
+      - COLUMNS
+      default: PARTITION_DISPATCHER_UNSPECIFIED
+      description: "The partition dispatch strategy.\n\n - `TABLE`: Dispatch by table name.\n - `INDEX_VALUE`: Dispatch by index value.\n - `Timestamp`: Dispatch by timestamp.\n - `COLUMNS`: Dispatch by column values."
+    S3DataFormatDateSeparator:
+      type: string
+      enum:
+      - DATE_SEPARATOR_UNSPECIFIED
+      - NONE
+      - YEAR
+      - MONTH
+      - DAY
+      default: DATE_SEPARATOR_UNSPECIFIED
+      description: "The date separator for the directory structure.\n\n - `NONE`: No date separator.\n - `YEAR`: Separate by year.\n - `MONTH`: Separate by month.\n - `DAY`: Separate by day."
+    DataFormatAvroConfig:
+      type: object
+      properties:
+        decimalHandlingMode:
+          example: DECIMAL_HANDLING_MODE_PRECISE
+          allOf:
+          - $ref: '#/components/schemas/AvroConfigDecimalHandlingMode'
+        bigintUnsignedHandlingMode:
+          example: BIGINT_UNSIGNED_HANDLING_MODE_STRING
+          allOf:
+          - $ref: '#/components/schemas/AvroConfigBigintUnsignedHandlingMode'
+        schemaRegistry:
+          $ref: '#/components/schemas/AvroConfigSchemaRegistry'
+      description: The Avro-specific data format configuration.
+    v1beta1KafkaDownstreamConfig:
+      type: object
+      properties:
+        broker:
+          $ref: '#/components/schemas/KafkaDownstreamConfigBroker'
+        authentication:
+          $ref: '#/components/schemas/KafkaDownstreamConfigAuthentication'
+        dataFormat:
+          $ref: '#/components/schemas/KafkaDownstreamConfigDataFormat'
+        topicPartitionConfig:
+          $ref: '#/components/schemas/KafkaDownstreamConfigTopicPartitionConfig'
+        columnSelectors:
+          type: array
+          items:
+            $ref: '#/components/schemas/KafkaDownstreamConfigColumnSelector'
+          description: The column selectors for filtering specific columns.
+      description: The Kafka downstream configuration.
+      required:
+      - broker
+      - authentication
+      - dataFormat
+      - topicPartitionConfig
+    KafkaDownstreamConfigTopicPartitionConfig:
+      type: object
+      properties:
+        dispatchType:
+          example: DISPATCH_TYPE_BY_TABLE
+          allOf:
+          - $ref: '#/components/schemas/TopicPartitionConfigDispatchType'
+        defaultTopic:
+          type: string
+          description: The default topic for dispatching all messages when dispatchType is DISPATCH_TYPE_ONE_TOPIC.
+        topicPrefix:
+          type: string
+          description: The topic name prefix for dispatch types that create per-table or per-database topics.
+        separator:
+          type: string
+          description: The separator between the prefix and the table or database name.
+        topicSuffix:
+          type: string
+          description: The topic name suffix for dispatch types that create per-table or per-database topics.
+        replicationFactor:
+          type: integer
+          format: int64
+          example: 3
+          description: The replication factor for auto-created topics.
+          minimum: 1
+        partitionNum:
+          type: integer
+          format: int64
+          example: 6
+          description: The number of partitions for auto-created topics.
+          minimum: 1
+        partitionDispatchers:
+          type: array
+          items:
+            $ref: '#/components/schemas/TopicPartitionConfigPartitionDispatcherConfig'
+          description: The custom partition dispatcher configurations.
+      description: The Kafka topic and partition configuration.
+      required:
+      - dispatchType
+      - replicationFactor
+      - partitionNum
+    v1beta1StartPosition:
+      type: object
+      properties:
+        mode:
+          example: FROM_NOW
+          allOf:
+          - $ref: '#/components/schemas/v1beta1StartPositionMode'
+        startTso:
+          type: string
+          format: uint64
+          description: The start TSO. This field is required when the mode is FROM_TSO.
+          example: '0'
+        startTimestamp:
+          type: string
+          format: date-time
+          example: '2024-01-01T00:00:00Z'
+          description: The start UTC timestamp. This field is required when the mode is FROM_UTC.
+      description: The start position for the changefeed.
+      required:
+      - mode
+    KafkaDownstreamConfigDataFormatProtocol:
+      type: string
+      enum:
+      - PROTOCOL_UNSPECIFIED
+      - PROTOCOL_CANAL_JSON
+      - PROTOCOL_OPEN_PROTOCOL
+      - PROTOCOL_AVRO
+      - PROTOCOL_DEBEZIUM
+      default: PROTOCOL_UNSPECIFIED
+      description: "The Kafka output protocol.\n\n - `PROTOCOL_CANAL_JSON`: Canal JSON format. Recommended for most use cases.\n - `PROTOCOL_OPEN_PROTOCOL`: Open Protocol (TiDB native format).\n - `PROTOCOL_AVRO`: Apache Avro format.\n - `PROTOCOL_DEBEZIUM`: Debezium format."
+    v1beta1AzureBlobDownstreamConfigEndpoint:
+      type: object
+      properties:
+        blobUri:
+          type: string
+          example: https://myaccount.blob.core.windows.net/mycontainer/cdc-data
+          description: The Azure Blob container URI. For example, `https://myaccount.blob.core.windows.net/mycontainer/cdc-data`.
+        sasToken:
+          type: string
+          example: sv=2022-11-02&ss=b&srt=sco&sp=rwdlaciytfx&se=2026-06-09T00:00:00Z&st=2026-06-08T00:00:00Z&spr=https&sig=...
+          description: The SAS token for Azure Blob authentication. This field is input-only and not returned in responses.
+      description: Endpoint defines the Azure Blob connection endpoint configuration.
+      required:
+      - blobUri
+      - sasToken
+    v1beta1Connection:
+      type: object
+      properties:
+        endpoint:
+          type: string
+          example: mysql.example.com:3306
+          description: The MySQL endpoint address in the `host:port` format. For private endpoint connections, use networkInfo.sinkEndpointId instead. Required for PUBLIC and VPC_PEERING network types. Optional for PRIVATE_LINK, where the endpoint can be assembled from the sink endpoint and ports.
+        username:
+          type: string
+          example: root
+          description: The MySQL username for authentication.
+        password:
+          type: string
+          example: A1B2C3...
+          description: The MySQL password for authentication. This field is input-only and not returned in responses.
+      description: The MySQL connection configuration.
+      required:
+      - username
+    v1beta1GcsDownstreamConfig:
+      type: object
+      properties:
+        endpoint:
+          $ref: '#/components/schemas/v1beta1GcsDownstreamConfigEndpoint'
+        dataFormat:
+          $ref: '#/components/schemas/v1beta1S3DataFormat'
+        storageFlushConfig:
+          $ref: '#/components/schemas/v1beta1StorageFlushConfig'
+      description: The GCS downstream configuration.
+      required:
+      - endpoint
+      - dataFormat
+    DataFormatDebeziumConfig:
+      type: object
+      properties:
+        outputOldValue:
+          type: boolean
+          description: Indicates whether to output the old value before the change.
+        disableSchema:
+          type: boolean
+          description: Indicates whether to disable the schema in Debezium messages.
+      description: The Debezium-specific data format configuration.
+    KafkaDownstreamConfigCompressionType:
+      type: string
+      enum:
+      - COMPRESSION_TYPE_UNSPECIFIED
+      - NONE
+      - GZIP
+      - SNAPPY
+      - LZ4
+      - ZSTD
+      default: COMPRESSION_TYPE_UNSPECIFIED
+      description: "The Kafka message compression type.\n\n - `NONE`: No compression.\n - `GZIP`: GZIP compression.\n - `SNAPPY`: Snappy compression.\n - `LZ4`: LZ4 compression.\n - `ZSTD`: ZSTD compression."
+    KafkaDownstreamConfigKafkaVersion:
+      type: string
+      enum:
+      - KAFKA_VERSION_UNSPECIFIED
+      - KAFKA_VERSION_0XX
+      - KAFKA_VERSION_1XX
+      - KAFKA_VERSION_2XX
+      - KAFKA_VERSION_3XX
+      default: KAFKA_VERSION_UNSPECIFIED
+      description: "The Kafka broker version.\n\n - `KAFKA_VERSION_0XX`: Kafka 0.x\n - `KAFKA_VERSION_1XX`: Kafka 1.x\n - `KAFKA_VERSION_2XX`: Kafka 2.x\n - `KAFKA_VERSION_3XX`: Kafka 3.x"
+    v1beta1NetworkInfo:
+      type: object
+      properties:
+        networkType:
+          example: NETWORK_TYPE_PUBLIC
+          allOf:
+          - $ref: '#/components/schemas/NetworkInfoNetworkType'
+        sinkEndpointId:
+          type: string
+          format: uint64
+          description: The private endpoint ID configured in the TiDB Cloud console. This field is required for PRIVATE_LINK network type.
+        ports:
+          type: array
+          items:
+            type: integer
+            format: int64
+          description: The downstream target ports to connect to for PRIVATE_LINK network type.
+          example:
+          - 9092
+      description: The network configuration for downstream connectivity.
+      required:
+      - networkType
+    TopicPartitionConfigDispatchType:
+      type: string
+      enum:
+      - DISPATCH_TYPE_UNSPECIFIED
+      - DISPATCH_TYPE_ONE_TOPIC
+      - DISPATCH_TYPE_BY_TABLE
+      - DISPATCH_TYPE_BY_DATABASE
+      default: DISPATCH_TYPE_UNSPECIFIED
+      description: "The message dispatch type to topics.\n\n - `DISPATCH_TYPE_ONE_TOPIC`: All messages go to a single topic.\n - `DISPATCH_TYPE_BY_TABLE`: Each table gets its own topic.\n - `DISPATCH_TYPE_BY_DATABASE`: Each database gets its own topic."
+    EndpointS3AuthType:
+      type: string
+      enum:
+      - S3_AUTH_TYPE_UNSPECIFIED
+      - S3_AUTH_TYPE_AK_SK
+      - S3_AUTH_TYPE_ASSUME_ROLE
+      default: S3_AUTH_TYPE_UNSPECIFIED
+      description: "The S3 authentication type.\n\n - `S3_AUTH_TYPE_AK_SK`: Access Key / Secret Key authentication.\n - `S3_AUTH_TYPE_ASSUME_ROLE`: IAM Assume Role authentication."
+    v1beta1Changefeed:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '67890'
+          description: The unique identifier of the changefeed. This field is output-only.
+          readOnly: true
+        clusterId:
+          type: string
+          example: '1234567890123'
+          description: The ID of the source TiDB cluster.
+        name:
+          type: string
+          example: my-changefeed
+          description: The user-defined name of the changefeed.
+        networkInfo:
+          $ref: '#/components/schemas/v1beta1NetworkInfo'
+        state:
+          example: RUNNING
+          description: The current state of the changefeed. This field is output-only.
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/ChangefeedState'
+        createTime:
+          type: string
+          format: date-time
+          readOnly: true
+          description: The creation time of the changefeed. This field is output-only.
+        checkpointTso:
+          type: string
+          format: uint64
+          readOnly: true
+          description: The checkpoint TSO of the changefeed. This field is output-only.
+          example: '0'
+        checkpointTs:
+          type: string
+          format: date-time
+          readOnly: true
+          description: The checkpoint timestamp of the changefeed. This field is output-only.
+        replicationCapacity:
+          type: string
+          example: 4rcu
+          description: The replication capacity (RCU) of the changefeed. Call ListChangefeedRCUs to get the available RCU options.
+        downstreamType:
+          description: The downstream type. When a downstream type is specified, the corresponding configuration field (kafka, mysql, s3, gcs, or azureBlob) is required. Cannot be changed after creation.
+          example: KAFKA
+          allOf:
+          - $ref: '#/components/schemas/v1beta1DownstreamType'
+        tableConfig:
+          $ref: '#/components/schemas/v1beta1TableConfig'
+        startPosition:
+          description: The start position configuration. This field can only be set during creation.
+          allOf:
+          - $ref: '#/components/schemas/v1beta1StartPosition'
+        kafka:
+          $ref: '#/components/schemas/v1beta1KafkaDownstreamConfig'
+        mysql:
+          $ref: '#/components/schemas/v1beta1MySQLDownstreamConfig'
+        s3:
+          $ref: '#/components/schemas/v1beta1S3DownstreamConfig'
+        gcs:
+          $ref: '#/components/schemas/v1beta1GcsDownstreamConfig'
+        azureBlob:
+          $ref: '#/components/schemas/v1beta1AzureBlobDownstreamConfig'
+        error:
+          type: string
+          example: 'kafka: broker not available'
+          description: The error message when the changefeed is in the FAILED or ERROR state.
+          readOnly: true
+      description: The changefeed configuration.
+      required:
+      - clusterId
+      - name
+      - replicationCapacity
+      - downstreamType
+      - tableConfig
+      - startPosition
+    v1beta1AzureBlobDownstreamConfig:
+      type: object
+      properties:
+        endpoint:
+          $ref: '#/components/schemas/v1beta1AzureBlobDownstreamConfigEndpoint'
+        dataFormat:
+          $ref: '#/components/schemas/v1beta1S3DataFormat'
+        storageFlushConfig:
+          $ref: '#/components/schemas/v1beta1StorageFlushConfig'
+      description: The Azure Blob downstream configuration.
+      required:
+      - endpoint
+      - dataFormat
+    AvroConfigSchemaRegistry:
+      type: object
+      properties:
+        schemaRegistryEndpoints:
+          type: string
+          example: http://schema-registry:8081
+          description: The comma-separated list of Schema Registry endpoints. Required for Confluent Schema Registry.
+        enableBasicAuth:
+          type: boolean
+          description: Indicates whether to enable basic authentication for Schema Registry.
+          example: false
+        basicAuthUsername:
+          type: string
+          description: The basic authentication username for Schema Registry.
+        basicAuthPassword:
+          type: string
+          description: The basic authentication password for Schema Registry.
+      description: The Schema Registry connection configuration.
+    rpcStatus:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/protobufAny'
+    v1beta1ListChangefeedsResponse:
+      type: object
+      properties:
+        changefeeds:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1beta1Changefeed'
+          description: The list of changefeeds matching the query.
+          readOnly: true
+        totalSize:
+          type: integer
+          format: int32
+          example: 42
+          description: The total number of changefeeds across all pages.
+          readOnly: true
+        nextPageToken:
+          type: string
+          example: eyJpZCI6Njc4OTB9
+          description: The page token for the next page. This field is empty when there are no more pages.
+          readOnly: true
+      title: 'ListChangefeedsResponse represents the response for listing changefeeds
+
+        (-- api-linter: core::0158::response-page-size-field=disabled --)
+
+        (-- api-linter: core::0158::response-next-page-token-field=disabled --)'
+      description: The response for listing changefeeds.
+    AuthenticationAuthType:
+      type: string
+      enum:
+      - AUTH_TYPE_UNSPECIFIED
+      - DISABLE
+      - SASL_PLAIN
+      - SASL_SCRAM_SHA_256
+      - SASL_SCRAM_SHA_512
+      default: AUTH_TYPE_UNSPECIFIED
+      description: "The Kafka authentication type.\n\n - `DISABLE`: No authentication.\n - `SASL_PLAIN`: SASL/PLAIN authentication.\n - `SASL_SCRAM_SHA_256`: SASL/SCRAM-SHA-256 authentication.\n - `SASL_SCRAM_SHA_512`: SASL/SCRAM-SHA-512 authentication."
+x-tagGroups:
+- name: Endpoints
+  tags:
+  - Cluster
+  - Region
+  - Private Endpoint Connection
+  - Import
+  - Integration
+  - Changefeed

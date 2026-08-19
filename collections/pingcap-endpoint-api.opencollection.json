@@ -1,0 +1,156 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "TiDB Cloud Data Service OPEN Endpoint API",
+    "version": "v1beta1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Endpoint",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List all endpoints in a Data App.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dataservice.tidbapi.com/v1beta1/dataApps/:dataAppId/endpoints",
+            "params": [
+              {
+                "name": "dataAppId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the Data App. You can get the ID from the response of [List all Data Apps in a project](#tag/Data-App/operation/DataApp_ListDataApps)."
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of items to return. If it is not set or set to `0`, the default value `100` will be used."
+              },
+              {
+                "name": "pageToken",
+                "value": "",
+                "type": "query",
+                "description": "The identifier of the current page, used to retrieve the next page of results. You can get this value from the `nextPageToken` field in the previous response. To access the first page of data, omit this field."
+              }
+            ]
+          },
+          "docs": "List all endpoints in a Data App."
+        },
+        {
+          "info": {
+            "name": "Create an endpoint for a Data App.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dataservice.tidbapi.com/v1beta1/dataApps/:dataAppId/endpoints",
+            "params": [
+              {
+                "name": "dataAppId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the Data App. You can get the ID from the response of [List all Data Apps in a project](#tag/Data-App/operation/DataApp_ListDataApps)."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create an endpoint for a Data App."
+        },
+        {
+          "info": {
+            "name": "Get an endpoint for a Data App.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dataservice.tidbapi.com/v1beta1/dataApps/:endpoint.name",
+            "params": [
+              {
+                "name": "endpoint.name",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the endpoint. For example: `dataApps/dataapp-yxNzAuFP/endpoints/1874778`. You can get the value from the response of [List all endpoints in a Data App](#tag/Endpoint/operation/Endpoint_ListEndpoints)."
+              }
+            ]
+          },
+          "docs": "Get an endpoint for a Data App."
+        },
+        {
+          "info": {
+            "name": "Update an endpoint for a Data App.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://dataservice.tidbapi.com/v1beta1/dataApps/:endpoint.name",
+            "params": [
+              {
+                "name": "endpoint.name",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the endpoint. For example: `dataApps/dataapp-yxNzAuFP/endpoints/1874778`. You can get the value from the response of [List all endpoints in a Data App](#tag/Endpoint/operation/Endpoint_ListEndpoints)."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update an endpoint for a Data App."
+        },
+        {
+          "info": {
+            "name": "Delete an endpoint for a Data App.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://dataservice.tidbapi.com/v1beta1/dataApps/:endpoint.name",
+            "params": [
+              {
+                "name": "endpoint.name",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the endpoint. For example: `dataApps/dataapp-yxNzAuFP/endpoints/1874778`. You can get the value from the response of [List all endpoints in a Data App](#tag/Endpoint/operation/Endpoint_ListEndpoints)."
+              }
+            ]
+          },
+          "docs": "Before you delete an endpoint, make sure that the endpoint is not online. Otherwise, the endpoint cannot be deleted."
+        },
+        {
+          "info": {
+            "name": "Test an endpoint for a Data App.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dataservice.tidbapi.com/v1beta1/:endpoint.name/test",
+            "params": [
+              {
+                "name": "endpoint.name",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the endpoint. For example: `dataApps/dataapp-yxNzAuFP/endpoints/1874778`. You can get the value from the response of [List all endpoints in a Data App](#tag/Endpoint/operation/Endpoint_ListEndpoints)."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Test an endpoint for a Data App."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,533 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "DM OpenAPI DOC Task API",
+    "version": "6.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "task",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "get task list",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://you.domain.com/api/v1/tasks",
+            "params": [
+              {
+                "name": "with_status",
+                "value": "",
+                "type": "query",
+                "description": "get task with status"
+              },
+              {
+                "name": "stage",
+                "value": "",
+                "type": "query",
+                "description": "filter by task stage"
+              },
+              {
+                "name": "source_name_list",
+                "value": "",
+                "type": "query",
+                "description": "filter by source name"
+              }
+            ]
+          },
+          "docs": "get task list"
+        },
+        {
+          "info": {
+            "name": "create a task",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://you.domain.com/api/v1/tasks",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "create a task"
+        },
+        {
+          "info": {
+            "name": "get a task",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://you.domain.com/api/v1/tasks/:task-name",
+            "params": [
+              {
+                "name": "task-name",
+                "value": "",
+                "type": "path",
+                "description": "globally unique task name"
+              },
+              {
+                "name": "with_status",
+                "value": "",
+                "type": "query",
+                "description": "get task with status"
+              }
+            ]
+          },
+          "docs": "get a task"
+        },
+        {
+          "info": {
+            "name": "update a task",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://you.domain.com/api/v1/tasks/:task-name",
+            "params": [
+              {
+                "name": "task-name",
+                "value": "",
+                "type": "path",
+                "description": "globally unique task name"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "update a task"
+        },
+        {
+          "info": {
+            "name": "delete a task",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://you.domain.com/api/v1/tasks/:task-name",
+            "params": [
+              {
+                "name": "task-name",
+                "value": "",
+                "type": "path",
+                "description": "globally unique task name"
+              },
+              {
+                "name": "force",
+                "value": "",
+                "type": "query",
+                "description": "force stop task even if some subtask is running"
+              },
+              {
+                "name": "keep_meta",
+                "value": "",
+                "type": "query",
+                "description": "Whether to keep downstream checkpoints and resumable internal metadata when deleting the task.\nOptimistic shard DDL metadata is always removed.\nWith force=true, only already-persisted checkpoint state is retained; deletion does not flush the latest checkpoint.\nStop the task and wait for the stop operation to complete before deleting it when the latest checkpoint must be retained.\nOnly use keep_meta=true after all DM masters are upgraded, because older versions ignore unknown query parameters."
+              }
+            ]
+          },
+          "docs": "delete a task"
+        },
+        {
+          "info": {
+            "name": "get task status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://you.domain.com/api/v1/tasks/:task-name/status",
+            "params": [
+              {
+                "name": "task-name",
+                "value": "",
+                "type": "path",
+                "description": "globally unique task name"
+              },
+              {
+                "name": "source_name_list",
+                "value": "",
+                "type": "query",
+                "description": "source name list"
+              }
+            ]
+          },
+          "docs": "get task status"
+        },
+        {
+          "info": {
+            "name": "start a task",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://you.domain.com/api/v1/tasks/:task-name/start",
+            "params": [
+              {
+                "name": "task-name",
+                "value": "",
+                "type": "path",
+                "description": "globally unique task name"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "start a task"
+        },
+        {
+          "info": {
+            "name": "stop a task",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://you.domain.com/api/v1/tasks/:task-name/stop",
+            "params": [
+              {
+                "name": "task-name",
+                "value": "",
+                "type": "path",
+                "description": "globally unique task name"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "stop a task"
+        },
+        {
+          "info": {
+            "name": "get task source table and target table route relation",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://you.domain.com/api/v1/tasks/:task-name/sources/:source-name/migrate_targets",
+            "params": [
+              {
+                "name": "task-name",
+                "value": "",
+                "type": "path",
+                "description": "globally unique task name"
+              },
+              {
+                "name": "source-name",
+                "value": "",
+                "type": "path",
+                "description": "source name"
+              },
+              {
+                "name": "schema_pattern",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "table_pattern",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "get task source table and target table route relation"
+        },
+        {
+          "info": {
+            "name": "get task source schema list",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://you.domain.com/api/v1/tasks/:task-name/sources/:source-name/schemas",
+            "params": [
+              {
+                "name": "task-name",
+                "value": "",
+                "type": "path",
+                "description": "globally unique task name"
+              },
+              {
+                "name": "source-name",
+                "value": "",
+                "type": "path",
+                "description": "source name"
+              }
+            ]
+          },
+          "docs": "get task source schema list"
+        },
+        {
+          "info": {
+            "name": "get task source table list",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://you.domain.com/api/v1/tasks/:task-name/sources/:source-name/schemas/:schema-name",
+            "params": [
+              {
+                "name": "task-name",
+                "value": "",
+                "type": "path",
+                "description": "globally unique task name"
+              },
+              {
+                "name": "source-name",
+                "value": "",
+                "type": "path",
+                "description": "source name"
+              },
+              {
+                "name": "schema-name",
+                "value": "",
+                "type": "path",
+                "description": "schema name"
+              }
+            ]
+          },
+          "docs": "get task source table list"
+        },
+        {
+          "info": {
+            "name": "get task source table structure",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://you.domain.com/api/v1/tasks/:task-name/sources/:source-name/schemas/:schema-name/:table-name",
+            "params": [
+              {
+                "name": "task-name",
+                "value": "",
+                "type": "path",
+                "description": "globally unique task name"
+              },
+              {
+                "name": "source-name",
+                "value": "",
+                "type": "path",
+                "description": "source name"
+              },
+              {
+                "name": "schema-name",
+                "value": "",
+                "type": "path",
+                "description": "schema name"
+              },
+              {
+                "name": "table-name",
+                "value": "",
+                "type": "path",
+                "description": "table name"
+              }
+            ]
+          },
+          "docs": "get task source table structure"
+        },
+        {
+          "info": {
+            "name": "operate task source table structure",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://you.domain.com/api/v1/tasks/:task-name/sources/:source-name/schemas/:schema-name/:table-name",
+            "params": [
+              {
+                "name": "task-name",
+                "value": "",
+                "type": "path",
+                "description": "globally unique task name"
+              },
+              {
+                "name": "source-name",
+                "value": "",
+                "type": "path",
+                "description": "source name"
+              },
+              {
+                "name": "schema-name",
+                "value": "",
+                "type": "path",
+                "description": "schema name"
+              },
+              {
+                "name": "table-name",
+                "value": "",
+                "type": "path",
+                "description": "table name"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "operate task source table structure"
+        },
+        {
+          "info": {
+            "name": "delete task source table structure",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://you.domain.com/api/v1/tasks/:task-name/sources/:source-name/schemas/:schema-name/:table-name",
+            "params": [
+              {
+                "name": "task-name",
+                "value": "",
+                "type": "path",
+                "description": "globally unique task name"
+              },
+              {
+                "name": "source-name",
+                "value": "",
+                "type": "path",
+                "description": "source name"
+              },
+              {
+                "name": "schema-name",
+                "value": "",
+                "type": "path",
+                "description": "schema name"
+              },
+              {
+                "name": "table-name",
+                "value": "",
+                "type": "path",
+                "description": "table name"
+              }
+            ]
+          },
+          "docs": "delete task source table structure"
+        },
+        {
+          "info": {
+            "name": "Turn task into the format of a configuration file or vice versa.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://you.domain.com/api/v1/tasks/converters",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Turn task into the format of a configuration file or vice versa."
+        },
+        {
+          "info": {
+            "name": "get task template list",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://you.domain.com/api/v1/tasks/templates"
+          },
+          "docs": "get task template list"
+        },
+        {
+          "info": {
+            "name": "create task template",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://you.domain.com/api/v1/tasks/templates",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "create task template"
+        },
+        {
+          "info": {
+            "name": "import task template",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://you.domain.com/api/v1/tasks/templates/import",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "import task template"
+        },
+        {
+          "info": {
+            "name": "get task template template",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://you.domain.com/api/v1/tasks/templates/:task-name",
+            "params": [
+              {
+                "name": "task-name",
+                "value": "",
+                "type": "path",
+                "description": "globally unique task name"
+              }
+            ]
+          },
+          "docs": "get task template template"
+        },
+        {
+          "info": {
+            "name": "update task template template",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://you.domain.com/api/v1/tasks/templates/:task-name",
+            "params": [
+              {
+                "name": "task-name",
+                "value": "",
+                "type": "path",
+                "description": "globally unique task name"
+              }
+            ]
+          },
+          "docs": "update task template template"
+        },
+        {
+          "info": {
+            "name": "delete task template template",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://you.domain.com/api/v1/tasks/templates/:task-name",
+            "params": [
+              {
+                "name": "task-name",
+                "value": "",
+                "type": "path",
+                "description": "globally unique task name"
+              }
+            ]
+          },
+          "docs": "delete task template template"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

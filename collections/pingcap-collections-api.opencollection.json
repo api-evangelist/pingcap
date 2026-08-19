@@ -1,0 +1,134 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "OSSInsight Public Collections API",
+    "version": "v1beta"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Collections",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List collections",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.ossinsight.io/v1/collections/"
+          },
+          "docs": "List collections."
+        },
+        {
+          "info": {
+            "name": "List hot collections",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.ossinsight.io/v1/collections/hot/"
+          },
+          "docs": "List hot collections with top repositories of the collection."
+        },
+        {
+          "info": {
+            "name": "Repository ranking by issues",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.ossinsight.io/v1/collections/:collection_id/ranking_by_issues/",
+            "params": [
+              {
+                "name": "period",
+                "value": "",
+                "type": "query",
+                "description": "The period of the range."
+              },
+              {
+                "name": "collection_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of collection"
+              }
+            ]
+          },
+          "docs": "Rank the GitHub repositories in the specified collection according to the number of issues."
+        },
+        {
+          "info": {
+            "name": "Repository ranking by prs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.ossinsight.io/v1/collections/:collection_id/ranking_by_prs/",
+            "params": [
+              {
+                "name": "period",
+                "value": "",
+                "type": "query",
+                "description": "The period of the range."
+              },
+              {
+                "name": "collection_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of collection"
+              }
+            ]
+          },
+          "docs": "Rank the GitHub repositories in the specified collection according to the number of pull requests."
+        },
+        {
+          "info": {
+            "name": "Repository ranking by stars",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.ossinsight.io/v1/collections/:collection_id/ranking_by_stars/",
+            "params": [
+              {
+                "name": "period",
+                "value": "",
+                "type": "query",
+                "description": "The period of the range."
+              },
+              {
+                "name": "collection_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of collection"
+              }
+            ]
+          },
+          "docs": "Rank the GitHub repositories in the specified collection according to the number of stars."
+        },
+        {
+          "info": {
+            "name": "List collection repositories",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.ossinsight.io/v1/collections/:collection_id/repos/",
+            "params": [
+              {
+                "name": "collection_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of collection"
+              }
+            ]
+          },
+          "docs": "List the repositories of collection."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

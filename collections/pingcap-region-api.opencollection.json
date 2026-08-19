@@ -1,0 +1,203 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "TiDB Cloud Dedicated Region API",
+    "version": "v1beta1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Region",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List regions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dedicated.tidbapi.com/v1beta1/regions",
+            "params": [
+              {
+                "name": "cloudProvider",
+                "value": "",
+                "type": "query",
+                "description": "The cloud provider where the region is located. If specified, only regions of the specified cloud provider are returned."
+              },
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "query",
+                "description": "The ID of the project to list regions for. If not specified, the project ID of the default project is used."
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of regions to return. If not specified, at most 20 regions will be returned. The maximum value is `100`. Values greater than `100` are set to `100`."
+              },
+              {
+                "name": "pageToken",
+                "value": "",
+                "type": "query",
+                "description": "The pagination token received from a previous [List regions](#tag/Region/operation/RegionService_ListRegions) request. Use this token to retrieve the next page of results.\n\n**Note**: When paginating, all other parameters must match the original request."
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "The number of regions to skip before returning results. If the value exceeds the total number of clusters, the response is `200` with an empty list and no `nextPageToken`."
+              }
+            ]
+          },
+          "docs": "Lists the regions where you can create a cluster, across all supported cloud providers."
+        },
+        {
+          "info": {
+            "name": "Get a region",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dedicated.tidbapi.com/v1beta1/regions/:regionId",
+            "params": [
+              {
+                "name": "regionId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the region to retrieve, in the format of `{cloud_provider}-{region_code}`. For example, `aws-us-east-1`."
+              },
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "query",
+                "description": "The ID of the project for which to retrieve the region. If not specified, the project ID of the default project is used."
+              }
+            ]
+          },
+          "docs": "Retrieves details of a specific region by region ID."
+        },
+        {
+          "info": {
+            "name": "List cloud providers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dedicated.tidbapi.com/v1beta1/regions:showCloudProviders",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "query",
+                "description": "The ID of the project. If not specified, the project ID of the default project is used."
+              }
+            ]
+          },
+          "docs": "Lists the cloud providers available for creating a cluster."
+        },
+        {
+          "info": {
+            "name": "List node specs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dedicated.tidbapi.com/v1beta1/regions/:regionId/nodeSpecs",
+            "params": [
+              {
+                "name": "regionId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the region, in the format of `{cloud_provider}-{region_code}`. For example, `aws-us-east-1`."
+              },
+              {
+                "name": "componentType",
+                "value": "",
+                "type": "query",
+                "description": "Filters the results to include only node specs for the specified component type."
+              },
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "query",
+                "description": "Filters the results to include only node specs available to the specified project. If not specified, the project ID of the default project is used."
+              },
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "query",
+                "description": "Filters the results to include only node specs available to the specified cluster. If not specified, all available node specs are returned."
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of node specs to return. If not specified, at most 10 node specs will be returned. The maximum value is `100`. Values greater than `100` are set to `100`."
+              },
+              {
+                "name": "pageToken",
+                "value": "",
+                "type": "query",
+                "description": "The pagination token received from a previous [List node specs](#tag/Region/operation/RegionService_ListNodeSpecs) request. Use this token to retrieve the next page of results.\n\n**Note**: When paginating, all other parameters must match the original request."
+              },
+              {
+                "name": "skip",
+                "value": "",
+                "type": "query",
+                "description": "The number of node specs to skip before returning results. If the value exceeds the total number of clusters, the response is `200` with an empty list and no `nextPageToken`."
+              }
+            ]
+          },
+          "docs": "Retrieves a paginated list of node specifications (specs) available for creating or scaling a cluster in the specified region. You can filter the results using the `componentType`, `projectId`, or `clusterId` parameter."
+        },
+        {
+          "info": {
+            "name": "Get a node spec",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dedicated.tidbapi.com/v1beta1/regions/:regionId/componentTypes/:componentType/nodeSpecs/:nodeSpecKey",
+            "params": [
+              {
+                "name": "regionId",
+                "value": "",
+                "type": "path",
+                "description": "The region ID of the node spec to retrieve, in the format of `{cloud_provider}-{region_code}`. For example, `aws-us-east-1`. If not specified, the default region ID is used."
+              },
+              {
+                "name": "componentType",
+                "value": "",
+                "type": "path",
+                "description": "Filters the results to include only node specs for the specified component type."
+              },
+              {
+                "name": "nodeSpecKey",
+                "value": "",
+                "type": "path",
+                "description": "The key of the node spec to retrieve. For example, `8C32G`."
+              },
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "query",
+                "description": "The ID of the project for which to retrieve the node spec. If not specified, the project ID of the default project is used."
+              },
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "query",
+                "description": "The ID of the cluster. If specified, only node specs that are available to the specified cluster are returned. If not specified, all available node specs are returned."
+              }
+            ]
+          },
+          "docs": "Retrieves details of a node spec used for creating or scaling a cluster."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

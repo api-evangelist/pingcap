@@ -1,0 +1,660 @@
+openapi: 3.2.0
+info:
+  title: TiDB Cloud Dedicated Region API
+  description: "*TiDB Cloud API is in beta.*\n\nThis API manages [TiDB Cloud Dedicated](https://docs.pingcap.com/tidbcloud/select-cluster-tier/#tidb-cloud-dedicated) clusters. For TiDB Cloud Starter or TiDB Cloud Essential instances, use the [TiDB Cloud Starter and Essential API](https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless). For more information about TiDB Cloud API, see [TiDB Cloud API Overview](https://docs.pingcap.com/tidbcloud/api-overview/).\n\n# Overview\n\nThe TiDB Cloud API is a [REST interface](https://en.wikipedia.org/wiki/Representational_state_transfer) that provides you with programmatic access to manage clusters and related resources within TiDB Cloud.\n\nThe API has the following features:\n\n- **JSON entities.** All entities are expressed in JSON.\n- **HTTPS-only.** You can only access the API via HTTPS, ensuring all the data sent over the network is encrypted with TLS.\n- **Key-based access and digest authentication.** Before you access TiDB Cloud API, you must generate an API key. All requests are authenticated through [HTTP Digest Authentication](https://en.wikipedia.org/wiki/Digest_access_authentication), ensuring the API key is never sent over the network.\n\n# Get Started\n\nThis guide helps you make your first API call to TiDB Cloud API. You'll learn how to authenticate a request, build a request, and interpret the response.\n\n## Prerequisites\n\nTo complete this guide, you need to perform the following tasks:\n\n- Create a [TiDB Cloud account](https://tidbcloud.com/free-trial)\n- Install [curl](https://curl.se/)\n\n## Step 1. Create an API key\n\nTo create an API key, log in to your TiDB Cloud console. Navigate to the [**API Keys**](https://tidbcloud.com/org-settings/api-keys) page of your organization, and create an API key.\n\nAn API key contains a public key and a private key. Copy and save them in a secure location. You will need to use the API key later in this guide.\n\nFor more details about creating API keys, refer to [API Key Management](#section/Authentication/API-Key-Management).\n\n## Step 2. Make your first API call\n\n### Build an API call\n\nTiDB Cloud API call consists of the following components:\n\n- **A host**. The host for TiDB Cloud API is <https://dedicated.tidbapi.com>.\n- **An API Key**. The public key and the private key are required for authentication.\n- **A request**. When submitting data to a resource via `POST`, `PATCH`, or `PUT`, you must submit your payload in JSON.\n\nIn this guide, you call the [List clusters](#tag/Cluster/operation/ClusterService_ListClusters) endpoint. For the detailed description of the endpoint, see the [API reference](#tag/Cluster/operation/ClusterService_ListClusters).\n\n### Call an API endpoint\n\nTo get all clusters in your organization, run the following command in your terminal. Remember to change `YOUR_PUBLIC_KEY` to your public key and `YOUR_PRIVATE_KEY` to your private key.\n\n```shell\ncurl --digest \\\n --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n --request GET \\\n --url 'https://dedicated.tidbapi.com/v1beta1/clusters'\n```\n\n## Step 3. Check the response\n\nAfter making the API call, if the status code in response is `200` and you see details about all clusters in your organization, your request is successful.\n\n# Authentication\n\nThe TiDB Cloud API uses [HTTP Digest Authentication](https://en.wikipedia.org/wiki/Digest_access_authentication). It protects your private key from being sent over the network. For more details about HTTP Digest Authentication, refer to the [IETF RFC](https://datatracker.ietf.org/doc/html/rfc7616).\n\n## API key overview\n\n- The API key contains a public key and a private key, which act as the username and password required in the HTTP Digest Authentication. The private key only displays upon the key creation.\n- The API key belongs to your organization and acts as the `Organization Owner` role. You can check [permissions of owner](https://docs.pingcap.com/tidbcloud/manage-user-access#configure-member-roles).\n- You must provide the correct API key in every request. Otherwise, TiDB Cloud responds with a `401` error.\n\n## API key management\n\n### Create an API key\n\nOnly the **owner** of an organization can create an API key.\n\nTo create an API key in an organization, perform the following steps:\n\n1. In the [TiDB Cloud console](https://tidbcloud.com), switch to your target organization using the combo box in the upper-left corner.\n2. In the left navigation pane, click **Organization Settings** > **API Keys**.\n3. On the **API Keys** page, click **Create API Key**.\n4. Enter a description for your API key.\n5. Configure the role and scope for the API key. For more information about the permissions of a role, see [User roles](https://docs.pingcap.com/tidbcloud/manage-user-access/#user-roles).\n6. Click **Generate API Key**. Copy and save the public key and the private key.\n7. Make sure that you have copied and saved the private key in a secure location. The private key only displays upon the creation. After leaving this page, you will not be able to get the full private key again.\n8. Click **Done**.\n\n### View details of an API key\n\nTo view details of an API key, perform the following steps:\n\n1. In the [TiDB Cloud console](https://tidbcloud.com), switch to your target organization using the combo box in the upper-left corner.\n2. In the left navigation pane, click **Organization Settings** > **API Keys**.\n3. You can view the details of the API keys on the page.\n\n### Edit an API key\n\nOnly the **owner** of an organization can modify an API key.\n\nTo edit an API key in an organization, perform the following steps:\n\n1. In the [TiDB Cloud console](https://tidbcloud.com), switch to your target organization using the combo box in the upper-left corner.\n2. In the left navigation pane, click **Organization Settings** > **API Keys**.\n3. On the **API Keys** page, click **...** in the API key row that you want to change, and then click **Update Role**.\n4. You can update the description and role of the API key.\n5. Click **Update**.\n\n### Delete an API key\n\nOnly the **owner** of an organization can delete an API key.\n\nTo delete an API key in an organization, perform the following steps:\n\n1. In the [TiDB Cloud console](https://tidbcloud.com), switch to your target organization using the combo box in the upper-left corner.\n2. In the left navigation pane, click **Organization Settings** > **API Keys**.\n3. On the **API Keys** page, click **...** in the API key row that you want to delete, and then click **Delete**.\n4. Click **I understand, delete it.**\n\n# Rate Limiting\n\nThe TiDB Cloud API allows up to 100 requests per minute per API key. If you exceed the rate limit, the API returns a `429` error. For more quota, you can [submit a request](https://support.pingcap.com/hc/en-us/requests/new?ticket_form_id=7800003722519) to contact our support team.\n\nEach API request returns the following headers about the limit.\n\n- `X-Ratelimit-Limit-Minute`: The number of requests allowed per minute. It is 100 currently.\n- `X-Ratelimit-Remaining-Minute`: The number of remaining requests in the current minute. When it reaches `0`, the API returns a `429` error and indicates that you exceed the rate limit.\n- `X-Ratelimit-Reset`: The time in seconds at which the current rate limit resets.\n\nIf you exceed the rate limit, an error response returns like this.\n\n```\n> HTTP/2 429\n> date: Fri, 22 Jul 2022 05:28:37 GMT\n> content-type: application/json\n> content-length: 66\n> x-ratelimit-reset: 23\n> x-ratelimit-remaining-minute: 0\n> x-ratelimit-limit-minute: 100\n> x-kong-response-latency: 2\n> server: kong/2.8.1\n\n> {\"details\":[],\"code\":49900007,\"message\":\"The request exceeded the limit of 100 times per apikey per minute. For more quota, please contact us: https://support.pingcap.com/hc/en-us/requests/new?ticket_form_id=7800003722519\"}\n```\n\n# API Changelog\n\nThis changelog lists all changes to the TiDB Cloud API.\n\n<!-- In reverse chronological order -->\n\n## 20260707\n\n- Introduce the following Changefeed endpoints for managing changefeeds:\n\t* [List changefeed RCU options](#tag/Changefeed/operation/ListChangefeedRCUs)\n\t* [List changefeeds](#tag/Changefeed/operation/ListChangefeeds)\n\t* [Create a changefeed](#tag/Changefeed/operation/CreateChangefeed)\n\t* [Get a changefeed](#tag/Changefeed/operation/GetChangefeed)\n\t* [Delete a changefeed](#tag/Changefeed/operation/DeleteChangefeed)\n\t* [Update a changefeed downstream config](#tag/Changefeed/operation/EditChangefeedDownstreamConfig)\n\t* [Pause a changefeed](#tag/Changefeed/operation/PauseChangefeed)\n\t* [Resume a changefeed](#tag/Changefeed/operation/ResumeChangefeed)\n\t* [Scale a changefeed](#tag/Changefeed/operation/ScaleChangefeed)\n\n## 20251028\n\n- Introduce the following TiDB Cloud Dedicated API endpoints for managing third-party monitoring integrations:\n\t* [List integrations](#tag/Integration/operation/IntegrationService_ListIntegrations)\n\t* [Create an integration](#tag/Integration/operation/IntegrationService_CreateIntegration)\n\t* [Delete an integration](#tag/Integration/operation/IntegrationService_DeleteIntegration)\n\n## 20250812\n\n- Initial release of the TiDB Cloud Dedicated API, including the following resources and endpoints:\n\t* Cluster\n\t\t* [List clusters](#tag/Cluster/operation/ClusterService_ListClusters)\n\t\t* [Create a cluster](#tag/Cluster/operation/ClusterService_CreateCluster)\n\t\t* [Get a cluster](#tag/Cluster/operation/ClusterService_GetCluster)\n\t\t* [Delete a cluster](#tag/Cluster/operation/ClusterService_DeleteCluster)\n\t\t* [Update a cluster](#tag/Cluster/operation/ClusterService_UpdateCluster)\n\t\t* [Pause a cluster](#tag/Cluster/operation/ClusterService_PauseCluster)\n\t\t* [Resume a cluster](#tag/Cluster/operation/ClusterService_ResumeCluster)\n\t\t* [Reset the root password of a cluster](#tag/Cluster/operation/ClusterService_ResetRootPassword)\n\t\t* [List node quotas for your organization](#tag/Cluster/operation/ClusterService_ShowNodeQuota)\n\t\t* [Get log redaction policy](#tag/Cluster/operation/ClusterService_GetLogRedactionPolicy)\n\t* Region\n\t\t* [List regions](#tag/Region/operation/RegionService_ListRegions)\n\t\t* [Get a region](#tag/Region/operation/RegionService_GetRegion)\n\t\t* [List cloud providers](#tag/Region/operation/RegionService_ShowCloudProviders)\n\t\t* [List node specs](#tag/Region/operation/RegionService_ListNodeSpecs)\n\t\t* [Get a node spec](#tag/Region/operation/RegionService_GetNodeSpec)\n\t* Private Endpoint Connection\n\t\t* [Get private link service for a TiDB node group](#tag/Private-Endpoint-Connection/operation/PrivateEndpointConnectionService_GetPrivateLinkService)\n\t\t* [Create a private endpoint connection](#tag/Private-Endpoint-Connection/operation/PrivateEndpointConnectionService_CreatePrivateEndpointConnection)\n\t\t* [List private endpoint connections](#tag/Private-Endpoint-Connection/operation/PrivateEndpointConnectionService_ListPrivateEndpointConnections)\n\t\t* [Get a private endpoint connection](#tag/Private-Endpoint-Connection/operation/PrivateEndpointConnectionService_GetPrivateEndpointConnection)\n\t\t* [Delete a private endpoint connection](#tag/Private-Endpoint-Connection/operation/PrivateEndpointConnectionService_DeletePrivateEndpointConnection)\n\t* Import\n\t\t* [List import tasks](#tag/Import/operation/ListImports)\n\t\t* [Create an import task](#tag/Import/operation/CreateImport)\n\t\t* [Get an import task](#tag/Import/operation/GetImport)\n\t\t* [Cancel an import task](#tag/Import/operation/CancelImport)\n\t\n"
+  version: v1beta1
+servers:
+- url: https://dedicated.tidbapi.com/v1beta1
+tags:
+- name: Region
+  description: List regions, get a region, and list cloud providers and node specs of a region.
+paths:
+  /regions:
+    get:
+      summary: List regions
+      description: Lists the regions where you can create a cluster, across all supported cloud providers.
+      operationId: RegionService_ListRegions
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tidb_cloud_open_apidedicatedv1beta1ListRegionsResponse'
+        '400':
+          description: A request field is invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        '401':
+          description: The API key cannot be authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        '403':
+          description: The API key does not have permission to access the resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        '429':
+          description: You have exceed the rate limit.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+      parameters:
+      - name: cloudProvider
+        description: The cloud provider where the region is located. If specified, only regions of the specified cloud provider are returned.
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: projectId
+        description: The ID of the project to list regions for. If not specified, the project ID of the default project is used.
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: pageSize
+        description: The maximum number of regions to return. If not specified, at most 20 regions will be returned. The maximum value is `100`. Values greater than `100` are set to `100`.
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 20
+          maximum: 100
+          minimum: 1
+      - name: pageToken
+        description: 'The pagination token received from a previous [List regions](#tag/Region/operation/RegionService_ListRegions) request. Use this token to retrieve the next page of results.
+
+
+          **Note**: When paginating, all other parameters must match the original request.'
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: skip
+        description: The number of regions to skip before returning results. If the value exceeds the total number of clusters, the response is `200` with an empty list and no `nextPageToken`.
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      tags:
+      - Region
+      x-code-samples:
+      - lang: curl
+        label: curl
+        source: "curl --digest --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --location 'https://dedicated.tidbapi.com/v1beta1/regions'"
+  /regions/{regionId}:
+    get:
+      summary: Get a region
+      description: Retrieves details of a specific region by region ID.
+      operationId: RegionService_GetRegion
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/commonv1beta1Region'
+        '400':
+          description: A request field is invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        '401':
+          description: The API key cannot be authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        '403':
+          description: The API key does not have permission to access the resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        '429':
+          description: You have exceed the rate limit.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+      parameters:
+      - name: regionId
+        description: The ID of the region to retrieve, in the format of `{cloud_provider}-{region_code}`. For example, `aws-us-east-1`.
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: projectId
+        description: The ID of the project for which to retrieve the region. If not specified, the project ID of the default project is used.
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Region
+      x-code-samples:
+      - lang: curl
+        label: curl
+        source: "curl --digest --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --location 'https://dedicated.tidbapi.com/v1beta1/regions/aws-us-east-1'"
+  /regions:showCloudProviders:
+    get:
+      summary: List cloud providers
+      description: Lists the cloud providers available for creating a cluster.
+      operationId: RegionService_ShowCloudProviders
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1beta1ShowCloudProvidersResponse'
+        '400':
+          description: A request field is invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        '401':
+          description: The API key cannot be authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        '403':
+          description: The API key does not have permission to access the resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        '429':
+          description: You have exceed the rate limit.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+      parameters:
+      - name: projectId
+        description: The ID of the project. If not specified, the project ID of the default project is used.
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Region
+      x-code-samples:
+      - lang: curl
+        label: curl
+        source: "curl --digest --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --location 'https://dedicated.tidbapi.com/v1beta1/regions:showCloudProviders'"
+  /regions/{regionId}/nodeSpecs:
+    get:
+      summary: List node specs
+      description: Retrieves a paginated list of node specifications (specs) available for creating or scaling a cluster in the specified region. You can filter the results using the `componentType`, `projectId`, or `clusterId` parameter.
+      operationId: RegionService_ListNodeSpecs
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1beta1ListNodeSpecsResponse'
+        '400':
+          description: A request field is invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        '401':
+          description: The API key cannot be authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        '403':
+          description: The API key does not have permission to access the resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        '429':
+          description: You have exceed the rate limit.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+      parameters:
+      - name: regionId
+        description: The ID of the region, in the format of `{cloud_provider}-{region_code}`. For example, `aws-us-east-1`.
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: componentType
+        description: Filters the results to include only node specs for the specified component type.
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - TIKV
+          - TIDB
+          - TIFLASH
+          - PD
+      - name: projectId
+        description: Filters the results to include only node specs available to the specified project. If not specified, the project ID of the default project is used.
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: clusterId
+        description: Filters the results to include only node specs available to the specified cluster. If not specified, all available node specs are returned.
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: pageSize
+        description: The maximum number of node specs to return. If not specified, at most 10 node specs will be returned. The maximum value is `100`. Values greater than `100` are set to `100`.
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 10
+          maximum: 100
+          minimum: 1
+      - name: pageToken
+        description: 'The pagination token received from a previous [List node specs](#tag/Region/operation/RegionService_ListNodeSpecs) request. Use this token to retrieve the next page of results.
+
+
+          **Note**: When paginating, all other parameters must match the original request.'
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: skip
+        description: The number of node specs to skip before returning results. If the value exceeds the total number of clusters, the response is `200` with an empty list and no `nextPageToken`.
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      tags:
+      - Region
+      x-code-samples:
+      - lang: curl
+        label: curl
+        source: "curl --digest --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --location 'https://dedicated.tidbapi.com/v1beta1/regions/aws-us-east-1/nodeSpecs'"
+  /regions/{regionId}/componentTypes/{componentType}/nodeSpecs/{nodeSpecKey}:
+    get:
+      summary: Get a node spec
+      description: Retrieves details of a node spec used for creating or scaling a cluster.
+      operationId: RegionService_GetNodeSpec
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1beta1NodeSpec'
+        '400':
+          description: A request field is invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        '401':
+          description: The API key cannot be authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        '403':
+          description: The API key does not have permission to access the resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        '429':
+          description: You have exceed the rate limit.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+      parameters:
+      - name: regionId
+        description: The region ID of the node spec to retrieve, in the format of `{cloud_provider}-{region_code}`. For example, `aws-us-east-1`. If not specified, the default region ID is used.
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: componentType
+        description: Filters the results to include only node specs for the specified component type.
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - TIKV
+          - TIDB
+          - TIFLASH
+          - PD
+      - name: nodeSpecKey
+        description: The key of the node spec to retrieve. For example, `8C32G`.
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: projectId
+        description: The ID of the project for which to retrieve the node spec. If not specified, the project ID of the default project is used.
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: clusterId
+        description: The ID of the cluster. If specified, only node specs that are available to the specified cluster are returned. If not specified, all available node specs are returned.
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Region
+      x-code-samples:
+      - lang: curl
+        label: curl
+        source: "curl --digest --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --location 'https://dedicated.tidbapi.com/v1beta1/regions/aws-us-east-1/componentTypes/TIKV/nodeSpecs/8C32G'"
+components:
+  schemas:
+    dedicatedv1beta1ComponentType:
+      type: string
+      enum:
+      - TIKV
+      - TIDB
+      - TIFLASH
+      - PD
+    commonv1beta1Region:
+      type: object
+      properties:
+        name:
+          type: string
+          example: regions/aws-us-west-2
+          description: The unique name of the region, in the format of `regions/{region_id}`. For example, `regions/aws-us-west-2`.
+          pattern: ^regions/(aws|gcp|azure)-(.+)$
+        regionId:
+          type: string
+          example: aws-us-west-2
+          description: The unique identifier for the region, in the format of `{cloud_provider}-{region_code}`. For example, `aws-us-west-2`.
+          readOnly: true
+          pattern: ^(aws|gcp|azure|alicloud)-[a-z0-9-]+$
+        cloudProvider:
+          example: aws
+          description: 'The cloud provider that offers the region.
+
+
+            - `"aws"`: Amazon Web Services
+
+
+            - `"gcp"`: Google Cloud
+
+
+            - `"azure"`: Microsoft Azure
+
+
+            - `"alicloud"`: Alibaba Cloud'
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/v1beta1RegionCloudProvider'
+        displayName:
+          type: string
+          example: Oregon (us-west-2)
+          description: A human-readable name for the region. For example, `Oregon (us-west-2)`.
+          readOnly: true
+        provider:
+          type:
+          - string
+          - 'null'
+          example: aws
+          description: '**Deprecated.** Use `cloudProvider` instead. The name of the cloud provider. For example, `aws`, `gcp`, `azure`, or `alicloud`.'
+          readOnly: true
+      description: A representation of a region for deploying TiDB clusters.
+    StorageNodeSettingStorageType:
+      type: string
+      enum:
+      - Basic
+      - Standard
+      - Performance
+      - Plus
+      description: " - Basic: Data disk: gp3; Raft log disk: none.\n - Standard: Data disk: gp3; Raft log disk: gp3.\n - Performance: Data disk: gp3; Raft log disk: io2.\n - Plus: Data disk: io2; Raft log disk: none."
+    googlerpcStatus:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+          description: The error code returned with this error.
+        message:
+          type: string
+          description: The error message returned with this error.
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/protobufAny'
+          description: A list of messages with additional error details.
+      description: 'The `Status` type defines a logical error model that is suitable for
+
+        different programming environments, including REST APIs and RPC APIs. It is
+
+        used by [gRPC](https://github.com/grpc). Each `Status` message contains
+
+        three pieces of data: error code, error message, and error details.
+
+
+        You can find out more about this error model and how to work with it in the
+
+        [API Design Guide](https://cloud.google.com/apis/design/errors).'
+    v1beta1NodeSpec:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the node spec resource, in the format of `regions/{region_id}/componentTypes/{component_type}/nodeSpecs/{node_spec_key}`. For example, `regions/aws-us-west-2/componentTypes/TIKV/nodeSpecs/8C32G`.
+        regionId:
+          type: string
+          description: The region ID of the node spec resource, in the format of `{cloud_provider}-{region_code}`. For example, `aws-us-west-2`.
+        componentType:
+          description: The component type of the node spec.
+          allOf:
+          - $ref: '#/components/schemas/dedicatedv1beta1ComponentType'
+        nodeSpecKey:
+          type: string
+          description: The key of the node spec. For example, `8C32G`.
+        displayName:
+          type: string
+          description: The display name of the node spec. For example, `8 vCPU, 32 GiB`.
+        vCpu:
+          type: integer
+          format: int32
+          description: The number of virtual CPUs (vCPUs) allocated to the node spec. For example, `8`.
+        memorySizeGi:
+          type: integer
+          format: int32
+          description: The amount of memory in gibibytes (GiB) allocated to the node spec. For example, `32`.
+        defaultStorageSizeGi:
+          type: integer
+          format: int32
+          description: The default storage size of the node spec resource in GiB.
+        maxStorageSizeGi:
+          type: integer
+          format: int32
+          description: The maximum storage size of the node spec resource in GiB.
+        minStorageSizeGi:
+          type: integer
+          format: int32
+          description: The minimum storage size of the node spec resource in GiB.
+        defaultNodeCount:
+          type: integer
+          format: int32
+          description: The default number of nodes for the node spec resource.
+        storageTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/StorageNodeSettingStorageType'
+          description: The storage types supported by the node spec resource.
+        maxRaftStoreIops:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          description: The maximum IOPS for Raft log storage of the node spec resource. Currently, this parameter is only useful when overriding IOPS for Raft log storage.
+        minRaftStoreIops:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          description: The minimum IOPS for Raft log storage of the node spec resource. Currently, this parameter is only useful when overriding IOPS for Raft log storage.
+        default:
+          type: boolean
+          description: Indicates whether this is the default node spec.
+      description: All fields are output only.
+    protobufAny:
+      type: object
+      properties:
+        '@type':
+          type: string
+          description: A URL or resource name that uniquely identifies the type of the serialized protocol buffer message.
+      additionalProperties: {}
+      description: "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n    // or ...\n    if (any.isSameTypeAs(Foo.getDefaultInstance())) {\n      foo = any.unpack(Foo.getDefaultInstance());\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := anypb.New(foo)\n     if err != nil {\n       ...\n     }\n     ...\n     foo := &pb.Foo{}\n     if err := any.UnmarshalTo(foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
+    tidb_cloud_open_apidedicatedv1beta1ListRegionsResponse:
+      type: object
+      properties:
+        regions:
+          type: array
+          items:
+            $ref: '#/components/schemas/commonv1beta1Region'
+          description: A list of regions that match the query.
+        totalSize:
+          type: integer
+          format: int32
+          description: The total number of regions that match the query.
+        nextPageToken:
+          type: string
+          description: The token to retrieve the next page of results. Use this value as the `pageToken` parameter in the next request. This field is empty when there are no more pages.
+    v1beta1ShowCloudProvidersResponse:
+      type: object
+      properties:
+        cloudProviders:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1beta1RegionCloudProvider'
+          description: 'A list of cloud providers that are available for the project.
+
+
+            - `"aws"`: Amazon Web Services
+
+
+            - `"gcp"`: Google Cloud
+
+
+            - `"azure"`: Microsoft Azure
+
+
+            - `"alicloud"`: Alibaba Cloud'
+    v1beta1ListNodeSpecsResponse:
+      type: object
+      properties:
+        nodeSpecs:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1beta1NodeSpec'
+          description: A list of node specs that match the query.
+        totalSize:
+          type: integer
+          format: int32
+          description: The total number of node specs that match the query.
+        nextPageToken:
+          type: string
+          description: The token to retrieve the next page of results. Use this value as the `pageToken` parameter in the next request. This field is empty when there are no more pages.
+    v1beta1RegionCloudProvider:
+      type: string
+      enum:
+      - aws
+      - gcp
+      - azure
+      - alicloud
+      description: "Enum of cloud provider names.\n\n - aws: Amazon Web Services.\n - gcp: Google Cloud Platform.\n - azure: Microsoft Azure.\n - alicloud: Alibaba Cloud."
+x-tagGroups:
+- name: Endpoints
+  tags:
+  - Cluster
+  - Region
+  - Private Endpoint Connection
+  - Import
+  - Integration
+  - Changefeed

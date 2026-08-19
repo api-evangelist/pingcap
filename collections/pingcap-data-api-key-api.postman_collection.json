@@ -1,0 +1,877 @@
+{
+  "item": [
+    {
+      "id": "d7b67296-3b23-4b9f-a833-8fcfb07025cd",
+      "name": "Data API Key",
+      "description": {
+        "content": "Create, get, update, delete, and list Data API keys of a Data App. The Data API key in Data Service is different from the key used in the [TiDB Cloud API](https://docs.pingcap.com/tidbcloud/api/v1beta#section/Authentication). The Data API key is used to access data in the TiDB Cloud clusters, whereas the TiDB Cloud API key is used to manage resources such as projects, clusters, Data Apps, and endpoints.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "7f910f74-9275-406b-9d7f-882f8f7a1a83",
+          "name": "List all API keys for a Data App.",
+          "request": {
+            "name": "List all API keys for a Data App.",
+            "description": {},
+            "url": {
+              "path": [
+                "v1beta1",
+                "dataApps",
+                ":dataAppId",
+                "apiKeys"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "pageSize",
+                  "value": "100",
+                  "description": "The maximum number of items to return. If it is not set or set to `0`, the default value `100` will be used."
+                },
+                {
+                  "disabled": false,
+                  "key": "pageToken",
+                  "value": "<string>",
+                  "description": "The identifier of the current page, used to retrieve the next page of results. You can get this value from the `nextPageToken` field in the previous response. To access the first page of data, omit this field."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "dataAppId",
+                  "description": "(Required) The ID of the Data App. You can get the ID from the response of [List all Data Apps in a project](#tag/Data-App/operation/DataApp_ListDataApps)."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d0d1021e-dddc-4348-876a-09d47eba505a",
+              "name": "OK.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1beta1",
+                    "dataApps",
+                    ":dataAppId",
+                    "apiKeys"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageSize",
+                      "value": "100"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dataAppId",
+                      "description": "(Required) The ID of the Data App. You can get the ID from the response of [List all Data Apps in a project](#tag/Data-App/operation/DataApp_ListDataApps)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"apiKeys\": [\n    {\n      \"apiKeyId\": \"string\",\n      \"name\": \"string\",\n      \"publicKey\": \"string\",\n      \"privateKey\": \"string\",\n      \"description\": \"string\",\n      \"role\": \"READ_ONLY\",\n      \"rateLimitRpm\": 2331,\n      \"expireState\": \"EXPIRE_STATE_NEVER_EXPIRE\",\n      \"expireTime\": \"string\",\n      \"apiKeyExpireSetting\": {\n        \"expireOption\": \"EXPIRE_OPTION_NEVER_EXPIRE\",\n        \"apiKeyTtl\": 12261\n      }\n    },\n    {\n      \"apiKeyId\": \"string\",\n      \"name\": \"string\",\n      \"publicKey\": \"string\",\n      \"privateKey\": \"string\",\n      \"description\": \"string\",\n      \"role\": \"READ_ONLY\",\n      \"rateLimitRpm\": 1784,\n      \"expireState\": \"EXPIRE_STATE_NEVER_EXPIRE\",\n      \"expireTime\": \"string\",\n      \"apiKeyExpireSetting\": {\n        \"expireOption\": \"EXPIRE_OPTION_NEVER_EXPIRE\",\n        \"apiKeyTtl\": 458174\n      }\n    }\n  ],\n  \"nextPageToken\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4e515129-392f-4c36-a686-324230cfea4f",
+              "name": "Bad request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1beta1",
+                    "dataApps",
+                    ":dataAppId",
+                    "apiKeys"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageSize",
+                      "value": "100"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dataAppId",
+                      "description": "(Required) The ID of the Data App. You can get the ID from the response of [List all Data Apps in a project](#tag/Data-App/operation/DataApp_ListDataApps)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 3166,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"@type\": \"string\",\n      \"key_0\": {},\n      \"key_1\": {},\n      \"key_2\": {},\n      \"key_3\": {},\n      \"key_4\": {}\n    },\n    {\n      \"@type\": \"string\",\n      \"key_0\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d3407d3d-a6cb-4899-85b0-06ac39067925",
+          "name": "Create an API key for a Data App.",
+          "request": {
+            "name": "Create an API key for a Data App.",
+            "description": {
+              "content": "For each Data App, you can create up to **100** API keys.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1beta1",
+                "dataApps",
+                ":dataAppId",
+                "apiKeys"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "dataAppId",
+                  "description": "(Required) The ID of the Data App. You can get the ID from the response of [List all Data Apps in a project](#tag/Data-App/operation/DataApp_ListDataApps)."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"<string>\",\n  \"role\": \"READ_ONLY\",\n  \"rateLimitRpm\": 100,\n  \"apiKeyExpireSetting\": {\n    \"expireOption\": \"EXPIRE_OPTION_NEVER_EXPIRE\",\n    \"apiKeyTtl\": \"<long>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "68d870d6-acc8-4e58-8bd3-f00fd7ad1ea2",
+              "name": "OK.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1beta1",
+                    "dataApps",
+                    ":dataAppId",
+                    "apiKeys"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dataAppId",
+                      "description": "(Required) The ID of the Data App. You can get the ID from the response of [List all Data Apps in a project](#tag/Data-App/operation/DataApp_ListDataApps)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"description\": \"<string>\",\n  \"role\": \"READ_ONLY\",\n  \"rateLimitRpm\": 100,\n  \"apiKeyExpireSetting\": {\n    \"expireOption\": \"EXPIRE_OPTION_NEVER_EXPIRE\",\n    \"apiKeyTtl\": \"<long>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"description\": \"<string>\",\n  \"role\": \"READ_ONLY\",\n  \"rateLimitRpm\": 100,\n  \"apiKeyExpireSetting\": {\n    \"expireOption\": \"EXPIRE_OPTION_NEVER_EXPIRE\",\n    \"apiKeyTtl\": \"<long>\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "40c4eb41-3a40-42a0-aa71-0674c476281d",
+              "name": "Bad request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1beta1",
+                    "dataApps",
+                    ":dataAppId",
+                    "apiKeys"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dataAppId",
+                      "description": "(Required) The ID of the Data App. You can get the ID from the response of [List all Data Apps in a project](#tag/Data-App/operation/DataApp_ListDataApps)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"description\": \"<string>\",\n  \"role\": \"READ_ONLY\",\n  \"rateLimitRpm\": 100,\n  \"apiKeyExpireSetting\": {\n    \"expireOption\": \"EXPIRE_OPTION_NEVER_EXPIRE\",\n    \"apiKeyTtl\": \"<long>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4939,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"@type\": \"string\",\n      \"key_0\": {}\n    },\n    {\n      \"@type\": \"string\",\n      \"key_0\": {},\n      \"key_1\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "183e2573-a632-4b5b-8de2-9b986b7edda7",
+          "name": "Update an API key for a Data App.",
+          "request": {
+            "name": "Update an API key for a Data App.",
+            "description": {
+              "content": "With this endpoint, you can update the description, role, rate limit, or expiration time of an API key.\n\n**Note:** You cannot update an expired key.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1beta1",
+                "dataApps",
+                ":dataAppId",
+                "apiKeys",
+                ":apiKeyId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "dataAppId",
+                  "description": "(Required) The ID of the Data App. You can get the ID from the response of [List all Data Apps in a project](#tag/Data-App/operation/DataApp_ListDataApps)."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "apiKeyId",
+                  "description": "(Required) The ID of the API key, which is returned when you [create an API key](#tag/Data-API-Key/operation/APIKey_CreateApiKey)."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"<string>\",\n  \"role\": \"READ_ONLY\",\n  \"rateLimitRpm\": 100,\n  \"apiKeyExpireSetting\": {\n    \"expireOption\": \"EXPIRE_OPTION_NEVER_EXPIRE\",\n    \"apiKeyTtl\": \"<long>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "74ffb557-3fff-4298-9557-b3b8dfe49826",
+              "name": "OK.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1beta1",
+                    "dataApps",
+                    ":dataAppId",
+                    "apiKeys",
+                    ":apiKeyId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dataAppId",
+                      "description": "(Required) The ID of the Data App. You can get the ID from the response of [List all Data Apps in a project](#tag/Data-App/operation/DataApp_ListDataApps)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "apiKeyId",
+                      "description": "(Required) The ID of the API key, which is returned when you [create an API key](#tag/Data-API-Key/operation/APIKey_CreateApiKey)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"description\": \"<string>\",\n  \"role\": \"READ_ONLY\",\n  \"rateLimitRpm\": 100,\n  \"apiKeyExpireSetting\": {\n    \"expireOption\": \"EXPIRE_OPTION_NEVER_EXPIRE\",\n    \"apiKeyTtl\": \"<long>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"description\": \"<string>\",\n  \"role\": \"READ_ONLY\",\n  \"rateLimitRpm\": 100,\n  \"apiKeyExpireSetting\": {\n    \"expireOption\": \"EXPIRE_OPTION_NEVER_EXPIRE\",\n    \"apiKeyTtl\": \"<long>\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "dab27205-1069-4def-98b6-e6e6ab6e3183",
+              "name": "Bad request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1beta1",
+                    "dataApps",
+                    ":dataAppId",
+                    "apiKeys",
+                    ":apiKeyId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dataAppId",
+                      "description": "(Required) The ID of the Data App. You can get the ID from the response of [List all Data Apps in a project](#tag/Data-App/operation/DataApp_ListDataApps)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "apiKeyId",
+                      "description": "(Required) The ID of the API key, which is returned when you [create an API key](#tag/Data-API-Key/operation/APIKey_CreateApiKey)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"description\": \"<string>\",\n  \"role\": \"READ_ONLY\",\n  \"rateLimitRpm\": 100,\n  \"apiKeyExpireSetting\": {\n    \"expireOption\": \"EXPIRE_OPTION_NEVER_EXPIRE\",\n    \"apiKeyTtl\": \"<long>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4939,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"@type\": \"string\",\n      \"key_0\": {}\n    },\n    {\n      \"@type\": \"string\",\n      \"key_0\": {},\n      \"key_1\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e37f30ce-aef0-44cd-b906-66e3ee36c73a",
+          "name": "Get an API key by ID.",
+          "request": {
+            "name": "Get an API key by ID.",
+            "description": {},
+            "url": {
+              "path": [
+                "v1beta1",
+                "dataApps",
+                ":dataAppId",
+                "apiKeys",
+                ":apiKeyId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "dataAppId",
+                  "description": "(Required) The ID of the Data App. You can get the ID from the response of [List all Data Apps in a project](#tag/Data-App/operation/DataApp_ListDataApps)."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "apiKeyId",
+                  "description": "(Required) The ID of the API key, which is returned when you [Create an API key](#tag/Data-API-Key/operation/APIKey_CreateApiKey)."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "22f44635-636a-43e0-93bc-a55e36c10539",
+              "name": "OK.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1beta1",
+                    "dataApps",
+                    ":dataAppId",
+                    "apiKeys",
+                    ":apiKeyId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dataAppId",
+                      "description": "(Required) The ID of the Data App. You can get the ID from the response of [List all Data Apps in a project](#tag/Data-App/operation/DataApp_ListDataApps)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "apiKeyId",
+                      "description": "(Required) The ID of the API key, which is returned when you [Create an API key](#tag/Data-API-Key/operation/APIKey_CreateApiKey)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"description\": \"<string>\",\n  \"role\": \"READ_ONLY\",\n  \"rateLimitRpm\": 100,\n  \"apiKeyExpireSetting\": {\n    \"expireOption\": \"EXPIRE_OPTION_NEVER_EXPIRE\",\n    \"apiKeyTtl\": \"<long>\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cc8772a0-ddf5-4d64-aa30-ec2438228681",
+              "name": "Bad request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1beta1",
+                    "dataApps",
+                    ":dataAppId",
+                    "apiKeys",
+                    ":apiKeyId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dataAppId",
+                      "description": "(Required) The ID of the Data App. You can get the ID from the response of [List all Data Apps in a project](#tag/Data-App/operation/DataApp_ListDataApps)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "apiKeyId",
+                      "description": "(Required) The ID of the API key, which is returned when you [Create an API key](#tag/Data-API-Key/operation/APIKey_CreateApiKey)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4939,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"@type\": \"string\",\n      \"key_0\": {}\n    },\n    {\n      \"@type\": \"string\",\n      \"key_0\": {},\n      \"key_1\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "76c6401b-4b0c-4621-9cfa-caecda574b29",
+          "name": "Delete an API key for a Data App.",
+          "request": {
+            "name": "Delete an API key for a Data App.",
+            "description": {
+              "content": "Before you delete an API key, make sure that the API key is not used by any Data App.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1beta1",
+                "dataApps",
+                ":dataAppId",
+                "apiKeys",
+                ":apiKeyId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "dataAppId",
+                  "description": "(Required) The ID of the Data App. You can get the ID from the response of [List all Data Apps in a project](#tag/Data-App/operation/DataApp_ListDataApps)."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "apiKeyId",
+                  "description": "(Required) The ID of the API key, which is returned when you [Create an API key](#tag/Data-API-Key/operation/APIKey_CreateApiKey)."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "f750f4c6-f3ef-4488-899b-17117610c60c",
+              "name": "OK.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1beta1",
+                    "dataApps",
+                    ":dataAppId",
+                    "apiKeys",
+                    ":apiKeyId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dataAppId",
+                      "description": "(Required) The ID of the Data App. You can get the ID from the response of [List all Data Apps in a project](#tag/Data-App/operation/DataApp_ListDataApps)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "apiKeyId",
+                      "description": "(Required) The ID of the API key, which is returned when you [Create an API key](#tag/Data-API-Key/operation/APIKey_CreateApiKey)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "db0d6724-e282-42b4-b5ed-cacdca94fd26",
+              "name": "Bad request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1beta1",
+                    "dataApps",
+                    ":dataAppId",
+                    "apiKeys",
+                    ":apiKeyId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dataAppId",
+                      "description": "(Required) The ID of the Data App. You can get the ID from the response of [List all Data Apps in a project](#tag/Data-App/operation/DataApp_ListDataApps)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "apiKeyId",
+                      "description": "(Required) The ID of the API key, which is returned when you [Create an API key](#tag/Data-API-Key/operation/APIKey_CreateApiKey)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4939,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"@type\": \"string\",\n      \"key_0\": {}\n    },\n    {\n      \"@type\": \"string\",\n      \"key_0\": {},\n      \"key_1\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://dataservice.tidbapi.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "fe27fa04-b133-46d4-9a32-c78cb645b9c5",
+    "name": "TiDB Cloud Data Service OPEN Data API Key API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "# Overview\n\nThe TiDB Cloud Data Service API provides a [RESTful interface](https://en.wikipedia.org/wiki/Representational_state_transfer) for programmatically managing administrative objects within the [TiDB Cloud Data Service](https://docs.pingcap.com/tidbcloud/data-service-overview). Through this API, you can manage the following resources automatically and efficiently:\n\n* **Data App**: a collection of endpoints that you can use to access data for a specific application.\n* **Data Source**: clusters linked to Data Apps for data manipulation and retrieval.\n* **Endpoint**: a web API that you can customize to execute SQL statements. You can specify parameters for the SQL statements, such as the value used in the `WHERE` clause. When a client calls an endpoint and provides values for the parameters in a request URL, the endpoint executes the SQL statement with the provided parameters and returns the results as part of the HTTP response.\n* **Deployment**: the process of deploying Data Apps.\n* **Data API Key**: used for secure endpoint access. This key is used to access data in the TiDB Cloud clusters, whereas the TiDB Cloud organization API key is used to manage resources such as projects, clusters, Data Apps, and endpoints.\n* **OpenAPI Specification**: Data Service supports generating the OpenAPI Specification 3.0 for each Data App, which enables you to interact with your endpoints in a standardized format. You can use this specification to generate standardized OpenAPI documentation, client SDKs, and server stubs.\n\n# Get Started\n\nThis guide helps you make your first API call to TiDB Cloud Data Service API. You'll learn how to authenticate a request, build a request, and interpret the response. The [List all Data Apps in a project](#tag/Data-App/operation/DataApp_ListDataApps) endpoint is used in this guide as an example.\n\n## Prerequisites\n\nTo complete this guide, you need to perform the following tasks:\n\n- Create a [TiDB Cloud account](https://tidbcloud.com/free-trial)\n- Install [curl](https://curl.se/)\n\n## Step 1. Create an organization API key\n\nTo create an organization API key, log in to your TiDB Cloud console. Navigate to the [**API Keys**](https://tidbcloud.com/org-settings/api-keys) page of your organization, and create an API key.\n\nAn organization API key contains a public key and a private key. Copy and save them in a secure location. You will need to use the API key later in this guide.\n\nFor more details about creating an organization API key, refer to [API Key Management](#section/Authentication/API-Key-Management).\n\n## Step 2. Make your first API call\n\n### Build an API call\n\nTiDB Cloud Data Service API call consists of the following components:\n\n- **A host.** The host for TiDB Cloud Data Service API is <https://dataservice.tidbapi.com>.\n- **An organization API Key**. The public key and the private key are required for authentication.\n- **A request.** When submitting data to a resource via `POST`, `PATCH`, or `PUT`, you must submit your payload in JSON.\n\nIn this guide, you call the [List all Data Apps in a project](#tag/Data-App/operation/DataApp_ListDataApps) endpoint. For a detailed description of the endpoint, see the [API reference](#tag/Data-App/operation/DataApp_ListDataApps).\n\n### Call an API endpoint\n\nTo get all Data Apps in your project, run the following command in your terminal. Replace `YOUR_PUBLIC_KEY`, `YOUR_PRIVATE_KEY`, and `YOUR_PROJECT_ID` with your actual values. To get the project ID, you can call the [List all accessible projects](https://docs.pingcap.com/tidbcloud/api/v1beta#tag/Project/operation/ListProjects) endpoint.\n\n```bash\ncurl --digest \\\n  --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --request GET \\\n  --url 'https://dataservice.tidbapi.com/v1beta1/dataApps?projectId=YOUR_PROJECT_ID'\n```\n\n## Step 3. Check the response\n\nAfter making the API call, if the status code in response is `200` and you see details about all the Data Apps in your project, your request is successful. Here is an example of a successful response.\n\n```log\n{\n  \"dataApps\": [\n    {\n      \"dataAppId\": \"{data_app_id}\",\n      \"name\": \"dataApps/{data_app_id}\",\n      \"version\": \"\",\n      \"projectId\": \"{project_id}\",\n      \"clusterIds\": [],\n      \"appType\": \"DATAAPP\",\n      \"displayName\": \"New Data App\",\n      \"description\": \"\",\n      \"createdAt\": \"2023-06-03T06:52:08Z\",\n      \"updatedAt\": \"2023-06-03T06:52:08Z\"\n    },\n    {\n      \"dataAppId\": \"{data_app_id}\",\n      \"name\": \"dataApps/{data_app_id}\",\n      \"version\": \"\",\n      \"projectId\": \"{project_id}\",\n      \"clusterIds\": [],\n      \"appType\": \"CHAT2QUERY\",\n      \"displayName\": \"New App\",\n      \"description\": \"\",\n      \"createdAt\": \"2023-06-03T06:52:08Z\",\n      \"updatedAt\": \"2023-06-03T06:52:08Z\"\n    }\n  ],\n  \"nextPageToken\": \"\"\n}\n```\n\nIf your API call is not successful, you will receive a status code other than `200` and the response looks similar to the following example. To troubleshoot the failed call, you can check the `message` in the response.\n\n```log\n{\n  \"code\": 403,\n  \"message\": \"Request error, projectId not exist\",\n  \"details\": []\n}\n```\n\n# Call a Deployed Data Service Endpoint\n\nIf you have deployed a Data Service endpoint, you can call it using the Data API key. To begin, follow these steps:\n\n1. Generate a Data API key by calling the [Create an API key for a Data App](#tag/Data-API-Key/operation/APIKey_CreateApiKey) endpoint. You can run the following `curl` command and replace `YOUR_PUBLIC_KEY`, `YOUR_PRIVATE_KEY`, and `YOUR_DATAAPP_ID` with your actual values. Note that `YOUR_PUBLIC_KEY` and `YOUR_PRIVATE_KEY` are [organization API keys](#section/Authentication/Organization-API-key-overview).\n\n    ```bash\n    curl --digest \\\n      --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n      --request POST \\\n      --url 'https://dataservice.tidbapi.com/v1beta1/dataApps/YOUR_DATAAPP_ID/apiKeys'\\\n      --header 'Content-Type: application/json' \\\n      --data '{\n        \"description\": \"A new API Key\",\n        \"role\": \"READ_AND_WRITE\",\n        \"rateLimitRpm\": 100\n      }'\n    ```\n\n2. Call the deployed endpoint. Suppose that you have created a `GET` endpoint named `/hello`, with the request URL as `https://data.tidbcloud.com/api/v1beta/app/DATAAPP_ID/endpoint/hello`. To call this endpoint, replace `YOUR_DATAAPP_PUBLIC_KEY` and `YOUR_DATAAPP_PRIVATE_KEY` with the values obtained from the response in step 1, and replace `YOUR_DATAAPP_ID` with the actual Data App ID in the following command:\n\n    ```bash\n    curl --location-trusted --digest \\\n      --user 'YOUR_DATAAPP_PUBLIC_KEY:YOUR_DATAAPP_PRIVATE_KEY' \\\n      --request GET \\\n      --url 'https://data.tidbcloud.com/api/v1beta/app/YOUR_DATAAPP_ID/endpoint/hello'\n    ```\n    \n    For improved performance, you can call the endpoint using the regional domain name. Replace `REGION` with the specific region name to which the cluster belongs, such as `us-west-2`.\n    \n    ```bash\n    curl --digest \\\n      --user 'YOUR_DATAAPP_PUBLIC_KEY:YOUR_DATAAPP_PRIVATE_KEY' \\\n      --request GET \\\n      --url 'https://REGION.data.tidbcloud.com/api/v1beta/app/DATAAPP_ID/endpoint/hello'\n    ```\n\n# Authentication\n\nThe TiDB Cloud Data Service API uses [HTTP Digest Authentication](https://en.wikipedia.org/wiki/Digest_access_authentication). It protects your private key from being sent over the network. For more details about HTTP Digest Authentication, refer to the [IETF RFC](https://datatracker.ietf.org/doc/html/rfc7616).\n\n## Organization API key overview\n\n- The organization API key contains a public key and a private key, which act as the username and password required in the HTTP Digest Authentication. The private key only displays upon the key creation.\n- The organization API key belongs to your organization and acts as the `Organization Owner` role. You can check [permissions of owner](https://docs.pingcap.com/tidbcloud/manage-user-access#configure-member-roles).\n- You must provide the correct organization API key in every request. Otherwise, TiDB Cloud responds with a `401` error.\n\n## Organization API key management\n\n### Create an organization API key\n\nOnly the **owner** of an organization can create an organization API key.\n\nTo create an organization API key in an organization, perform the following steps:\n\n1. In the [TiDB Cloud console](https://tidbcloud.com), switch to your target organization using the combo box in the upper-left corner.\n2. In the left navigation pane, click **Organization Settings** > **API Keys**.\n3. On the **API Keys** page, click **Create API Key**.\n4. Enter a description for your API key. The role of the API key is always `Organization Owner` currently.\n5. Click **Next**. Copy and save the public key and the private key.\n6. Make sure that you have copied and saved the private key in a secure location. The private key only displays upon the creation. After leaving this page, you will not be able to get the full private key again.\n7. Click **Done**.\n\n### View details of an organization API key\n\nTo view details of an organization API key, perform the following steps:\n\n1. In the [TiDB Cloud console](https://tidbcloud.com), switch to your target organization using the combo box in the upper-left corner.\n2. In the left navigation pane, click **Organization Settings** > **API Keys**.\n3. You can view the details of the API keys on the page.\n\n### Edit an organization API key\n\nOnly the **owner** of an organization can modify an organization API key.\n\nTo edit an organization API key in an organization, perform the following steps:\n\n1. In the [TiDB Cloud console](https://tidbcloud.com), switch to your target organization using the combo box in the upper-left corner.\n2. In the left navigation pane, click **Organization Settings** > **API Keys**.\n3. On the **API Keys** page, click **...** in the API key row that you want to change, and then click **Edit**.\n4. You can update the API key description.\n5. Click **Update**.\n\n### Delete an organization API key\n\nOnly the **owner** of an organization can delete an organization API key.\n\nTo delete an organization API key in an organization, perform the following steps:\n\n1. In the [TiDB Cloud console](https://tidbcloud.com), switch to your target organization using the combo box in the upper-left corner.\n2. In the left navigation pane, click **Organization Settings** > **API Keys**.\n3. On the **API Keys** page, click **...** in the API key row that you want to delete, and then click **Delete**.\n4. Click **I understand, delete it.**\n\n# Rate Limiting\n\nThe TiDB Cloud Data Service API allows up to 100 requests per minute per API key. If you exceed the rate limit, the API returns a `429` error. For more quota, you can [submit a request](https://support.pingcap.com/hc/en-us/requests/new?ticket_form_id=7800003722519) to contact our support team.\n\nEach API request returns the following headers about the limit.\n\n- `X-Ratelimit-Limit-Minute`: The number of requests allowed per minute. It is 100 currently.\n- `X-Ratelimit-Remaining-Minute`: The number of remaining requests in the current minute. When it reaches `0`, the API returns a `429` error and indicates that you exceed the rate limit.\n- `X-Ratelimit-Reset`: The time in seconds at which the current rate limit resets.\n\nIf you exceed the rate limit, an error response returns like this.\n\n```\n> HTTP/2 429\n> date: Fri, 22 Jul 2022 05:28:37 GMT\n> content-type: application/json\n> content-length: 66\n> x-ratelimit-reset: 23\n> x-ratelimit-remaining-minute: 0\n> x-ratelimit-limit-minute: 100\n> x-kong-response-latency: 2\n> server: kong/2.8.1\n\n> {\"details\":[],\"code\":49900007,\"message\":\"The request exceeded the limit of 100 times per apikey per minute. For more quota, please contact us: https://support.pingcap.com/hc/en-us/requests/new?ticket_form_id=7800003722519\"}\n```\n\n# API Changelog\n\nThis changelog lists all changes to the TiDB Cloud Data Service API.\n\n<!-- In reverse chronological order -->\n\n## 20250812\n\n- \"TiDB Cloud Serverless\" is renamed to \"TiDB Cloud Starter\".\n\n## 20240910\n\n- The [Update Chat2Query Data App settings by ID](#tag/Data-App/operation/DataApp_UpdateChat2QuerySettings) endpoint removes the support for the `gpt-3.5-turbo` model and adds support for `gpt-4o` and `gpt-4o-mini` models.\n\n- \"TiDB Serverless\" is renamed to \"TiDB Cloud Serverless\".\n- \"TiDB Dedicated\" is renamed to \"TiDB Cloud Dedicated\".\n\n## 20240806\n\n- Add the [List all system endpoints in a Data App](#tag/Data-App/operation/DataAppsService_GetSystemEndpointConfig) endpoint.\n\n- Add the [Update the configuration of system endpoints](#tag/Data-App/operation/DataAppsService_UpdateSystemEndpointConfig) endpoint.\n\n## 20240716\n\n- The [Update Chat2Query Data App settings by ID](#tag/Data-App/operation/DataApp_UpdateChat2QuerySettings) endpoint removes the support for Claude models.\n\n## 20240528\n\n- Initial release of the TiDB Cloud Data Service API, including the following resources and endpoints:\n\n    - Data App:\n      - [List all Data Apps in a project](#tag/Data-App/operation/DataApp_ListDataApps)\n      - [Create a Data App](#tag/Data-App/operation/DataApp_CreateDataApp)\n      - [Get Chat2Query Data App settings by ID](#tag/Data-App/operation/DataApp_GetChat2QuerySettings)\n      - [Update Chat2Query Data App settings by ID](#tag/Data-App/operation/DataApp_UpdateChat2QuerySettings)\n      - [Update a Data App](#tag/Data-App/operation/DataApp_UpdateDataApp)\n      - [Get a Data App by ID](#tag/Data-App/operation/DataApp_GetDataApp)\n      - [Delete a Data App](#tag/Data-App/operation/DataApp_DeleteDataApp)\n    - Data Source:\n      - [List all data sources in a Data App](#tag/Data-Source/operation/DataSource_ListDataSources)\n      - [Create a data source for a Data App](#tag/Data-Source/operation/DataSource_CreateDataSource)\n      - [Get a data source by ID](#tag/Data-Source/operation/DataSource_GetDataSource)\n      - [Delete a data source for a Data App](#tag/Data-Source/operation/DataSource_DeleteDataSource)\n    - Endpoint:\n      - [List all endpoints in a Data App](#tag/Deployment/operation/Deployment_ListDeployments)\n      - [Create an endpoint for a Data App](#tag/Endpoint/operation/Endpoint_CreateEndpoint)\n      - [Update an endpoint for a Data App](#tag/Endpoint/operation/Endpoint_UpdateEndpoint)\n      - [Get an endpoint for a Data App](#tag/Endpoint/operation/Endpoint_GetEndpoint)\n      - [Delete an endpoint for a Data App](#tag/Endpoint/operation/Endpoint_DeleteEndpoint)\n      - [Test an endpoint for a Data App](#tag/Endpoint/operation/Endpoint_TestEndpoint)\n    - Deployment:\n      - [List all deployments for a Data App](#tag/Deployment/operation/Deployment_ListDeployments)\n      - [Create a deployment for a Data App](#tag/Deployment/operation/Deployment_CreateDeployment)\n      - [Get a deployment by ID](#tag/Deployment/operation/Deployment_GetDeployment)\n    - Data API Key:\n      - [List all API keys for a Data App](#tag/Data-API-Key/operation/APIKey_ListApiKeys)\n      - [Create an API key for a Data App](#tag/Data-API-Key/operation/APIKey_CreateApiKey)\n      - [Update an API key for a Data App](#tag/Data-API-Key/operation/APIKey_UpdateApiKey)\n      - [Get an API key by ID](#tag/Data-API-Key/operation/APIKey_GetApiKey)\n      - [Delete an API key for a Data App](#tag/Data-API-Key/operation/APIKey_DeleteApiKey)\n    - OpenAPI Specification:\n      - [Get the OpenAPI Specification of a Data App](#tag/OpenAPI-Specification/operation/APISpecification_GetApiSpec)\n",
+      "type": "text/plain"
+    }
+  }
+}

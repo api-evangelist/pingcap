@@ -1,0 +1,209 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "TiDB Cloud Data Service OPEN Data App API",
+    "version": "v1beta1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Data App",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List all Data Apps in a project.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dataservice.tidbapi.com/v1beta1/dataApps",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "query",
+                "description": "The ID of the project that the Data App belongs to. You can get the project ID from the response of [List all accessible projects](https://docs.pingcap.com/tidbcloud/api/v1beta#tag/Project/operation/ListProjects)."
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of items to return. If it is not set or set to `0`, the default value `100` will be used."
+              },
+              {
+                "name": "pageToken",
+                "value": "",
+                "type": "query",
+                "description": "The identifier of the current page, used to retrieve the next page of results. You can get this value from the `nextPageToken` field in the previous response. To access the first page of data, omit this field."
+              }
+            ]
+          },
+          "docs": "List all Data Apps in a project."
+        },
+        {
+          "info": {
+            "name": "Create a Data App.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dataservice.tidbapi.com/v1beta1/dataApps",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a Data App."
+        },
+        {
+          "info": {
+            "name": "List all system endpoints in a Data App.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dataservice.tidbapi.com/v1beta1/dataApps/:dataAppId/systemEndpointConfig",
+            "params": [
+              {
+                "name": "dataAppId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the Data App. You can get the ID from the response of [List all Data Apps in a project](#tag/Data-App/operation/DataApp_ListDataApps)."
+              }
+            ]
+          },
+          "docs": "TiDB Cloud Data Service provides an endpoint library with predefined system endpoints that you can directly add to your Data App, reducing the effort in your endpoint development.\n\nFor example, the `POST:/system/query` system endpoint enables you to execute any SQL statement by simply passing the statement in the predefined `sql` parameter. This endpoint facilitates the immediate execution of SQL queries, enhancing flexibility and efficiency."
+        },
+        {
+          "info": {
+            "name": "Update the configuration of system endpoints.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://dataservice.tidbapi.com/v1beta1/dataApps/:dataAppId/systemEndpointConfig",
+            "params": [
+              {
+                "name": "dataAppId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the Data App. You can get the ID from the response of [List all Data Apps in a project](#tag/Data-App/operation/DataApp_ListDataApps)."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "With this endpoint, you can enable or disable the system endpoints in a Data App."
+        },
+        {
+          "info": {
+            "name": "Get Chat2Query Data App settings by ID.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dataservice.tidbapi.com/v1beta1/dataApps/:dataAppId/chat2querySettings",
+            "params": [
+              {
+                "name": "dataAppId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the Data App. You can get the ID from the response of [List all Data Apps in a project](#tag/Data-App/operation/DataApp_ListDataApps)."
+              }
+            ]
+          },
+          "docs": "With this endpoint, you can get the settings of a Chat2Query Data App, such as `name`, `llmApiKey`, `languageCode`, and `llmModel`. To get basic information, such as `version`, `projectId`, and `clusterIds`, use the [Get a Data App by ID](#tag/Data-App/operation/DataApp_GetDataApp) endpoint instead."
+        },
+        {
+          "info": {
+            "name": "Update Chat2Query Data App settings by ID.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://dataservice.tidbapi.com/v1beta1/dataApps/:dataAppId/chat2querySettings",
+            "params": [
+              {
+                "name": "dataAppId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the Data App. You can get the ID from the response of [List all Data Apps in a project](#tag/Data-App/operation/DataApp_ListDataApps)."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "With this endpoint, you can update the `llmApiKey`, `languageCode`, or `llmModel` settings of a Chat2Query Data App. To update the version, name, or description, use the [Update a Data App](#tag/Data-App/operation/DataApp_UpdateDataApp) endpoint instead."
+        },
+        {
+          "info": {
+            "name": "Get a Data App by ID.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dataservice.tidbapi.com/v1beta1/dataApps/:dataAppId",
+            "params": [
+              {
+                "name": "dataAppId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the Data App. You can get the ID from the response of [List all Data Apps in a project](#tag/Data-App/operation/DataApp_ListDataApps)."
+              }
+            ]
+          },
+          "docs": "With this endpoint, you can get the basic information of a Data App, such as `name`, `version`, `projectId`, and `clusterIds`. To get the `llmApiKey`, `languageCode`, and `llmModel` of a Chat2Query Data App, use the [Get Chat2Query Data App settings by ID](#tag/Data-App/operation/DataApp_UpdateChat2QuerySettings) endpoint instead."
+        },
+        {
+          "info": {
+            "name": "Update a Data App.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://dataservice.tidbapi.com/v1beta1/dataApps/:dataAppId",
+            "params": [
+              {
+                "name": "dataAppId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the Data App. You can get the ID from the response of [List all Data Apps in a project](#tag/Data-App/operation/DataApp_ListDataApps)."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "With this endpoint, you can update the `version`, `name`, or `description` of a Data App. To update the `llmApiKey`, `languageCode`, or `llmModel` settings of a Chat2Query App, use the [Update Chat2Query App settings by Data App ID](#tag/Data-App/operation/DataApp_GetChat2QuerySettings) endpoint instead."
+        },
+        {
+          "info": {
+            "name": "Delete a Data App.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://dataservice.tidbapi.com/v1beta1/dataApps/:dataAppId",
+            "params": [
+              {
+                "name": "dataAppId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the Data App. You can get the ID from the response of [List all Data Apps in a project](#tag/Data-App/operation/DataApp_ListDataApps)."
+              }
+            ]
+          },
+          "docs": "Delete a Data App."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

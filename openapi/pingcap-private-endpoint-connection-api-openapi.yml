@@ -1,0 +1,878 @@
+openapi: 3.2.0
+info:
+  title: TiDB Cloud Dedicated Private Endpoint Connection API
+  description: "*TiDB Cloud API is in beta.*\n\nThis API manages [TiDB Cloud Dedicated](https://docs.pingcap.com/tidbcloud/select-cluster-tier/#tidb-cloud-dedicated) clusters. For TiDB Cloud Starter or TiDB Cloud Essential instances, use the [TiDB Cloud Starter and Essential API](https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless). For more information about TiDB Cloud API, see [TiDB Cloud API Overview](https://docs.pingcap.com/tidbcloud/api-overview/).\n\n# Overview\n\nThe TiDB Cloud API is a [REST interface](https://en.wikipedia.org/wiki/Representational_state_transfer) that provides you with programmatic access to manage clusters and related resources within TiDB Cloud.\n\nThe API has the following features:\n\n- **JSON entities.** All entities are expressed in JSON.\n- **HTTPS-only.** You can only access the API via HTTPS, ensuring all the data sent over the network is encrypted with TLS.\n- **Key-based access and digest authentication.** Before you access TiDB Cloud API, you must generate an API key. All requests are authenticated through [HTTP Digest Authentication](https://en.wikipedia.org/wiki/Digest_access_authentication), ensuring the API key is never sent over the network.\n\n# Get Started\n\nThis guide helps you make your first API call to TiDB Cloud API. You'll learn how to authenticate a request, build a request, and interpret the response.\n\n## Prerequisites\n\nTo complete this guide, you need to perform the following tasks:\n\n- Create a [TiDB Cloud account](https://tidbcloud.com/free-trial)\n- Install [curl](https://curl.se/)\n\n## Step 1. Create an API key\n\nTo create an API key, log in to your TiDB Cloud console. Navigate to the [**API Keys**](https://tidbcloud.com/org-settings/api-keys) page of your organization, and create an API key.\n\nAn API key contains a public key and a private key. Copy and save them in a secure location. You will need to use the API key later in this guide.\n\nFor more details about creating API keys, refer to [API Key Management](#section/Authentication/API-Key-Management).\n\n## Step 2. Make your first API call\n\n### Build an API call\n\nTiDB Cloud API call consists of the following components:\n\n- **A host**. The host for TiDB Cloud API is <https://dedicated.tidbapi.com>.\n- **An API Key**. The public key and the private key are required for authentication.\n- **A request**. When submitting data to a resource via `POST`, `PATCH`, or `PUT`, you must submit your payload in JSON.\n\nIn this guide, you call the [List clusters](#tag/Cluster/operation/ClusterService_ListClusters) endpoint. For the detailed description of the endpoint, see the [API reference](#tag/Cluster/operation/ClusterService_ListClusters).\n\n### Call an API endpoint\n\nTo get all clusters in your organization, run the following command in your terminal. Remember to change `YOUR_PUBLIC_KEY` to your public key and `YOUR_PRIVATE_KEY` to your private key.\n\n```shell\ncurl --digest \\\n --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n --request GET \\\n --url 'https://dedicated.tidbapi.com/v1beta1/clusters'\n```\n\n## Step 3. Check the response\n\nAfter making the API call, if the status code in response is `200` and you see details about all clusters in your organization, your request is successful.\n\n# Authentication\n\nThe TiDB Cloud API uses [HTTP Digest Authentication](https://en.wikipedia.org/wiki/Digest_access_authentication). It protects your private key from being sent over the network. For more details about HTTP Digest Authentication, refer to the [IETF RFC](https://datatracker.ietf.org/doc/html/rfc7616).\n\n## API key overview\n\n- The API key contains a public key and a private key, which act as the username and password required in the HTTP Digest Authentication. The private key only displays upon the key creation.\n- The API key belongs to your organization and acts as the `Organization Owner` role. You can check [permissions of owner](https://docs.pingcap.com/tidbcloud/manage-user-access#configure-member-roles).\n- You must provide the correct API key in every request. Otherwise, TiDB Cloud responds with a `401` error.\n\n## API key management\n\n### Create an API key\n\nOnly the **owner** of an organization can create an API key.\n\nTo create an API key in an organization, perform the following steps:\n\n1. In the [TiDB Cloud console](https://tidbcloud.com), switch to your target organization using the combo box in the upper-left corner.\n2. In the left navigation pane, click **Organization Settings** > **API Keys**.\n3. On the **API Keys** page, click **Create API Key**.\n4. Enter a description for your API key.\n5. Configure the role and scope for the API key. For more information about the permissions of a role, see [User roles](https://docs.pingcap.com/tidbcloud/manage-user-access/#user-roles).\n6. Click **Generate API Key**. Copy and save the public key and the private key.\n7. Make sure that you have copied and saved the private key in a secure location. The private key only displays upon the creation. After leaving this page, you will not be able to get the full private key again.\n8. Click **Done**.\n\n### View details of an API key\n\nTo view details of an API key, perform the following steps:\n\n1. In the [TiDB Cloud console](https://tidbcloud.com), switch to your target organization using the combo box in the upper-left corner.\n2. In the left navigation pane, click **Organization Settings** > **API Keys**.\n3. You can view the details of the API keys on the page.\n\n### Edit an API key\n\nOnly the **owner** of an organization can modify an API key.\n\nTo edit an API key in an organization, perform the following steps:\n\n1. In the [TiDB Cloud console](https://tidbcloud.com), switch to your target organization using the combo box in the upper-left corner.\n2. In the left navigation pane, click **Organization Settings** > **API Keys**.\n3. On the **API Keys** page, click **...** in the API key row that you want to change, and then click **Update Role**.\n4. You can update the description and role of the API key.\n5. Click **Update**.\n\n### Delete an API key\n\nOnly the **owner** of an organization can delete an API key.\n\nTo delete an API key in an organization, perform the following steps:\n\n1. In the [TiDB Cloud console](https://tidbcloud.com), switch to your target organization using the combo box in the upper-left corner.\n2. In the left navigation pane, click **Organization Settings** > **API Keys**.\n3. On the **API Keys** page, click **...** in the API key row that you want to delete, and then click **Delete**.\n4. Click **I understand, delete it.**\n\n# Rate Limiting\n\nThe TiDB Cloud API allows up to 100 requests per minute per API key. If you exceed the rate limit, the API returns a `429` error. For more quota, you can [submit a request](https://support.pingcap.com/hc/en-us/requests/new?ticket_form_id=7800003722519) to contact our support team.\n\nEach API request returns the following headers about the limit.\n\n- `X-Ratelimit-Limit-Minute`: The number of requests allowed per minute. It is 100 currently.\n- `X-Ratelimit-Remaining-Minute`: The number of remaining requests in the current minute. When it reaches `0`, the API returns a `429` error and indicates that you exceed the rate limit.\n- `X-Ratelimit-Reset`: The time in seconds at which the current rate limit resets.\n\nIf you exceed the rate limit, an error response returns like this.\n\n```\n> HTTP/2 429\n> date: Fri, 22 Jul 2022 05:28:37 GMT\n> content-type: application/json\n> content-length: 66\n> x-ratelimit-reset: 23\n> x-ratelimit-remaining-minute: 0\n> x-ratelimit-limit-minute: 100\n> x-kong-response-latency: 2\n> server: kong/2.8.1\n\n> {\"details\":[],\"code\":49900007,\"message\":\"The request exceeded the limit of 100 times per apikey per minute. For more quota, please contact us: https://support.pingcap.com/hc/en-us/requests/new?ticket_form_id=7800003722519\"}\n```\n\n# API Changelog\n\nThis changelog lists all changes to the TiDB Cloud API.\n\n<!-- In reverse chronological order -->\n\n## 20260707\n\n- Introduce the following Changefeed endpoints for managing changefeeds:\n\t* [List changefeed RCU options](#tag/Changefeed/operation/ListChangefeedRCUs)\n\t* [List changefeeds](#tag/Changefeed/operation/ListChangefeeds)\n\t* [Create a changefeed](#tag/Changefeed/operation/CreateChangefeed)\n\t* [Get a changefeed](#tag/Changefeed/operation/GetChangefeed)\n\t* [Delete a changefeed](#tag/Changefeed/operation/DeleteChangefeed)\n\t* [Update a changefeed downstream config](#tag/Changefeed/operation/EditChangefeedDownstreamConfig)\n\t* [Pause a changefeed](#tag/Changefeed/operation/PauseChangefeed)\n\t* [Resume a changefeed](#tag/Changefeed/operation/ResumeChangefeed)\n\t* [Scale a changefeed](#tag/Changefeed/operation/ScaleChangefeed)\n\n## 20251028\n\n- Introduce the following TiDB Cloud Dedicated API endpoints for managing third-party monitoring integrations:\n\t* [List integrations](#tag/Integration/operation/IntegrationService_ListIntegrations)\n\t* [Create an integration](#tag/Integration/operation/IntegrationService_CreateIntegration)\n\t* [Delete an integration](#tag/Integration/operation/IntegrationService_DeleteIntegration)\n\n## 20250812\n\n- Initial release of the TiDB Cloud Dedicated API, including the following resources and endpoints:\n\t* Cluster\n\t\t* [List clusters](#tag/Cluster/operation/ClusterService_ListClusters)\n\t\t* [Create a cluster](#tag/Cluster/operation/ClusterService_CreateCluster)\n\t\t* [Get a cluster](#tag/Cluster/operation/ClusterService_GetCluster)\n\t\t* [Delete a cluster](#tag/Cluster/operation/ClusterService_DeleteCluster)\n\t\t* [Update a cluster](#tag/Cluster/operation/ClusterService_UpdateCluster)\n\t\t* [Pause a cluster](#tag/Cluster/operation/ClusterService_PauseCluster)\n\t\t* [Resume a cluster](#tag/Cluster/operation/ClusterService_ResumeCluster)\n\t\t* [Reset the root password of a cluster](#tag/Cluster/operation/ClusterService_ResetRootPassword)\n\t\t* [List node quotas for your organization](#tag/Cluster/operation/ClusterService_ShowNodeQuota)\n\t\t* [Get log redaction policy](#tag/Cluster/operation/ClusterService_GetLogRedactionPolicy)\n\t* Region\n\t\t* [List regions](#tag/Region/operation/RegionService_ListRegions)\n\t\t* [Get a region](#tag/Region/operation/RegionService_GetRegion)\n\t\t* [List cloud providers](#tag/Region/operation/RegionService_ShowCloudProviders)\n\t\t* [List node specs](#tag/Region/operation/RegionService_ListNodeSpecs)\n\t\t* [Get a node spec](#tag/Region/operation/RegionService_GetNodeSpec)\n\t* Private Endpoint Connection\n\t\t* [Get private link service for a TiDB node group](#tag/Private-Endpoint-Connection/operation/PrivateEndpointConnectionService_GetPrivateLinkService)\n\t\t* [Create a private endpoint connection](#tag/Private-Endpoint-Connection/operation/PrivateEndpointConnectionService_CreatePrivateEndpointConnection)\n\t\t* [List private endpoint connections](#tag/Private-Endpoint-Connection/operation/PrivateEndpointConnectionService_ListPrivateEndpointConnections)\n\t\t* [Get a private endpoint connection](#tag/Private-Endpoint-Connection/operation/PrivateEndpointConnectionService_GetPrivateEndpointConnection)\n\t\t* [Delete a private endpoint connection](#tag/Private-Endpoint-Connection/operation/PrivateEndpointConnectionService_DeletePrivateEndpointConnection)\n\t* Import\n\t\t* [List import tasks](#tag/Import/operation/ListImports)\n\t\t* [Create an import task](#tag/Import/operation/CreateImport)\n\t\t* [Get an import task](#tag/Import/operation/GetImport)\n\t\t* [Cancel an import task](#tag/Import/operation/CancelImport)\n\t\n"
+  version: v1beta1
+servers:
+- url: https://dedicated.tidbapi.com/v1beta1
+tags:
+- name: Private Endpoint Connection
+  description: Get private link service for a TiDB node group, create a private endpoint connection, list private endpoint connections, get a private endpoint connection, and delete a private endpoint connection.
+paths:
+  /clusters/{clusterId}/tidbNodeGroups/{tidbNodeGroupId}/privateLinkService:
+    get:
+      summary: Get private link service for a TiDB node group
+      description: Retrieves the private link service configuration for a [TiDB node group](https://docs.pingcap.com/tidbcloud/tidb-node-group-overview/). You can use the private link service to establish private endpoint connections to your TiDB cluster.
+      operationId: PrivateEndpointConnectionService_GetPrivateLinkService
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/dedicatedv1beta1PrivateLinkService'
+        '400':
+          description: A request field is invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        '401':
+          description: The API key cannot be authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        '403':
+          description: The API key does not have permission to access the resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        '429':
+          description: You have exceed the rate limit.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+      parameters:
+      - name: clusterId
+        description: The ID of the cluster for which to get the private link service.
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: tidbNodeGroupId
+        description: The ID of the TiDB node group for which to get the private link service.
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Private Endpoint Connection
+      x-code-samples:
+      - lang: curl
+        label: curl
+        source: "curl --digest --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --location 'https://dedicated.tidbapi.com/v1beta1/clusters/{clusterId}/tidbNodeGroups/{tidbNodeGroupId}/privateLinkService'"
+  /clusters/{clusterId}/tidbNodeGroups/{tidbNodeGroupId}/privateEndpointConnections:
+    get:
+      summary: List private endpoint connections
+      description: Lists private endpoint connections for a cluster and TiDB node group. To list private link connections across different clusters and TiDB node groups, set cluster_id and tidb_node_group_id to "-". If you want to list private link connections under a project across different clusters and TiDB node groups, set both cluster_id and tidb_node_group_id to "-", and pass the project_id in the query parameter.
+      operationId: PrivateEndpointConnectionService_ListPrivateEndpointConnections
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/dedicatedv1beta1ListPrivateEndpointConnectionsResponse'
+        '400':
+          description: A request field is invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        '401':
+          description: The API key cannot be authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        '403':
+          description: The API key does not have permission to access the resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        '429':
+          description: You have exceed the rate limit.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+      parameters:
+      - name: clusterId
+        description: The id of the cluster for which to list private link connections. To list private link connections across different clusters and TiDB node groups, set as `-``.
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: '[^/]+'
+      - name: tidbNodeGroupId
+        description: To list private link connections across different clusters and TiDB node groups, set tidb_node_group_id to "-".
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: '[^/]+'
+      - name: projectId
+        description: 'Pass this project_id only when listing under a project across different clusters and TiDB node groups.
+
+          Both cluster_id and tidb_node_group_id should be set to "-" in this case.
+
+          If unspecified, the project ID of the cluster is used.'
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: cloudProvider
+        description: "If specified, only private link connections of the specified cloud provider will be returned.\n\n - aws: Amazon Web Services.\n - gcp: Google Cloud Platform.\n - azure: Microsoft Azure.\n - alicloud: Alibaba Cloud"
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - aws
+          - gcp
+          - azure
+          - alicloud
+      - name: pageSize
+        description: 'The maximum number of private link connections to return. The service may return fewer than this value.
+
+          If unspecified, at most 10 private link connections will be returned.
+
+          The maximum value is 100; values above 100 will be coerced to 100.'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: pageToken
+        description: 'A page token, received from a previous `ListPrivateLinkConnections` call.
+
+          Provide this to retrieve the subsequent page.'
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: skip
+        description: 'The number of individual resources to skip before starting to return results.
+
+          If the skip value causes the cursor to move past the end of the collection,
+
+          the response will be 200 OK with an empty result set and no next_page_token.'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      tags:
+      - Private Endpoint Connection
+      x-code-samples:
+      - lang: curl
+        label: curl
+        source: "curl --digest --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --location 'https://dedicated.tidbapi.com/v1beta1/clusters/{clusterId}/tidbNodeGroups/{tidbNodeGroupId}/privateEndpointConnections'"
+    post:
+      summary: Create a private endpoint connection
+      description: "Creates a private endpoint connection for a TiDB node group. For more information, see the following documents:\n\n- [Connect via Private Endpoint with AWS](https://docs.pingcap.com/tidbcloud/set-up-private-endpoint-connections/) \n- [Connect via Private Endpoint with Azure](https://docs.pingcap.com/tidbcloud/set-up-private-endpoint-connections-on-azure/) \n- [Connect via Private Endpoint with Google Cloud](https://docs.pingcap.com/tidbcloud/set-up-private-endpoint-connections-on-google-cloud/)"
+      operationId: PrivateEndpointConnectionService_CreatePrivateEndpointConnection
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/dedicatedv1beta1PrivateEndpointConnection'
+        '400':
+          description: A request field is invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        '401':
+          description: The API key cannot be authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        '403':
+          description: The API key does not have permission to access the resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        '429':
+          description: You have exceed the rate limit.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+      parameters:
+      - name: clusterId
+        description: The ID of the cluster for which to create the private endpoint connection.
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: tidbNodeGroupId
+        description: The ID of the TiDB node group to which the private endpoint connection belongs.
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: validateOnly
+        description: (Azure only) If set to `true`, the request is validated but not executed. Defaults to `false`.
+        in: query
+        required: false
+        schema:
+          type: boolean
+      tags:
+      - Private Endpoint Connection
+      x-code-samples:
+      - lang: curl
+        label: curl
+        source: "curl --digest --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --location 'https://dedicated.tidbapi.com/v1beta1/clusters/{clusterId}/tidbNodeGroups/{tidbNodeGroupId}/privateEndpointConnections' --header 'Content-Type: application/json' --data '{\n    \"endpointId\": \"vpce-0a1b2c3d4e5f6g7h8\"\n}'"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: tidbNodeGroups/1/privateEndpointConnections/1234567890
+                  description: The name of the private endpoint connection, in the format of `tidbNodeGroups/{tidb_node_group_id}/privateEndpointConnections/{private_endpoint_connection_id}`.
+                  readOnly: true
+                privateEndpointConnectionId:
+                  type: string
+                  example: '1234567890'
+                  description: The unique ID of the private endpoint connection.
+                  readOnly: true
+                clusterId:
+                  type: string
+                  example: '1'
+                  description: The ID of the cluster to which the private endpoint connection belongs.
+                  readOnly: true
+                clusterDisplayName:
+                  type: string
+                  example: my-cluster
+                  description: The display name of the cluster to which the private endpoint connection belongs.
+                  readOnly: true
+                labels:
+                  type: object
+                  example:
+                    tidb.cloud/project: '1'
+                  additionalProperties:
+                    type: string
+                  description: The labels of the private link connection, including the mandatory `tidb.cloud/project` label identifying the project it belongs to. Each label consists of a string key and a string value.
+                  readOnly: true
+                endpointId:
+                  type: string
+                  example: vpce-0a1b2c3d4e5f6g7h8
+                  description: 'The endpoint ID of the private link connection.
+
+
+                    - AWS: the VPC endpoint ID for [AWS PrivateLink
+
+                    ](https://aws.amazon.com/privatelink/).
+
+
+                    - Google Cloud: the endpoint ID for [Private Service Connect](https://cloud.google.com/vpc/docs/private-service-connect).
+
+
+                    - Azure: the resource ID for [Azure Private Link](https://learn.microsoft.com/en-us/azure/private-link/private-link-overview).'
+                privateIpAddress:
+                  type:
+                  - string
+                  - 'null'
+                  description: (Azure only) The private IP address of the private endpoint in your virtual network. TiDB Cloud automatically creates a public DNS record that resolves to this IP address, enabling you to connect using the DNS name.
+                endpointState:
+                  example: ACTIVE
+                  description: 'The state of the private endpoint connection.
+
+
+                    - `"PENDING"`: TiDB Cloud is asynchronously accepting the endpoint connection.
+
+
+                    - `"ACTIVE"`: the private endpoint connection is ready to use.
+
+
+                    - `"DELETING"`: the private endpoint connection is being deleted.
+
+
+                    - `"FAILED"`: the private endpoint connection has failed.
+
+                    - `DISCOVERED`: the endpoint is created in your VPC but not registered with TiDB Cloud.'
+                  readOnly: true
+                  allOf:
+                  - $ref: '#/components/schemas/dedicatedv1beta1PrivateEndpointConnectionEndpointState'
+                message:
+                  type: string
+                  example: ''
+                  description: The detailed message when the `endpointState` field is `"FAILED"`.
+                  readOnly: true
+                regionId:
+                  type: string
+                  example: aws-us-east-1
+                  description: The ID of the region where the private endpoint connection is located, in the format of `{cloud_provider}-{region_code}`. For example, `aws-us-east-1`.
+                  readOnly: true
+                regionDisplayName:
+                  type: string
+                  example: N. Virginia (us-east-1)
+                  description: The display name of the region where the private endpoint connection is located. For example, `N. Virginia (us-east-1)`.
+                  readOnly: true
+                cloudProvider:
+                  example: aws
+                  description: 'The cloud provider where the private endpoint connection is located.
+
+
+                    - `"aws"`: Amazon Web Services
+
+
+                    - `"gcp"`: Google Cloud
+
+
+                    - `"azure"`: Microsoft Azure
+
+
+                    - `"alicloud"`: Alibaba Cloud'
+                  readOnly: true
+                  allOf:
+                  - $ref: '#/components/schemas/v1beta1RegionCloudProvider'
+                privateLinkServiceName:
+                  type: string
+                  example: com.amazonaws.vpce.us-east-1.vpce-svc-1234567890
+                  description: The name of the private link service that the private endpoint connection is connected to.
+                  readOnly: true
+                privateLinkServiceState:
+                  example: ACTIVE
+                  description: The state of the private link service that the private endpoint connection is connected to.
+                  readOnly: true
+                  allOf:
+                  - $ref: '#/components/schemas/dedicatedv1beta1PrivateLinkServiceState'
+                tidbNodeGroupDisplayName:
+                  type: string
+                  example: DefaultGroup
+                  description: The display name of the TiDB node group that the private endpoint connection is connected to.
+                  readOnly: true
+                accountId:
+                  type:
+                  - string
+                  - 'null'
+                  description: (Google Cloud only) The project name used to identify the Google Cloud project that the private service connection belongs to.
+                  readOnly: true
+                host:
+                  type: string
+                  example: privatelink-1234567890.abcdefg.clusters.tidb-cloud.com
+                  description: The hostname for accessing the TiDB cluster through the private endpoint connection.
+                  readOnly: true
+                port:
+                  type: integer
+                  format: int32
+                  example: 4000
+                  description: The port used to connect to the TiDB cluster through the private endpoint connection.
+                  readOnly: true
+              required:
+              - endpointId
+        required: true
+  /clusters/{clusterId}/tidbNodeGroups/{tidbNodeGroupId}/privateEndpointConnections/{privateEndpointConnectionId}:
+    get:
+      summary: Get a private endpoint connection
+      description: Retrieves a private endpoint connection for a TiDB node group.
+      operationId: PrivateEndpointConnectionService_GetPrivateEndpointConnection
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/dedicatedv1beta1PrivateEndpointConnection'
+        '400':
+          description: A request field is invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        '401':
+          description: The API key cannot be authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        '403':
+          description: The API key does not have permission to access the resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        '429':
+          description: You have exceed the rate limit.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+      parameters:
+      - name: clusterId
+        description: The ID of the cluster for which to get the private endpoint connection.
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: tidbNodeGroupId
+        description: The ID of the TiDB node group for which to get the private endpoint connection.
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: privateEndpointConnectionId
+        description: The ID of the private endpoint connection to get.
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Private Endpoint Connection
+      x-code-samples:
+      - lang: curl
+        label: curl
+        source: "curl --digest --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --location 'https://dedicated.tidbapi.com/v1beta1/clusters/{clusterId}/tidbNodeGroups/{tidbNodeGroupId}/privateEndpointConnections/{privateEndpointConnectionId}'"
+    delete:
+      summary: Delete a private endpoint connection
+      description: Deletes a private endpoint connection for a TiDB node group.
+      operationId: PrivateEndpointConnectionService_DeletePrivateEndpointConnection
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+        '400':
+          description: A request field is invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        '401':
+          description: The API key cannot be authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        '403':
+          description: The API key does not have permission to access the resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        '429':
+          description: You have exceed the rate limit.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/googlerpcStatus'
+      parameters:
+      - name: clusterId
+        description: The ID of the cluster from which to delete the private endpoint connection.
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: tidbNodeGroupId
+        description: The ID of the TiDB node group from which to delete the private endpoint connection.
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: privateEndpointConnectionId
+        description: The ID of the private endpoint connection to delete.
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Private Endpoint Connection
+      x-code-samples:
+      - lang: curl
+        label: curl
+        source: "curl --digest --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --location --request DELETE 'https://dedicated.tidbapi.com/v1beta1/clusters/{clusterId}/tidbNodeGroups/{tidbNodeGroupId}/privateEndpointConnections/{privateEndpointConnectionId}'"
+components:
+  schemas:
+    dedicatedv1beta1PrivateEndpointConnection:
+      type: object
+      properties:
+        name:
+          type: string
+          example: tidbNodeGroups/1/privateEndpointConnections/1234567890
+          description: The name of the private endpoint connection, in the format of `tidbNodeGroups/{tidb_node_group_id}/privateEndpointConnections/{private_endpoint_connection_id}`.
+          readOnly: true
+        tidbNodeGroupId:
+          type: string
+          example: '1'
+          description: The ID of the TiDB node group to which the private endpoint connection belongs.
+        privateEndpointConnectionId:
+          type: string
+          example: '1234567890'
+          description: The unique ID of the private endpoint connection.
+          readOnly: true
+        clusterId:
+          type: string
+          example: '1'
+          description: The ID of the cluster to which the private endpoint connection belongs.
+          readOnly: true
+        clusterDisplayName:
+          type: string
+          example: my-cluster
+          description: The display name of the cluster to which the private endpoint connection belongs.
+          readOnly: true
+        labels:
+          type: object
+          example:
+            tidb.cloud/project: '1'
+          additionalProperties:
+            type: string
+          description: The labels of the private link connection, including the mandatory `tidb.cloud/project` label identifying the project it belongs to. Each label consists of a string key and a string value.
+          readOnly: true
+        endpointId:
+          type: string
+          example: vpce-0a1b2c3d4e5f6g7h8
+          description: 'The endpoint ID of the private link connection.
+
+
+            - AWS: the VPC endpoint ID for [AWS PrivateLink
+
+            ](https://aws.amazon.com/privatelink/).
+
+
+            - Google Cloud: the endpoint ID for [Private Service Connect](https://cloud.google.com/vpc/docs/private-service-connect).
+
+
+            - Azure: the resource ID for [Azure Private Link](https://learn.microsoft.com/en-us/azure/private-link/private-link-overview).'
+        privateIpAddress:
+          type:
+          - string
+          - 'null'
+          description: (Azure only) The private IP address of the private endpoint in your virtual network. TiDB Cloud automatically creates a public DNS record that resolves to this IP address, enabling you to connect using the DNS name.
+        endpointState:
+          example: ACTIVE
+          description: 'The state of the private endpoint connection.
+
+
+            - `"PENDING"`: TiDB Cloud is asynchronously accepting the endpoint connection.
+
+
+            - `"ACTIVE"`: the private endpoint connection is ready to use.
+
+
+            - `"DELETING"`: the private endpoint connection is being deleted.
+
+
+            - `"FAILED"`: the private endpoint connection has failed.
+
+            - `"DISCOVERED"`: the endpoint is created in your VPC but not registered with TiDB Cloud.'
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/dedicatedv1beta1PrivateEndpointConnectionEndpointState'
+        message:
+          type: string
+          example: ''
+          description: The detailed message when the `endpointState` field is `"FAILED"`.
+          readOnly: true
+        regionId:
+          type: string
+          example: aws-us-east-1
+          description: The ID of the region where the private endpoint connection is located, in the format of `{cloud_provider}-{region_code}`. For example, `aws-us-east-1`.
+          readOnly: true
+        regionDisplayName:
+          type: string
+          example: N. Virginia (us-east-1)
+          description: The display name of the region where the private endpoint connection is located. For example, `N. Virginia (us-east-1)`.
+          readOnly: true
+        cloudProvider:
+          example: aws
+          description: The cloud provider where the private endpoint connection is located.
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/v1beta1RegionCloudProvider'
+        privateLinkServiceName:
+          type: string
+          example: com.amazonaws.vpce.us-east-1.vpce-svc-1234567890
+          description: The name of the private link service that the private endpoint connection is connected to.
+          readOnly: true
+        privateLinkServiceState:
+          example: ACTIVE
+          description: The state of the private link service that the private endpoint connection is connected to.
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/dedicatedv1beta1PrivateLinkServiceState'
+        tidbNodeGroupDisplayName:
+          type: string
+          example: DefaultGroup
+          description: The display name of the TiDB node group that the private endpoint connection is connected to.
+          readOnly: true
+        accountId:
+          type:
+          - string
+          - 'null'
+          description: (Google Cloud only) The project name used to identify the Google Cloud project that the private service connection belongs to.
+          readOnly: true
+        host:
+          type: string
+          example: privatelink-1234567890.abcdefg.clusters.tidb-cloud.com
+          description: The hostname for accessing the TiDB cluster through the private endpoint connection.
+          readOnly: true
+        port:
+          type: integer
+          format: int32
+          example: 4000
+          description: The port used to connect to the TiDB cluster through the private endpoint connection.
+          readOnly: true
+      required:
+      - tidbNodeGroupId
+      - endpointId
+    dedicatedv1beta1PrivateLinkService:
+      type: object
+      properties:
+        name:
+          type: string
+          example: tidbNodeGroups/1/privateLinkService
+          description: The name of the private link service.
+        tidbNodeGroupId:
+          type: string
+          example: '1'
+          description: The ID of the TiDB node group to which the private link service belongs.
+        serviceName:
+          type: string
+          example: com.amazonaws.vpce.us-east-1.vpce-svc-1234567890
+          description: 'The service name of the private link service, which varies by cloud provider:
+
+
+            - AWS: the service name of the private link service.
+
+
+            - Google Cloud: the resource name of the service attachment.
+
+
+            - Azure: the resource ID of the private link service.'
+        serviceDnsName:
+          type: string
+          example: privatelink-1234567890.muznnz1umf3p.clusters.tidb-cloud.com
+          description: 'The DNS name of the private link service, which varies by cloud provider:
+
+
+            - AWS: the fully qualified domain name (FQDN) shared across all private endpoints, regardless of VPC location.
+
+
+            - Google Cloud: the zone name (suffix of the FQDN) shared across all private endpoints in a single VPC network. The FQDN format is `<endpoint_name>.<service_dns_name>`.
+
+
+            - Azure: the zone name shared across public internet. The FQDN format is `<endpoint_name>-<random_hash>.<service_dns_name>`.'
+        availableZones:
+          type: array
+          example:
+          - use1-az1
+          - use1-az4
+          - use1-az6
+          items:
+            type: string
+          description: (AWS only) The availability zones where the private link service is available. For more information, see [`DescribeVpcEndpointServices`](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeVpcEndpointServices.html).
+        state:
+          example: ACTIVE
+          description: 'The state of the private link service.
+
+
+            - `"CREATING"`: the private link service is being created.
+
+
+            - `"ACTIVE"`: the private link service is ready to use.
+
+
+            - `"DELETING"`: the private link service is being deleted.'
+          allOf:
+          - $ref: '#/components/schemas/dedicatedv1beta1PrivateLinkServiceState'
+        regionId:
+          type: string
+          example: aws-us-east-1
+          description: The ID of the region where the private link service is located, in the format of `{cloud_provider}-{region_code}`. For example, `aws-us-east-1`.
+        regionDisplayName:
+          type: string
+          example: N. Virginia (us-east-1)
+          description: The display name of the region where the private link service is located. For example, `N. Virginia (us-east-1)`.
+        cloudProvider:
+          example: aws
+          description: 'The cloud provider where the private link service is located.
+
+
+            - `"aws"`: Amazon Web Services
+
+
+            - `"gcp"`: Google Cloud
+
+
+            - `"azure"`: Microsoft Azure
+
+
+            - `"alicloud"`: Alibaba Cloud'
+          allOf:
+          - $ref: '#/components/schemas/v1beta1RegionCloudProvider'
+      description: All fields are output only.
+    googlerpcStatus:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+          description: The error code returned with this error.
+        message:
+          type: string
+          description: The error message returned with this error.
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/protobufAny'
+          description: A list of messages with additional error details.
+      description: 'The `Status` type defines a logical error model that is suitable for
+
+        different programming environments, including REST APIs and RPC APIs. It is
+
+        used by [gRPC](https://github.com/grpc). Each `Status` message contains
+
+        three pieces of data: error code, error message, and error details.
+
+
+        You can find out more about this error model and how to work with it in the
+
+        [API Design Guide](https://cloud.google.com/apis/design/errors).'
+    protobufAny:
+      type: object
+      properties:
+        '@type':
+          type: string
+          description: A URL or resource name that uniquely identifies the type of the serialized protocol buffer message.
+      additionalProperties: {}
+      description: "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n    // or ...\n    if (any.isSameTypeAs(Foo.getDefaultInstance())) {\n      foo = any.unpack(Foo.getDefaultInstance());\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := anypb.New(foo)\n     if err != nil {\n       ...\n     }\n     ...\n     foo := &pb.Foo{}\n     if err := any.UnmarshalTo(foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
+    dedicatedv1beta1ListPrivateEndpointConnectionsResponse:
+      type: object
+      properties:
+        privateEndpointConnections:
+          type: array
+          items:
+            $ref: '#/components/schemas/dedicatedv1beta1PrivateEndpointConnection'
+          description: A list of private endpoint connections that match the query.
+        totalSize:
+          type: integer
+          format: int32
+          example: 1
+          description: The total number of private link connections that match the query.
+        nextPageToken:
+          type: string
+          example: next_page_token
+          description: The token to retrieve the next page of results. Use this value as the `pageToken` parameter in the next request. This field is empty when there are no more pages.
+    dedicatedv1beta1PrivateEndpointConnectionEndpointState:
+      type: string
+      enum:
+      - PENDING
+      - ACTIVE
+      - DELETING
+      - FAILED
+      - DISCOVERED
+      description: 'The state of the private endpoint connection.
+
+
+        - `"PENDING"`: TiDB Cloud is asynchronously accepting the endpoint connection.
+
+
+        - `"ACTIVE"`: the private endpoint connection is ready to use.
+
+
+        - `"DELETING"`: the private endpoint connection is being deleted.
+
+
+        - `"FAILED"`: the private endpoint connection has failed.
+
+        - `"DISCOVERED"`: the endpoint is created in your VPC but not registered with TiDB Cloud.'
+    v1beta1RegionCloudProvider:
+      type: string
+      enum:
+      - aws
+      - gcp
+      - azure
+      - alicloud
+      description: "Enum of cloud provider names.\n\n - aws: Amazon Web Services.\n - gcp: Google Cloud Platform.\n - azure: Microsoft Azure.\n - alicloud: Alibaba Cloud."
+    dedicatedv1beta1PrivateLinkServiceState:
+      type: string
+      enum:
+      - CREATING
+      - ACTIVE
+      - DELETING
+      description: " - CREATING: The private link service is being created.\n - ACTIVE: The private link service is active and ready for use.\n - DELETING: The private link service is being deleted."
+x-tagGroups:
+- name: Endpoints
+  tags:
+  - Cluster
+  - Region
+  - Private Endpoint Connection
+  - Import
+  - Integration
+  - Changefeed

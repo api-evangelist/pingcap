@@ -1,0 +1,1357 @@
+{
+  "item": [
+    {
+      "id": "7af3125b-d8f5-48c7-b317-81dff599274e",
+      "name": "Data App",
+      "description": {
+        "content": "Create, get, update, delete, and list Data Apps.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "8cf4e451-4171-405a-9300-173a843fa886",
+          "name": "List all Data Apps in a project.",
+          "request": {
+            "name": "List all Data Apps in a project.",
+            "description": {},
+            "url": {
+              "path": [
+                "v1beta1",
+                "dataApps"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "projectId",
+                  "value": "<string>",
+                  "description": "(Required) The ID of the project that the Data App belongs to. You can get the project ID from the response of [List all accessible projects](https://docs.pingcap.com/tidbcloud/api/v1beta#tag/Project/operation/ListProjects)."
+                },
+                {
+                  "disabled": false,
+                  "key": "pageSize",
+                  "value": "100",
+                  "description": "The maximum number of items to return. If it is not set or set to `0`, the default value `100` will be used."
+                },
+                {
+                  "disabled": false,
+                  "key": "pageToken",
+                  "value": "<string>",
+                  "description": "The identifier of the current page, used to retrieve the next page of results. You can get this value from the `nextPageToken` field in the previous response. To access the first page of data, omit this field."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "cca75b47-542b-4914-8817-d63a03397a56",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1beta1",
+                    "dataApps"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "projectId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "100"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"dataApps\": [\n    {\n      \"dataAppId\": \"string\",\n      \"name\": \"string\",\n      \"version\": \"1.0.0\",\n      \"projectId\": \"string\",\n      \"clusterIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"appType\": \"CHAT2QUERY\",\n      \"displayName\": \"string\",\n      \"description\": \"string\",\n      \"createdAt\": \"string\",\n      \"updatedAt\": \"string\"\n    },\n    {\n      \"dataAppId\": \"string\",\n      \"name\": \"string\",\n      \"version\": \"1.0.0\",\n      \"projectId\": \"string\",\n      \"clusterIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"appType\": \"DATAAPP\",\n      \"displayName\": \"string\",\n      \"description\": \"string\",\n      \"createdAt\": \"string\",\n      \"updatedAt\": \"string\"\n    }\n  ],\n  \"nextPageToken\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c7919a64-0385-4ba8-81ec-2cbf19a0b3af",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1beta1",
+                    "dataApps"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "projectId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "100"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 7119,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"@type\": \"string\"\n    },\n    {\n      \"@type\": \"string\",\n      \"key_0\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "228e7449-31dc-46ff-a2cc-600c4978b90a",
+          "name": "Create a Data App.",
+          "request": {
+            "name": "Create a Data App.",
+            "description": {},
+            "url": {
+              "path": [
+                "v1beta1",
+                "dataApps"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"projectId\": \"<string>\",\n  \"clusterIds\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"appType\": \"<string>\",\n  \"version\": \"1.0.0\",\n  \"displayName\": \"<string>\",\n  \"description\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "95b17d36-60ef-42dc-b954-2a1856679e79",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1beta1",
+                    "dataApps"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"projectId\": \"<string>\",\n  \"clusterIds\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"appType\": \"<string>\",\n  \"version\": \"1.0.0\",\n  \"displayName\": \"<string>\",\n  \"description\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"dataAppId\": \"string\",\n  \"name\": \"string\",\n  \"version\": \"1.0.0\",\n  \"projectId\": \"string\",\n  \"clusterIds\": [\n    \"string\",\n    \"string\"\n  ],\n  \"appType\": \"<string>\",\n  \"displayName\": \"string\",\n  \"description\": \"string\",\n  \"createdAt\": \"string\",\n  \"updatedAt\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8dd91971-e19d-43cc-bb37-6051f1563743",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1beta1",
+                    "dataApps"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"projectId\": \"<string>\",\n  \"clusterIds\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"appType\": \"<string>\",\n  \"version\": \"1.0.0\",\n  \"displayName\": \"<string>\",\n  \"description\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 9182,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"@type\": \"string\",\n      \"key_0\": {}\n    },\n    {\n      \"@type\": \"string\",\n      \"key_0\": {},\n      \"key_1\": {},\n      \"key_2\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e8ac876b-a6cf-41db-a12d-1d82199b5eee",
+          "name": "List all system endpoints in a Data App.",
+          "request": {
+            "name": "List all system endpoints in a Data App.",
+            "description": {
+              "content": "TiDB Cloud Data Service provides an endpoint library with predefined system endpoints that you can directly add to your Data App, reducing the effort in your endpoint development.\n\nFor example, the `POST:/system/query` system endpoint enables you to execute any SQL statement by simply passing the statement in the predefined `sql` parameter. This endpoint facilitates the immediate execution of SQL queries, enhancing flexibility and efficiency.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1beta1",
+                "dataApps",
+                ":dataAppId",
+                "systemEndpointConfig"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "dataAppId",
+                  "description": "(Required) The ID of the Data App. You can get the ID from the response of [List all Data Apps in a project](#tag/Data-App/operation/DataApp_ListDataApps)."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "7dd30fc9-dfc0-4df4-91e9-062bfb987b50",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1beta1",
+                    "dataApps",
+                    ":dataAppId",
+                    "systemEndpointConfig"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dataAppId",
+                      "description": "(Required) The ID of the Data App. You can get the ID from the response of [List all Data Apps in a project](#tag/Data-App/operation/DataApp_ListDataApps)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"items\": [\n    {\n      \"type\": \"system-data\",\n      \"key\": \"POST:/system/query\",\n      \"enabled\": false\n    },\n    {\n      \"type\": \"system-data\",\n      \"key\": \"POST:/system/query\",\n      \"enabled\": false\n    }\n  ],\n  \"name\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "aa51356c-c408-4aff-b3ff-8be7ae7de31c",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1beta1",
+                    "dataApps",
+                    ":dataAppId",
+                    "systemEndpointConfig"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dataAppId",
+                      "description": "(Required) The ID of the Data App. You can get the ID from the response of [List all Data Apps in a project](#tag/Data-App/operation/DataApp_ListDataApps)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 9182,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"@type\": \"string\",\n      \"key_0\": {}\n    },\n    {\n      \"@type\": \"string\",\n      \"key_0\": {},\n      \"key_1\": {},\n      \"key_2\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8d718b71-59f0-4b00-a345-ca60ce1a88d8",
+          "name": "Update the configuration of system endpoints.",
+          "request": {
+            "name": "Update the configuration of system endpoints.",
+            "description": {
+              "content": "With this endpoint, you can enable or disable the system endpoints in a Data App.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1beta1",
+                "dataApps",
+                ":dataAppId",
+                "systemEndpointConfig"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "dataAppId",
+                  "description": "(Required) The ID of the Data App. You can get the ID from the response of [List all Data Apps in a project](#tag/Data-App/operation/DataApp_ListDataApps)."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"items\": [\n    {\n      \"type\": \"<string>\",\n      \"key\": \"<string>\",\n      \"enabled\": \"<boolean>\"\n    },\n    {\n      \"type\": \"<string>\",\n      \"key\": \"<string>\",\n      \"enabled\": \"<boolean>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "a317a212-76ec-4119-9bb3-be8f91e6f01e",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1beta1",
+                    "dataApps",
+                    ":dataAppId",
+                    "systemEndpointConfig"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dataAppId",
+                      "description": "(Required) The ID of the Data App. You can get the ID from the response of [List all Data Apps in a project](#tag/Data-App/operation/DataApp_ListDataApps)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"items\": [\n    {\n      \"type\": \"system-data\",\n      \"key\": \"POST:/system/query\",\n      \"enabled\": \"<boolean>\"\n    },\n    {\n      \"type\": \"system-data\",\n      \"key\": \"POST:/system/query\",\n      \"enabled\": \"<boolean>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"items\": [\n    {\n      \"type\": \"system-data\",\n      \"key\": \"POST:/system/query\",\n      \"enabled\": \"<boolean>\"\n    },\n    {\n      \"type\": \"system-data\",\n      \"key\": \"POST:/system/query\",\n      \"enabled\": \"<boolean>\"\n    }\n  ],\n  \"name\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3be70215-1a53-4c31-952b-04c93a9b45b1",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1beta1",
+                    "dataApps",
+                    ":dataAppId",
+                    "systemEndpointConfig"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dataAppId",
+                      "description": "(Required) The ID of the Data App. You can get the ID from the response of [List all Data Apps in a project](#tag/Data-App/operation/DataApp_ListDataApps)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"items\": [\n    {\n      \"type\": \"system-data\",\n      \"key\": \"POST:/system/query\",\n      \"enabled\": \"<boolean>\"\n    },\n    {\n      \"type\": \"system-data\",\n      \"key\": \"POST:/system/query\",\n      \"enabled\": \"<boolean>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 9182,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"@type\": \"string\",\n      \"key_0\": {}\n    },\n    {\n      \"@type\": \"string\",\n      \"key_0\": {},\n      \"key_1\": {},\n      \"key_2\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9aa19492-95be-43ca-b320-345396eaa55d",
+          "name": "Get Chat2Query Data App settings by ID.",
+          "request": {
+            "name": "Get Chat2Query Data App settings by ID.",
+            "description": {
+              "content": "With this endpoint, you can get the settings of a Chat2Query Data App, such as `name`, `llmApiKey`, `languageCode`, and `llmModel`. To get basic information, such as `version`, `projectId`, and `clusterIds`, use the [Get a Data App by ID](#tag/Data-App/operation/DataApp_GetDataApp) endpoint instead.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1beta1",
+                "dataApps",
+                ":dataAppId",
+                "chat2querySettings"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "dataAppId",
+                  "description": "(Required) The ID of the Data App. You can get the ID from the response of [List all Data Apps in a project](#tag/Data-App/operation/DataApp_ListDataApps)."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "b6078b28-565d-4897-8cef-b2995b2685cf",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1beta1",
+                    "dataApps",
+                    ":dataAppId",
+                    "chat2querySettings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dataAppId",
+                      "description": "(Required) The ID of the Data App. You can get the ID from the response of [List all Data Apps in a project](#tag/Data-App/operation/DataApp_ListDataApps)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"llmApiKey\": \"string\",\n  \"languageCode\": \"string\",\n  \"llmModel\": \"string\",\n  \"name\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "127bac32-4c4f-453f-b6ba-0a2d6f503153",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1beta1",
+                    "dataApps",
+                    ":dataAppId",
+                    "chat2querySettings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dataAppId",
+                      "description": "(Required) The ID of the Data App. You can get the ID from the response of [List all Data Apps in a project](#tag/Data-App/operation/DataApp_ListDataApps)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 9182,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"@type\": \"string\",\n      \"key_0\": {}\n    },\n    {\n      \"@type\": \"string\",\n      \"key_0\": {},\n      \"key_1\": {},\n      \"key_2\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3ba53436-3c4d-4087-adf0-f2826e8023f4",
+          "name": "Update Chat2Query Data App settings by ID.",
+          "request": {
+            "name": "Update Chat2Query Data App settings by ID.",
+            "description": {
+              "content": "With this endpoint, you can update the `llmApiKey`, `languageCode`, or `llmModel` settings of a Chat2Query Data App. To update the version, name, or description, use the [Update a Data App](#tag/Data-App/operation/DataApp_UpdateDataApp) endpoint instead.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1beta1",
+                "dataApps",
+                ":dataAppId",
+                "chat2querySettings"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "dataAppId",
+                  "description": "(Required) The ID of the Data App. You can get the ID from the response of [List all Data Apps in a project](#tag/Data-App/operation/DataApp_ListDataApps)."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"llmApiKey\": \"<string>\",\n  \"languageCode\": \"<string>\",\n  \"llmModel\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "fe251d83-3188-43c4-b4b1-b6c01944c2ea",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1beta1",
+                    "dataApps",
+                    ":dataAppId",
+                    "chat2querySettings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dataAppId",
+                      "description": "(Required) The ID of the Data App. You can get the ID from the response of [List all Data Apps in a project](#tag/Data-App/operation/DataApp_ListDataApps)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"llmApiKey\": \"<string>\",\n  \"languageCode\": \"<string>\",\n  \"llmModel\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"llmApiKey\": \"string\",\n  \"languageCode\": \"string\",\n  \"llmModel\": \"string\",\n  \"name\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4289b40c-eb57-49ed-a375-7308396ea273",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1beta1",
+                    "dataApps",
+                    ":dataAppId",
+                    "chat2querySettings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dataAppId",
+                      "description": "(Required) The ID of the Data App. You can get the ID from the response of [List all Data Apps in a project](#tag/Data-App/operation/DataApp_ListDataApps)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"llmApiKey\": \"<string>\",\n  \"languageCode\": \"<string>\",\n  \"llmModel\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 9182,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"@type\": \"string\",\n      \"key_0\": {}\n    },\n    {\n      \"@type\": \"string\",\n      \"key_0\": {},\n      \"key_1\": {},\n      \"key_2\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7f830ced-d09f-4a41-abc9-08392f58a63c",
+          "name": "Update a Data App.",
+          "request": {
+            "name": "Update a Data App.",
+            "description": {
+              "content": "With this endpoint, you can update the `version`, `name`, or `description` of a Data App. To update the `llmApiKey`, `languageCode`, or `llmModel` settings of a Chat2Query App, use the [Update Chat2Query App settings by Data App ID](#tag/Data-App/operation/DataApp_GetChat2QuerySettings) endpoint instead.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1beta1",
+                "dataApps",
+                ":dataAppId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "dataAppId",
+                  "description": "(Required) The ID of the Data App. You can get the ID from the response of [List all Data Apps in a project](#tag/Data-App/operation/DataApp_ListDataApps)."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"version\": \"1.0.0\",\n  \"displayName\": \"<string>\",\n  \"description\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "4440e338-1220-4ac4-a9b0-b2b53b540e38",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1beta1",
+                    "dataApps",
+                    ":dataAppId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dataAppId",
+                      "description": "(Required) The ID of the Data App. You can get the ID from the response of [List all Data Apps in a project](#tag/Data-App/operation/DataApp_ListDataApps)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"version\": \"1.0.0\",\n  \"displayName\": \"<string>\",\n  \"description\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"dataAppId\": \"string\",\n  \"name\": \"string\",\n  \"version\": \"1.0.0\",\n  \"projectId\": \"string\",\n  \"clusterIds\": [\n    \"string\",\n    \"string\"\n  ],\n  \"appType\": \"<string>\",\n  \"displayName\": \"string\",\n  \"description\": \"string\",\n  \"createdAt\": \"string\",\n  \"updatedAt\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d5bdddee-3cb4-4ac4-990f-8b6baddbf05c",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1beta1",
+                    "dataApps",
+                    ":dataAppId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dataAppId",
+                      "description": "(Required) The ID of the Data App. You can get the ID from the response of [List all Data Apps in a project](#tag/Data-App/operation/DataApp_ListDataApps)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"version\": \"1.0.0\",\n  \"displayName\": \"<string>\",\n  \"description\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 9182,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"@type\": \"string\",\n      \"key_0\": {}\n    },\n    {\n      \"@type\": \"string\",\n      \"key_0\": {},\n      \"key_1\": {},\n      \"key_2\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3240af04-caf3-4e17-adce-ad4ee9ccabb6",
+          "name": "Get a Data App by ID.",
+          "request": {
+            "name": "Get a Data App by ID.",
+            "description": {
+              "content": "With this endpoint, you can get the basic information of a Data App, such as `name`, `version`, `projectId`, and `clusterIds`. To get the `llmApiKey`, `languageCode`, and `llmModel` of a Chat2Query Data App, use the [Get Chat2Query Data App settings by ID](#tag/Data-App/operation/DataApp_UpdateChat2QuerySettings) endpoint instead.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1beta1",
+                "dataApps",
+                ":dataAppId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "dataAppId",
+                  "description": "(Required) The ID of the Data App. You can get the ID from the response of [List all Data Apps in a project](#tag/Data-App/operation/DataApp_ListDataApps)."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "5b7f19cd-0ca9-44aa-9174-0b2234a4db9b",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1beta1",
+                    "dataApps",
+                    ":dataAppId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dataAppId",
+                      "description": "(Required) The ID of the Data App. You can get the ID from the response of [List all Data Apps in a project](#tag/Data-App/operation/DataApp_ListDataApps)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"dataAppId\": \"string\",\n  \"name\": \"string\",\n  \"version\": \"1.0.0\",\n  \"projectId\": \"string\",\n  \"clusterIds\": [\n    \"string\",\n    \"string\"\n  ],\n  \"appType\": \"<string>\",\n  \"displayName\": \"string\",\n  \"description\": \"string\",\n  \"createdAt\": \"string\",\n  \"updatedAt\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d763bc7b-3d18-44d7-9874-c91dd9b68988",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1beta1",
+                    "dataApps",
+                    ":dataAppId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dataAppId",
+                      "description": "(Required) The ID of the Data App. You can get the ID from the response of [List all Data Apps in a project](#tag/Data-App/operation/DataApp_ListDataApps)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 9182,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"@type\": \"string\",\n      \"key_0\": {}\n    },\n    {\n      \"@type\": \"string\",\n      \"key_0\": {},\n      \"key_1\": {},\n      \"key_2\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8b6b5633-f4d1-43c9-9094-4d799932881f",
+          "name": "Delete a Data App.",
+          "request": {
+            "name": "Delete a Data App.",
+            "description": {},
+            "url": {
+              "path": [
+                "v1beta1",
+                "dataApps",
+                ":dataAppId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "dataAppId",
+                  "description": "(Required) The ID of the Data App. You can get the ID from the response of [List all Data Apps in a project](#tag/Data-App/operation/DataApp_ListDataApps)."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d3b24eb0-fc25-4ff6-8058-f77b81ac847a",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1beta1",
+                    "dataApps",
+                    ":dataAppId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dataAppId",
+                      "description": "(Required) The ID of the Data App. You can get the ID from the response of [List all Data Apps in a project](#tag/Data-App/operation/DataApp_ListDataApps)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a1bdd16d-edec-4b7e-afac-e34b223e0ae5",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1beta1",
+                    "dataApps",
+                    ":dataAppId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dataAppId",
+                      "description": "(Required) The ID of the Data App. You can get the ID from the response of [List all Data Apps in a project](#tag/Data-App/operation/DataApp_ListDataApps)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 9182,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"@type\": \"string\",\n      \"key_0\": {}\n    },\n    {\n      \"@type\": \"string\",\n      \"key_0\": {},\n      \"key_1\": {},\n      \"key_2\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://dataservice.tidbapi.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "f5136812-a8bd-45a2-9058-e72baa38a7f3",
+    "name": "TiDB Cloud Data Service OPEN Data App API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "# Overview\n\nThe TiDB Cloud Data Service API provides a [RESTful interface](https://en.wikipedia.org/wiki/Representational_state_transfer) for programmatically managing administrative objects within the [TiDB Cloud Data Service](https://docs.pingcap.com/tidbcloud/data-service-overview). Through this API, you can manage the following resources automatically and efficiently:\n\n* **Data App**: a collection of endpoints that you can use to access data for a specific application.\n* **Data Source**: clusters linked to Data Apps for data manipulation and retrieval.\n* **Endpoint**: a web API that you can customize to execute SQL statements. You can specify parameters for the SQL statements, such as the value used in the `WHERE` clause. When a client calls an endpoint and provides values for the parameters in a request URL, the endpoint executes the SQL statement with the provided parameters and returns the results as part of the HTTP response.\n* **Deployment**: the process of deploying Data Apps.\n* **Data API Key**: used for secure endpoint access. This key is used to access data in the TiDB Cloud clusters, whereas the TiDB Cloud organization API key is used to manage resources such as projects, clusters, Data Apps, and endpoints.\n* **OpenAPI Specification**: Data Service supports generating the OpenAPI Specification 3.0 for each Data App, which enables you to interact with your endpoints in a standardized format. You can use this specification to generate standardized OpenAPI documentation, client SDKs, and server stubs.\n\n# Get Started\n\nThis guide helps you make your first API call to TiDB Cloud Data Service API. You'll learn how to authenticate a request, build a request, and interpret the response. The [List all Data Apps in a project](#tag/Data-App/operation/DataApp_ListDataApps) endpoint is used in this guide as an example.\n\n## Prerequisites\n\nTo complete this guide, you need to perform the following tasks:\n\n- Create a [TiDB Cloud account](https://tidbcloud.com/free-trial)\n- Install [curl](https://curl.se/)\n\n## Step 1. Create an organization API key\n\nTo create an organization API key, log in to your TiDB Cloud console. Navigate to the [**API Keys**](https://tidbcloud.com/org-settings/api-keys) page of your organization, and create an API key.\n\nAn organization API key contains a public key and a private key. Copy and save them in a secure location. You will need to use the API key later in this guide.\n\nFor more details about creating an organization API key, refer to [API Key Management](#section/Authentication/API-Key-Management).\n\n## Step 2. Make your first API call\n\n### Build an API call\n\nTiDB Cloud Data Service API call consists of the following components:\n\n- **A host.** The host for TiDB Cloud Data Service API is <https://dataservice.tidbapi.com>.\n- **An organization API Key**. The public key and the private key are required for authentication.\n- **A request.** When submitting data to a resource via `POST`, `PATCH`, or `PUT`, you must submit your payload in JSON.\n\nIn this guide, you call the [List all Data Apps in a project](#tag/Data-App/operation/DataApp_ListDataApps) endpoint. For a detailed description of the endpoint, see the [API reference](#tag/Data-App/operation/DataApp_ListDataApps).\n\n### Call an API endpoint\n\nTo get all Data Apps in your project, run the following command in your terminal. Replace `YOUR_PUBLIC_KEY`, `YOUR_PRIVATE_KEY`, and `YOUR_PROJECT_ID` with your actual values. To get the project ID, you can call the [List all accessible projects](https://docs.pingcap.com/tidbcloud/api/v1beta#tag/Project/operation/ListProjects) endpoint.\n\n```bash\ncurl --digest \\\n  --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --request GET \\\n  --url 'https://dataservice.tidbapi.com/v1beta1/dataApps?projectId=YOUR_PROJECT_ID'\n```\n\n## Step 3. Check the response\n\nAfter making the API call, if the status code in response is `200` and you see details about all the Data Apps in your project, your request is successful. Here is an example of a successful response.\n\n```log\n{\n  \"dataApps\": [\n    {\n      \"dataAppId\": \"{data_app_id}\",\n      \"name\": \"dataApps/{data_app_id}\",\n      \"version\": \"\",\n      \"projectId\": \"{project_id}\",\n      \"clusterIds\": [],\n      \"appType\": \"DATAAPP\",\n      \"displayName\": \"New Data App\",\n      \"description\": \"\",\n      \"createdAt\": \"2023-06-03T06:52:08Z\",\n      \"updatedAt\": \"2023-06-03T06:52:08Z\"\n    },\n    {\n      \"dataAppId\": \"{data_app_id}\",\n      \"name\": \"dataApps/{data_app_id}\",\n      \"version\": \"\",\n      \"projectId\": \"{project_id}\",\n      \"clusterIds\": [],\n      \"appType\": \"CHAT2QUERY\",\n      \"displayName\": \"New App\",\n      \"description\": \"\",\n      \"createdAt\": \"2023-06-03T06:52:08Z\",\n      \"updatedAt\": \"2023-06-03T06:52:08Z\"\n    }\n  ],\n  \"nextPageToken\": \"\"\n}\n```\n\nIf your API call is not successful, you will receive a status code other than `200` and the response looks similar to the following example. To troubleshoot the failed call, you can check the `message` in the response.\n\n```log\n{\n  \"code\": 403,\n  \"message\": \"Request error, projectId not exist\",\n  \"details\": []\n}\n```\n\n# Call a Deployed Data Service Endpoint\n\nIf you have deployed a Data Service endpoint, you can call it using the Data API key. To begin, follow these steps:\n\n1. Generate a Data API key by calling the [Create an API key for a Data App](#tag/Data-API-Key/operation/APIKey_CreateApiKey) endpoint. You can run the following `curl` command and replace `YOUR_PUBLIC_KEY`, `YOUR_PRIVATE_KEY`, and `YOUR_DATAAPP_ID` with your actual values. Note that `YOUR_PUBLIC_KEY` and `YOUR_PRIVATE_KEY` are [organization API keys](#section/Authentication/Organization-API-key-overview).\n\n    ```bash\n    curl --digest \\\n      --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n      --request POST \\\n      --url 'https://dataservice.tidbapi.com/v1beta1/dataApps/YOUR_DATAAPP_ID/apiKeys'\\\n      --header 'Content-Type: application/json' \\\n      --data '{\n        \"description\": \"A new API Key\",\n        \"role\": \"READ_AND_WRITE\",\n        \"rateLimitRpm\": 100\n      }'\n    ```\n\n2. Call the deployed endpoint. Suppose that you have created a `GET` endpoint named `/hello`, with the request URL as `https://data.tidbcloud.com/api/v1beta/app/DATAAPP_ID/endpoint/hello`. To call this endpoint, replace `YOUR_DATAAPP_PUBLIC_KEY` and `YOUR_DATAAPP_PRIVATE_KEY` with the values obtained from the response in step 1, and replace `YOUR_DATAAPP_ID` with the actual Data App ID in the following command:\n\n    ```bash\n    curl --location-trusted --digest \\\n      --user 'YOUR_DATAAPP_PUBLIC_KEY:YOUR_DATAAPP_PRIVATE_KEY' \\\n      --request GET \\\n      --url 'https://data.tidbcloud.com/api/v1beta/app/YOUR_DATAAPP_ID/endpoint/hello'\n    ```\n    \n    For improved performance, you can call the endpoint using the regional domain name. Replace `REGION` with the specific region name to which the cluster belongs, such as `us-west-2`.\n    \n    ```bash\n    curl --digest \\\n      --user 'YOUR_DATAAPP_PUBLIC_KEY:YOUR_DATAAPP_PRIVATE_KEY' \\\n      --request GET \\\n      --url 'https://REGION.data.tidbcloud.com/api/v1beta/app/DATAAPP_ID/endpoint/hello'\n    ```\n\n# Authentication\n\nThe TiDB Cloud Data Service API uses [HTTP Digest Authentication](https://en.wikipedia.org/wiki/Digest_access_authentication). It protects your private key from being sent over the network. For more details about HTTP Digest Authentication, refer to the [IETF RFC](https://datatracker.ietf.org/doc/html/rfc7616).\n\n## Organization API key overview\n\n- The organization API key contains a public key and a private key, which act as the username and password required in the HTTP Digest Authentication. The private key only displays upon the key creation.\n- The organization API key belongs to your organization and acts as the `Organization Owner` role. You can check [permissions of owner](https://docs.pingcap.com/tidbcloud/manage-user-access#configure-member-roles).\n- You must provide the correct organization API key in every request. Otherwise, TiDB Cloud responds with a `401` error.\n\n## Organization API key management\n\n### Create an organization API key\n\nOnly the **owner** of an organization can create an organization API key.\n\nTo create an organization API key in an organization, perform the following steps:\n\n1. In the [TiDB Cloud console](https://tidbcloud.com), switch to your target organization using the combo box in the upper-left corner.\n2. In the left navigation pane, click **Organization Settings** > **API Keys**.\n3. On the **API Keys** page, click **Create API Key**.\n4. Enter a description for your API key. The role of the API key is always `Organization Owner` currently.\n5. Click **Next**. Copy and save the public key and the private key.\n6. Make sure that you have copied and saved the private key in a secure location. The private key only displays upon the creation. After leaving this page, you will not be able to get the full private key again.\n7. Click **Done**.\n\n### View details of an organization API key\n\nTo view details of an organization API key, perform the following steps:\n\n1. In the [TiDB Cloud console](https://tidbcloud.com), switch to your target organization using the combo box in the upper-left corner.\n2. In the left navigation pane, click **Organization Settings** > **API Keys**.\n3. You can view the details of the API keys on the page.\n\n### Edit an organization API key\n\nOnly the **owner** of an organization can modify an organization API key.\n\nTo edit an organization API key in an organization, perform the following steps:\n\n1. In the [TiDB Cloud console](https://tidbcloud.com), switch to your target organization using the combo box in the upper-left corner.\n2. In the left navigation pane, click **Organization Settings** > **API Keys**.\n3. On the **API Keys** page, click **...** in the API key row that you want to change, and then click **Edit**.\n4. You can update the API key description.\n5. Click **Update**.\n\n### Delete an organization API key\n\nOnly the **owner** of an organization can delete an organization API key.\n\nTo delete an organization API key in an organization, perform the following steps:\n\n1. In the [TiDB Cloud console](https://tidbcloud.com), switch to your target organization using the combo box in the upper-left corner.\n2. In the left navigation pane, click **Organization Settings** > **API Keys**.\n3. On the **API Keys** page, click **...** in the API key row that you want to delete, and then click **Delete**.\n4. Click **I understand, delete it.**\n\n# Rate Limiting\n\nThe TiDB Cloud Data Service API allows up to 100 requests per minute per API key. If you exceed the rate limit, the API returns a `429` error. For more quota, you can [submit a request](https://support.pingcap.com/hc/en-us/requests/new?ticket_form_id=7800003722519) to contact our support team.\n\nEach API request returns the following headers about the limit.\n\n- `X-Ratelimit-Limit-Minute`: The number of requests allowed per minute. It is 100 currently.\n- `X-Ratelimit-Remaining-Minute`: The number of remaining requests in the current minute. When it reaches `0`, the API returns a `429` error and indicates that you exceed the rate limit.\n- `X-Ratelimit-Reset`: The time in seconds at which the current rate limit resets.\n\nIf you exceed the rate limit, an error response returns like this.\n\n```\n> HTTP/2 429\n> date: Fri, 22 Jul 2022 05:28:37 GMT\n> content-type: application/json\n> content-length: 66\n> x-ratelimit-reset: 23\n> x-ratelimit-remaining-minute: 0\n> x-ratelimit-limit-minute: 100\n> x-kong-response-latency: 2\n> server: kong/2.8.1\n\n> {\"details\":[],\"code\":49900007,\"message\":\"The request exceeded the limit of 100 times per apikey per minute. For more quota, please contact us: https://support.pingcap.com/hc/en-us/requests/new?ticket_form_id=7800003722519\"}\n```\n\n# API Changelog\n\nThis changelog lists all changes to the TiDB Cloud Data Service API.\n\n<!-- In reverse chronological order -->\n\n## 20250812\n\n- \"TiDB Cloud Serverless\" is renamed to \"TiDB Cloud Starter\".\n\n## 20240910\n\n- The [Update Chat2Query Data App settings by ID](#tag/Data-App/operation/DataApp_UpdateChat2QuerySettings) endpoint removes the support for the `gpt-3.5-turbo` model and adds support for `gpt-4o` and `gpt-4o-mini` models.\n\n- \"TiDB Serverless\" is renamed to \"TiDB Cloud Serverless\".\n- \"TiDB Dedicated\" is renamed to \"TiDB Cloud Dedicated\".\n\n## 20240806\n\n- Add the [List all system endpoints in a Data App](#tag/Data-App/operation/DataAppsService_GetSystemEndpointConfig) endpoint.\n\n- Add the [Update the configuration of system endpoints](#tag/Data-App/operation/DataAppsService_UpdateSystemEndpointConfig) endpoint.\n\n## 20240716\n\n- The [Update Chat2Query Data App settings by ID](#tag/Data-App/operation/DataApp_UpdateChat2QuerySettings) endpoint removes the support for Claude models.\n\n## 20240528\n\n- Initial release of the TiDB Cloud Data Service API, including the following resources and endpoints:\n\n    - Data App:\n      - [List all Data Apps in a project](#tag/Data-App/operation/DataApp_ListDataApps)\n      - [Create a Data App](#tag/Data-App/operation/DataApp_CreateDataApp)\n      - [Get Chat2Query Data App settings by ID](#tag/Data-App/operation/DataApp_GetChat2QuerySettings)\n      - [Update Chat2Query Data App settings by ID](#tag/Data-App/operation/DataApp_UpdateChat2QuerySettings)\n      - [Update a Data App](#tag/Data-App/operation/DataApp_UpdateDataApp)\n      - [Get a Data App by ID](#tag/Data-App/operation/DataApp_GetDataApp)\n      - [Delete a Data App](#tag/Data-App/operation/DataApp_DeleteDataApp)\n    - Data Source:\n      - [List all data sources in a Data App](#tag/Data-Source/operation/DataSource_ListDataSources)\n      - [Create a data source for a Data App](#tag/Data-Source/operation/DataSource_CreateDataSource)\n      - [Get a data source by ID](#tag/Data-Source/operation/DataSource_GetDataSource)\n      - [Delete a data source for a Data App](#tag/Data-Source/operation/DataSource_DeleteDataSource)\n    - Endpoint:\n      - [List all endpoints in a Data App](#tag/Deployment/operation/Deployment_ListDeployments)\n      - [Create an endpoint for a Data App](#tag/Endpoint/operation/Endpoint_CreateEndpoint)\n      - [Update an endpoint for a Data App](#tag/Endpoint/operation/Endpoint_UpdateEndpoint)\n      - [Get an endpoint for a Data App](#tag/Endpoint/operation/Endpoint_GetEndpoint)\n      - [Delete an endpoint for a Data App](#tag/Endpoint/operation/Endpoint_DeleteEndpoint)\n      - [Test an endpoint for a Data App](#tag/Endpoint/operation/Endpoint_TestEndpoint)\n    - Deployment:\n      - [List all deployments for a Data App](#tag/Deployment/operation/Deployment_ListDeployments)\n      - [Create a deployment for a Data App](#tag/Deployment/operation/Deployment_CreateDeployment)\n      - [Get a deployment by ID](#tag/Deployment/operation/Deployment_GetDeployment)\n    - Data API Key:\n      - [List all API keys for a Data App](#tag/Data-API-Key/operation/APIKey_ListApiKeys)\n      - [Create an API key for a Data App](#tag/Data-API-Key/operation/APIKey_CreateApiKey)\n      - [Update an API key for a Data App](#tag/Data-API-Key/operation/APIKey_UpdateApiKey)\n      - [Get an API key by ID](#tag/Data-API-Key/operation/APIKey_GetApiKey)\n      - [Delete an API key for a Data App](#tag/Data-API-Key/operation/APIKey_DeleteApiKey)\n    - OpenAPI Specification:\n      - [Get the OpenAPI Specification of a Data App](#tag/OpenAPI-Specification/operation/APISpecification_GetApiSpec)\n",
+      "type": "text/plain"
+    }
+  }
+}

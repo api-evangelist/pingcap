@@ -1,0 +1,324 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "DM OpenAPI DOC Source API",
+    "version": "6.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "source",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "get data source list",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://you.domain.com/api/v1/sources",
+            "params": [
+              {
+                "name": "with_status",
+                "value": "",
+                "type": "query",
+                "description": "list source with status"
+              },
+              {
+                "name": "enable_relay",
+                "value": "",
+                "type": "query",
+                "description": "only return the enable-relay source"
+              }
+            ]
+          },
+          "docs": "get data source list"
+        },
+        {
+          "info": {
+            "name": "create and enable a new data source",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://you.domain.com/api/v1/sources",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "create and enable a new data source"
+        },
+        {
+          "info": {
+            "name": "get source",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://you.domain.com/api/v1/sources/:source-name",
+            "params": [
+              {
+                "name": "source-name",
+                "value": "",
+                "type": "path",
+                "description": "globally unique data source name"
+              },
+              {
+                "name": "with_status",
+                "value": "",
+                "type": "query",
+                "description": "list source with status"
+              }
+            ]
+          },
+          "docs": "get source"
+        },
+        {
+          "info": {
+            "name": "update a data source",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://you.domain.com/api/v1/sources/:source-name",
+            "params": [
+              {
+                "name": "source-name",
+                "value": "",
+                "type": "path",
+                "description": "globally unique data source name"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "update a data source"
+        },
+        {
+          "info": {
+            "name": "delete a data source",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://you.domain.com/api/v1/sources/:source-name",
+            "params": [
+              {
+                "name": "source-name",
+                "value": "",
+                "type": "path",
+                "description": "globally unique data source name"
+              },
+              {
+                "name": "force",
+                "value": "",
+                "type": "query",
+                "description": "force stop source also stop the related tasks"
+              }
+            ]
+          },
+          "docs": "delete a data source"
+        },
+        {
+          "info": {
+            "name": "get the current status of the data source",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://you.domain.com/api/v1/sources/:source-name/status",
+            "params": [
+              {
+                "name": "source-name",
+                "value": "",
+                "type": "path",
+                "description": "globally unique data source name"
+              }
+            ]
+          },
+          "docs": "get the current status of the data source"
+        },
+        {
+          "info": {
+            "name": "enable a data source",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://you.domain.com/api/v1/sources/:source-name/enable",
+            "params": [
+              {
+                "name": "source-name",
+                "value": "",
+                "type": "path",
+                "description": "globally unique data source name"
+              }
+            ]
+          },
+          "docs": "enable a data source"
+        },
+        {
+          "info": {
+            "name": "disable a data source",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://you.domain.com/api/v1/sources/:source-name/disable",
+            "params": [
+              {
+                "name": "source-name",
+                "value": "",
+                "type": "path",
+                "description": "globally unique data source name"
+              }
+            ]
+          },
+          "docs": "disable a data source"
+        },
+        {
+          "info": {
+            "name": "transfer source to a free worker",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://you.domain.com/api/v1/sources/:source-name/transfer",
+            "params": [
+              {
+                "name": "source-name",
+                "value": "",
+                "type": "path",
+                "description": "globally unique data source name"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "transfer source to a free worker"
+        },
+        {
+          "info": {
+            "name": "enable relay log function for the data source",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://you.domain.com/api/v1/sources/:source-name/relay/enable",
+            "params": [
+              {
+                "name": "source-name",
+                "value": "",
+                "type": "path",
+                "description": "globally unique data source name"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "enable relay log function for the data source"
+        },
+        {
+          "info": {
+            "name": "disable relay log function for the data source",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://you.domain.com/api/v1/sources/:source-name/relay/disable",
+            "params": [
+              {
+                "name": "source-name",
+                "value": "",
+                "type": "path",
+                "description": "globally unique data source name"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "disable relay log function for the data source"
+        },
+        {
+          "info": {
+            "name": "purge relay log",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://you.domain.com/api/v1/sources/:source-name/relay/purge",
+            "params": [
+              {
+                "name": "source-name",
+                "value": "",
+                "type": "path",
+                "description": "globally unique data source name"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "purge relay log"
+        },
+        {
+          "info": {
+            "name": "get source schema list",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://you.domain.com/api/v1/sources/:source-name/schemas",
+            "params": [
+              {
+                "name": "source-name",
+                "value": "",
+                "type": "path",
+                "description": "source name"
+              }
+            ]
+          },
+          "docs": "get source schema list"
+        },
+        {
+          "info": {
+            "name": "get source table list",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://you.domain.com/api/v1/sources/:source-name/schemas/:schema-name",
+            "params": [
+              {
+                "name": "source-name",
+                "value": "",
+                "type": "path",
+                "description": "source name"
+              },
+              {
+                "name": "schema-name",
+                "value": "",
+                "type": "path",
+                "description": "schema name"
+              }
+            ]
+          },
+          "docs": "get source table list"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

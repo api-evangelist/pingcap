@@ -1,0 +1,153 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "TiDB Cloud Starter and Essential Branch API",
+    "version": "v1beta1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Branch",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List branches",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://serverless.tidbapi.com/v1beta1/clusters/:clusterId/branches",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the TiDB Cloud Starter or Essential instance to which the [branch](https://docs.pingcap.com/tidbcloud/branch-overview/) belongs."
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of branches to return. If not specified, at most 10 branches will be returned. The maximum value is `100`. Values greater than `100` are set to `100`."
+              },
+              {
+                "name": "pageToken",
+                "value": "",
+                "type": "query",
+                "description": "The pagination token received from a previous [List branches](#tag/Branch/operation/BranchService_ListBranches) request. Use this token to retrieve the next page of results.\n\n**Note**: When paginating, all other parameters must match the original request."
+              }
+            ]
+          },
+          "docs": "List branches"
+        },
+        {
+          "info": {
+            "name": "Create a branch",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://serverless.tidbapi.com/v1beta1/clusters/:clusterId/branches",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the TiDB Cloud Starter or Essential instance to which the branch belongs."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a branch"
+        },
+        {
+          "info": {
+            "name": "Get details of a branch",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://serverless.tidbapi.com/v1beta1/clusters/:clusterId/branches/:branchId",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the TiDB Cloud Starter or Essential instance to which the branch belongs."
+              },
+              {
+                "name": "branchId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the branch."
+              },
+              {
+                "name": "view",
+                "value": "",
+                "type": "query",
+                "description": "The detail level of the branch information to return.\n\n- `BASIC`: returns only basic branch information.\n- `FULL`: returns complete branch details."
+              }
+            ]
+          },
+          "docs": "Get details of a branch"
+        },
+        {
+          "info": {
+            "name": "Delete a branch",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://serverless.tidbapi.com/v1beta1/clusters/:clusterId/branches/:branchId",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the TiDB Cloud Starter or Essential instance to which the branch belongs."
+              },
+              {
+                "name": "branchId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the branch."
+              }
+            ]
+          },
+          "docs": "Delete a branch"
+        },
+        {
+          "info": {
+            "name": "Reset a branch",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://serverless.tidbapi.com/v1beta1/clusters/:clusterId/branches/:branchId:reset",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the TiDB Cloud Starter or Essential instance to which the branch belongs."
+              },
+              {
+                "name": "branchId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the branch."
+              }
+            ]
+          },
+          "docs": "Resets a branch to match the current state of its parent branch."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

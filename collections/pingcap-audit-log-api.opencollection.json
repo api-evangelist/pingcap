@@ -1,0 +1,67 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "IAM System OPEN Audit Log API",
+    "version": "v1beta1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Audit Log",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List audit logs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://iam.tidbapi.com/v1beta1/auditLogs",
+            "params": [
+              {
+                "name": "pageToken",
+                "value": "",
+                "type": "query",
+                "description": "The pagination token received from a previous [List audit logs](#tag/Audit-Log/paths/~1auditLogs/get) request. Use this token to retrieve the next page of results."
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of audit logs to return. If not specified, at most 100 audit logs will be returned."
+              },
+              {
+                "name": "startTime",
+                "value": "",
+                "type": "query",
+                "description": "Filters the results to include only audit logs created on or after this timestamp, in the [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format."
+              },
+              {
+                "name": "endTime",
+                "value": "",
+                "type": "query",
+                "description": "Filters the results to include only audit logs created before or at this timestamp, in the [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format."
+              },
+              {
+                "name": "auditEventTypes",
+                "value": "",
+                "type": "query",
+                "description": "Filters the results by specific event types. For more information, see [Console audit event types](https://docs.pingcap.com/tidbcloud/tidb-cloud-console-auditing/#console-audit-event-types)."
+              },
+              {
+                "name": "keyword",
+                "value": "",
+                "type": "query",
+                "description": "Filters results to include only audit logs that contain the specified search term."
+              }
+            ]
+          },
+          "docs": "Lists all console audit logs for your organization. This endpoint helps you track various behaviors and operations of users on the [TiDB Cloud console](https://tidbcloud.com/). You can filter results by time range, event type, or keyword."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

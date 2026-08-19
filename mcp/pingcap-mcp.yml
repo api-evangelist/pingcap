@@ -12,8 +12,8 @@ server:
   default_transport: stdio
   url: null
   hosted: false
-  note: Self-hosted / locally run. There is no PingCAP-operated remote MCP endpoint; the server is launched by the
-    MCP client and connects to a TiDB or TiDB Cloud instance the caller supplies.
+  note: Self-hosted / locally run. There is no PingCAP-operated remote MCP endpoint; the server is launched
+    by the MCP client and connects to a TiDB or TiDB Cloud instance the caller supplies.
   install: uvx --from "pytidb[mcp]" tidb-mcp-server
   sse_install: uvx --from "pytidb[mcp]" tidb-mcp-server --transport sse
   package: pytidb[mcp]
@@ -61,12 +61,18 @@ tools:
   description: Remove an existing database user
   category: user-management
   read_only: false
-surface_note: The TiDB MCP Server operates on the SQL data plane (MySQL protocol), not on the TiDB Cloud management
-  REST API. Agent-side control-plane work is instead covered by the published tidbcloud-manager agent skill, which
-  drives the TiDB Cloud OpenAPI directly.
+surface_note: The TiDB MCP Server operates on the SQL data plane (MySQL protocol), not on the TiDB Cloud
+  management REST API. Agent-side control-plane work is instead covered by the published tidbcloud-manager
+  agent skill, which drives the TiDB Cloud OpenAPI directly.
 crosswalk: mcp/pingcap-tool-crosswalk.yml
 x-evidence:
   fetched: '2026-08-02'
-  tools_list_probe: not applicable — stdio/SSE server launched locally, no anonymous public endpoint to POST tools/list
-    against
+  tools_list_probe: not applicable — stdio/SSE server launched locally, no anonymous public endpoint to
+    POST tools/list against
   tool_source: docs.pingcap.com/ai/tidb-mcp-server/ published tool list
+deployment:
+  mode: local-stdio
+  verified: searched
+  tools: 7
+  checked: '2026-08-12'
+  source: catalog MCP census

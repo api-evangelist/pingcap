@@ -1,0 +1,128 @@
+{
+  "item": [
+    {
+      "id": "8eb29d34-3aa4-4a3a-b9b9-10af66e99c5f",
+      "name": "Trends",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "3b72f51f-1a5d-4ff2-94f6-397a5f9eac9a",
+          "name": "List trending repos",
+          "request": {
+            "name": "List trending repos",
+            "description": {
+              "content": "Trending repos is an open source alternative to GitHub trends, which showcases recently popular open source projects in the GitHub community.\n\n> **Note**\n>\n> Please URI encode the requested parameters, e.g. `C++` needs to be encoded as `C%2B%2B`.\n \n☁️ Daily run on [TiDB Cloud](https://tidbcloud.com/?utm_source=ossinsight&utm_medium=ossinsight_api), analyze upon dataset that has over 6 billion GitHub events.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "trends",
+                "repos",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "period",
+                  "value": "past_24_hours",
+                  "description": "Specify the period of time to calculate trending repos."
+                },
+                {
+                  "disabled": false,
+                  "key": "language",
+                  "value": "All",
+                  "description": "Specify using which programming language to filter trending repos. If not specified, all languages will be included."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "648e8cab-ecf2-4941-b4eb-fa159c7977ec",
+              "name": "Default Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "trends",
+                    "repos",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "period",
+                      "value": "past_24_hours"
+                    },
+                    {
+                      "key": "language",
+                      "value": "All"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"sql_endpoint\",\n  \"data\": {\n    \"columns\": [\n      {\n        \"col\": \"string\",\n        \"data_type\": \"BLOB\",\n        \"nullable\": true\n      },\n      {\n        \"col\": \"string\",\n        \"data_type\": \"INT\",\n        \"nullable\": false\n      }\n    ],\n    \"rows\": [\n      {\n        \"collection_names\": \"CICD\",\n        \"contributor_logins\": \"cplee,nektos-ci,usagirei,ae-ou,MrNossiom\",\n        \"description\": \"Run your GitHub Actions locally 🚀\",\n        \"forks\": \"5\",\n        \"primary_language\": \"Go\",\n        \"pull_requests\": \"6\",\n        \"pushes\": \"17\",\n        \"repo_id\": \"163883279\",\n        \"repo_name\": \"nektos/act\",\n        \"stars\": \"395\",\n        \"total_score\": \"1565.7526\"\n      },\n      {\n        \"collection_names\": \"ChatGPT Alternatives\",\n        \"contributor_logins\": \"antonkesy,ruanslv,starplatinum3,AlexandroLuis,realhaik\",\n        \"description\": \"Inference code for LLaMA models\",\n        \"forks\": \"48\",\n        \"primary_language\": \"Python\",\n        \"pull_requests\": \"41\",\n        \"pushes\": \"7\",\n        \"repo_id\": \"601538369\",\n        \"repo_name\": \"facebookresearch/llama\",\n        \"stars\": \"209\",\n        \"total_score\": \"1079.0274\"\n      },\n      {\n        \"collection_names\": \"Stable Diffusion Ecosystem\",\n        \"contributor_logins\": \"atiorh,SaladDays831,ZachNagengast,TimYao18,vzsg\",\n        \"description\": \"Stable Diffusion with Core ML on Apple Silicon\",\n        \"forks\": \"5\",\n        \"primary_language\": \"Python\",\n        \"pull_requests\": \"7\",\n        \"pushes\": \"5\",\n        \"repo_id\": \"566576114\",\n        \"repo_name\": \"apple/ml-stable-diffusion\",\n        \"stars\": \"99\",\n        \"total_score\": \"575.2498\"\n      },\n      {\n        \"collection_names\": \"Stable Diffusion Ecosystem\",\n        \"contributor_logins\": \"danonymous856,EvilPhi666,FurkanGozukara,Prathyusha-98,ca-kishida\",\n        \"description\": \"High-Resolution Image Synthesis with Latent Diffusion Models\",\n        \"forks\": \"6\",\n        \"primary_language\": \"Python\",\n        \"pull_requests\": \"2\",\n        \"pushes\": \"\",\n        \"repo_id\": \"569927055\",\n        \"repo_name\": \"Stability-AI/stablediffusion\",\n        \"stars\": \"75\",\n        \"total_score\": \"483.0236\"\n      }\n    ],\n    \"result\": {\n      \"code\": 200,\n      \"message\": \"Query OK!\",\n      \"start_ms\": 1690957407469,\n      \"end_ms\": 1690957407499,\n      \"latency\": \"30ms\",\n      \"row_count\": 4,\n      \"row_affect\": 0,\n      \"limit\": 50,\n      \"databases\": [\n        \"gharchive_dev\"\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.ossinsight.io/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "8252b989-59f7-4170-856a-2c04854d44c5",
+    "name": "OSSInsight Public Trends API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "\nOSSInsight Public APIs (beta) provide a convenient way to access insight data for open source projects on GitHub, supplementing the existing GitHub API.\n\nIt provides data query in different dimensions, including:\n\n```mdx-code-block\nimport DocCardList from '@theme/DocCardList';\nimport {useCurrentSidebarCategory} from '@docusaurus/theme-common';\n\n<DocCardList items={useCurrentSidebarCategory().items.filter((item) => {\n    // Exclude Introduction and Showcase pages\n    return item.docId !== 'api/showcase' && item.docId !== 'api/ossinsight-public-api';\n})}/>\n```\n\n## Usage\n\nThe OSSInsight Public API is designed to follow the OpenAPI specification and can be accessed by initiating HTTP requests using the command line `curl` or web request libraries in different programming languages.\n\n### Base URL\n\nAll API requests are based on the following URL:\n\n```shell\nhttps://api.ossinsight.io/v1\n```\n\n### Authentication\n\nNo authentication is required for beta version of public APIs, but there are [rate limits](#rate-limit) for API requests.\n\n> Note:\n> We will add authentication way for larger API requests in future releases.\n\n### Rate Limit\n\nFor each IP address, the rate limit allows for up to **600 requests per hour**, which can be checked by the following fields in the Response Header to see the current usage:\n\n```\nx-ratelimit-limit: 600\nx-ratelimit-remaining: 599\n```\n\nIn addition, we have also set up a global rate limit of up to **1000 requests per minute**, which can be checked by the following fields in the Response Header to see the current usage:\n\n```\nx-ratelimit-limit-minute: 1000\nx-ratelimit-remaining-minute: 97\n```\n\n### Example\n\nFor example, if you want to know what countries the stargazers in the `pingcap/tidb` repository are located in, you can make a request using the curl command as follows:\n\n```shell\ncurl https://api.ossinsight.io/v1/repos/pingcap/tidb/stargazers/countries\n```\n\n<details>\n\n<summary>Example Response</summary>\n\n```json\n{\n  \"type\": \"sql_endpoint\",\n  \"data\": {\n    \"columns\": [\n      {\n        \"col\": \"country_or_area\",\n        \"data_type\": \"CHAR\",\n        \"nullable\": true\n      },\n      {\n        \"col\": \"count\",\n        \"data_type\": \"BIGINT\",\n        \"nullable\": true\n      },\n      {\n        \"col\": \"percentage\",\n        \"data_type\": \"DECIMAL\",\n        \"nullable\": true\n      }\n    ],\n    \"rows\": [\n      {\n        \"count\": \"9183\",\n        \"country_or_area\": \"CN\",\n        \"percentage\": \"0.5936\"\n      },\n      {\n        \"count\": \"1542\",\n        \"country_or_area\": \"US\",\n        \"percentage\": \"0.0997\"\n      },\n      {\n        \"count\": \"471\",\n        \"country_or_area\": \"JP\",\n        \"percentage\": \"0.0304\"\n      }\n    ],\n    \"result\": {\n      \"code\": 200,\n      \"message\": \"Query OK!\",\n      \"start_ms\": 1690351487809,\n      \"end_ms\": 1690351487930,\n      \"latency\": \"121ms\",\n      \"row_count\": 132,\n      \"row_affect\": 0,\n      \"limit\": 300,\n      \"databases\": [\n        \"gharchive_dev\"\n      ]\n    }\n  }\n}\n```\n\n</details>\n\n## Request New API \n\nIf the API in the documentation does not meet your query requirements, please contact us as follows:\n\n- Email us at ossinsight@pingcap.com\n- Open an issue in the [OSSInsight GitHub repository](https://github.com/pingcap/ossinsight/issues/new?assignees=&labels=type%2Ffeature&projects=&template=feature_request.md&title=New%20API)\n",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,1461 @@
+openapi: 3.2.0
+info:
+  title: DM OpenAPI DOC Task API
+  version: 6.0.0
+  description: task
+servers:
+- url: https://you.domain.com/
+tags:
+- name: task
+  description: task
+  externalDocs:
+    description: doc
+    url: https://docs.pingcap.com/zh/tidb/stable/quick-start-with-dm
+paths:
+  /api/v1/tasks:
+    post:
+      tags:
+      - task
+      summary: create a task
+      operationId: DMAPICreateTask
+      requestBody:
+        description: request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTaskRequest'
+      responses:
+        '201':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperateTaskResponse'
+        '400':
+          description: failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorWithMessage'
+    get:
+      tags:
+      - task
+      summary: get task list
+      parameters:
+      - name: with_status
+        in: query
+        required: false
+        description: get task with status
+        schema:
+          type: boolean
+          example: true
+      - name: stage
+        in: query
+        required: false
+        description: filter by task stage
+        schema:
+          $ref: '#/components/schemas/TaskStage'
+      - name: source_name_list
+        in: query
+        required: false
+        description: filter by source name
+        schema:
+          $ref: '#/components/schemas/SourceNameList'
+      operationId: DMAPIGetTaskList
+      responses:
+        '200':
+          description: task list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetTaskListResponse'
+        '400':
+          description: failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorWithMessage'
+  /api/v1/tasks/{task-name}:
+    get:
+      tags:
+      - task
+      summary: get a task
+      parameters:
+      - name: task-name
+        in: path
+        description: globally unique task name
+        required: true
+        schema:
+          type: string
+          example: task-1
+      - name: with_status
+        in: query
+        required: false
+        description: get task with status
+        schema:
+          type: boolean
+          example: true
+      operationId: DMAPIGetTask
+      responses:
+        '200':
+          description: task list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '404':
+          description: task not found
+    delete:
+      tags:
+      - task
+      summary: delete a task
+      operationId: DMAPIDeleteTask
+      parameters:
+      - name: task-name
+        in: path
+        description: globally unique task name
+        required: true
+        schema:
+          type: string
+          example: task-1
+      - name: force
+        in: query
+        required: false
+        description: force stop task even if some subtask is running
+        schema:
+          type: boolean
+          example: true
+      - name: keep_meta
+        in: query
+        required: false
+        description: 'Whether to keep downstream checkpoints and resumable internal metadata when deleting the task.
+
+          Optimistic shard DDL metadata is always removed.
+
+          With force=true, only already-persisted checkpoint state is retained; deletion does not flush the latest checkpoint.
+
+          Stop the task and wait for the stop operation to complete before deleting it when the latest checkpoint must be retained.
+
+          Only use keep_meta=true after all DM masters are upgraded, because older versions ignore unknown query parameters.'
+        schema:
+          type: boolean
+          default: false
+          example: true
+      responses:
+        '204':
+          description: success
+        '400':
+          description: failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorWithMessage'
+    put:
+      tags:
+      - task
+      summary: update a task
+      operationId: DMAPIUpdateTask
+      requestBody:
+        description: request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTaskRequest'
+      parameters:
+      - name: task-name
+        in: path
+        description: globally unique task name
+        required: true
+        schema:
+          type: string
+          example: task-1
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperateTaskResponse'
+        '400':
+          description: failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorWithMessage'
+  /api/v1/tasks/{task-name}/status:
+    get:
+      tags:
+      - task
+      summary: get task status
+      operationId: DMAPIGetTaskStatus
+      parameters:
+      - name: task-name
+        in: path
+        description: globally unique task name
+        required: true
+        schema:
+          type: string
+          example: task-1
+      - name: source_name_list
+        in: query
+        description: source name list
+        required: false
+        schema:
+          $ref: '#/components/schemas/SourceNameList'
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetTaskStatusResponse'
+        '400':
+          description: failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorWithMessage'
+  /api/v1/tasks/{task-name}/start:
+    post:
+      tags:
+      - task
+      summary: start a task
+      operationId: DMAPIStartTask
+      parameters:
+      - name: task-name
+        in: path
+        description: globally unique task name
+        required: true
+        schema:
+          type: string
+          example: task-1
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StartTaskRequest'
+      responses:
+        '200':
+          description: success
+        '400':
+          description: failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorWithMessage'
+  /api/v1/tasks/{task-name}/stop:
+    post:
+      tags:
+      - task
+      summary: stop a task
+      operationId: DMAPIStopTask
+      parameters:
+      - name: task-name
+        in: path
+        description: globally unique task name
+        required: true
+        schema:
+          type: string
+          example: task-1
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StopTaskRequest'
+      responses:
+        '200':
+          description: success
+        '400':
+          description: failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorWithMessage'
+  /api/v1/tasks/{task-name}/sources/{source-name}/migrate_targets:
+    get:
+      tags:
+      - task
+      summary: get task source table and target table route relation
+      operationId: DMAPIGetTaskMigrateTargets
+      parameters:
+      - name: task-name
+        in: path
+        description: globally unique task name
+        required: true
+        schema:
+          type: string
+          example: task-1
+      - name: source-name
+        in: path
+        description: source name
+        required: true
+        schema:
+          type: string
+          example: source-1
+      - name: schema_pattern
+        in: query
+        required: false
+        schema:
+          type: string
+          example: db*
+      - name: table_pattern
+        in: query
+        required: false
+        schema:
+          type: string
+          example: table*
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetTaskMigrateTargetsResponse'
+        '400':
+          description: failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorWithMessage'
+  /api/v1/tasks/{task-name}/sources/{source-name}/schemas:
+    get:
+      tags:
+      - task
+      summary: get task source schema list
+      operationId: DMAPIGetSchemaListByTaskAndSource
+      parameters:
+      - name: task-name
+        in: path
+        description: globally unique task name
+        required: true
+        schema:
+          type: string
+          example: task-1
+      - name: source-name
+        in: path
+        description: source name
+        required: true
+        schema:
+          type: string
+          example: source-1
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SchemaNameList'
+        '400':
+          description: failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorWithMessage'
+  /api/v1/tasks/{task-name}/sources/{source-name}/schemas/{schema-name}:
+    get:
+      tags:
+      - task
+      summary: get task source table list
+      operationId: DMAPIGetTableListByTaskAndSource
+      parameters:
+      - name: task-name
+        in: path
+        description: globally unique task name
+        required: true
+        schema:
+          type: string
+          example: task-1
+      - name: source-name
+        in: path
+        description: source name
+        required: true
+        schema:
+          type: string
+          example: source-1
+      - name: schema-name
+        in: path
+        description: schema name
+        required: true
+        schema:
+          type: string
+          example: db1
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TableNameList'
+        '400':
+          description: failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorWithMessage'
+  /api/v1/tasks/{task-name}/sources/{source-name}/schemas/{schema-name}/{table-name}:
+    get:
+      tags:
+      - task
+      summary: get task source table structure
+      operationId: DMAPIGetTableStructure
+      parameters:
+      - name: task-name
+        in: path
+        description: globally unique task name
+        required: true
+        schema:
+          type: string
+          example: task-1
+      - name: source-name
+        in: path
+        description: source name
+        required: true
+        schema:
+          type: string
+          example: source-1
+      - name: schema-name
+        in: path
+        description: schema name
+        required: true
+        schema:
+          type: string
+          example: db1
+      - name: table-name
+        in: path
+        description: table name
+        required: true
+        schema:
+          type: string
+          example: table1
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetTaskTableStructureResponse'
+        '400':
+          description: failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorWithMessage'
+    put:
+      tags:
+      - task
+      summary: operate task source table structure
+      operationId: DMAPIOperateTableStructure
+      parameters:
+      - name: task-name
+        in: path
+        description: globally unique task name
+        required: true
+        schema:
+          type: string
+          example: task-1
+      - name: source-name
+        in: path
+        description: source name
+        required: true
+        schema:
+          type: string
+          example: task-1
+      - name: schema-name
+        in: path
+        description: schema name
+        required: true
+        schema:
+          type: string
+          example: db1
+      - name: table-name
+        in: path
+        description: table name
+        required: true
+        schema:
+          type: string
+          example: table1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OperateTaskTableStructureRequest'
+      responses:
+        '200':
+          description: success
+        '400':
+          description: failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorWithMessage'
+    delete:
+      tags:
+      - task
+      summary: delete task source table structure
+      operationId: DMAPIDeleteTableStructure
+      parameters:
+      - name: task-name
+        in: path
+        description: globally unique task name
+        required: true
+        schema:
+          type: string
+          example: task-1
+      - name: source-name
+        in: path
+        description: source name
+        required: true
+        schema:
+          type: string
+          example: source-1
+      - name: schema-name
+        in: path
+        description: schema name
+        required: true
+        schema:
+          type: string
+          example: db1
+      - name: table-name
+        in: path
+        description: table name
+        required: true
+        schema:
+          type: string
+          example: table1
+      responses:
+        '204':
+          description: success
+        '400':
+          description: failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorWithMessage'
+  /api/v1/tasks/converters:
+    post:
+      tags:
+      - task
+      summary: Turn task into the format of a configuration file or vice versa.
+      operationId: DMAPIConvertTask
+      requestBody:
+        description: if task is input this task will be converted to task_config file or vice versa
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConverterTaskRequest'
+      responses:
+        '201':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConverterTaskResponse'
+        '400':
+          description: failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorWithMessage'
+  /api/v1/tasks/templates:
+    post:
+      tags:
+      - task
+      summary: create task template
+      operationId: DMAPICreateTaskTemplate
+      requestBody:
+        description: request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Task'
+      responses:
+        '201':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '400':
+          description: failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorWithMessage'
+    get:
+      tags:
+      - task
+      summary: get task template list
+      operationId: DMAPIGetTaskTemplateList
+      responses:
+        '200':
+          description: task list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetTaskListResponse'
+        '400':
+          description: failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorWithMessage'
+  /api/v1/tasks/templates/import:
+    post:
+      tags:
+      - task
+      summary: import task template
+      operationId: DMAPIImportTaskTemplate
+      requestBody:
+        description: request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskTemplateRequest'
+      responses:
+        '202':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskTemplateResponse'
+        '400':
+          description: failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorWithMessage'
+  /api/v1/tasks/templates/{task-name}:
+    get:
+      tags:
+      - task
+      summary: get task template template
+      operationId: DMAPIGetTaskTemplate
+      parameters:
+      - name: task-name
+        in: path
+        description: globally unique task name
+        required: true
+        schema:
+          type: string
+          example: task-1
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '400':
+          description: failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorWithMessage'
+    put:
+      tags:
+      - task
+      summary: update task template template
+      operationId: DMAPUpdateTaskTemplate
+      parameters:
+      - name: task-name
+        in: path
+        description: globally unique task name
+        required: true
+        schema:
+          type: string
+          example: task-1
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '400':
+          description: failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorWithMessage'
+    delete:
+      tags:
+      - task
+      summary: delete task template template
+      operationId: DMAPIDeleteTaskTemplate
+      parameters:
+      - name: task-name
+        in: path
+        description: globally unique task name
+        required: true
+        schema:
+          type: string
+          example: task-1
+      responses:
+        '204':
+          description: success
+        '400':
+          description: failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorWithMessage'
+components:
+  schemas:
+    ConverterTaskResponse:
+      type: object
+      properties:
+        task:
+          $ref: '#/components/schemas/Task'
+        task_config_file:
+          type: string
+          description: config file in yaml format https://docs.pingcap.com/zh/tidb/stable/task-configuration-file-full.
+      required:
+      - task
+      - task_config_file
+    LoadStatus:
+      type: object
+      description: status of load unit
+      properties:
+        finished_bytes:
+          type: integer
+          format: int64
+        total_bytes:
+          type: integer
+          format: int64
+        progress:
+          type: string
+        meta_binlog:
+          type: string
+        meta_binlog_gtid:
+          type: string
+        bps:
+          type: integer
+          format: int64
+      required:
+      - finished_bytes
+      - total_bytes
+      - progress
+      - meta_binlog
+      - meta_binlog_gtid
+      - bps
+    TaskSourceConfig:
+      type: object
+      description: source-related configuration
+      properties:
+        full_migrate_conf:
+          $ref: '#/components/schemas/TaskFullMigrateConf'
+        incr_migrate_conf:
+          $ref: '#/components/schemas/TaskIncrMigrateConf'
+        source_conf:
+          type: array
+          description: source configuration
+          items:
+            $ref: '#/components/schemas/TaskSourceConf'
+      required:
+      - source_conf
+    TaskSourceConf:
+      type: object
+      properties:
+        source_name:
+          type: string
+          example: mysql-replica-01
+          description: source name
+        binlog_name:
+          type: string
+          example: binlog.000001
+        binlog_pos:
+          type: integer
+          example: 4
+        binlog_gtid:
+          type: string
+          example: 03fc0263-28c7-11e7-a653-6c0b84d59f30:1-7041423,05474d3c-28c7-11e7-8352-203db246dd3d:1-170
+      required:
+      - source_name
+    GetTaskListResponse:
+      type: object
+      properties:
+        total:
+          type: integer
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Task'
+      required:
+      - total
+      - data
+    TableNameList:
+      description: schema name list
+      type: array
+      items:
+        type: string
+        example: table1
+    SchemaNameList:
+      description: schema name list
+      type: array
+      items:
+        type: string
+        example: db1
+    SourceNameList:
+      description: source name list
+      type: array
+      items:
+        type: string
+        example: source-1
+    DumpStatus:
+      type: object
+      description: status of dump unit
+      properties:
+        total_tables:
+          type: integer
+          format: int64
+        completed_tables:
+          type: number
+          format: double
+        finished_bytes:
+          type: number
+          format: double
+        finished_rows:
+          type: number
+          format: double
+        estimate_total_rows:
+          type: number
+          format: double
+        bps:
+          type: integer
+          format: int64
+        progress:
+          type: string
+      required:
+      - total_tables
+      - completed_tables
+      - finished_bytes
+      - finished_rows
+      - estimate_total_rows
+      - bps
+      - progress
+    OperateTaskResponse:
+      type: object
+      properties:
+        task:
+          $ref: '#/components/schemas/Task'
+        check_result:
+          type: string
+          description: pre-check result
+          example: 'pre-check is passed. '
+      required:
+      - task
+      - check_result
+    TaskTableMigrateRule:
+      type: object
+      description: upstream table to downstream migrate rules
+      properties:
+        source:
+          $ref: '#/components/schemas/TaskTableMigrateRuleSource'
+        target:
+          $ref: '#/components/schemas/TaskTableMigrateRuleTarget'
+        binlog_filter_rule:
+          type: array
+          description: filter rule name
+          items:
+            type: string
+            example: rule-1
+      required:
+      - source
+    OperateTaskTableStructureRequest:
+      description: action to operate table request
+      type: object
+      properties:
+        sql_content:
+          type: string
+          example: CREATE TABLE `t1` ( `c1` int(11) DEFAULT NULL, `c2` int(11) DEFAULT NULL, `c3` int(11) DEFAULT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+          description: sql you want to operate
+        flush:
+          type: boolean
+          default: true
+          description: Writes the schema to the checkpoint so that DM can load it after restarting the task
+        sync:
+          type: boolean
+          description: Updates the optimistic sharding metadata with this schema only used when an error occurs in the optimistic sharding DDL mode
+      required:
+      - sql_content
+    Task:
+      description: task
+      type: object
+      properties:
+        name:
+          type: string
+          example: task-1
+          description: task name
+        task_mode:
+          type: string
+          example: all
+          description: migrate mode
+          enum:
+          - full
+          - incremental
+          - all
+          - dump
+          - load
+        shard_mode:
+          type: string
+          description: the way to coordinate DDL
+          enum:
+          - pessimistic
+          - optimistic
+        strict_optimistic_shard_mode:
+          type: boolean
+          example: true
+          description: whether to enable strict optimistic shard mode
+          default: false
+        meta_schema:
+          type: string
+          example: dm-meta
+          description: downstream database for storing meta information
+          default: dm-meta
+        enhance_online_schema_change:
+          type: boolean
+          example: true
+          description: whether to enable support for the online ddl plugin
+          default: true
+        on_duplicate:
+          type: string
+          description: how to handle conflicted data
+          enum:
+          - replace
+          - error
+          - ignore
+        target_config:
+          $ref: '#/components/schemas/TaskTargetDataBase'
+        binlog_filter_rule:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/TaskBinLogFilterRule'
+        table_migrate_rule:
+          type: array
+          description: table migrate rule
+          items:
+            $ref: '#/components/schemas/TaskTableMigrateRule'
+        source_config:
+          $ref: '#/components/schemas/TaskSourceConfig'
+        status_list:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubTaskStatus'
+        ignore_checking_items:
+          type: array
+          description: ignore precheck items
+          items:
+            type: string
+            example: version
+      required:
+      - name
+      - task_mode
+      - enhance_online_schema_change
+      - on_duplicate
+      - target_config
+      - table_migrate_rule
+      - source_config
+    TaskTargetDataBase:
+      type: object
+      description: downstream database configuration
+      properties:
+        host:
+          type: string
+          example: 127.0.0.1
+          description: source address
+        port:
+          type: integer
+          example: 3306
+          description: source port
+        user:
+          type: string
+          example: root
+          description: source username
+        password:
+          type: string
+          example: '123456'
+          description: source password
+        security:
+          $ref: '#/components/schemas/Security'
+          description: downstram database ssl config
+      required:
+      - host
+      - port
+      - user
+      - password
+    Security:
+      type:
+      - object
+      - 'null'
+      description: data source ssl configuration, the field will be hidden when getting the data source configuration from the interface
+      properties:
+        ssl_ca_content:
+          type: string
+          example: ''
+          description: certificate file content
+        ssl_cert_content:
+          type: string
+          example: ''
+          description: File content of PEM format/X509 format certificates
+        ssl_key_content:
+          type: string
+          example: ''
+          description: Content of the private key file in X509 format
+        cert_allowed_cn:
+          type: array
+          description: Common Name of SSL certificates
+          items:
+            type: string
+      required:
+      - ssl_ca_content
+      - ssl_cert_content
+      - ssl_key_content
+    TaskTemplateRequest:
+      type: object
+      properties:
+        overwrite:
+          type: boolean
+          default: false
+          description: whether to overwrite task template template
+      required:
+      - overwrite
+    GetTaskStatusResponse:
+      type: object
+      properties:
+        total:
+          type: integer
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubTaskStatus'
+      required:
+      - total
+      - data
+    TaskStage:
+      type: string
+      enum:
+      - Stopped
+      - Running
+      - Finished
+      - Paused
+    TaskBinLogFilterRule:
+      description: Filtering rules at binlog level
+      type: object
+      properties:
+        ignore_event:
+          description: event type
+          type: array
+          items:
+            type: string
+            description: event type
+            example: all dml
+        ignore_sql:
+          description: sql pattern to filter
+          type: array
+          items:
+            type: string
+            description: sql pattern to filter
+            example: ^Drop
+    ConverterTaskRequest:
+      type: object
+      properties:
+        task:
+          $ref: '#/components/schemas/Task'
+        task_config_file:
+          type: string
+          description: config file in yaml format https://docs.pingcap.com/zh/tidb/stable/task-configuration-file-full.
+    ErrorWithMessage:
+      description: operation error
+      type: object
+      properties:
+        error_msg:
+          type: string
+          description: error message
+        error_code:
+          type: integer
+          description: error code
+      required:
+      - error_msg
+      - error_code
+    GetTaskMigrateTargetsResponse:
+      type: object
+      properties:
+        total:
+          type: integer
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaskMigrateTarget'
+      required:
+      - total
+      - data
+    StartTaskRequest:
+      type: object
+      properties:
+        remove_meta:
+          type: boolean
+          default: false
+          description: whether to remove meta database in downstream database
+        source_name_list:
+          $ref: '#/components/schemas/SourceNameList'
+        start_time:
+          type: string
+          example: '2006-01-02T15:04:05+08:00'
+          description: task start time. Prefer RFC3339-like values with timezone offset (`+08:00` or `+0800`). Legacy values without timezone are interpreted in upstream timezone.
+        safe_mode_time_duration:
+          type: string
+          example: 10s
+          description: time duration of safe mode
+    UpdateTaskRequest:
+      type: object
+      properties:
+        task:
+          $ref: '#/components/schemas/Task'
+      required:
+      - task
+    TaskTableMigrateRuleTarget:
+      type: object
+      description: downstream-related configuration
+      properties:
+        schema:
+          type: string
+          description: schema name, does not support wildcards
+          example: db1
+        table:
+          type: string
+          description: table name, does not support wildcards
+          example: tb1
+    TaskIncrMigrateConf:
+      description: configuration of incremental tasks
+      type: object
+      properties:
+        repl_threads:
+          type: integer
+          description: incremental task of concurrent
+          default: 16
+        repl_batch:
+          type: integer
+          description: incremental synchronization of batch execution sql quantities
+          default: 100
+    TaskFullMigrateConf:
+      description: configuration of full migrate tasks
+      type: object
+      properties:
+        export_threads:
+          type: integer
+          description: full export of concurrent
+          default: 4
+        import_threads:
+          type: integer
+          description: full import of concurrent
+          default: 16
+        data_dir:
+          type: string
+          example: ./exported_data
+          description: 'Storage directory for full import.
+
+
+            Notes:
+
+            - When `import_mode` is `import-into`, this must be a shared storage URI (for example, `s3://bucket/prefix`).
+
+            - Local filesystem paths (for example, `/data/...` or `./exported_data`) are rejected when `import_mode` is `import-into`.'
+        consistency:
+          type: string
+          example: auto
+          description: to control the way in which data is exported for consistency assurance
+        import_mode:
+          type: string
+          example: logical
+          description: 'Import mode of full import.
+
+
+            Notes:
+
+            - `import-into` does not support sharding / multi-source tasks (for example, when `task.shard_mode` is set, or `source_config.source_conf` contains multiple sources).
+
+            - `import-into` requires `data_dir` to be a shared storage URI (for example, `s3://bucket/prefix`).
+
+
+            Validation failures (error message may be returned):
+
+            - `import-into` + sharding/multi-source: "import-into mode does not support sharding"
+
+            - `import-into` + local `data_dir`: "import-into mode requires shared storage"'
+          enum:
+          - logical
+          - physical
+          - import-into
+        sorting_dir:
+          type: string
+          example: ./sort_dir
+          description: sorting dir name for physical import
+        disk_quota:
+          type: string
+          example: 80G
+          description: disk quota for physical import
+        checksum:
+          type: string
+          example: optional
+          description: to control checksum of physical import
+          enum:
+          - required
+          - optional
+          - 'off'
+        analyze:
+          type: string
+          example: optional
+          description: to control checksum of physical import
+          enum:
+          - required
+          - optional
+          - 'off'
+        range_concurrency:
+          type: integer
+          description: to control range concurrency of physical import
+          default: 0
+        compress-kv-pairs:
+          type: string
+          description: to control compress kv pairs of physical import
+        pd_addr:
+          type: string
+          description: address of pd
+        security:
+          $ref: '#/components/schemas/Security'
+          description: downstram tidb cluster ssl config
+        on_duplicate_logical:
+          type: string
+          example: replace
+          description: to control the duplication resolution when meet duplicate rows for logical import
+          enum:
+          - replace
+          - error
+          - ignore
+        on_duplicate_physical:
+          type: string
+          example: none
+          description: to control the duplication resolution when meet duplicate rows for physical import
+          enum:
+          - none
+          - manual
+    TaskTableMigrateRuleSource:
+      description: source-related configuration
+      properties:
+        source_name:
+          type: string
+          description: source name
+          example: source-name
+        schema:
+          type: string
+          description: schema name, wildcard support
+          example: db-*
+        table:
+          type: string
+          description: table name, wildcard support
+          example: tb-*
+      required:
+      - source_name
+      - schema
+      - table
+    StopTaskRequest:
+      type: object
+      properties:
+        timeout_duration:
+          type: string
+          example: 15s
+          description: time duration waiting task stop
+        source_name_list:
+          $ref: '#/components/schemas/SourceNameList'
+    ShardingGroup:
+      type: object
+      properties:
+        target:
+          type: string
+        ddl_list:
+          type: array
+          items:
+            type: string
+          description: ''
+        first_location:
+          type: string
+        synced:
+          type: array
+          items:
+            type: string
+          description: ''
+        unsynced:
+          type: array
+          items:
+            type: string
+          description: ''
+      required:
+      - target
+      - ddl_list
+      - first_location
+      - synced
+      - unsynced
+    SyncStatus:
+      type: object
+      description: status of sync unit
+      properties:
+        total_events:
+          type: integer
+          format: int64
+        total_tps:
+          type: integer
+          format: int64
+        recent_tps:
+          type: integer
+          format: int64
+        master_binlog:
+          type: string
+        master_binlog_gtid:
+          type: string
+        syncer_binlog:
+          type: string
+        syncer_binlog_gtid:
+          type: string
+        blocking_ddls:
+          type: array
+          items:
+            type: string
+          description: sharding DDL which current is blocking
+        unresolved_groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShardingGroup'
+          description: sharding groups which current are un-resolved
+        synced:
+          type: boolean
+        binlog_type:
+          type: string
+        seconds_behind_master:
+          type: integer
+          format: int64
+        io_total_bytes:
+          type: integer
+          format: uint64
+        dump_io_total_bytes:
+          type: integer
+          format: uint64
+      required:
+      - total_events
+      - total_tps
+      - recent_tps
+      - master_binlog
+      - master_binlog_gtid
+      - syncer_binlog
+      - syncer_binlog_gtid
+      - blocking_ddls
+      - unresolved_groups
+      - synced
+      - binlog_type
+      - seconds_behind_master
+      - io_total_bytes
+      - dump_io_total_bytes
+    TaskTemplateResponse:
+      type: object
+      properties:
+        success_task_list:
+          type: array
+          items:
+            type: string
+        failed_task_list:
+          type: array
+          items:
+            type: object
+            properties:
+              task_name:
+                type: string
+              error_msg:
+                type: string
+            required:
+            - task_name
+            - error_msg
+      required:
+      - success_task_list
+      - failed_task_list
+    SubTaskStatus:
+      type: object
+      properties:
+        name:
+          type: string
+          description: task name
+        source_name:
+          type: string
+          description: source name
+        worker_name:
+          type: string
+          description: worker name
+        stage:
+          $ref: '#/components/schemas/TaskStage'
+        unit:
+          type: string
+          example: sync
+          description: task unit type
+        unresolved_ddl_lock_id:
+          type: string
+        load_status:
+          $ref: '#/components/schemas/LoadStatus'
+        sync_status:
+          $ref: '#/components/schemas/SyncStatus'
+        dump_status:
+          $ref: '#/components/schemas/DumpStatus'
+        error_msg:
+          type: string
+          description: error message when something wrong
+      required:
+      - name
+      - source_name
+      - worker_name
+      - stage
+      - unit
+    GetTaskTableStructureResponse:
+      type: object
+      properties:
+        schema_name:
+          type: string
+          example: db1
+        table_name:
+          type: string
+          example: table1
+        schema_create_sql:
+          type: string
+          example: CREATE TABLE `t1` (`id` int(11) NOT NULL AUTO_INCREMENT,PRIMARY KEY (`id`) /*T![clustered_index] CLUSTERED */) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin
+      required:
+      - table_name
+      - table_create_sql
+    CreateTaskRequest:
+      type: object
+      properties:
+        task:
+          $ref: '#/components/schemas/Task'
+      required:
+      - task
+    TaskMigrateTarget:
+      type: object
+      description: task migrate targets
+      properties:
+        source_schema:
+          type: string
+          example: db1
+        source_table:
+          type: string
+          example: tb1
+        target_schema:
+          type: string
+          example: db1
+        target_table:
+          type: string
+          example: tb1
+      required:
+      - source_schema
+      - source_table
+      - target_schema
+      - target_table
+externalDocs:
+  description: DM OpenAPI DOC
+  url: https://docs.pingcap.com/zh/tidb-data-migration/stable

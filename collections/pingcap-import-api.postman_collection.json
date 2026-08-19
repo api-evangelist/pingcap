@@ -1,0 +1,4689 @@
+{
+  "item": [
+    {
+      "id": "d6f47924-b20a-4ee6-bf5d-8ed9be549012",
+      "name": "Import",
+      "description": {
+        "content": "List import tasks, create an import task, get an import task, and cancel an import task.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "390ea4c6-7e3f-4aa0-be09-9abe46968b20",
+          "name": "List import tasks",
+          "request": {
+            "name": "List import tasks",
+            "description": {
+              "content": "Lists all import tasks for a cluster. You can use query parameters to control sorting, pagination, and the number of results returned.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "clusters",
+                ":clusterId",
+                "imports"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "description": {
+                    "content": "The pagination token received from a previous [List import tasks](#tag/Import/operation/ListImports) request. Use this token to retrieve the next page of results.",
+                    "type": "text/plain"
+                  },
+                  "key": "pageToken",
+                  "value": ""
+                },
+                {
+                  "description": {
+                    "content": "The maximum number of import tasks to return. If not specified, at most 10 node specs will be returned.",
+                    "type": "text/plain"
+                  },
+                  "key": "pageSize",
+                  "value": ""
+                },
+                {
+                  "description": {
+                    "content": "Specifies the sorting order of results. Use a comma-separated list of field names, optionally appending `desc` for descending order. For example, `createTime, name desc`. By default, fields are sorted in ascending order.",
+                    "type": "text/plain"
+                  },
+                  "key": "orderBy",
+                  "value": ""
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "",
+                  "key": "clusterId",
+                  "description": "(Required) The ID of the cluster to list import tasks for."
+                }
+              ]
+            },
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "efeb2ef7-c649-4612-a7b0-b3cfbcf17622",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters",
+                    ":clusterId",
+                    "imports"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageToken",
+                      "value": ""
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": ""
+                    },
+                    {
+                      "key": "orderBy",
+                      "value": ""
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "clusterId",
+                      "description": "(Required) The ID of the cluster to list import tasks for."
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "cc809625-331d-4d65-a976-d48b27563c45",
+              "name": "An unexpected error response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters",
+                    ":clusterId",
+                    "imports"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageToken",
+                      "value": ""
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": ""
+                    },
+                    {
+                      "key": "orderBy",
+                      "value": ""
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "clusterId",
+                      "description": "(Required) The ID of the cluster to list import tasks for."
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d5cde506-a50d-4b4b-bc7e-80e716297bc6",
+          "name": "Create an import task",
+          "request": {
+            "name": "Create an import task",
+            "description": {
+              "content": "Creates an import task to import data into a cluster.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "clusters",
+                ":clusterId",
+                "imports"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "",
+                  "key": "clusterId",
+                  "description": "(Required) The ID of the target cluster where data will be imported."
+                }
+              ]
+            },
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "0216f403-e99d-4321-9c10-372e1a932c1a",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters",
+                    ":clusterId",
+                    "imports"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "clusterId",
+                      "description": "(Required) The ID of the target cluster where data will be imported."
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "75a27349-34f3-404e-a88d-6d2f4685f340",
+              "name": "An unexpected error response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters",
+                    ":clusterId",
+                    "imports"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "clusterId",
+                      "description": "(Required) The ID of the target cluster where data will be imported."
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "07f0aa71-0b7b-48da-9a79-81b4dcfe88ed",
+          "name": "Get an import task",
+          "request": {
+            "name": "Get an import task",
+            "description": {
+              "content": "Retrieves details of a specific import task by its ID.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "clusters",
+                ":clusterId",
+                "imports",
+                ":importId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "",
+                  "key": "clusterId",
+                  "description": "(Required) The ID of the cluster that contains the import task."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "",
+                  "key": "importId",
+                  "description": "(Required) The ID of the import task to retrieve."
+                }
+              ]
+            },
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "fad72ceb-b862-4b25-987f-7cf2276f12bc",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters",
+                    ":clusterId",
+                    "imports",
+                    ":importId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "clusterId",
+                      "description": "(Required) The ID of the cluster that contains the import task."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "importId",
+                      "description": "(Required) The ID of the import task to retrieve."
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "21fa3a36-b070-4387-b9ef-8b219bb35b56",
+              "name": "An unexpected error response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters",
+                    ":clusterId",
+                    "imports",
+                    ":importId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "clusterId",
+                      "description": "(Required) The ID of the cluster that contains the import task."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "importId",
+                      "description": "(Required) The ID of the import task to retrieve."
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "570e4c8c-4c0d-4320-b749-3a0c4a2e0415",
+          "name": "Cancel an import task",
+          "request": {
+            "name": "Cancel an import task",
+            "description": {
+              "content": "Cancels a running import task by its ID.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "clusters",
+                ":clusterId",
+                "imports",
+                "{{importId}}:cancel"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "",
+                  "key": "clusterId",
+                  "description": "(Required) The ID of the cluster that contains the import task."
+                }
+              ]
+            },
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "c08b051f-5b1d-4052-965e-57401b0149c0",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters",
+                    ":clusterId",
+                    "imports",
+                    "{{importId}}:cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "clusterId",
+                      "description": "(Required) The ID of the cluster that contains the import task."
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "e86b4627-ded4-4dd3-93e6-a78572a7dbc2",
+              "name": "An unexpected error response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters",
+                    ":clusterId",
+                    "imports",
+                    "{{importId}}:cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "clusterId",
+                      "description": "(Required) The ID of the cluster that contains the import task."
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3c336c00-0e0e-4505-b022-f2d405ae6e76",
+          "name": "Get details of an import task",
+          "request": {
+            "name": "Get details of an import task",
+            "description": {},
+            "url": {
+              "path": [
+                "clusters",
+                ":clusterId",
+                "imports",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "",
+                  "key": "clusterId",
+                  "description": "(Required) The ID of the TiDB Cloud Starter or Essential instance."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "",
+                  "key": "id",
+                  "description": "(Required) The ID of the import task."
+                }
+              ]
+            },
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d29f3c63-377c-4969-9909-827fc52fed2f",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters",
+                    ":clusterId",
+                    "imports",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "clusterId",
+                      "description": "(Required) The ID of the TiDB Cloud Starter or Essential instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "id",
+                      "description": "(Required) The ID of the import task."
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "e2abdd45-ce0d-4a6e-bc9e-33151ed32a25",
+              "name": "A request field is invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters",
+                    ":clusterId",
+                    "imports",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "clusterId",
+                      "description": "(Required) The ID of the TiDB Cloud Starter or Essential instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "id",
+                      "description": "(Required) The ID of the import task."
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "f20b36c7-63c9-491c-a664-f60b380168c5",
+              "name": "The API key cannot be authenticated.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters",
+                    ":clusterId",
+                    "imports",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "clusterId",
+                      "description": "(Required) The ID of the TiDB Cloud Starter or Essential instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "id",
+                      "description": "(Required) The ID of the import task."
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "4ca91095-d6bb-4edd-b1fe-5964da466f84",
+              "name": "The API key does not have permission to access the resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters",
+                    ":clusterId",
+                    "imports",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "clusterId",
+                      "description": "(Required) The ID of the TiDB Cloud Starter or Essential instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "id",
+                      "description": "(Required) The ID of the import task."
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "6fd3f3cd-57a0-4d49-82f4-b73ce800efb4",
+              "name": "You have exceed the rate limit.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters",
+                    ":clusterId",
+                    "imports",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "clusterId",
+                      "description": "(Required) The ID of the TiDB Cloud Starter or Essential instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "id",
+                      "description": "(Required) The ID of the import task."
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "f008992a-2ecf-4555-8086-a78a368cccaf",
+              "name": "Internal server error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters",
+                    ":clusterId",
+                    "imports",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "clusterId",
+                      "description": "(Required) The ID of the TiDB Cloud Starter or Essential instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "id",
+                      "description": "(Required) The ID of the import task."
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "88e1e808-179e-4053-b44e-89159b9a99b0",
+              "name": "An unexpected error response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters",
+                    ":clusterId",
+                    "imports",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "clusterId",
+                      "description": "(Required) The ID of the TiDB Cloud Starter or Essential instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "id",
+                      "description": "(Required) The ID of the import task."
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6fe21f50-429d-4a36-9bab-43edbc6bd1d7",
+          "name": "Cancel an import task",
+          "request": {
+            "name": "Cancel an import task",
+            "description": {},
+            "url": {
+              "path": [
+                "clusters",
+                ":clusterId",
+                "imports",
+                "{{id}}:cancel"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "",
+                  "key": "clusterId",
+                  "description": "(Required) The ID of the TiDB Cloud Starter or Essential instance."
+                }
+              ]
+            },
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "60880e56-66b0-4c40-9b34-8c8bbc4e9a48",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters",
+                    ":clusterId",
+                    "imports",
+                    "{{id}}:cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "clusterId",
+                      "description": "(Required) The ID of the TiDB Cloud Starter or Essential instance."
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "90aa43f6-ab19-4dda-a74a-5990fa12cd1a",
+              "name": "A request field is invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters",
+                    ":clusterId",
+                    "imports",
+                    "{{id}}:cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "clusterId",
+                      "description": "(Required) The ID of the TiDB Cloud Starter or Essential instance."
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "248493bd-3161-4a17-b55f-0839566b1516",
+              "name": "The API key cannot be authenticated.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters",
+                    ":clusterId",
+                    "imports",
+                    "{{id}}:cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "clusterId",
+                      "description": "(Required) The ID of the TiDB Cloud Starter or Essential instance."
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "c0cdc430-075a-4ffc-aded-45be5ad7c449",
+              "name": "The API key does not have permission to access the resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters",
+                    ":clusterId",
+                    "imports",
+                    "{{id}}:cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "clusterId",
+                      "description": "(Required) The ID of the TiDB Cloud Starter or Essential instance."
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "ea56df1f-7df7-4d3b-ac65-970293e9ef53",
+              "name": "You have exceed the rate limit.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters",
+                    ":clusterId",
+                    "imports",
+                    "{{id}}:cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "clusterId",
+                      "description": "(Required) The ID of the TiDB Cloud Starter or Essential instance."
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "fa638e2d-5e9e-4fae-8c36-81253608dc9c",
+              "name": "Internal server error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters",
+                    ":clusterId",
+                    "imports",
+                    "{{id}}:cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "clusterId",
+                      "description": "(Required) The ID of the TiDB Cloud Starter or Essential instance."
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "6fdeaf82-b790-48e2-a557-7ca31e090d6e",
+              "name": "An unexpected error response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters",
+                    ":clusterId",
+                    "imports",
+                    "{{id}}:cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "clusterId",
+                      "description": "(Required) The ID of the TiDB Cloud Starter or Essential instance."
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "64bc8f3a-2798-4e71-82f9-b83da10f30ac",
+          "name": "List all import tasks for a cluster.",
+          "request": {
+            "name": "List all import tasks for a cluster.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1beta",
+                "projects",
+                ":project_id",
+                "clusters",
+                ":cluster_id",
+                "imports"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "description": {
+                    "content": "The number of pages.",
+                    "type": "text/plain"
+                  },
+                  "key": "page",
+                  "value": ""
+                },
+                {
+                  "description": {
+                    "content": "The size of a page.",
+                    "type": "text/plain"
+                  },
+                  "key": "page_size",
+                  "value": ""
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "",
+                  "key": "project_id",
+                  "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "",
+                  "key": "cluster_id",
+                  "description": "(Required) The ID of your cluster. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                }
+              ]
+            },
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "ea6b1593-92b7-4b2b-879e-343695c4f0d9",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects",
+                    ":project_id",
+                    "clusters",
+                    ":cluster_id",
+                    "imports"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": ""
+                    },
+                    {
+                      "key": "page_size",
+                      "value": ""
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "project_id",
+                      "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "cluster_id",
+                      "description": "(Required) The ID of your cluster. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "65e1b06d-eb0f-4484-ab48-05d9c05cfd2f",
+              "name": "A request field is invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects",
+                    ":project_id",
+                    "clusters",
+                    ":cluster_id",
+                    "imports"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": ""
+                    },
+                    {
+                      "key": "page_size",
+                      "value": ""
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "project_id",
+                      "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "cluster_id",
+                      "description": "(Required) The ID of your cluster. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "777c57fe-db92-44d0-9de8-80fc1a0e9f33",
+              "name": "The API key cannot be authenticated.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects",
+                    ":project_id",
+                    "clusters",
+                    ":cluster_id",
+                    "imports"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": ""
+                    },
+                    {
+                      "key": "page_size",
+                      "value": ""
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "project_id",
+                      "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "cluster_id",
+                      "description": "(Required) The ID of your cluster. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "c42ea491-04f2-4997-9563-7044bc8b7d55",
+              "name": "The API key does not have permission to access the resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects",
+                    ":project_id",
+                    "clusters",
+                    ":cluster_id",
+                    "imports"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": ""
+                    },
+                    {
+                      "key": "page_size",
+                      "value": ""
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "project_id",
+                      "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "cluster_id",
+                      "description": "(Required) The ID of your cluster. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "5c81c544-840b-4237-9072-118854a09e8d",
+              "name": "The requested resource does not exist.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects",
+                    ":project_id",
+                    "clusters",
+                    ":cluster_id",
+                    "imports"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": ""
+                    },
+                    {
+                      "key": "page_size",
+                      "value": ""
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "project_id",
+                      "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "cluster_id",
+                      "description": "(Required) The ID of your cluster. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "575171b8-99e7-4626-af1b-e450b193d2b4",
+              "name": "You have exceed the rate limit.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects",
+                    ":project_id",
+                    "clusters",
+                    ":cluster_id",
+                    "imports"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": ""
+                    },
+                    {
+                      "key": "page_size",
+                      "value": ""
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "project_id",
+                      "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "cluster_id",
+                      "description": "(Required) The ID of your cluster. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "579baf3a-d4ae-4e79-b358-2a4dbae79355",
+              "name": "Server error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects",
+                    ":project_id",
+                    "clusters",
+                    ":cluster_id",
+                    "imports"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": ""
+                    },
+                    {
+                      "key": "page_size",
+                      "value": ""
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "project_id",
+                      "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "cluster_id",
+                      "description": "(Required) The ID of your cluster. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "6039967c-661a-4baf-8c76-695d55818e45",
+              "name": "An unexpected error response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects",
+                    ":project_id",
+                    "clusters",
+                    ":cluster_id",
+                    "imports"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": ""
+                    },
+                    {
+                      "key": "page_size",
+                      "value": ""
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "project_id",
+                      "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "cluster_id",
+                      "description": "(Required) The ID of your cluster. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "81bdb1a7-d09c-459e-abe7-cf7c1de7c8fc",
+          "name": "Create an import task.",
+          "request": {
+            "name": "Create an import task.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1beta",
+                "projects",
+                ":project_id",
+                "clusters",
+                ":cluster_id",
+                "imports"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "",
+                  "key": "project_id",
+                  "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "",
+                  "key": "cluster_id",
+                  "description": "(Required) The ID of your cluster that you want to start an import job. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                }
+              ]
+            },
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "67563966-4831-4c64-b5a7-39327af5d52d",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects",
+                    ":project_id",
+                    "clusters",
+                    ":cluster_id",
+                    "imports"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "project_id",
+                      "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "cluster_id",
+                      "description": "(Required) The ID of your cluster that you want to start an import job. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "b4ec5234-1004-4d84-9af1-907a8aa16b2d",
+              "name": "A request field is invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects",
+                    ":project_id",
+                    "clusters",
+                    ":cluster_id",
+                    "imports"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "project_id",
+                      "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "cluster_id",
+                      "description": "(Required) The ID of your cluster that you want to start an import job. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "7d6eaf21-bdec-4b66-922e-28ea3348507b",
+              "name": "The API key cannot be authenticated.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects",
+                    ":project_id",
+                    "clusters",
+                    ":cluster_id",
+                    "imports"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "project_id",
+                      "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "cluster_id",
+                      "description": "(Required) The ID of your cluster that you want to start an import job. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "b780ca81-a436-4f07-a09f-cb08c2ba62f1",
+              "name": "The API key does not have permission to access the resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects",
+                    ":project_id",
+                    "clusters",
+                    ":cluster_id",
+                    "imports"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "project_id",
+                      "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "cluster_id",
+                      "description": "(Required) The ID of your cluster that you want to start an import job. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "f7ffd886-d9a1-455a-80f9-be92145a982a",
+              "name": "The requested resource does not exist.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects",
+                    ":project_id",
+                    "clusters",
+                    ":cluster_id",
+                    "imports"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "project_id",
+                      "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "cluster_id",
+                      "description": "(Required) The ID of your cluster that you want to start an import job. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "a44a2765-83ea-4d21-8569-8a5cf00937b8",
+              "name": "You have exceed the rate limit.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects",
+                    ":project_id",
+                    "clusters",
+                    ":cluster_id",
+                    "imports"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "project_id",
+                      "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "cluster_id",
+                      "description": "(Required) The ID of your cluster that you want to start an import job. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "8cd7f679-90dc-450c-9021-a82561b85cbb",
+              "name": "Server error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects",
+                    ":project_id",
+                    "clusters",
+                    ":cluster_id",
+                    "imports"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "project_id",
+                      "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "cluster_id",
+                      "description": "(Required) The ID of your cluster that you want to start an import job. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "af068056-7f3e-42bf-989d-3cbbc472b2a0",
+              "name": "An unexpected error response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects",
+                    ":project_id",
+                    "clusters",
+                    ":cluster_id",
+                    "imports"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "project_id",
+                      "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "cluster_id",
+                      "description": "(Required) The ID of your cluster that you want to start an import job. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1edd7662-956d-4c91-8c0b-57302ccc45d5",
+          "name": "Preview data before starting an import task.",
+          "request": {
+            "name": "Preview data before starting an import task.",
+            "description": {
+              "content": "Before you create an import task, you can preview the data using this endpoint and make sure that the import task is configured as intended. The preview result is organized by tables.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1beta",
+                "projects",
+                ":project_id",
+                "clusters",
+                ":cluster_id",
+                "imports",
+                "preview"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "",
+                  "key": "project_id",
+                  "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "",
+                  "key": "cluster_id",
+                  "description": "(Required) The ID of your cluster that you want to start an import task. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                }
+              ]
+            },
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "00af3839-f52e-4875-adbc-f951eb9d1601",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects",
+                    ":project_id",
+                    "clusters",
+                    ":cluster_id",
+                    "imports",
+                    "preview"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "project_id",
+                      "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "cluster_id",
+                      "description": "(Required) The ID of your cluster that you want to start an import task. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "5bb5b20b-69e0-477b-af58-44459070ba20",
+              "name": "A request field is invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects",
+                    ":project_id",
+                    "clusters",
+                    ":cluster_id",
+                    "imports",
+                    "preview"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "project_id",
+                      "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "cluster_id",
+                      "description": "(Required) The ID of your cluster that you want to start an import task. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "5a27f538-f665-42f8-b99c-a2ecd1d02930",
+              "name": "The API key cannot be authenticated.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects",
+                    ":project_id",
+                    "clusters",
+                    ":cluster_id",
+                    "imports",
+                    "preview"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "project_id",
+                      "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "cluster_id",
+                      "description": "(Required) The ID of your cluster that you want to start an import task. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "8ba0c26c-b90b-4202-b4ec-9e8d0c1cd2ce",
+              "name": "The API key does not have permission to access the resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects",
+                    ":project_id",
+                    "clusters",
+                    ":cluster_id",
+                    "imports",
+                    "preview"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "project_id",
+                      "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "cluster_id",
+                      "description": "(Required) The ID of your cluster that you want to start an import task. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "2056d8ff-16e4-4190-9a68-1ca577ecbfcc",
+              "name": "The requested resource does not exist.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects",
+                    ":project_id",
+                    "clusters",
+                    ":cluster_id",
+                    "imports",
+                    "preview"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "project_id",
+                      "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "cluster_id",
+                      "description": "(Required) The ID of your cluster that you want to start an import task. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "4d5552bc-23cd-4b7f-8ce5-ccaa088a7ad6",
+              "name": "You have exceed the rate limit.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects",
+                    ":project_id",
+                    "clusters",
+                    ":cluster_id",
+                    "imports",
+                    "preview"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "project_id",
+                      "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "cluster_id",
+                      "description": "(Required) The ID of your cluster that you want to start an import task. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "162accb0-17f5-46db-ae5d-c8737f9e1330",
+              "name": "Server error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects",
+                    ":project_id",
+                    "clusters",
+                    ":cluster_id",
+                    "imports",
+                    "preview"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "project_id",
+                      "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "cluster_id",
+                      "description": "(Required) The ID of your cluster that you want to start an import task. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "4617f75d-3f1c-48f0-9814-8232840f0c49",
+              "name": "An unexpected error response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects",
+                    ":project_id",
+                    "clusters",
+                    ":cluster_id",
+                    "imports",
+                    "preview"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "project_id",
+                      "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "cluster_id",
+                      "description": "(Required) The ID of your cluster that you want to start an import task. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a1ceefaf-3cf0-42ab-a29f-7a06144938a1",
+          "name": "Retrieve the role information for import tasks on a cluster.",
+          "request": {
+            "name": "Retrieve the role information for import tasks on a cluster.",
+            "description": {
+              "content": "Retrieve the role information for import tasks on a cluster, so that you can configure the access for the import tasks to retrieve the data from the data source. For more information on how to configure the access for the import tasks, refer to [Configure Amazon S3 Access and GCS Access](https://docs.pingcap.com/tidbcloud/config-s3-and-gcs-access).",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1beta",
+                "projects",
+                ":project_id",
+                "clusters",
+                ":cluster_id",
+                "imports",
+                "role_info"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "",
+                  "key": "project_id",
+                  "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "",
+                  "key": "cluster_id",
+                  "description": "(Required) The ID of your cluster. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                }
+              ]
+            },
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "cb5c9cd6-9d27-426a-bb5f-eddfe6c9d9bf",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects",
+                    ":project_id",
+                    "clusters",
+                    ":cluster_id",
+                    "imports",
+                    "role_info"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "project_id",
+                      "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "cluster_id",
+                      "description": "(Required) The ID of your cluster. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "cdf6ed6a-5212-4258-ab1f-0732ddc19323",
+              "name": "A request field is invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects",
+                    ":project_id",
+                    "clusters",
+                    ":cluster_id",
+                    "imports",
+                    "role_info"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "project_id",
+                      "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "cluster_id",
+                      "description": "(Required) The ID of your cluster. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "0d7798cd-20c6-4243-ae55-db97f2bfad0e",
+              "name": "The API key cannot be authenticated.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects",
+                    ":project_id",
+                    "clusters",
+                    ":cluster_id",
+                    "imports",
+                    "role_info"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "project_id",
+                      "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "cluster_id",
+                      "description": "(Required) The ID of your cluster. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "a2af202a-f8a0-4f1e-aa63-a2a8f013287b",
+              "name": "The API key does not have permission to access the resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects",
+                    ":project_id",
+                    "clusters",
+                    ":cluster_id",
+                    "imports",
+                    "role_info"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "project_id",
+                      "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "cluster_id",
+                      "description": "(Required) The ID of your cluster. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "39633ae6-b52e-43c6-9a0c-be636e1c56cc",
+              "name": "The requested resource does not exist.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects",
+                    ":project_id",
+                    "clusters",
+                    ":cluster_id",
+                    "imports",
+                    "role_info"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "project_id",
+                      "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "cluster_id",
+                      "description": "(Required) The ID of your cluster. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "e70a6fa0-d318-4acf-a558-f6ac3c7803e8",
+              "name": "You have exceed the rate limit.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects",
+                    ":project_id",
+                    "clusters",
+                    ":cluster_id",
+                    "imports",
+                    "role_info"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "project_id",
+                      "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "cluster_id",
+                      "description": "(Required) The ID of your cluster. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "4d98243d-f9df-4d13-8d48-13f6e3ee4536",
+              "name": "Server error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects",
+                    ":project_id",
+                    "clusters",
+                    ":cluster_id",
+                    "imports",
+                    "role_info"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "project_id",
+                      "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "cluster_id",
+                      "description": "(Required) The ID of your cluster. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "00aa5437-b689-41fa-9975-fa0ca18cdd0c",
+              "name": "An unexpected error response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects",
+                    ":project_id",
+                    "clusters",
+                    ":cluster_id",
+                    "imports",
+                    "role_info"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "project_id",
+                      "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "cluster_id",
+                      "description": "(Required) The ID of your cluster. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4907da86-d1d3-4b94-8f03-db06c4dc6cf6",
+          "name": "Upload a local file for an import task.",
+          "request": {
+            "name": "Upload a local file for an import task.",
+            "description": {
+              "content": "If you need to import data from a local file, you must first upload the file using this endpoint before you create an import task using the [Create an import task](#tag/Import/operation/CreateImportTask) endpoint.\n\nUploading a local file is only available for TiDB Cloud Starter instances.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1beta",
+                "projects",
+                ":project_id",
+                "clusters",
+                ":cluster_id",
+                "imports",
+                "upload_file"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "",
+                  "key": "project_id",
+                  "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "",
+                  "key": "cluster_id",
+                  "description": "(Required) The ID of your cluster. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                }
+              ]
+            },
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "e6ab489e-88ff-40db-80c1-5d14ad947117",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects",
+                    ":project_id",
+                    "clusters",
+                    ":cluster_id",
+                    "imports",
+                    "upload_file"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "project_id",
+                      "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "cluster_id",
+                      "description": "(Required) The ID of your cluster. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "19710c11-0574-4e8b-a7b3-e500b68737a1",
+              "name": "A request field is invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects",
+                    ":project_id",
+                    "clusters",
+                    ":cluster_id",
+                    "imports",
+                    "upload_file"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "project_id",
+                      "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "cluster_id",
+                      "description": "(Required) The ID of your cluster. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "d678562c-409b-44c3-8121-7d134ac75bde",
+              "name": "The API key cannot be authenticated.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects",
+                    ":project_id",
+                    "clusters",
+                    ":cluster_id",
+                    "imports",
+                    "upload_file"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "project_id",
+                      "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "cluster_id",
+                      "description": "(Required) The ID of your cluster. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "c765820d-2b52-409b-9389-45e63f34367d",
+              "name": "The API key does not have permission to access the resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects",
+                    ":project_id",
+                    "clusters",
+                    ":cluster_id",
+                    "imports",
+                    "upload_file"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "project_id",
+                      "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "cluster_id",
+                      "description": "(Required) The ID of your cluster. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "029aa872-6f25-4420-8ca3-27de54f154f2",
+              "name": "The requested resource does not exist.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects",
+                    ":project_id",
+                    "clusters",
+                    ":cluster_id",
+                    "imports",
+                    "upload_file"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "project_id",
+                      "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "cluster_id",
+                      "description": "(Required) The ID of your cluster. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "4120d415-4b43-4918-8b75-273a4b563b92",
+              "name": "You have exceed the rate limit.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects",
+                    ":project_id",
+                    "clusters",
+                    ":cluster_id",
+                    "imports",
+                    "upload_file"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "project_id",
+                      "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "cluster_id",
+                      "description": "(Required) The ID of your cluster. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "3655b415-476e-48cd-b2fa-ce22ad8eabae",
+              "name": "Server error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects",
+                    ":project_id",
+                    "clusters",
+                    ":cluster_id",
+                    "imports",
+                    "upload_file"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "project_id",
+                      "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "cluster_id",
+                      "description": "(Required) The ID of your cluster. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "82267e17-2d4f-43ee-92ad-e5445d8ea663",
+              "name": "An unexpected error response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects",
+                    ":project_id",
+                    "clusters",
+                    ":cluster_id",
+                    "imports",
+                    "upload_file"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "project_id",
+                      "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "cluster_id",
+                      "description": "(Required) The ID of your cluster. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "06bdb5a3-8d15-4a57-8683-f65f20ae0b99",
+          "name": "Get an import task.",
+          "request": {
+            "name": "Get an import task.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1beta",
+                "projects",
+                ":project_id",
+                "clusters",
+                ":cluster_id",
+                "imports",
+                ":import_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "",
+                  "key": "project_id",
+                  "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "",
+                  "key": "cluster_id",
+                  "description": "(Required) The ID of your cluster. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "",
+                  "key": "import_id",
+                  "description": "(Required) The ID of your import task. You can get the import ID from the response of [List import tasks for a cluster](#tag/Project/operation/ListImportTasks)."
+                }
+              ]
+            },
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "c1ce3f60-213b-4017-940f-f75bfd26a2bb",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects",
+                    ":project_id",
+                    "clusters",
+                    ":cluster_id",
+                    "imports",
+                    ":import_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "project_id",
+                      "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "cluster_id",
+                      "description": "(Required) The ID of your cluster. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "import_id",
+                      "description": "(Required) The ID of your import task. You can get the import ID from the response of [List import tasks for a cluster](#tag/Project/operation/ListImportTasks)."
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "033b331b-1965-43c6-8d7f-327fc73f6b48",
+              "name": "A request field is invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects",
+                    ":project_id",
+                    "clusters",
+                    ":cluster_id",
+                    "imports",
+                    ":import_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "project_id",
+                      "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "cluster_id",
+                      "description": "(Required) The ID of your cluster. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "import_id",
+                      "description": "(Required) The ID of your import task. You can get the import ID from the response of [List import tasks for a cluster](#tag/Project/operation/ListImportTasks)."
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "2325da64-6838-42c5-9c86-07d5bdeb3bb4",
+              "name": "The API key cannot be authenticated.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects",
+                    ":project_id",
+                    "clusters",
+                    ":cluster_id",
+                    "imports",
+                    ":import_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "project_id",
+                      "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "cluster_id",
+                      "description": "(Required) The ID of your cluster. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "import_id",
+                      "description": "(Required) The ID of your import task. You can get the import ID from the response of [List import tasks for a cluster](#tag/Project/operation/ListImportTasks)."
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "4a18f191-3c0b-4673-b576-2c63cd4c6655",
+              "name": "The API key does not have permission to access the resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects",
+                    ":project_id",
+                    "clusters",
+                    ":cluster_id",
+                    "imports",
+                    ":import_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "project_id",
+                      "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "cluster_id",
+                      "description": "(Required) The ID of your cluster. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "import_id",
+                      "description": "(Required) The ID of your import task. You can get the import ID from the response of [List import tasks for a cluster](#tag/Project/operation/ListImportTasks)."
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "70b42c07-cddf-46d6-8d01-c0e22babcfaa",
+              "name": "The requested resource does not exist.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects",
+                    ":project_id",
+                    "clusters",
+                    ":cluster_id",
+                    "imports",
+                    ":import_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "project_id",
+                      "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "cluster_id",
+                      "description": "(Required) The ID of your cluster. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "import_id",
+                      "description": "(Required) The ID of your import task. You can get the import ID from the response of [List import tasks for a cluster](#tag/Project/operation/ListImportTasks)."
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "c59f8aa0-a951-45bf-813d-95a448cd839b",
+              "name": "You have exceed the rate limit.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects",
+                    ":project_id",
+                    "clusters",
+                    ":cluster_id",
+                    "imports",
+                    ":import_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "project_id",
+                      "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "cluster_id",
+                      "description": "(Required) The ID of your cluster. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "import_id",
+                      "description": "(Required) The ID of your import task. You can get the import ID from the response of [List import tasks for a cluster](#tag/Project/operation/ListImportTasks)."
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "cc8a21e9-de9f-4c6d-b4ea-075bdca0468c",
+              "name": "Server error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects",
+                    ":project_id",
+                    "clusters",
+                    ":cluster_id",
+                    "imports",
+                    ":import_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "project_id",
+                      "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "cluster_id",
+                      "description": "(Required) The ID of your cluster. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "import_id",
+                      "description": "(Required) The ID of your import task. You can get the import ID from the response of [List import tasks for a cluster](#tag/Project/operation/ListImportTasks)."
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "e77dee0a-c7b8-42b4-b1a5-89cc17c623e3",
+              "name": "An unexpected error response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects",
+                    ":project_id",
+                    "clusters",
+                    ":cluster_id",
+                    "imports",
+                    ":import_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "project_id",
+                      "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "cluster_id",
+                      "description": "(Required) The ID of your cluster. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "import_id",
+                      "description": "(Required) The ID of your import task. You can get the import ID from the response of [List import tasks for a cluster](#tag/Project/operation/ListImportTasks)."
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "bd6eba15-a257-46e0-81eb-62bcbb2728a9",
+          "name": "Update an import task.",
+          "request": {
+            "name": "Update an import task.",
+            "description": {
+              "content": "Update an import task from a cluster. Currently, this endpoint only supports canceling the import task if the current phase of the import task is `PREPARING` or `IMPORTING`.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1beta",
+                "projects",
+                ":project_id",
+                "clusters",
+                ":cluster_id",
+                "imports",
+                ":import_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "",
+                  "key": "project_id",
+                  "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "",
+                  "key": "cluster_id",
+                  "description": "(Required) The ID of your cluster. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "",
+                  "key": "import_id",
+                  "description": "(Required) The ID of the import task. You can get the import ID from the response of [List import tasks for a cluster](#tag/Project/operation/ListImportTasks)."
+                }
+              ]
+            },
+            "method": "PATCH",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "047527f8-708d-467f-ab13-d606c0be3b3a",
+              "name": "A successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects",
+                    ":project_id",
+                    "clusters",
+                    ":cluster_id",
+                    "imports",
+                    ":import_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "project_id",
+                      "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "cluster_id",
+                      "description": "(Required) The ID of your cluster. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "import_id",
+                      "description": "(Required) The ID of the import task. You can get the import ID from the response of [List import tasks for a cluster](#tag/Project/operation/ListImportTasks)."
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "dfb81962-1ed4-433b-ab2d-d38d040fe694",
+              "name": "A request field is invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects",
+                    ":project_id",
+                    "clusters",
+                    ":cluster_id",
+                    "imports",
+                    ":import_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "project_id",
+                      "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "cluster_id",
+                      "description": "(Required) The ID of your cluster. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "import_id",
+                      "description": "(Required) The ID of the import task. You can get the import ID from the response of [List import tasks for a cluster](#tag/Project/operation/ListImportTasks)."
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "31f23992-0ffd-4cc8-a6ea-1e4d1ed157b2",
+              "name": "The API key cannot be authenticated.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects",
+                    ":project_id",
+                    "clusters",
+                    ":cluster_id",
+                    "imports",
+                    ":import_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "project_id",
+                      "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "cluster_id",
+                      "description": "(Required) The ID of your cluster. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "import_id",
+                      "description": "(Required) The ID of the import task. You can get the import ID from the response of [List import tasks for a cluster](#tag/Project/operation/ListImportTasks)."
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "f996030a-f5e2-4f4b-988b-b972529b7d5f",
+              "name": "The API key does not have permission to access the resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects",
+                    ":project_id",
+                    "clusters",
+                    ":cluster_id",
+                    "imports",
+                    ":import_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "project_id",
+                      "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "cluster_id",
+                      "description": "(Required) The ID of your cluster. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "import_id",
+                      "description": "(Required) The ID of the import task. You can get the import ID from the response of [List import tasks for a cluster](#tag/Project/operation/ListImportTasks)."
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "c72e4282-c4fb-47d3-b5f2-336e7bd0d774",
+              "name": "The requested resource does not exist.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects",
+                    ":project_id",
+                    "clusters",
+                    ":cluster_id",
+                    "imports",
+                    ":import_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "project_id",
+                      "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "cluster_id",
+                      "description": "(Required) The ID of your cluster. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "import_id",
+                      "description": "(Required) The ID of the import task. You can get the import ID from the response of [List import tasks for a cluster](#tag/Project/operation/ListImportTasks)."
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "0530e5d2-6f06-4dfb-bf57-7b1535a13e42",
+              "name": "You have exceed the rate limit.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects",
+                    ":project_id",
+                    "clusters",
+                    ":cluster_id",
+                    "imports",
+                    ":import_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "project_id",
+                      "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "cluster_id",
+                      "description": "(Required) The ID of your cluster. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "import_id",
+                      "description": "(Required) The ID of the import task. You can get the import ID from the response of [List import tasks for a cluster](#tag/Project/operation/ListImportTasks)."
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "0795872b-19bc-45ab-8248-fae41e031f80",
+              "name": "Server error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects",
+                    ":project_id",
+                    "clusters",
+                    ":cluster_id",
+                    "imports",
+                    ":import_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "project_id",
+                      "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "cluster_id",
+                      "description": "(Required) The ID of your cluster. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "import_id",
+                      "description": "(Required) The ID of the import task. You can get the import ID from the response of [List import tasks for a cluster](#tag/Project/operation/ListImportTasks)."
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "876c89c0-a54c-4057-a953-d50cb2297047",
+              "name": "An unexpected error response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1beta",
+                    "projects",
+                    ":project_id",
+                    "clusters",
+                    ":cluster_id",
+                    "imports",
+                    ":import_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "project_id",
+                      "description": "(Required) The ID of your project. You can get the project ID from the response of [List all accessible projects](#tag/Project/operation/ListProjects)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "cluster_id",
+                      "description": "(Required) The ID of your cluster. You can get the cluster ID from the response of [List all clusters in a project](#tag/Cluster/operation/ListClustersOfProject)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "import_id",
+                      "description": "(Required) The ID of the import task. You can get the import ID from the response of [List import tasks for a cluster](#tag/Project/operation/ListImportTasks)."
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    },
+    {
+      "disabled": false,
+      "description": {
+        "content": "(Required) The ID of the import task to cancel.",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "",
+      "key": "importId"
+    },
+    {
+      "disabled": false,
+      "description": {
+        "content": "(Required) The ID of the import task.",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "",
+      "key": "id"
+    }
+  ],
+  "info": {
+    "_postman_id": "cbd79ad6-f474-424b-b988-07833c094736",
+    "name": "Pingcap Import API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Operations tagged Import across 3 of this provider's published API definitions: pingcap-tidb-cloud-dedicated-v1beta1-openapi-original.json, pingcap-tidb-cloud-starter-essential-v1beta1-openapi-original.json, pingcap-tidb-cloud-v1beta-openapi-original.json. Each path carries the servers of the definition it was published in.",
+      "type": "text/plain"
+    }
+  }
+}
