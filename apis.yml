@@ -30,16 +30,16 @@ specificationVersion: '0.23'
 created: '2026-08-02'
 modified: '2026-08-02'
 tags:
-- Distributed SQL
+- distributed-sql
 - Database
 - tidb
 - htap
 - mysql-compatible
-- Cloud Database
-- Database-as-a-Service
-- Vector Search
-- Data Migration
-- Change Data Capture
+- cloud-database
+- dbaas
+- vector-search
+- data-migration
+- change-data-capture
 - Open-Source
 - Infrastructure
 tags_raw:
@@ -70,7 +70,7 @@ apis:
   - Artificial Intelligence
   - tidb
   - Database
-  - Vector Search
+  - vector-search
   tags_raw:
   - mcp
   - agent-native
@@ -709,7 +709,7 @@ apis:
   humanURL: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
   baseURL: https://serverless.tidbapi.com/v1beta1
   tags:
-  - Doc
+  - doc
   tags_raw:
   - doc
   properties:
@@ -1366,7 +1366,7 @@ apis:
   humanURL: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
   baseURL: https://serverless.tidbapi.com/v1beta1
   tags:
-  - Source
+  - source
   tags_raw:
   - source
   properties:
