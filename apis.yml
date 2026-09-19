@@ -48,8 +48,8 @@ tags:
 - Distributed SQL
 - Database
 - tidb
-- htap
-- mysql-compatible
+- HTAP
+- MySQL Compatible
 - Cloud Database
 - Database-as-a-Service
 - Vector Search
@@ -156,6 +156,8 @@ apis:
   humanURL: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
   baseURL: https://serverless.tidbapi.com/v1beta1
   tags:
+  - Audit Logs
+  tags_raw:
   - Audit Log
   properties:
   - type: OpenAPI
