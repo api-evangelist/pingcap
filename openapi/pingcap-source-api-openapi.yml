@@ -6,7 +6,7 @@ info:
 servers:
 - url: https://you.domain.com/
 tags:
-- name: source
+- name: Source
   description: source
   externalDocs:
     description: doc
@@ -15,7 +15,7 @@ paths:
   /api/v1/sources:
     post:
       tags:
-      - source
+      - Source
       summary: create and enable a new data source
       operationId: DMAPICreateSource
       requestBody:
@@ -39,7 +39,7 @@ paths:
                 $ref: '#/components/schemas/ErrorWithMessage'
     get:
       tags:
-      - source
+      - Source
       summary: get data source list
       operationId: DMAPIGetSourceList
       parameters:
@@ -67,7 +67,7 @@ paths:
   /api/v1/sources/{source-name}:
     get:
       tags:
-      - source
+      - Source
       summary: get source
       operationId: DMAPIGetSource
       parameters:
@@ -96,7 +96,7 @@ paths:
           description: source not found
     delete:
       tags:
-      - source
+      - Source
       summary: delete a data source
       operationId: DMAPIDeleteSource
       parameters:
@@ -125,7 +125,7 @@ paths:
                 $ref: '#/components/schemas/ErrorWithMessage'
     put:
       tags:
-      - source
+      - Source
       summary: update a data source
       operationId: DMAPIUpdateSource
       parameters:
@@ -158,7 +158,7 @@ paths:
   /api/v1/sources/{source-name}/status:
     get:
       tags:
-      - source
+      - Source
       summary: get the current status of the data source
       operationId: DMAPIGetSourceStatus
       parameters:
@@ -185,7 +185,7 @@ paths:
   /api/v1/sources/{source-name}/enable:
     post:
       tags:
-      - source
+      - Source
       summary: enable a data source
       operationId: DMAPIEnableSource
       parameters:
@@ -208,7 +208,7 @@ paths:
   /api/v1/sources/{source-name}/disable:
     post:
       tags:
-      - source
+      - Source
       summary: disable a data source
       operationId: DMAPIDisableSource
       parameters:
@@ -231,7 +231,7 @@ paths:
   /api/v1/sources/{source-name}/transfer:
     post:
       tags:
-      - source
+      - Source
       summary: transfer source to a free worker
       operationId: DMAPITransferSource
       parameters:
@@ -260,7 +260,7 @@ paths:
   /api/v1/sources/{source-name}/relay/enable:
     post:
       tags:
-      - source
+      - Source
       summary: enable relay log function for the data source
       parameters:
       - name: source-name
@@ -289,7 +289,7 @@ paths:
   /api/v1/sources/{source-name}/relay/disable:
     post:
       tags:
-      - source
+      - Source
       summary: disable relay log function for the data source
       operationId: DMAPIDisableRelay
       parameters:
@@ -318,7 +318,7 @@ paths:
   /api/v1/sources/{source-name}/relay/purge:
     post:
       tags:
-      - source
+      - Source
       summary: purge relay log
       operationId: DMAPIPurgeRelay
       parameters:
@@ -347,7 +347,7 @@ paths:
   /api/v1/sources/{source-name}/schemas:
     get:
       tags:
-      - source
+      - Source
       summary: get source schema list
       operationId: DMAPIGetSourceSchemaList
       parameters:
@@ -374,7 +374,7 @@ paths:
   /api/v1/sources/{source-name}/schemas/{schema-name}:
     get:
       tags:
-      - source
+      - Source
       summary: get source table list
       operationId: DMAPIGetSourceTableList
       parameters:
@@ -407,37 +407,16 @@ paths:
                 $ref: '#/components/schemas/ErrorWithMessage'
 components:
   schemas:
-    UpdateSourceRequest:
+    CreateSourceRequest:
       type: object
       properties:
         source:
           $ref: '#/components/schemas/Source'
+        worker_name:
+          type: string
+          example: worker-1
       required:
       - source
-    TableNameList:
-      description: schema name list
-      type: array
-      items:
-        type: string
-        example: table1
-    SchemaNameList:
-      description: schema name list
-      type: array
-      items:
-        type: string
-        example: db1
-    GetSourceListResponse:
-      type: object
-      properties:
-        total:
-          type: integer
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Source'
-      required:
-      - total
-      - data
     WorkerNameRequest:
       description: requests related to workers
       type: object
@@ -448,6 +427,216 @@ components:
           description: worker name
       required:
       - worker_name
+    WorkerNameList:
+      description: worker name list
+      type: array
+      items:
+        type: string
+        example: worker-1
+    RelayConfig:
+      description: the config of relay
+      type: object
+      properties:
+        enable_relay:
+          type: boolean
+        relay_binlog_name:
+          type:
+          - string
+          - 'null'
+          example: mysql-bin.000002
+          description: starting filename of the upstream binlog
+        relay_binlog_gtid:
+          type:
+          - string
+          - 'null'
+          example: e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849
+          description: starting GTID of the upstream binlog
+        relay_dir:
+          type:
+          - string
+          - 'null'
+          default: ./relay_log
+          description: the directory where the relay log is stored
+    EnableRelayRequest:
+      description: action to start a relay request
+      type: object
+      properties:
+        worker_name_list:
+          $ref: '#/components/schemas/WorkerNameList'
+        relay_binlog_name:
+          type:
+          - string
+          - 'null'
+          example: mysql-bin.000002
+          description: starting filename of the upstream binlog
+        relay_binlog_gtid:
+          type:
+          - string
+          - 'null'
+          example: e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849
+          description: starting GTID of the upstream binlog
+        relay_dir:
+          type:
+          - string
+          - 'null'
+          default: ./relay_log
+          description: the directory where the relay log is stored
+    RelayStatus:
+      description: status of relay log
+      type: object
+      properties:
+        master_binlog:
+          type: string
+          example: (mysql-bin.000001, 1979)
+          description: upstream binlog file information
+        master_binlog_gtid:
+          type: string
+          example: e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849
+          description: GTID of the upstream
+        relay_dir:
+          type: string
+          description: the directory where the relay log is stored
+          example: ./sub_dir
+        relay_binlog_gtid:
+          type: string
+          example: e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849
+          description: relay current GTID
+        relay_catch_up_master:
+          type: boolean
+          description: whether to catch up with upstream progress
+        stage:
+          type: string
+          description: current status
+          example: Running
+      required:
+      - master_binlog
+      - master_binlog_gtid
+      - relay_dir
+      - relay_binlog_gtid
+      - relay_catch_up_master
+      - stage
+    SchemaNameList:
+      description: schema name list
+      type: array
+      items:
+        type: string
+        example: db1
+    SourceStatus:
+      description: source status
+      type: object
+      properties:
+        source_name:
+          type: string
+          example: mysql-replica-01
+          description: source name
+        worker_name:
+          type: string
+          example: worker-1
+          description: The worker currently bound to the source
+        relay_status:
+          $ref: '#/components/schemas/RelayStatus'
+        error_msg:
+          type: string
+          description: error message when something wrong
+      required:
+      - source_name
+      - worker_name
+    ErrorWithMessage:
+      description: operation error
+      type: object
+      properties:
+        error_msg:
+          type: string
+          description: error message
+        error_code:
+          type: integer
+          description: error code
+      required:
+      - error_msg
+      - error_code
+    Security:
+      type:
+      - object
+      - 'null'
+      description: data source ssl configuration, the field will be hidden when getting the data source configuration from the interface
+      properties:
+        ssl_ca_content:
+          type: string
+          example: ''
+          description: certificate file content
+        ssl_cert_content:
+          type: string
+          example: ''
+          description: File content of PEM format/X509 format certificates
+        ssl_key_content:
+          type: string
+          example: ''
+          description: Content of the private key file in X509 format
+        cert_allowed_cn:
+          type: array
+          description: Common Name of SSL certificates
+          items:
+            type: string
+      required:
+      - ssl_ca_content
+      - ssl_cert_content
+      - ssl_key_content
+    GetSourceStatusResponse:
+      type: object
+      properties:
+        total:
+          type: integer
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SourceStatus'
+      required:
+      - total
+      - data
+    TaskNameList:
+      description: task name list
+      type: array
+      items:
+        type: string
+        example: task1
+    UpdateSourceRequest:
+      type: object
+      properties:
+        source:
+          $ref: '#/components/schemas/Source'
+      required:
+      - source
+    Purge:
+      description: relay log cleanup policy configuration
+      type: object
+      properties:
+        interval:
+          type:
+          - integer
+          - 'null'
+          default: 3600
+          description: 'The interval to periodically check if the relay log is expired, default value: 3600, in seconds'
+          format: int64
+        expires:
+          type:
+          - integer
+          - 'null'
+          default: 0
+          description: expiration time of relay log
+          format: int64
+        remain_space:
+          type:
+          - integer
+          - 'null'
+          default: 15
+          description: Minimum free disk space, in GB
+          format: int64
+    TableNameList:
+      description: schema name list
+      type: array
+      items:
+        type: string
+        example: table1
     Source:
       type: object
       description: source
@@ -507,6 +696,18 @@ components:
       - user
       - enable_gtid
       - enable
+    GetSourceListResponse:
+      type: object
+      properties:
+        total:
+          type: integer
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Source'
+      required:
+      - total
+      - data
     PurgeRelayRequest:
       description: action to stop a relay request
       type: object
@@ -522,213 +723,12 @@ components:
           description: 'specify relay sub directory for relay_binlog_name. If not specified, the latest one will be used. Sample format: 2ae76434-f79f-11e8-bde2-0242ac130008.000001'
       required:
       - relay_binlog_name
-    Security:
-      type:
-      - object
-      - 'null'
-      description: data source ssl configuration, the field will be hidden when getting the data source configuration from the interface
-      properties:
-        ssl_ca_content:
-          type: string
-          example: ''
-          description: certificate file content
-        ssl_cert_content:
-          type: string
-          example: ''
-          description: File content of PEM format/X509 format certificates
-        ssl_key_content:
-          type: string
-          example: ''
-          description: Content of the private key file in X509 format
-        cert_allowed_cn:
-          type: array
-          description: Common Name of SSL certificates
-          items:
-            type: string
-      required:
-      - ssl_ca_content
-      - ssl_cert_content
-      - ssl_key_content
-    ErrorWithMessage:
-      description: operation error
-      type: object
-      properties:
-        error_msg:
-          type: string
-          description: error message
-        error_code:
-          type: integer
-          description: error code
-      required:
-      - error_msg
-      - error_code
-    Purge:
-      description: relay log cleanup policy configuration
-      type: object
-      properties:
-        interval:
-          type:
-          - integer
-          - 'null'
-          default: 3600
-          description: 'The interval to periodically check if the relay log is expired, default value: 3600, in seconds'
-          format: int64
-        expires:
-          type:
-          - integer
-          - 'null'
-          default: 0
-          description: expiration time of relay log
-          format: int64
-        remain_space:
-          type:
-          - integer
-          - 'null'
-          default: 15
-          description: Minimum free disk space, in GB
-          format: int64
-    EnableRelayRequest:
-      description: action to start a relay request
-      type: object
-      properties:
-        worker_name_list:
-          $ref: '#/components/schemas/WorkerNameList'
-        relay_binlog_name:
-          type:
-          - string
-          - 'null'
-          example: mysql-bin.000002
-          description: starting filename of the upstream binlog
-        relay_binlog_gtid:
-          type:
-          - string
-          - 'null'
-          example: e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849
-          description: starting GTID of the upstream binlog
-        relay_dir:
-          type:
-          - string
-          - 'null'
-          default: ./relay_log
-          description: the directory where the relay log is stored
-    SourceStatus:
-      description: source status
-      type: object
-      properties:
-        source_name:
-          type: string
-          example: mysql-replica-01
-          description: source name
-        worker_name:
-          type: string
-          example: worker-1
-          description: The worker currently bound to the source
-        relay_status:
-          $ref: '#/components/schemas/RelayStatus'
-        error_msg:
-          type: string
-          description: error message when something wrong
-      required:
-      - source_name
-      - worker_name
-    WorkerNameList:
-      description: worker name list
-      type: array
-      items:
-        type: string
-        example: worker-1
-    RelayStatus:
-      description: status of relay log
-      type: object
-      properties:
-        master_binlog:
-          type: string
-          example: (mysql-bin.000001, 1979)
-          description: upstream binlog file information
-        master_binlog_gtid:
-          type: string
-          example: e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849
-          description: GTID of the upstream
-        relay_dir:
-          type: string
-          description: the directory where the relay log is stored
-          example: ./sub_dir
-        relay_binlog_gtid:
-          type: string
-          example: e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849
-          description: relay current GTID
-        relay_catch_up_master:
-          type: boolean
-          description: whether to catch up with upstream progress
-        stage:
-          type: string
-          description: current status
-          example: Running
-      required:
-      - master_binlog
-      - master_binlog_gtid
-      - relay_dir
-      - relay_binlog_gtid
-      - relay_catch_up_master
-      - stage
-    CreateSourceRequest:
-      type: object
-      properties:
-        source:
-          $ref: '#/components/schemas/Source'
-        worker_name:
-          type: string
-          example: worker-1
-      required:
-      - source
-    RelayConfig:
-      description: the config of relay
-      type: object
-      properties:
-        enable_relay:
-          type: boolean
-        relay_binlog_name:
-          type:
-          - string
-          - 'null'
-          example: mysql-bin.000002
-          description: starting filename of the upstream binlog
-        relay_binlog_gtid:
-          type:
-          - string
-          - 'null'
-          example: e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849
-          description: starting GTID of the upstream binlog
-        relay_dir:
-          type:
-          - string
-          - 'null'
-          default: ./relay_log
-          description: the directory where the relay log is stored
-    TaskNameList:
-      description: task name list
-      type: array
-      items:
-        type: string
-        example: task1
     DisableRelayRequest:
       description: action to stop a relay request
       type: object
       properties:
         worker_name_list:
           $ref: '#/components/schemas/WorkerNameList'
-    GetSourceStatusResponse:
-      type: object
-      properties:
-        total:
-          type: integer
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/SourceStatus'
-      required:
-      - total
-      - data
 externalDocs:
   description: DM OpenAPI DOC
   url: https://docs.pingcap.com/zh/tidb-data-migration/stable

@@ -5,12 +5,12 @@ info:
 servers:
 - url: https://you.domain.com/
 tags:
-- name: doc
+- name: Doc
 paths:
   /api/v1/docs:
     get:
       tags:
-      - doc
+      - Doc
       summary: get doc html
       operationId: GetDocHTML
       responses:
@@ -19,7 +19,7 @@ paths:
   /api/v1/dm.json:
     get:
       tags:
-      - doc
+      - Doc
       summary: get doc json
       operationId: GetDocJSON
       responses:
