@@ -1,17 +1,12 @@
 openapi: 3.2.0
 info:
-  description: '*TiDB Cloud API is in beta.*
-
-
-    # Overview
-
-
-    The TiDB Cloud API is a REST interface that provides you with programmatic access to manage administrative objects within TiDB Cloud.'
-  title: System OPEN Billing API
-  contact: {}
+  title: Pingcap Billing API
   version: v1beta1
+  contact: {}
+  description: 'Operations tagged Billing across 2 of this provider''s published API definitions: pingcap-tidb-cloud-billing-v1beta1-openapi-original.json, tidb-cloud-msp-v1beta1-openapi-original.json. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://billing.tidbapi.com/v1beta1
+- url: https://msp.tidbapi.com/v1beta1/msp
 tags:
 - name: Billing
 paths:
@@ -46,6 +41,8 @@ paths:
                 $ref: '#/components/schemas/billing_errors.BaseError'
       operationId: getBillsByBilledMonth
       x-operation-id-source: derived
+    servers:
+    - url: https://billing.tidbapi.com/v1beta1
   /billsCostExplorer:
     post:
       x-code-samples:
@@ -77,6 +74,8 @@ paths:
         required: true
       operationId: postBillsCostExplorer
       x-operation-id-source: derived
+    servers:
+    - url: https://billing.tidbapi.com/v1beta1
   /billsCostExplorer/args:
     get:
       x-code-samples:
@@ -101,6 +100,8 @@ paths:
                 $ref: '#/components/schemas/billing_errors.BaseError'
       operationId: getBillsCostExplorerArgs
       x-operation-id-source: derived
+    servers:
+    - url: https://billing.tidbapi.com/v1beta1
   /billsDetails/{billedMonth}:
     get:
       x-code-samples:
@@ -132,35 +133,124 @@ paths:
                 $ref: '#/components/schemas/billing_errors.BaseError'
       operationId: getBillsDetailsByBilledMonth
       x-operation-id-source: derived
+    servers:
+    - url: https://billing.tidbapi.com/v1beta1
+  /credits:
+    get:
+      x-code-samples:
+      - lang: curl
+        source: "curl --digest \\\n  --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --request GET \\\n  --url 'https://msp.tidbapi.com/v1beta1/msp/credits'"
+      description: This endpoint retrieves the credits applied to a specific MSP.
+      tags:
+      - Billing
+      summary: Return credits applied to a specific MSP
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/forms.MspCredit'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/billing_errors.BaseError'
+      operationId: getCredits
+      x-operation-id-source: derived
+    servers:
+    - url: https://msp.tidbapi.com/v1beta1/msp
+  /discounts/:
+    get:
+      x-code-samples:
+      - lang: curl
+        source: "curl --digest \\\n  --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --request GET \\\n  --url 'https://msp.tidbapi.com/v1beta1/msp/discounts'"
+      description: This endpoint retrieves the discount applied to a specific MSP.
+      tags:
+      - Billing
+      summary: Return discounts applied to a specific MSP
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/forms.MspDiscount'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/billing_errors.BaseError'
+      operationId: getDiscounts
+      x-operation-id-source: derived
+    servers:
+    - url: https://msp.tidbapi.com/v1beta1/msp
+  /mspCustomerBills/{billedMonth}/mspCustomers/{mspCustomerId}:
+    get:
+      x-code-samples:
+      - lang: curl
+        source: "curl --digest \\\n --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n --request GET \\\n --url 'https://msp.tidbapi.com/v1beta1/msp/mspCustomerBills/{YYYY-MM}/mspCustomers/{mspCustomerId}'"
+      description: This endpoint retrieves the bill for the given month of a specific end customer of MSP. You can query a bill up to 6 months prior to the current month. The bill is returned in JSON format.
+      tags:
+      - Billing
+      summary: Return monthly bills for a specific end customer of MSP
+      parameters:
+      - description: The month of this bill happens for the specified organization. The format is YYYY-MM, for example, '2023-08'.
+        name: billedMonth
+        in: path
+        required: true
+        schema:
+          type: string
+      - description: ID of the end customer of MSP.
+        name: mspCustomerId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/forms.BillsExplorer'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/billing_errors.BaseError'
+      operationId: getMspCustomerBillsByBilledMonthMspCustomersByMspCustomerId
+      x-operation-id-source: derived
+    servers:
+    - url: https://msp.tidbapi.com/v1beta1/msp
 components:
   schemas:
-    forms.BillsCostExplorerElements:
+    forms.CostExplorerTrendsTimeGroup:
+      type: string
+      enum:
+      - day
+      - month
+      - total
+      x-enum-varnames:
+      - CostExploreTrendsTimeGroupDay
+      - CostExploreTrendsTimeGroupMonth
+      - CostExploreTrendsTimeGroupTotal
+    forms.TimeRange:
       type: object
       properties:
-        billedDate:
+        endDate:
+          description: End date of the time range.
           type: string
-        breakdown:
-          type: array
-          items:
-            $ref: '#/components/schemas/forms.BillsCostExplorerBreakdown'
-        credits:
-          description: The total credits held by the organization in this bill. The value of this field is expressed in cents (100ths of one US Dollar).
+        startDate:
+          description: Start date of the time range.
           type: string
-          example: '0.00'
-        discounts:
-          description: The total amount of discounts applied to this bill. The value of this field is expressed in cents (100ths of one US Dollar).
-          type: string
-          example: '0.00'
-        runningTotal:
-          description: The sum of services that the specified organization has consumed during this bill period. The value of this field is expressed in cents (100ths of one US Dollar).
-          type: string
-          example: '0.00'
-        totalCost:
-          description: 'The total amount that the specified organization should pay for this bill. The value of this field is expressed in cents (100ths of one US Dollar).
-
-            `total_cost` = `running_total` - `discounts` - `credits`.'
-          type: string
-          example: '0.00'
     forms.Groups:
       type: object
       properties:
@@ -173,42 +263,44 @@ components:
           description: "Time Granularity determines how the cost explorer query results are organized daily, monthly, or in total.\n 1. \"day\": Query results are organized daily\n 2. \"month\": Query results are organized monthly\n 3. \"total\": Query results are organized in total"
           allOf:
           - $ref: '#/components/schemas/forms.CostExplorerTrendsTimeGroup'
-    forms.Provider:
+    forms.SummaryByProject:
       type: object
       properties:
-        name:
-          description: Name of the cloud provider
-          type: string
-        regions:
-          description: Name of the region
+        otherCharges:
+          description: These charges occur not only within a project but also across the entire organization.
           type: array
           items:
-            type: string
-    forms.BillsExplorer:
-      type: object
-      properties:
-        overview:
-          description: The overall information for a bill in the specified organization.
-          allOf:
-          - $ref: '#/components/schemas/forms.BillsOverview'
-        summaryByProject:
-          description: A breakdown of the bill by project.
-          allOf:
-          - $ref: '#/components/schemas/forms.SummaryByProject'
-        summaryByService:
-          description: A breakdown of the bill by service.
+            $ref: '#/components/schemas/forms.BillsOtherName'
+        projects:
+          description: The projects in the specified organization.
           type: array
           items:
-            $ref: '#/components/schemas/forms.BillsServiceCosts'
-    forms.TimeRange:
+            $ref: '#/components/schemas/forms.BillsProjects'
+    forms.BillsCostExplorer:
       type: object
       properties:
-        endDate:
-          description: End date of the time range.
+        credits:
+          description: The total credits held by the organization in this bill. The value of this field is expressed in cents (100ths of one US Dollar).
           type: string
-        startDate:
-          description: Start date of the time range.
+          example: '0.00'
+        discounts:
+          description: The total amount of discounts applied to this bill. The value of this field is expressed in cents (100ths of one US Dollar).
           type: string
+          example: '0.00'
+        elements:
+          type: array
+          items:
+            $ref: '#/components/schemas/forms.BillsCostExplorerElements'
+        runningTotal:
+          description: The sum of services that the specified organization has consumed during this bill period. The value of this field is expressed in cents (100ths of one US Dollar).
+          type: string
+          example: '0.00'
+        totalCost:
+          description: 'The total amount that the specified organization should pay for this bill. The value of this field is expressed in cents (100ths of one US Dollar).
+
+            `total_cost` = `running_total` - `discounts` - `credits`.'
+          type: string
+          example: '0.00'
     forms.CostExplorerTrendsBreakdownKey:
       type: string
       enum:
@@ -225,20 +317,26 @@ components:
       - CostExploreTrendsBreakdownKeyCluster
       - CostExploreTrendsBreakdownKeyProvider
       - CostExploreTrendsBreakdownKeyRegion
-    forms.TrendsInput:
+    forms.CostExplorerService:
       type: object
       properties:
-        filter:
-          $ref: '#/components/schemas/forms.TrendsFilter'
-        groups:
-          $ref: '#/components/schemas/forms.Groups'
-    forms.BillsOverview:
-      type: object
-      properties:
-        billedMonth:
-          description: The month in which this bill is generated for the specified organization.
+        category:
+          description: 2nd level of service.
           type: string
-          example: 2023-09
+        component:
+          description: 3rd level of service.
+          type: string
+        product:
+          description: 1st level of service.
+          type: string
+        service:
+          type: string
+    forms.BillsOtherName:
+      type: object
+      properties:
+        chargeName:
+          type: string
+          example: Support Plan
         credits:
           description: The total credits held by the organization in this bill. The value of this field is expressed in cents (100ths of one US Dollar).
           type: string
@@ -267,41 +365,13 @@ components:
           type: string
         status:
           type: integer
-    forms.ProjectOpenAPI:
+    forms.TrendsInput:
       type: object
       properties:
-        id:
-          type: string
-          example: '0'
-        name:
-          type: string
-        status:
-          type: string
-    forms.BillsCostExplorer:
-      type: object
-      properties:
-        credits:
-          description: The total credits held by the organization in this bill. The value of this field is expressed in cents (100ths of one US Dollar).
-          type: string
-          example: '0.00'
-        discounts:
-          description: The total amount of discounts applied to this bill. The value of this field is expressed in cents (100ths of one US Dollar).
-          type: string
-          example: '0.00'
-        elements:
-          type: array
-          items:
-            $ref: '#/components/schemas/forms.BillsCostExplorerElements'
-        runningTotal:
-          description: The sum of services that the specified organization has consumed during this bill period. The value of this field is expressed in cents (100ths of one US Dollar).
-          type: string
-          example: '0.00'
-        totalCost:
-          description: 'The total amount that the specified organization should pay for this bill. The value of this field is expressed in cents (100ths of one US Dollar).
-
-            `total_cost` = `running_total` - `discounts` - `credits`.'
-          type: string
-          example: '0.00'
+        filter:
+          $ref: '#/components/schemas/forms.TrendsFilter'
+        groups:
+          $ref: '#/components/schemas/forms.Groups'
     forms.TrendsFilter:
       type: object
       properties:
@@ -323,44 +393,171 @@ components:
             $ref: '#/components/schemas/forms.CostExplorerService'
         timeRange:
           $ref: '#/components/schemas/forms.TimeRange'
-    forms.CostExplorerTrendsTimeGroup:
-      type: string
-      enum:
-      - day
-      - month
-      - total
-      x-enum-varnames:
-      - CostExploreTrendsTimeGroupDay
-      - CostExploreTrendsTimeGroupMonth
-      - CostExploreTrendsTimeGroupTotal
-    forms.ClusterOpenAPI:
+    forms.CostExplorerProvider:
       type: object
       properties:
-        ProjectID:
+        name:
+          description: Name of Cloud provider.
           type: string
-          example: '0'
+        regions:
+          description: Name of region.
+          type: array
+          items:
+            type: string
+    forms.TrendsArgs:
+      type: object
+      properties:
+        clusters:
+          type: array
+          items:
+            $ref: '#/components/schemas/forms.ClusterOpenAPI'
+        projects:
+          type: array
+          items:
+            $ref: '#/components/schemas/forms.ProjectOpenAPI'
+        providers:
+          type: array
+          items:
+            $ref: '#/components/schemas/forms.Provider'
+        services:
+          description: 'The Identifier of TiDB Cloud services consists of 3 levels. For example, "service": "TiDB Dedicated - Node Compute - TiFlash" consists of the following 3 levels.'
+          type: array
+          items:
+            $ref: '#/components/schemas/forms.CostExplorerService'
+    forms.ProjectOpenAPI:
+      type: object
+      properties:
         id:
           type: string
           example: '0'
         name:
           type: string
-        regionName:
-          type: string
         status:
           type: string
-    forms.SummaryByProject:
+    forms.BillsOverview:
       type: object
       properties:
-        otherCharges:
-          description: These charges occur not only within a project but also across the entire organization.
+        billedMonth:
+          description: The month in which this bill is generated for the specified organization.
+          type: string
+          example: 2023-09
+        credits:
+          description: The total credits held by the organization in this bill. The value of this field is expressed in cents (100ths of one US Dollar).
+          type: string
+          example: '0.00'
+        discounts:
+          description: The total amount of discounts applied to this bill. The value of this field is expressed in cents (100ths of one US Dollar).
+          type: string
+          example: '0.00'
+        runningTotal:
+          description: The sum of services that the specified organization has consumed during this bill period. The value of this field is expressed in cents (100ths of one US Dollar).
+          type: string
+          example: '0.00'
+        totalCost:
+          description: 'The total amount that the specified organization should pay for this bill. The value of this field is expressed in cents (100ths of one US Dollar).
+
+            `total_cost` = `running_total` - `discounts` - `credits`.'
+          type: string
+          example: '0.00'
+    forms.BillsDetails:
+      type: object
+      properties:
+        details:
           type: array
           items:
-            $ref: '#/components/schemas/forms.BillsOtherName'
-        projects:
-          description: The projects in the specified organization.
+            $ref: '#/components/schemas/forms.BillsDetail'
+    forms.BillsServiceCosts:
+      type: object
+      properties:
+        credits:
+          description: The total credits held by the organization in this bill. The value of this field is expressed in cents (100ths of one US Dollar).
+          type: string
+          example: '0.00'
+        discounts:
+          description: The total amount of discounts applied to this bill. The value of this field is expressed in cents (100ths of one US Dollar).
+          type: string
+          example: '0.00'
+        runningTotal:
+          description: The sum of services that the specified organization has consumed during this bill period. The value of this field is expressed in cents (100ths of one US Dollar).
+          type: string
+          example: '0.00'
+        serviceCosts:
           type: array
           items:
-            $ref: '#/components/schemas/forms.BillsProjects'
+            $ref: '#/components/schemas/forms.BillsServiceCosts'
+        serviceName:
+          description: The name of services provided by TiDB Cloud.
+          type: string
+          example: TiDB Dedicated
+        totalCost:
+          description: 'The total amount that the specified organization should pay for this bill. The value of this field is expressed in cents (100ths of one US Dollar).
+
+            `total_cost` = `running_total` - `discounts` - `credits`.'
+          type: string
+          example: '0.00'
+    forms.BillsCostExplorerBreakdown:
+      type: object
+      properties:
+        billedDate:
+          type: string
+        credits:
+          description: The total credits held by the organization in this bill. The value of this field is expressed in cents (100ths of one US Dollar).
+          type: string
+          example: '0.00'
+        detailKey:
+          type: string
+        detailName:
+          type: string
+        discounts:
+          description: The total amount of discounts applied to this bill. The value of this field is expressed in cents (100ths of one US Dollar).
+          type: string
+          example: '0.00'
+        runningTotal:
+          description: The sum of services that the specified organization has consumed during this bill period. The value of this field is expressed in cents (100ths of one US Dollar).
+          type: string
+          example: '0.00'
+        totalCost:
+          description: 'The total amount that the specified organization should pay for this bill. The value of this field is expressed in cents (100ths of one US Dollar).
+
+            `total_cost` = `running_total` - `discounts` - `credits`.'
+          type: string
+          example: '0.00'
+    forms.BillsProjects:
+      type: object
+      properties:
+        credits:
+          description: The total credits held by the organization in this bill. The value of this field is expressed in cents (100ths of one US Dollar).
+          type: string
+          example: '0.00'
+        discounts:
+          description: The total amount of discounts applied to this bill. The value of this field is expressed in cents (100ths of one US Dollar).
+          type: string
+          example: '0.00'
+        projectName:
+          description: The name of a project in the specified organization.
+          type: string
+          example: prod-project
+        runningTotal:
+          description: The sum of services that the specified organization has consumed during this bill period. The value of this field is expressed in cents (100ths of one US Dollar).
+          type: string
+          example: '0.00'
+        totalCost:
+          description: 'The total amount that the specified organization should pay for this bill. The value of this field is expressed in cents (100ths of one US Dollar).
+
+            `total_cost` = `running_total` - `discounts` - `credits`.'
+          type: string
+          example: '0.00'
+    forms.Provider:
+      type: object
+      properties:
+        name:
+          description: Name of the cloud provider
+          type: string
+        regions:
+          description: Name of the region
+          type: array
+          items:
+            type: string
     forms.BillsDetail:
       type: object
       properties:
@@ -394,9 +591,46 @@ components:
             `total_cost` = `running_total` - `discounts` - `credits`.'
           type: string
           example: '0.00'
-    forms.BillsServiceCosts:
+    forms.ClusterOpenAPI:
       type: object
       properties:
+        ProjectID:
+          type: string
+          example: '0'
+        id:
+          type: string
+          example: '0'
+        name:
+          type: string
+        regionName:
+          type: string
+        status:
+          type: string
+    forms.BillsExplorer:
+      type: object
+      properties:
+        overview:
+          description: The overall information for a bill in the specified organization.
+          allOf:
+          - $ref: '#/components/schemas/forms.BillsOverview'
+        summaryByProject:
+          description: A breakdown of the bill by project.
+          allOf:
+          - $ref: '#/components/schemas/forms.SummaryByProject'
+        summaryByService:
+          description: A breakdown of the bill by service.
+          type: array
+          items:
+            $ref: '#/components/schemas/forms.BillsServiceCosts'
+    forms.BillsCostExplorerElements:
+      type: object
+      properties:
+        billedDate:
+          type: string
+        breakdown:
+          type: array
+          items:
+            $ref: '#/components/schemas/forms.BillsCostExplorerBreakdown'
         credits:
           description: The total credits held by the organization in this bill. The value of this field is expressed in cents (100ths of one US Dollar).
           type: string
@@ -409,21 +643,103 @@ components:
           description: The sum of services that the specified organization has consumed during this bill period. The value of this field is expressed in cents (100ths of one US Dollar).
           type: string
           example: '0.00'
-        serviceCosts:
-          type: array
-          items:
-            $ref: '#/components/schemas/forms.BillsServiceCosts'
-        serviceName:
-          description: The name of services provided by TiDB Cloud.
-          type: string
-          example: TiDB Dedicated
         totalCost:
           description: 'The total amount that the specified organization should pay for this bill. The value of this field is expressed in cents (100ths of one US Dollar).
 
             `total_cost` = `running_total` - `discounts` - `credits`.'
           type: string
           example: '0.00'
-    forms.BillsOtherName:
+    forms.MspCredit:
+      type: object
+      properties:
+        credit:
+          description: The total amount of credit.
+          type: number
+          example: 1000
+        creditCode:
+          description: The code of a credit.
+          type: string
+          example: 498c7f44-656f-4944-b455-0695faa5d4f9
+        expiryDate:
+          description: Expired date of a credit.
+          type: string
+          example: '2023-12-01T00:00:00Z'
+        remainingCredit:
+          description: The remaining amount of a credit.
+          type: number
+          example: 1000
+        services:
+          description: The service to which a credit is applicable.
+          type: string
+          example: General Product
+        startDate:
+          description: Effective start date of a credit.
+          type: string
+          example: '2023-11-01T00:00:00Z'
+        status:
+          description: The status of a credit.
+          type: string
+          example: active
+    forms.MspDiscount:
+      type: object
+      properties:
+        description:
+          description: The description of a discount.
+          type: string
+        discountCode:
+          description: The code of a discount.
+          type: string
+          example: 498c7f44-656f-4944-b455-0695faa5d4f9
+        expiryDate:
+          description: Expired date of a credit.
+          type: string
+          example: '2023-12-01T00:00:00Z'
+        percentageDiscount:
+          description: The percentage is deducted from the original price. For example, a 20% discount on a $100 item would result in a discounted price of $80.
+          type: string
+          example: 20%
+        services:
+          description: The service to which a discount is applicable.
+          type: string
+          example: Node Compute, Changefeed,
+        startDate:
+          description: Effective start date of a credit.
+          type: string
+          example: '2023-11-01T00:00:00Z'
+        status:
+          description: The status of a discount.
+          type: string
+          example: valid
+    forms.BillsServiceCosts_2:
+      type: object
+      properties:
+        credits:
+          description: The total credits held by the organization in this bill. The value of this field is expressed in cents (100ths of one US Dollar).
+          type: number
+          example: 0
+        discounts:
+          description: Total amount of discounts applied to this bill. The value of this field is expressed in cents (100ths of one US Dollar).
+          type: number
+          example: 0
+        runningTotal:
+          description: The sum of services that the specified organization consumed in the period during this bill period. The value of this field is expressed in cents (100ths of one US Dollar).
+          type: number
+          example: 0
+        serviceCosts:
+          type: array
+          items:
+            $ref: '#/components/schemas/forms.BillsServiceCosts_2'
+        serviceName:
+          description: The name of services provided by TiDB Cloud.
+          type: string
+          example: TiDB Dedicated
+        totalCost:
+          description: 'The total amount that the specified organization should pay toward this bill. The value of this field is expressed in cents (100ths of one US Dollar).
+
+            `total_cost` = `running_total` - `discounts` - `credits`.'
+          type: number
+          example: 0
+    forms.BillsOtherName_2:
       type: object
       properties:
         chargeName:
@@ -431,127 +747,99 @@ components:
           example: Support Plan
         credits:
           description: The total credits held by the organization in this bill. The value of this field is expressed in cents (100ths of one US Dollar).
-          type: string
-          example: '0.00'
+          type: number
+          example: 0
         discounts:
-          description: The total amount of discounts applied to this bill. The value of this field is expressed in cents (100ths of one US Dollar).
-          type: string
-          example: '0.00'
+          description: Total amount of discounts applied to this bill. The value of this field is expressed in cents (100ths of one US Dollar).
+          type: number
+          example: 0
         runningTotal:
-          description: The sum of services that the specified organization has consumed during this bill period. The value of this field is expressed in cents (100ths of one US Dollar).
-          type: string
-          example: '0.00'
+          description: The sum of services that the specified organization consumed in the period during this bill period. The value of this field is expressed in cents (100ths of one US Dollar).
+          type: number
+          example: 0
         totalCost:
-          description: 'The total amount that the specified organization should pay for this bill. The value of this field is expressed in cents (100ths of one US Dollar).
+          description: 'The total amount that the specified organization should pay toward this bill. The value of this field is expressed in cents (100ths of one US Dollar).
 
             `total_cost` = `running_total` - `discounts` - `credits`.'
-          type: string
-          example: '0.00'
-    forms.CostExplorerService:
+          type: number
+          example: 0
+    forms.SummaryByCustomer:
       type: object
       properties:
-        category:
-          description: 2nd level of service.
-          type: string
-        component:
-          description: 3rd level of service.
-          type: string
-        product:
-          description: 1st level of service.
-          type: string
-        service:
-          type: string
-    forms.CostExplorerProvider:
-      type: object
-      properties:
-        name:
-          description: Name of Cloud provider.
-          type: string
-        regions:
-          description: Name of region.
-          type: array
-          items:
-            type: string
-    forms.TrendsArgs:
-      type: object
-      properties:
-        clusters:
-          type: array
-          items:
-            $ref: '#/components/schemas/forms.ClusterOpenAPI'
-        projects:
-          type: array
-          items:
-            $ref: '#/components/schemas/forms.ProjectOpenAPI'
-        providers:
-          type: array
-          items:
-            $ref: '#/components/schemas/forms.Provider'
-        services:
-          description: 'The Identifier of TiDB Cloud services consists of 3 levels. For example, "service": "TiDB Dedicated - Node Compute - TiFlash" consists of the following 3 levels.'
-          type: array
-          items:
-            $ref: '#/components/schemas/forms.CostExplorerService'
-    forms.BillsProjects:
+        customerID:
+          description: The Organization ID of MSP
+          type: integer
+        mspCustomerBills:
+          description: The bill generated for a specific MSP customer in the specified month.
+          allOf:
+          - $ref: '#/components/schemas/forms.BillsExplorer'
+    forms.BillsProjects_2:
       type: object
       properties:
         credits:
           description: The total credits held by the organization in this bill. The value of this field is expressed in cents (100ths of one US Dollar).
-          type: string
-          example: '0.00'
+          type: number
+          example: 0
         discounts:
-          description: The total amount of discounts applied to this bill. The value of this field is expressed in cents (100ths of one US Dollar).
-          type: string
-          example: '0.00'
+          description: Total amount of discounts applied to this bill. The value of this field is expressed in cents (100ths of one US Dollar).
+          type: number
+          example: 0
         projectName:
           description: The name of a project in the specified organization.
           type: string
           example: prod-project
         runningTotal:
-          description: The sum of services that the specified organization has consumed during this bill period. The value of this field is expressed in cents (100ths of one US Dollar).
-          type: string
-          example: '0.00'
+          description: The sum of services that the specified organization consumed in the period during this bill period. The value of this field is expressed in cents (100ths of one US Dollar).
+          type: number
+          example: 0
         totalCost:
-          description: 'The total amount that the specified organization should pay for this bill. The value of this field is expressed in cents (100ths of one US Dollar).
+          description: 'The total amount that the specified organization should pay toward this bill. The value of this field is expressed in cents (100ths of one US Dollar).
 
             `total_cost` = `running_total` - `discounts` - `credits`.'
-          type: string
-          example: '0.00'
-    forms.BillsDetails:
+          type: number
+          example: 0
+    forms.BillsOverview_2:
       type: object
       properties:
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/forms.BillsDetail'
-    forms.BillsCostExplorerBreakdown:
-      type: object
-      properties:
-        billedDate:
+        billedMonth:
+          description: The month in which this bill is generated for the specified organization.
           type: string
+          example: 2023-09
         credits:
           description: The total credits held by the organization in this bill. The value of this field is expressed in cents (100ths of one US Dollar).
-          type: string
-          example: '0.00'
-        detailKey:
-          type: string
-        detailName:
-          type: string
+          type: number
+          example: 0
         discounts:
-          description: The total amount of discounts applied to this bill. The value of this field is expressed in cents (100ths of one US Dollar).
-          type: string
-          example: '0.00'
+          description: Total amount of discounts applied to this bill. The value of this field is expressed in cents (100ths of one US Dollar).
+          type: number
+          example: 0
         runningTotal:
-          description: The sum of services that the specified organization has consumed during this bill period. The value of this field is expressed in cents (100ths of one US Dollar).
-          type: string
-          example: '0.00'
+          description: The sum of services that the specified organization consumed in the period during this bill period. The value of this field is expressed in cents (100ths of one US Dollar).
+          type: number
+          example: 0
         totalCost:
-          description: 'The total amount that the specified organization should pay for this bill. The value of this field is expressed in cents (100ths of one US Dollar).
+          description: 'The total amount that the specified organization should pay toward this bill. The value of this field is expressed in cents (100ths of one US Dollar).
 
             `total_cost` = `running_total` - `discounts` - `credits`.'
-          type: string
-          example: '0.00'
-x-tagGroups:
-- name: Endpoints
-  tags:
-  - Billing
+          type: number
+          example: 0
+    forms.MspBills:
+      type: object
+      properties:
+        overview:
+          description: The overall information for a bill in the specified organization.
+          allOf:
+          - $ref: '#/components/schemas/forms.BillsOverview_2'
+        summaryByCustomer:
+          description: Month of bills happens to a specific MSP.
+          type: array
+          items:
+            $ref: '#/components/schemas/forms.SummaryByCustomer'
+        summaryByService:
+          description: A breakdown of the bill by service.
+          type: array
+          items:
+            $ref: '#/components/schemas/forms.BillsServiceCosts_2'
+x-refined-from:
+- pingcap-tidb-cloud-billing-v1beta1-openapi-original.json
+- tidb-cloud-msp-v1beta1-openapi-original.json

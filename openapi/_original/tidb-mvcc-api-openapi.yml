@@ -1,0 +1,98 @@
+# x-archived-from: tidb-mvcc-api-openapi.yml
+# x-archived-on: 2026-09-26
+openapi: 3.2.0
+info:
+  title: TiDB HTTP MVCC API
+  description: The TiDB HTTP API is a built-in administrative interface available on self-managed TiDB server instances, accessible on port 10080 by default.
+  version: '1.0'
+  contact:
+    name: TiDB GitHub
+    url: https://github.com/pingcap/tidb/blob/master/docs/tidb_http_api.md
+  termsOfService: https://www.apache.org/licenses/LICENSE-2.0
+servers:
+- url: http://localhost:10080
+  description: Local TiDB Node (default status port)
+tags:
+- name: MVCC
+  description: Endpoints for retrieving multi-version concurrency control (MVCC) key details for debugging.
+paths:
+  /mvcc/key/{db}/{table}/{handle}:
+    get:
+      operationId: getMvccByHandle
+      summary: Get MVCC info by row handle
+      description: Returns multi-version concurrency control (MVCC) information for the key corresponding to the specified row handle in a table. Shows all versions of the key across transactions, including start timestamp, commit timestamp, and value. Used for debugging transaction conflicts and stale data issues.
+      tags:
+      - MVCC
+      parameters:
+      - $ref: '#/components/parameters/db'
+      - $ref: '#/components/parameters/table'
+      - name: handle
+        in: path
+        description: The row handle (primary key value or internal row ID) for the target row.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: MVCC information retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MvccInfo'
+        '404':
+          description: The specified database, table, or handle was not found.
+  /mvcc/hex/{hexKey}:
+    get:
+      operationId: getMvccByHexKey
+      summary: Get MVCC info by hex key
+      description: Returns MVCC information for a key specified as a hexadecimal string. This endpoint is used when you have the raw encoded key from TiKV region information and need to look up the MVCC history for that specific key.
+      tags:
+      - MVCC
+      parameters:
+      - name: hexKey
+        in: path
+        description: The raw key encoded as a hexadecimal string.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: MVCC information retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MvccInfo'
+components:
+  schemas:
+    MvccInfo:
+      type: object
+      description: MVCC version history for a TiKV key.
+      properties:
+        key:
+          type: string
+          description: The hexadecimal-encoded key.
+        mvcc:
+          type: object
+          description: The MVCC data for this key.
+          properties:
+            info:
+              type: object
+              description: Raw MVCC information including lock, writes, and values.
+  parameters:
+    table:
+      name: table
+      in: path
+      description: The table name within the specified database.
+      required: true
+      schema:
+        type: string
+    db:
+      name: db
+      in: path
+      description: The database name.
+      required: true
+      schema:
+        type: string
+externalDocs:
+  description: TiDB HTTP API Reference
+  url: https://github.com/pingcap/tidb/blob/master/docs/tidb_http_api.md

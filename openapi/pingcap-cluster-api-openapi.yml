@@ -5296,108 +5296,6 @@ paths:
     - url: https://you.domain.com/
 components:
   schemas:
-    v1beta1UpdateClusterRequestStorageNodeSetting:
-      type: object
-      properties:
-        nodeSpecKey:
-          type: string
-          example: 8C32G
-          description: The node spec key of the nodes in the cluster. For example, `8C32G`.
-        nodeCount:
-          type:
-          - integer
-          - 'null'
-          format: int32
-          example: 3
-          description: "The number of nodes in the cluster. \nWhen updating TiFlash node setting: \n- If the node count is set to 0, the TiFlash node will be removed.\n- If the node count is null, the TiFlash node count won't change.\nFor other components, if the node count is set to 0, server will ignore the node count."
-        storageSizeGi:
-          type: integer
-          format: int32
-          example: 500
-          description: The storage size of the node in GiB. To get the supported storage size range, refer to the `NodeSpec` resource.
-        storageType:
-          example: Standard
-          description: The type of storage for the node. Defaults to `Basic`. For more information, see [TiKV node storage types](https://docs.pingcap.com/tidbcloud/size-your-cluster/#tikv-node-storage-types) and [TiFlash node storage types](https://docs.pingcap.com/tidbcloud/size-your-cluster/#tiflash-node-storage-types).
-          allOf:
-          - $ref: '#/components/schemas/StorageNodeSettingStorageType'
-        raftStoreIops:
-          type:
-          - integer
-          - 'null'
-          format: int32
-          example: 3000
-          description: The IOPS of the Raft store for the node. If not set, the default IOPS of Raft store will be used.
-    googlerpcStatus:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-          description: The error code returned with this error.
-        message:
-          type: string
-          description: The error message returned with this error.
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/protobufAny'
-          description: A list of messages with additional error details.
-      description: 'The `Status` type defines a logical error model that is suitable for
-
-        different programming environments, including REST APIs and RPC APIs. It is
-
-        used by [gRPC](https://github.com/grpc). Each `Status` message contains
-
-        three pieces of data: error code, error message, and error details.
-
-
-        You can find out more about this error model and how to work with it in the
-
-        [API Design Guide](https://cloud.google.com/apis/design/errors).'
-    v1beta1PauseClusterResponse:
-      type: object
-      properties:
-        cluster:
-          description: The cluster details after it is paused.
-          allOf:
-          - $ref: '#/components/schemas/tidb_cloud_open_apidedicatedv1beta1Cluster'
-      required:
-      - cluster
-    v1beta1ClusterServiceResetRootPasswordBody:
-      type: object
-      properties:
-        rootPassword:
-          type: string
-          example: new_password
-          description: The new root password for the cluster. The password must be between 8 and 64 characters long and can contain letters, numbers, and special characters.
-      required:
-      - rootPassword
-    v1beta1TidbNodeGroupEndpointConnectionType:
-      type: string
-      enum:
-      - PUBLIC
-      - VPC_PEERING
-      - PRIVATE_ENDPOINT
-      description: "The connection type for TiDB node group endpoints.\n\n - PUBLIC: Indicates that the endpoint is accessible over the public network.\n - VPC_PEERING: Indicates that the endpoint is accessible over [VPC peering](https://docs.pingcap.com/tidbcloud/tidb-cloud-glossary/#vpc-peering).\n - PRIVATE_ENDPOINT: Indicates that the endpoint is accessible over a private link."
-    dedicatedv1beta1ClusterPausePlan:
-      type: object
-      properties:
-        pauseType:
-          description: 'The type of the pause plan.
-
-
-            - `"NORMAL"`: the default pause plan.
-
-            - `"DEPRECATE"`: the legacy pause plan and will be removed in a future release.'
-          allOf:
-          - $ref: '#/components/schemas/dedicatedv1beta1ClusterPausePlanType'
-        scheduledResumeTime:
-          type: string
-          format: date-time
-          description: The scheduled time for the cluster to automatically resume from the `PAUSED` state, in the [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format.
-          readOnly: true
-      required:
-      - pauseType
     UpdateClusterRequestTidbNodeSettingTidbNodeGroup:
       type: object
       properties:
@@ -5413,81 +5311,35 @@ components:
           example: 2
           description: The number of TiDB nodes in the TiDB node group. It must be greater than or equal to 1.
           minimum: 1
-    dedicatedv1beta1ClusterPausePlanType:
-      type: string
-      enum:
-      - NORMAL
-      - DEPRECATE
-      description: 'The type of the pause plan.
-
-
-        - `NORMAL`: the default pause plan.
-
-        - `DEPRECATE`: the legacy pause plan and will be removed in a future release.'
-    dedicatedv1beta1TidbNodeGroupEndpoint:
+    v1beta1UpdateClusterRequestTidbNodeSetting:
       type: object
       properties:
-        host:
+        nodeSpecKey:
           type: string
-          description: 'The hostname or IP address of the endpoint. For `PRIVATE_ENDPOINT` connection types, availability varies by cloud provider:
-
-
-            - For clusters deployed on AWS, the `host` field is available after the private link service is ready.
-
-
-            - For clusters deployed on Google Cloud or Azure, the `host` field is available after you create a `PrivateEndpointConnection`.'
-          readOnly: true
-        port:
-          type: integer
-          format: int32
-          description: The port of the endpoint connection.
-          readOnly: true
-        connectionType:
-          example: PRIVATE_ENDPOINT
-          description: 'The connection type for TiDB node group endpoints.
-
-
-            - `"PUBLIC"`: indicates that the endpoint is accessible over the public network.
-
-
-            - `"VPC_PEERING"`: indicates that the endpoint is accessible over [VPC peering](https://docs.pingcap.com/tidbcloud/tidb-cloud-glossary/#vpc-peering).
-
-
-            - `"PRIVATE_ENDPOINT"`: indicates that the endpoint is accessible over a private link.'
-          readOnly: true
+          example: 8C32G
+          description: "The node spec key of the TiDB nodes in the cluster. For example, `8C32G`. \n\nTo get the node spec available configurations of a specific region for a cloud provider, refer to [List node specs](#tag/Cluster/operation/RegionService_ListNodeSpecs) API."
+        tidbNodeGroups:
+          type: array
+          items:
+            $ref: '#/components/schemas/UpdateClusterRequestTidbNodeSettingTidbNodeGroup'
+          description: The TiDB node groups of the cluster.
+    v1beta1PauseClusterResponse:
+      type: object
+      properties:
+        cluster:
+          description: The cluster details after it is paused.
           allOf:
-          - $ref: '#/components/schemas/v1beta1TidbNodeGroupEndpointConnectionType'
-    dedicatedv1beta1ComponentType:
+          - $ref: '#/components/schemas/tidb_cloud_open_apidedicatedv1beta1Cluster'
+      required:
+      - cluster
+    v1beta1RegionCloudProvider:
       type: string
       enum:
-      - TIKV
-      - TIDB
-      - TIFLASH
-      - PD
-    dedicatedv1beta1ResetRootPasswordResponse:
-      type: object
-    dedicatedv1beta1LogRedactionPolicy:
-      type: object
-      properties:
-        clusterId:
-          type: string
-          example: '1'
-          description: The ID of the cluster to which the log redaction policy applies.
-        redactLog:
-          type:
-          - boolean
-          - 'null'
-          example: true
-          default: true
-          description: 'Indicates whether to redact sensitive information in logs.
-
-
-            The default policy is `true`, which means sensitive data is redacted in logs.
-
-
-            **Note**: Disabling log redaction might expose sensitive information and increase the risk of data leakage. Ensure that you understand and acknowledge this risk before proceeding. Remember to re-enable it as soon as you complete your diagnostic or maintenance task.'
-      required:
-      - clusterId
+      - aws
+      - gcp
+      - azure
+      - alicloud
+      description: "Enum of cloud provider names.\n\n - aws: Amazon Web Services.\n - gcp: Google Cloud Platform.\n - azure: Microsoft Azure.\n - alicloud: Alibaba Cloud."
     dedicatedv1beta1TidbNodeGroup:
       type: object
       properties:
@@ -5556,73 +5408,113 @@ components:
           - $ref: '#/components/schemas/ClusterNodeChangingProgress'
       required:
       - nodeCount
-    commonv1beta1ClusterState:
+    dedicatedv1beta1ClusterPausePlanType:
       type: string
       enum:
-      - CREATING
-      - DELETING
-      - ACTIVE
-      - RESTORING
-      - MAINTENANCE
-      - DELETED
-      - INACTIVE
-      - UPGRADING
-      - IMPORTING
-      - MODIFYING
-      - PAUSING
-      - PAUSED
-      - RESUMING
-      description: "Enum of possible states of a cluster.\n\n - CREATING: Cluster is being created.\n - DELETING: Cluster is being deleted.\n - ACTIVE: Cluster is active for use.\n - RESTORING: Cluster data is being restored.\n - MAINTENANCE: Cluster is under maintenance.\n - DELETED: Cluster has been deleted.\n - INACTIVE: Cluster is not active, but not being deleted.\n - UPGRADING: Cluster is being updated.\nOnly for Dedicated Cluster.\n - IMPORTING: Cluster is being imported.\nOnly for Dedicated Cluster.\n - MODIFYING: Cluster is being modified.\nOnly for Dedicated Cluster.\n - PAUSING: Cluster is being paused.\nOnly for Dedicated Cluster.\n - PAUSED: Cluster is paused.\nOnly for Dedicated Cluster.\n - RESUMING: Cluster is resuming.\nOnly for Dedicated Cluster."
-    dedicatedv1beta1TidbNodeGroupState:
-      type: string
-      enum:
-      - ACTIVE
-      - MODIFYING
-      - PAUSED
-      description: " - ACTIVE: Indicates the TiDB node group is active and ready for use.\n - MODIFYING: Indicates the TiDB node group is being modified.\n - PAUSED: Indicates the TiDB node group is paused."
-    v1beta1ClusterStorageNodeSetting:
+      - NORMAL
+      - DEPRECATE
+      description: 'The type of the pause plan.
+
+
+        - `NORMAL`: the default pause plan.
+
+        - `DEPRECATE`: the legacy pause plan and will be removed in a future release.'
+    v1beta1ResumeClusterResponse:
       type: object
       properties:
-        nodeCount:
+        cluster:
+          description: The cluster details after it is resumed.
+          allOf:
+          - $ref: '#/components/schemas/tidb_cloud_open_apidedicatedv1beta1Cluster'
+      required:
+      - cluster
+    v1beta1TidbNodeGroupEndpointConnectionType:
+      type: string
+      enum:
+      - PUBLIC
+      - VPC_PEERING
+      - PRIVATE_ENDPOINT
+      description: "The connection type for TiDB node group endpoints.\n\n - PUBLIC: Indicates that the endpoint is accessible over the public network.\n - VPC_PEERING: Indicates that the endpoint is accessible over [VPC peering](https://docs.pingcap.com/tidbcloud/tidb-cloud-glossary/#vpc-peering).\n - PRIVATE_ENDPOINT: Indicates that the endpoint is accessible over a private link."
+    dedicatedv1beta1TidbNodeGroupEndpoint:
+      type: object
+      properties:
+        host:
+          type: string
+          description: 'The hostname or IP address of the endpoint. For `PRIVATE_ENDPOINT` connection types, availability varies by cloud provider:
+
+
+            - For clusters deployed on AWS, the `host` field is available after the private link service is ready.
+
+
+            - For clusters deployed on Google Cloud or Azure, the `host` field is available after you create a `PrivateEndpointConnection`.'
+          readOnly: true
+        port:
           type: integer
           format: int32
-          example: 3
-          description: The number of nodes in the cluster.
+          description: The port of the endpoint connection.
+          readOnly: true
+        connectionType:
+          example: PRIVATE_ENDPOINT
+          description: 'The connection type for TiDB node group endpoints.
+
+
+            - `"PUBLIC"`: indicates that the endpoint is accessible over the public network.
+
+
+            - `"VPC_PEERING"`: indicates that the endpoint is accessible over [VPC peering](https://docs.pingcap.com/tidbcloud/tidb-cloud-glossary/#vpc-peering).
+
+
+            - `"PRIVATE_ENDPOINT"`: indicates that the endpoint is accessible over a private link.'
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/v1beta1TidbNodeGroupEndpointConnectionType'
+    v1beta1ClusterTidbNodeSetting:
+      type: object
+      properties:
         nodeSpecKey:
           type: string
           example: 8C32G
-          description: The node spec key of the nodes in the cluster. For example, `8C32G`.
-        storageSizeGi:
-          type: integer
-          format: int32
-          example: 500
-          description: The storage size of each node in gibibytes (GiB). To view supported storage size ranges, use the [List node specs](#tag/Region/operation/RegionService_ListNodeSpecs) or [Get a node spec](#tag/Region/operation/RegionService_GetNodeSpec) endpoint.
-        storageType:
-          example: Standard
-          description: The storage type of the node. For more information, see [TiKV node storage types](https://docs.pingcap.com/tidbcloud/size-your-cluster/#tikv-node-storage-types) and [TiFlash node storage types](https://docs.pingcap.com/tidbcloud/size-your-cluster/#tiflash-node-storage-types).
-          allOf:
-          - $ref: '#/components/schemas/StorageNodeSettingStorageType'
-        raftStoreIops:
-          type:
-          - integer
-          - 'null'
-          format: int32
-          example: 3000
-          description: The IOPS (input/output operations per second) of the Raft store for the node. If not specified, the default IOPS of Raft store is used. It is recommended to leave it blank to use the default settings for optimal performance.
+          description: "The node spec key of the TiDB nodes in the cluster. For example, `8C32G`. \n\nTo get the node spec available configurations of a specific region for a cloud provider, refer to [List node specs](#tag/Region/operation/RegionService_ListNodeSpecs) API."
+        tidbNodeGroups:
+          type: array
+          items:
+            $ref: '#/components/schemas/dedicatedv1beta1TidbNodeGroup'
+          description: 'The [TiDB node groups](https://docs.pingcap.com/tidbcloud/tidb-node-group-overview/) in the cluster.
+
+
+            When you create a cluster, this array must contain exactly one `TidbNodeGroup` object, and the `nodeCount` field must be set.'
         nodeSpecDisplayName:
           type: string
           example: 8 vCPU, 32 GiB
           description: The display name of the node spec. For example, `8 vCPU, 32 GiB`.
           readOnly: true
-        nodeChangingProgress:
-          description: The progress of the node changing.
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/ClusterNodeChangingProgress'
       required:
-      - nodeCount
       - nodeSpecKey
-      - storageSizeGi
+      - tidbNodeGroups
+    dedicatedv1beta1ComponentType:
+      type: string
+      enum:
+      - TIKV
+      - TIDB
+      - TIFLASH
+      - PD
+    tidb_cloud_open_apidedicatedv1beta1ListClustersResponse:
+      type: object
+      properties:
+        clusters:
+          type: array
+          items:
+            $ref: '#/components/schemas/tidb_cloud_open_apidedicatedv1beta1Cluster'
+          description: A list of clusters that match the query.
+        totalSize:
+          type: integer
+          format: int32
+          example: 1
+          description: The total number of clusters that match the query.
+        nextPageToken:
+          type: string
+          example: next_page_token
+          description: The token to retrieve the next page of results. Use this value as the `pageToken` parameter in the next request. This field is empty when there are no more pages.
     ShowNodeQuotaResponseComponentQuota:
       type: object
       properties:
@@ -5643,31 +5535,71 @@ components:
           type: integer
           format: int32
           description: The maximum number of nodes allowed for this component type.
-    v1beta1RegionCloudProvider:
-      type: string
-      enum:
-      - aws
-      - gcp
-      - azure
-      - alicloud
-      description: "Enum of cloud provider names.\n\n - aws: Amazon Web Services.\n - gcp: Google Cloud Platform.\n - azure: Microsoft Azure.\n - alicloud: Alibaba Cloud."
-    tidb_cloud_open_apidedicatedv1beta1ListClustersResponse:
+    googlerpcStatus:
       type: object
       properties:
-        clusters:
-          type: array
-          items:
-            $ref: '#/components/schemas/tidb_cloud_open_apidedicatedv1beta1Cluster'
-          description: A list of clusters that match the query.
-        totalSize:
+        code:
           type: integer
           format: int32
-          example: 1
-          description: The total number of clusters that match the query.
-        nextPageToken:
+          description: The error code returned with this error.
+        message:
           type: string
-          example: next_page_token
-          description: The token to retrieve the next page of results. Use this value as the `pageToken` parameter in the next request. This field is empty when there are no more pages.
+          description: The error message returned with this error.
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/protobufAny'
+          description: A list of messages with additional error details.
+      description: 'The `Status` type defines a logical error model that is suitable for
+
+        different programming environments, including REST APIs and RPC APIs. It is
+
+        used by [gRPC](https://github.com/grpc). Each `Status` message contains
+
+        three pieces of data: error code, error message, and error details.
+
+
+        You can find out more about this error model and how to work with it in the
+
+        [API Design Guide](https://cloud.google.com/apis/design/errors).'
+    dedicatedv1beta1TidbNodeGroupState:
+      type: string
+      enum:
+      - ACTIVE
+      - MODIFYING
+      - PAUSED
+      description: " - ACTIVE: Indicates the TiDB node group is active and ready for use.\n - MODIFYING: Indicates the TiDB node group is being modified.\n - PAUSED: Indicates the TiDB node group is paused."
+    v1beta1UpdateClusterRequestStorageNodeSetting:
+      type: object
+      properties:
+        nodeSpecKey:
+          type: string
+          example: 8C32G
+          description: The node spec key of the nodes in the cluster. For example, `8C32G`.
+        nodeCount:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          example: 3
+          description: "The number of nodes in the cluster. \nWhen updating TiFlash node setting: \n- If the node count is set to 0, the TiFlash node will be removed.\n- If the node count is null, the TiFlash node count won't change.\nFor other components, if the node count is set to 0, server will ignore the node count."
+        storageSizeGi:
+          type: integer
+          format: int32
+          example: 500
+          description: The storage size of the node in GiB. To get the supported storage size range, refer to the `NodeSpec` resource.
+        storageType:
+          example: Standard
+          description: The type of storage for the node. Defaults to `Basic`. For more information, see [TiKV node storage types](https://docs.pingcap.com/tidbcloud/size-your-cluster/#tikv-node-storage-types) and [TiFlash node storage types](https://docs.pingcap.com/tidbcloud/size-your-cluster/#tiflash-node-storage-types).
+          allOf:
+          - $ref: '#/components/schemas/StorageNodeSettingStorageType'
+        raftStoreIops:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          example: 3000
+          description: The IOPS of the Raft store for the node. If not set, the default IOPS of Raft store will be used.
     protobufAny:
       type: object
       properties:
@@ -5676,14 +5608,15 @@ components:
           description: A URL or resource name that uniquely identifies the type of the serialized protocol buffer message.
       additionalProperties: {}
       description: "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n    // or ...\n    if (any.isSameTypeAs(Foo.getDefaultInstance())) {\n      foo = any.unpack(Foo.getDefaultInstance());\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := anypb.New(foo)\n     if err != nil {\n       ...\n     }\n     ...\n     foo := &pb.Foo{}\n     if err := any.UnmarshalTo(foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
-    StorageNodeSettingStorageType:
-      type: string
-      enum:
-      - Basic
-      - Standard
-      - Performance
-      - Plus
-      description: " - Basic: Data disk: gp3; Raft log disk: none.\n - Standard: Data disk: gp3; Raft log disk: gp3.\n - Performance: Data disk: gp3; Raft log disk: io2.\n - Plus: Data disk: io2; Raft log disk: none."
+    v1beta1ClusterServiceResetRootPasswordBody:
+      type: object
+      properties:
+        rootPassword:
+          type: string
+          example: new_password
+          description: The new root password for the cluster. The password must be between 8 and 64 characters long and can contain letters, numbers, and special characters.
+      required:
+      - rootPassword
     tidb_cloud_open_apidedicatedv1beta1Cluster:
       type: object
       properties:
@@ -5833,15 +5766,25 @@ components:
       - tidbNodeSetting
       - tikvNodeSetting
       - port
-    v1beta1ResumeClusterResponse:
+    dedicatedv1beta1ClusterPausePlan:
       type: object
       properties:
-        cluster:
-          description: The cluster details after it is resumed.
+        pauseType:
+          description: 'The type of the pause plan.
+
+
+            - `"NORMAL"`: the default pause plan.
+
+            - `"DEPRECATE"`: the legacy pause plan and will be removed in a future release.'
           allOf:
-          - $ref: '#/components/schemas/tidb_cloud_open_apidedicatedv1beta1Cluster'
+          - $ref: '#/components/schemas/dedicatedv1beta1ClusterPausePlanType'
+        scheduledResumeTime:
+          type: string
+          format: date-time
+          description: The scheduled time for the cluster to automatically resume from the `PAUSED` state, in the [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format.
+          readOnly: true
       required:
-      - cluster
+      - pauseType
     ClusterNodeChangingProgress:
       type: object
       properties:
@@ -5855,29 +5798,96 @@ components:
           format: int32
           description: The number of nodes pending deletion. This value appears only during node deletion operations.
           readOnly: true
-    v1beta1ClusterTidbNodeSetting:
+    dedicatedv1beta1LogRedactionPolicy:
       type: object
       properties:
+        clusterId:
+          type: string
+          example: '1'
+          description: The ID of the cluster to which the log redaction policy applies.
+        redactLog:
+          type:
+          - boolean
+          - 'null'
+          example: true
+          default: true
+          description: 'Indicates whether to redact sensitive information in logs.
+
+
+            The default policy is `true`, which means sensitive data is redacted in logs.
+
+
+            **Note**: Disabling log redaction might expose sensitive information and increase the risk of data leakage. Ensure that you understand and acknowledge this risk before proceeding. Remember to re-enable it as soon as you complete your diagnostic or maintenance task.'
+      required:
+      - clusterId
+    commonv1beta1ClusterState:
+      type: string
+      enum:
+      - CREATING
+      - DELETING
+      - ACTIVE
+      - RESTORING
+      - MAINTENANCE
+      - DELETED
+      - INACTIVE
+      - UPGRADING
+      - IMPORTING
+      - MODIFYING
+      - PAUSING
+      - PAUSED
+      - RESUMING
+      description: "Enum of possible states of a cluster.\n\n - CREATING: Cluster is being created.\n - DELETING: Cluster is being deleted.\n - ACTIVE: Cluster is active for use.\n - RESTORING: Cluster data is being restored.\n - MAINTENANCE: Cluster is under maintenance.\n - DELETED: Cluster has been deleted.\n - INACTIVE: Cluster is not active, but not being deleted.\n - UPGRADING: Cluster is being updated.\nOnly for Dedicated Cluster.\n - IMPORTING: Cluster is being imported.\nOnly for Dedicated Cluster.\n - MODIFYING: Cluster is being modified.\nOnly for Dedicated Cluster.\n - PAUSING: Cluster is being paused.\nOnly for Dedicated Cluster.\n - PAUSED: Cluster is paused.\nOnly for Dedicated Cluster.\n - RESUMING: Cluster is resuming.\nOnly for Dedicated Cluster."
+    StorageNodeSettingStorageType:
+      type: string
+      enum:
+      - Basic
+      - Standard
+      - Performance
+      - Plus
+      description: " - Basic: Data disk: gp3; Raft log disk: none.\n - Standard: Data disk: gp3; Raft log disk: gp3.\n - Performance: Data disk: gp3; Raft log disk: io2.\n - Plus: Data disk: io2; Raft log disk: none."
+    v1beta1ClusterStorageNodeSetting:
+      type: object
+      properties:
+        nodeCount:
+          type: integer
+          format: int32
+          example: 3
+          description: The number of nodes in the cluster.
         nodeSpecKey:
           type: string
           example: 8C32G
-          description: "The node spec key of the TiDB nodes in the cluster. For example, `8C32G`. \n\nTo get the node spec available configurations of a specific region for a cloud provider, refer to [List node specs](#tag/Region/operation/RegionService_ListNodeSpecs) API."
-        tidbNodeGroups:
-          type: array
-          items:
-            $ref: '#/components/schemas/dedicatedv1beta1TidbNodeGroup'
-          description: 'The [TiDB node groups](https://docs.pingcap.com/tidbcloud/tidb-node-group-overview/) in the cluster.
-
-
-            When you create a cluster, this array must contain exactly one `TidbNodeGroup` object, and the `nodeCount` field must be set.'
+          description: The node spec key of the nodes in the cluster. For example, `8C32G`.
+        storageSizeGi:
+          type: integer
+          format: int32
+          example: 500
+          description: The storage size of each node in gibibytes (GiB). To view supported storage size ranges, use the [List node specs](#tag/Region/operation/RegionService_ListNodeSpecs) or [Get a node spec](#tag/Region/operation/RegionService_GetNodeSpec) endpoint.
+        storageType:
+          example: Standard
+          description: The storage type of the node. For more information, see [TiKV node storage types](https://docs.pingcap.com/tidbcloud/size-your-cluster/#tikv-node-storage-types) and [TiFlash node storage types](https://docs.pingcap.com/tidbcloud/size-your-cluster/#tiflash-node-storage-types).
+          allOf:
+          - $ref: '#/components/schemas/StorageNodeSettingStorageType'
+        raftStoreIops:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          example: 3000
+          description: The IOPS (input/output operations per second) of the Raft store for the node. If not specified, the default IOPS of Raft store is used. It is recommended to leave it blank to use the default settings for optimal performance.
         nodeSpecDisplayName:
           type: string
           example: 8 vCPU, 32 GiB
           description: The display name of the node spec. For example, `8 vCPU, 32 GiB`.
           readOnly: true
+        nodeChangingProgress:
+          description: The progress of the node changing.
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/ClusterNodeChangingProgress'
       required:
+      - nodeCount
       - nodeSpecKey
-      - tidbNodeGroups
+      - storageSizeGi
     v1beta1ShowNodeQuotaResponse:
       type: object
       properties:
@@ -5893,18 +5903,200 @@ components:
           items:
             $ref: '#/components/schemas/ShowNodeQuotaResponseComponentQuota'
           description: A list of quotas for each component type. Each quota specifies the maximum number of nodes allowed for that component.
-    v1beta1UpdateClusterRequestTidbNodeSetting:
+    dedicatedv1beta1ResetRootPasswordResponse:
+      type: object
+    ClusterSpendingLimit:
       type: object
       properties:
-        nodeSpecKey:
+        monthly:
+          type: integer
+          format: int32
+          description: The maximum spending limit for the TiDB Cloud Starter instance per month, in USD cents.
+      description: Message for spending limit configuration.
+    v1beta1RegionCloudProvider_2:
+      type: string
+      enum:
+      - aws
+      - alicloud
+      description: "Enum of cloud provider names.\n\n - aws: Amazon Web Services.\n - alicloud: Alibaba Cloud"
+    serverlessv1beta1ClusterHighAvailabilityType:
+      type: string
+      enum:
+      - ZONAL
+      - REGIONAL
+      description: 'The high availability configuration for the cluster.
+
+
+        - `ZONAL`: high availability within a single availability zone. For more information, see [Zonal high availability architecture](https://docs.pingcap.com/tidbcloud/serverless-high-availability/#zonal-high-availability-architecture).
+
+        - `REGIONAL`: high availability across multiple availability zones within a region. For more information, see [Regional high availability architecture](https://docs.pingcap.com/tidbcloud/serverless-high-availability/#regional-high-availability-architecture).'
+    v1beta1ClusterEndpoints:
+      type: object
+      properties:
+        public:
+          description: The public endpoint configuration for connecting to the TiDB Cloud Starter or Essential instance. For more information, see [Network](https://docs.pingcap.com/tidbcloud/connect-to-tidb-cluster-serverless/#network).
+          allOf:
+          - $ref: '#/components/schemas/v1beta1ClusterEndpointsPublic'
+        private:
+          description: The private endpoint for securely connecting to the TiDB Cloud Starter or Essential instance. For more information, see [Network](https://docs.pingcap.com/tidbcloud/connect-to-tidb-cluster-serverless/#network).
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/v1beta1ClusterEndpointsPrivate'
+      description: Message for endpoint information for connecting to a TiDB Cloud Starter or Essential instance.
+    v1beta1ClusterEncryptionConfig:
+      type: object
+      properties:
+        enhancedEncryptionEnabled:
+          type: boolean
+          description: Indicates whether enhanced data encryption is enabled.
+      description: Message for encryption settings for a TiDB Cloud Starter or Essential instance.
+    commonv1beta1ServicePlan:
+      type: string
+      enum:
+      - Starter
+      - Essential
+    v1beta1ClusterAutomatedBackupPolicy:
+      type: object
+      properties:
+        startTime:
           type: string
-          example: 8C32G
-          description: "The node spec key of the TiDB nodes in the cluster. For example, `8C32G`. \n\nTo get the node spec available configurations of a specific region for a cloud provider, refer to [List node specs](#tag/Cluster/operation/RegionService_ListNodeSpecs) API."
-        tidbNodeGroups:
+          description: The UTC time of day in `HH:mm` format when the automated backup starts.
+        retentionDays:
+          type: integer
+          format: int32
+          description: The number of days to retain automated backups.
+      description: Message for automated backup configuration for a cluster.
+    tidb_cloud_open_apiserverlessv1beta1ListRegionsResponse:
+      type: object
+      properties:
+        regions:
           type: array
           items:
-            $ref: '#/components/schemas/UpdateClusterRequestTidbNodeSettingTidbNodeGroup'
-          description: The TiDB node groups of the cluster.
+            type: object
+            $ref: '#/components/schemas/commonv1beta1Region'
+          description: A list of available regions.
+      description: Responses message to the request for listing of available regions in TiDB Cloud Starter and Essential.
+    googlerpcStatus_2:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+          description: The error code returned with this error.
+        message:
+          type: string
+          description: The error message returned with this error.
+        details:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/protobufAny'
+          description: A list of messages with additional error details.
+      description: 'The `Status` type defines a logical error model that is suitable for
+
+        different programming environments, including REST APIs and RPC APIs. It is
+
+        used by [gRPC](https://github.com/grpc). Each `Status` message contains
+
+        three pieces of data: error code, error message, and error details.
+
+
+        You can find out more about this error model and how to work with it in the
+
+        [API Design Guide](https://cloud.google.com/apis/design/errors).'
+    v1beta1ClusterEndpointsPublicAuthorizedNetwork:
+      type: object
+      properties:
+        startIpAddress:
+          type: string
+          description: The starting IP address of the authorized network range.
+        endIpAddress:
+          type: string
+          description: The ending IP address of the authorized network range.
+        displayName:
+          type: string
+          description: The display name of the authorized network.
+      required:
+      - startIpAddress
+      - endIpAddress
+      - displayName
+    v1beta1ClusterServicePartialUpdateClusterBody:
+      type: object
+      properties:
+        cluster:
+          type: object
+          properties:
+            displayName:
+              type: string
+              description: The user-defined name of the TiDB Cloud Starter or Essential instance.
+            spendingLimit:
+              description: The [spending limit](https://docs.pingcap.com/tidbcloud/tidb-cloud-glossary/#spending-limit) for the TiDB Cloud Starter instance.
+              allOf:
+              - $ref: '#/components/schemas/ClusterSpendingLimit'
+            automatedBackupPolicy:
+              description: The schedule and retention rules for automated database backups.
+              allOf:
+              - $ref: '#/components/schemas/v1beta1ClusterAutomatedBackupPolicy'
+            endpoints:
+              description: The connection endpoints for accessing the TiDB Cloud Starter or Essential instance.
+              allOf:
+              - $ref: '#/components/schemas/v1beta1ClusterEndpoints'
+            labels:
+              type: object
+              additionalProperties:
+                type: string
+              description: 'The labels for the TiDB Cloud Starter or Essential instance.
+
+
+                - `tidb.cloud/organization`: the ID of the organization where the TiDB Cloud Starter or Essential instance belongs.
+
+                - `tidb.cloud/project`: the ID of the project where the TiDB Cloud Starter or Essential instance belongs.'
+            autoScaling:
+              description: The auto-scaling configuration for the TiDB Cloud Essential instance.
+              allOf:
+              - $ref: '#/components/schemas/v1beta1ClusterAutoScaling'
+          description: The updated configuration of the TiDB Cloud Starter or Essential instance.
+        updateMask:
+          type: string
+          description: Specifies which fields to update in the TiDB Cloud Starter or Essential instance.
+      description: Message for requesting a partial update on a TiDB Cloud Starter or Essential instance.
+      required:
+      - updateMask
+    v1beta1ClusterEndpointsPrivateAWS:
+      type: object
+      properties:
+        serviceName:
+          type: string
+          description: The AWS service name for private access.
+          readOnly: true
+        availabilityZone:
+          type: array
+          items:
+            type: string
+          description: A list of availability zones where the service is available.
+          readOnly: true
+      description: The [AWS PrivateLink](https://aws.amazon.com/privatelink/) configuration details for private access.
+    v1beta1ClusterEndpointsPrivate:
+      type: object
+      properties:
+        host:
+          type: string
+          description: The hostname of the private endpoint.
+          readOnly: true
+        port:
+          type: integer
+          format: int32
+          description: The port number of the private endpoint.
+          readOnly: true
+        aws:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/v1beta1ClusterEndpointsPrivateAWS'
+        alicloud:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/PrivateALICLOUD'
+      description: Message for private endpoint to securely connect to the TiDB Cloud Starter or Essential instance.
     tidb_cloud_open_apiserverlessv1beta1Cluster:
       type: object
       properties:
@@ -6018,34 +6210,81 @@ components:
       required:
       - displayName
       - region
-    googlerpcStatus_2:
+    commonv1beta1ClusterState_2:
+      type: string
+      enum:
+      - CREATING
+      - ACTIVE
+      - RESTORING
+      - DELETED
+      description: "Enum of possible states of a TiDB Cloud Starter or Essential instance.\n\n - CREATING: Instance is being created.\n - ACTIVE: Instance is active for use.\n - RESTORING: Instance data is being restored.\n - DELETED: Instance has been deleted."
+    v1beta1ClusterAutoScaling:
       type: object
       properties:
-        code:
+        minRcu:
+          type: integer
+          format: int64
+          description: The minimum number of Request Capacity Units (RCUs) for auto-scaling. The value must be greater than or equal to `2000` and less than or equal to `maxRcu`.
+          minimum: 2000
+        maxRcu:
+          type: integer
+          format: int64
+          description: The maximum number of Request Capacity Units (RCUs) for auto-scaling. The value must be less than or equal to `100000` and greater than or equal to `minRcu`.
+          maximum: 100000
+      description: Message for auto scaling configuration.
+    v1beta1ClusterEndpointsPublic:
+      type: object
+      properties:
+        host:
+          type: string
+          description: The hostname of the public endpoint.
+          readOnly: true
+        port:
           type: integer
           format: int32
-          description: The error code returned with this error.
-        message:
-          type: string
-          description: The error message returned with this error.
-        details:
+          description: The port number of the public endpoint.
+          readOnly: true
+        disabled:
+          type: boolean
+          description: Indicates whether the public endpoint is disabled.
+        authorizedNetworks:
           type: array
           items:
             type: object
-            $ref: '#/components/schemas/protobufAny'
-          description: A list of messages with additional error details.
-      description: 'The `Status` type defines a logical error model that is suitable for
-
-        different programming environments, including REST APIs and RPC APIs. It is
-
-        used by [gRPC](https://github.com/grpc). Each `Status` message contains
-
-        three pieces of data: error code, error message, and error details.
-
-
-        You can find out more about this error model and how to work with it in the
-
-        [API Design Guide](https://cloud.google.com/apis/design/errors).'
+            $ref: '#/components/schemas/v1beta1ClusterEndpointsPublicAuthorizedNetwork'
+          description: The list of networks that are allowed to connect to the TiDB Cloud Starter or Essential instance.
+      description: Message for public endpoint to connect to the TiDB Cloud Starter or Essential instance.
+    PrivateALICLOUD:
+      type: object
+      properties:
+        serviceName:
+          type: string
+          description: The Alibaba Cloud service name for private access.
+          readOnly: true
+        availabilityZone:
+          type: array
+          items:
+            type: string
+          description: A list of availability zones where the service is available.
+          readOnly: true
+      description: The [Alibaba Cloud PrivateLink](https://www.alibabacloud.com/help/en/privatelink/product-overview/what-is-a-private-network-connection) configuration for private access.
+    tidb_cloud_open_apiserverlessv1beta1ListClustersResponse:
+      type: object
+      properties:
+        clusters:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/tidb_cloud_open_apiserverlessv1beta1Cluster'
+          description: A list of TiDB Cloud Starter and Essential instances that match the query.
+        nextPageToken:
+          type: string
+          description: The token to retrieve the next page of results. Use this value as the `pageToken` parameter in the next request. This field is empty when there are no more pages.
+        totalSize:
+          type: integer
+          format: int64
+          description: The total number of TiDB Cloud Starter and Essential instances that match the query.
+      description: Responses message to the request for listing of TiDB Cloud Starter and Essential instances.
     commonv1beta1Region:
       type: object
       properties:
@@ -6099,245 +6338,42 @@ components:
             - `Essential`: [TiDB Cloud Essential](https://docs.pingcap.com/tidbcloud/select-cluster-tier/#essential)'
           readOnly: true
       description: A representation of a region for deploying TiDB Cloud Starter and Essential instances.
-    serverlessv1beta1ClusterHighAvailabilityType:
-      type: string
-      enum:
-      - ZONAL
-      - REGIONAL
-      description: 'The high availability configuration for the cluster.
-
-
-        - `ZONAL`: high availability within a single availability zone. For more information, see [Zonal high availability architecture](https://docs.pingcap.com/tidbcloud/serverless-high-availability/#zonal-high-availability-architecture).
-
-        - `REGIONAL`: high availability across multiple availability zones within a region. For more information, see [Regional high availability architecture](https://docs.pingcap.com/tidbcloud/serverless-high-availability/#regional-high-availability-architecture).'
-    v1beta1ClusterEndpointsPublic:
+    GetClusterWorkerListResponse:
+      type: object
+      properties:
+        total:
+          type: integer
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClusterWorker'
+      required:
+      - total
+      - data
+    GetClusterMasterListResponse:
+      type: object
+      properties:
+        total:
+          type: integer
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClusterMaster'
+      required:
+      - total
+      - data
+    AlertManagerTopology:
       type: object
       properties:
         host:
           type: string
-          description: The hostname of the public endpoint.
-          readOnly: true
+          example: 127.0.0.1
         port:
           type: integer
-          format: int32
-          description: The port number of the public endpoint.
-          readOnly: true
-        disabled:
-          type: boolean
-          description: Indicates whether the public endpoint is disabled.
-        authorizedNetworks:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/v1beta1ClusterEndpointsPublicAuthorizedNetwork'
-          description: The list of networks that are allowed to connect to the TiDB Cloud Starter or Essential instance.
-      description: Message for public endpoint to connect to the TiDB Cloud Starter or Essential instance.
-    v1beta1ClusterEndpointsPrivateAWS:
-      type: object
-      properties:
-        serviceName:
-          type: string
-          description: The AWS service name for private access.
-          readOnly: true
-        availabilityZone:
-          type: array
-          items:
-            type: string
-          description: A list of availability zones where the service is available.
-          readOnly: true
-      description: The [AWS PrivateLink](https://aws.amazon.com/privatelink/) configuration details for private access.
-    PrivateALICLOUD:
-      type: object
-      properties:
-        serviceName:
-          type: string
-          description: The Alibaba Cloud service name for private access.
-          readOnly: true
-        availabilityZone:
-          type: array
-          items:
-            type: string
-          description: A list of availability zones where the service is available.
-          readOnly: true
-      description: The [Alibaba Cloud PrivateLink](https://www.alibabacloud.com/help/en/privatelink/product-overview/what-is-a-private-network-connection) configuration for private access.
-    v1beta1ClusterEndpointsPublicAuthorizedNetwork:
-      type: object
-      properties:
-        startIpAddress:
-          type: string
-          description: The starting IP address of the authorized network range.
-        endIpAddress:
-          type: string
-          description: The ending IP address of the authorized network range.
-        displayName:
-          type: string
-          description: The display name of the authorized network.
+          example: 9093
       required:
-      - startIpAddress
-      - endIpAddress
-      - displayName
-    commonv1beta1ServicePlan:
-      type: string
-      enum:
-      - Starter
-      - Essential
-    commonv1beta1ClusterState_2:
-      type: string
-      enum:
-      - CREATING
-      - ACTIVE
-      - RESTORING
-      - DELETED
-      description: "Enum of possible states of a TiDB Cloud Starter or Essential instance.\n\n - CREATING: Instance is being created.\n - ACTIVE: Instance is active for use.\n - RESTORING: Instance data is being restored.\n - DELETED: Instance has been deleted."
-    v1beta1ClusterEndpoints:
-      type: object
-      properties:
-        public:
-          description: The public endpoint configuration for connecting to the TiDB Cloud Starter or Essential instance. For more information, see [Network](https://docs.pingcap.com/tidbcloud/connect-to-tidb-cluster-serverless/#network).
-          allOf:
-          - $ref: '#/components/schemas/v1beta1ClusterEndpointsPublic'
-        private:
-          description: The private endpoint for securely connecting to the TiDB Cloud Starter or Essential instance. For more information, see [Network](https://docs.pingcap.com/tidbcloud/connect-to-tidb-cluster-serverless/#network).
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/v1beta1ClusterEndpointsPrivate'
-      description: Message for endpoint information for connecting to a TiDB Cloud Starter or Essential instance.
-    tidb_cloud_open_apiserverlessv1beta1ListRegionsResponse:
-      type: object
-      properties:
-        regions:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/commonv1beta1Region'
-          description: A list of available regions.
-      description: Responses message to the request for listing of available regions in TiDB Cloud Starter and Essential.
-    v1beta1RegionCloudProvider_2:
-      type: string
-      enum:
-      - aws
-      - alicloud
-      description: "Enum of cloud provider names.\n\n - aws: Amazon Web Services.\n - alicloud: Alibaba Cloud"
-    tidb_cloud_open_apiserverlessv1beta1ListClustersResponse:
-      type: object
-      properties:
-        clusters:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/tidb_cloud_open_apiserverlessv1beta1Cluster'
-          description: A list of TiDB Cloud Starter and Essential instances that match the query.
-        nextPageToken:
-          type: string
-          description: The token to retrieve the next page of results. Use this value as the `pageToken` parameter in the next request. This field is empty when there are no more pages.
-        totalSize:
-          type: integer
-          format: int64
-          description: The total number of TiDB Cloud Starter and Essential instances that match the query.
-      description: Responses message to the request for listing of TiDB Cloud Starter and Essential instances.
-    v1beta1ClusterAutomatedBackupPolicy:
-      type: object
-      properties:
-        startTime:
-          type: string
-          description: The UTC time of day in `HH:mm` format when the automated backup starts.
-        retentionDays:
-          type: integer
-          format: int32
-          description: The number of days to retain automated backups.
-      description: Message for automated backup configuration for a cluster.
-    v1beta1ClusterServicePartialUpdateClusterBody:
-      type: object
-      properties:
-        cluster:
-          type: object
-          properties:
-            displayName:
-              type: string
-              description: The user-defined name of the TiDB Cloud Starter or Essential instance.
-            spendingLimit:
-              description: The [spending limit](https://docs.pingcap.com/tidbcloud/tidb-cloud-glossary/#spending-limit) for the TiDB Cloud Starter instance.
-              allOf:
-              - $ref: '#/components/schemas/ClusterSpendingLimit'
-            automatedBackupPolicy:
-              description: The schedule and retention rules for automated database backups.
-              allOf:
-              - $ref: '#/components/schemas/v1beta1ClusterAutomatedBackupPolicy'
-            endpoints:
-              description: The connection endpoints for accessing the TiDB Cloud Starter or Essential instance.
-              allOf:
-              - $ref: '#/components/schemas/v1beta1ClusterEndpoints'
-            labels:
-              type: object
-              additionalProperties:
-                type: string
-              description: 'The labels for the TiDB Cloud Starter or Essential instance.
-
-
-                - `tidb.cloud/organization`: the ID of the organization where the TiDB Cloud Starter or Essential instance belongs.
-
-                - `tidb.cloud/project`: the ID of the project where the TiDB Cloud Starter or Essential instance belongs.'
-            autoScaling:
-              description: The auto-scaling configuration for the TiDB Cloud Essential instance.
-              allOf:
-              - $ref: '#/components/schemas/v1beta1ClusterAutoScaling'
-          description: The updated configuration of the TiDB Cloud Starter or Essential instance.
-        updateMask:
-          type: string
-          description: Specifies which fields to update in the TiDB Cloud Starter or Essential instance.
-      description: Message for requesting a partial update on a TiDB Cloud Starter or Essential instance.
-      required:
-      - updateMask
-    v1beta1ClusterEndpointsPrivate:
-      type: object
-      properties:
-        host:
-          type: string
-          description: The hostname of the private endpoint.
-          readOnly: true
-        port:
-          type: integer
-          format: int32
-          description: The port number of the private endpoint.
-          readOnly: true
-        aws:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/v1beta1ClusterEndpointsPrivateAWS'
-        alicloud:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/PrivateALICLOUD'
-      description: Message for private endpoint to securely connect to the TiDB Cloud Starter or Essential instance.
-    ClusterSpendingLimit:
-      type: object
-      properties:
-        monthly:
-          type: integer
-          format: int32
-          description: The maximum spending limit for the TiDB Cloud Starter instance per month, in USD cents.
-      description: Message for spending limit configuration.
-    v1beta1ClusterAutoScaling:
-      type: object
-      properties:
-        minRcu:
-          type: integer
-          format: int64
-          description: The minimum number of Request Capacity Units (RCUs) for auto-scaling. The value must be greater than or equal to `2000` and less than or equal to `maxRcu`.
-          minimum: 2000
-        maxRcu:
-          type: integer
-          format: int64
-          description: The maximum number of Request Capacity Units (RCUs) for auto-scaling. The value must be less than or equal to `100000` and greater than or equal to `minRcu`.
-          maximum: 100000
-      description: Message for auto scaling configuration.
-    v1beta1ClusterEncryptionConfig:
-      type: object
-      properties:
-        enhancedEncryptionEnabled:
-          type: boolean
-          description: Indicates whether enhanced data encryption is enabled.
-      description: Message for encryption settings for a TiDB Cloud Starter or Essential instance.
+      - host
+      - port
     MasterTopology:
       type: object
       properties:
@@ -6354,6 +6390,19 @@ components:
       - name
       - host
       - port
+    ErrorWithMessage:
+      description: operation error
+      type: object
+      properties:
+        error_msg:
+          type: string
+          description: error message
+        error_code:
+          type: integer
+          description: error code
+      required:
+      - error_msg
+      - error_code
     ClusterTopology:
       type: object
       properties:
@@ -6371,18 +6420,6 @@ components:
           $ref: '#/components/schemas/PrometheusTopology'
         alert_manager_topology:
           $ref: '#/components/schemas/AlertManagerTopology'
-    AlertManagerTopology:
-      type: object
-      properties:
-        host:
-          type: string
-          example: 127.0.0.1
-        port:
-          type: integer
-          example: 9093
-      required:
-      - host
-      - port
     PrometheusTopology:
       type: object
       properties:
@@ -6395,52 +6432,6 @@ components:
       required:
       - host
       - port
-    GetClusterInfoResponse:
-      type: object
-      properties:
-        cluster_id:
-          type: integer
-          format: uint64
-          description: cluster id
-        topology:
-          $ref: '#/components/schemas/ClusterTopology'
-      required:
-      - cluster_id
-    ClusterWorker:
-      type: object
-      properties:
-        name:
-          type: string
-          example: worker1
-        addr:
-          type: string
-          example: 127.0.0.1:8261
-          description: address of the current master node
-        bound_stage:
-          type: string
-          example: bound
-          description: bound stage of this worker node
-        bound_source_name:
-          type: string
-          example: mysql-01
-          description: source name bound to this worker node
-      required:
-      - name
-      - addr
-      - bound_stage
-      - bound_source_name
-    GetClusterMasterListResponse:
-      type: object
-      properties:
-        total:
-          type: integer
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/ClusterMaster'
-      required:
-      - total
-      - data
     WorkerTopology:
       type: object
       properties:
@@ -6457,43 +6448,17 @@ components:
       - name
       - host
       - port
-    GetClusterWorkerListResponse:
+    GetClusterInfoResponse:
       type: object
       properties:
-        total:
+        cluster_id:
           type: integer
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/ClusterWorker'
+          format: uint64
+          description: cluster id
+        topology:
+          $ref: '#/components/schemas/ClusterTopology'
       required:
-      - total
-      - data
-    ErrorWithMessage:
-      description: operation error
-      type: object
-      properties:
-        error_msg:
-          type: string
-          description: error message
-        error_code:
-          type: integer
-          description: error code
-      required:
-      - error_msg
-      - error_code
-    GrafanaTopology:
-      type: object
-      properties:
-        host:
-          type: string
-          example: 127.0.0.1
-        port:
-          type: integer
-          example: 3000
-      required:
-      - host
-      - port
+      - cluster_id
     ClusterMaster:
       type: object
       properties:
@@ -6517,6 +6482,41 @@ components:
       - alive
       - leader
       - addr
+    GrafanaTopology:
+      type: object
+      properties:
+        host:
+          type: string
+          example: 127.0.0.1
+        port:
+          type: integer
+          example: 3000
+      required:
+      - host
+      - port
+    ClusterWorker:
+      type: object
+      properties:
+        name:
+          type: string
+          example: worker1
+        addr:
+          type: string
+          example: 127.0.0.1:8261
+          description: address of the current master node
+        bound_stage:
+          type: string
+          example: bound
+          description: bound stage of this worker node
+        bound_source_name:
+          type: string
+          example: mysql-01
+          description: source name bound to this worker node
+      required:
+      - name
+      - addr
+      - bound_stage
+      - bound_source_name
 externalDocs:
   description: DM OpenAPI DOC
   url: https://docs.pingcap.com/zh/tidb-data-migration/stable

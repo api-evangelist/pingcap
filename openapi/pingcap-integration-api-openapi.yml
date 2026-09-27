@@ -310,61 +310,34 @@ paths:
         source: "curl -X DELETE \"https://dedicated.tidbapi.com/v1beta1/clusters/123/integrations/456\" \\\n  --digest --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  -H \"Accept: application/json\""
 components:
   schemas:
-    v1beta1DatadogIntegrationStatusResp:
+    openapiv1beta1DatadogSite:
+      type: string
+      enum:
+      - US1
+      - US3
+      - US5
+      - EU1
+      - US1_FED
+      - AP1
+      - AP2
+    v1beta1CreateDatadogIntegrationRequest:
       type: object
       example:
-        state: ACTIVE
-        status_reason: ''
+        api_key: <DATADOG_API_KEY>
         site: US1
-        site_url: https://app.datadoghq.com
-        dashboard_url: https://app.datadoghq.com/dashboard/example
-        masked_api_key: '****3086'
       properties:
-        state:
-          description: The current state of the Datadog integration.
-          allOf:
-          - $ref: '#/components/schemas/v1beta1IntegrationState'
-        statusReason:
+        apiKey:
           type: string
-          description: A message describing the reason for an `ERROR` state. Empty when the integration is functioning normally.
+          description: The Datadog API key used to authenticate your integration. This field is write-only and will be masked in all responses.
         site:
           description: The Datadog site region where your cluster metrics are sent.
           allOf:
           - $ref: '#/components/schemas/openapiv1beta1DatadogSite'
-        siteUrl:
-          type: string
-          description: The base URL of the Datadog site.
-        dashboardUrl:
-          type: string
-          description: A link to view your cluster metrics in Datadog.
-        maskedApiKey:
-          type: string
-          description: The API key used for the integration, which is partially masked.
-    v1beta1CreateNewrelicIntegrationRequest:
-      type: object
-      example:
-        api_key: <NEWRELIC_API_KEY>
-        site: US_OTLP
-      properties:
-        apiKey:
-          type: string
-          description: The New Relic ingestion key used to connect your cluster to New Relic. This field is write-only and will be masked in all responses.
-        site:
-          description: The New Relic ingestion site where your cluster metrics are sent.
-          allOf:
-          - $ref: '#/components/schemas/openapiv1beta1NewrelicSite'
-    rpcStatus:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/protobufAny'
+    openapiv1beta1NewrelicSite:
+      type: string
+      enum:
+      - US_OTLP
+      - EU_OTLP
     protobufAny:
       type: object
       properties:
@@ -406,82 +379,6 @@ components:
     v1beta1CreatePrometheusMetricsKeyRequest:
       type: object
       example: {}
-    openapiv1beta1ListIntegrationsResp:
-      type: object
-      example:
-        items:
-        - id: 103
-          type: DATADOG
-          datadog:
-            state: ACTIVE
-            site: US1
-            masked_api_key: '****3086'
-          create_time: '2025-10-23T12:34:56Z'
-          update_time: '2025-10-24T08:21:00Z'
-          creator: admin@example.com
-        total: 1
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/openapiv1beta1IntegrationStatusResp'
-          description: The list of integrations configured for the cluster.
-        total:
-          type: integer
-          format: int32
-          description: The total number of integrations configured for the cluster.
-    openapiv1beta1DatadogSite:
-      type: string
-      enum:
-      - US1
-      - US3
-      - US5
-      - EU1
-      - US1_FED
-      - AP1
-      - AP2
-    openapiv1beta1NewrelicSite:
-      type: string
-      enum:
-      - US_OTLP
-      - EU_OTLP
-    openapiv1beta1CreateMetricsKeyResp:
-      type: object
-      example:
-        key: <PROMETHEUS_READ_KEY>
-        query_endpoint: https://prom.example.com/api/v1/query
-      properties:
-        key:
-          type: string
-          description: The generated read-only API key for authenticating Prometheus queries.
-        queryEndpoint:
-          type: string
-          description: The Prometheus-compatible HTTP endpoint for querying your cluster metrics.
-    v1beta1IntegrationState:
-      type: string
-      enum:
-      - NONE
-      - ACTIVE
-      - ERROR
-    v1beta1CreateDatadogIntegrationRequest:
-      type: object
-      example:
-        api_key: <DATADOG_API_KEY>
-        site: US1
-      properties:
-        apiKey:
-          type: string
-          description: The Datadog API key used to authenticate your integration. This field is write-only and will be masked in all responses.
-        site:
-          description: The Datadog site region where your cluster metrics are sent.
-          allOf:
-          - $ref: '#/components/schemas/openapiv1beta1DatadogSite'
-    openapiv1beta1IntegrationType:
-      type: string
-      enum:
-      - DATADOG
-      - NEWRELIC
-      - PROMETHEUS
     openapiv1beta1IntegrationStatusResp:
       type: object
       example:
@@ -529,6 +426,109 @@ components:
         creator:
           type: string
           description: The email address or system identifier of the user who created the integration.
+    openapiv1beta1CreateMetricsKeyResp:
+      type: object
+      example:
+        key: <PROMETHEUS_READ_KEY>
+        query_endpoint: https://prom.example.com/api/v1/query
+      properties:
+        key:
+          type: string
+          description: The generated read-only API key for authenticating Prometheus queries.
+        queryEndpoint:
+          type: string
+          description: The Prometheus-compatible HTTP endpoint for querying your cluster metrics.
+    v1beta1CreateNewrelicIntegrationRequest:
+      type: object
+      example:
+        api_key: <NEWRELIC_API_KEY>
+        site: US_OTLP
+      properties:
+        apiKey:
+          type: string
+          description: The New Relic ingestion key used to connect your cluster to New Relic. This field is write-only and will be masked in all responses.
+        site:
+          description: The New Relic ingestion site where your cluster metrics are sent.
+          allOf:
+          - $ref: '#/components/schemas/openapiv1beta1NewrelicSite'
+    rpcStatus:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/protobufAny'
+    openapiv1beta1ListIntegrationsResp:
+      type: object
+      example:
+        items:
+        - id: 103
+          type: DATADOG
+          datadog:
+            state: ACTIVE
+            site: US1
+            masked_api_key: '****3086'
+          create_time: '2025-10-23T12:34:56Z'
+          update_time: '2025-10-24T08:21:00Z'
+          creator: admin@example.com
+        total: 1
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/openapiv1beta1IntegrationStatusResp'
+          description: The list of integrations configured for the cluster.
+        total:
+          type: integer
+          format: int32
+          description: The total number of integrations configured for the cluster.
+    openapiv1beta1IntegrationType:
+      type: string
+      enum:
+      - DATADOG
+      - NEWRELIC
+      - PROMETHEUS
+    v1beta1DatadogIntegrationStatusResp:
+      type: object
+      example:
+        state: ACTIVE
+        status_reason: ''
+        site: US1
+        site_url: https://app.datadoghq.com
+        dashboard_url: https://app.datadoghq.com/dashboard/example
+        masked_api_key: '****3086'
+      properties:
+        state:
+          description: The current state of the Datadog integration.
+          allOf:
+          - $ref: '#/components/schemas/v1beta1IntegrationState'
+        statusReason:
+          type: string
+          description: A message describing the reason for an `ERROR` state. Empty when the integration is functioning normally.
+        site:
+          description: The Datadog site region where your cluster metrics are sent.
+          allOf:
+          - $ref: '#/components/schemas/openapiv1beta1DatadogSite'
+        siteUrl:
+          type: string
+          description: The base URL of the Datadog site.
+        dashboardUrl:
+          type: string
+          description: A link to view your cluster metrics in Datadog.
+        maskedApiKey:
+          type: string
+          description: The API key used for the integration, which is partially masked.
+    v1beta1IntegrationState:
+      type: string
+      enum:
+      - NONE
+      - ACTIVE
+      - ERROR
 x-tagGroups:
 - name: Endpoints
   tags:

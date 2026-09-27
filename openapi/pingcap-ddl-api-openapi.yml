@@ -1,0 +1,91 @@
+openapi: 3.2.0
+info:
+  title: TiDB HTTP DDL API
+  description: The TiDB HTTP API is a built-in administrative interface available on self-managed TiDB server instances, accessible on port 10080 by default.
+  version: '1.0'
+  contact:
+    name: TiDB GitHub
+    url: https://github.com/pingcap/tidb/blob/master/docs/tidb_http_api.md
+  termsOfService: https://www.apache.org/licenses/LICENSE-2.0
+servers:
+- url: http://localhost:10080
+  description: Local TiDB Node (default status port)
+tags:
+- name: DDL
+  description: Endpoints for managing and inspecting DDL jobs, including ownership and history.
+paths:
+  /ddl/history:
+    get:
+      operationId: getDdlHistory
+      summary: Get DDL job history
+      description: Returns the history of DDL (Data Definition Language) jobs executed on the cluster, such as CREATE TABLE, ALTER TABLE, DROP INDEX, and similar schema change operations. Results are paginated using start_job_id and limit parameters. DDL history is useful for auditing schema changes and diagnosing failed schema modifications.
+      tags:
+      - DDL
+      parameters:
+      - name: start_job_id
+        in: query
+        description: The DDL job ID to start listing from, for pagination.
+        required: false
+        schema:
+          type: integer
+      - name: limit
+        in: query
+        description: Maximum number of DDL job history records to return.
+        required: false
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: DDL job history retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DdlJob'
+  /ddl/owner/resign:
+    post:
+      operationId: resignDdlOwner
+      summary: Resign DDL owner
+      description: Forces the current TiDB server to resign its role as the DDL owner, triggering a new DDL owner election among all TiDB servers in the cluster. Only one TiDB server is the DDL owner at any time and is responsible for executing schema change jobs. Use this endpoint when the current DDL owner is experiencing issues.
+      tags:
+      - DDL
+      responses:
+        '200':
+          description: DDL owner resignation initiated successfully.
+components:
+  schemas:
+    DdlJob:
+      type: object
+      description: A DDL job record from TiDB's schema change history.
+      properties:
+        id:
+          type: integer
+          description: The unique numeric DDL job ID.
+        type:
+          type: string
+          description: The DDL job type (e.g., create table, add index, drop column).
+        schema_id:
+          type: integer
+          description: The ID of the database schema affected by this DDL job.
+        table_id:
+          type: integer
+          description: The ID of the table affected by this DDL job.
+        schema_name:
+          type: string
+          description: The database name affected by this DDL job.
+        table_name:
+          type: string
+          description: The table name affected by this DDL job.
+        state:
+          type: string
+          description: The current state of the DDL job (done, synced, cancelled, etc.).
+        start_time:
+          type: integer
+          description: The Unix timestamp when the DDL job started.
+        error:
+          type: string
+          description: Error message if the DDL job failed.
+externalDocs:
+  description: TiDB HTTP API Reference
+  url: https://github.com/pingcap/tidb/blob/master/docs/tidb_http_api.md

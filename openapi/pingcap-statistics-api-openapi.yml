@@ -1,0 +1,87 @@
+openapi: 3.2.0
+info:
+  title: TiDB HTTP Statistics API
+  description: The TiDB HTTP API is a built-in administrative interface available on self-managed TiDB server instances, accessible on port 10080 by default.
+  version: '1.0'
+  contact:
+    name: TiDB GitHub
+    url: https://github.com/pingcap/tidb/blob/master/docs/tidb_http_api.md
+  termsOfService: https://www.apache.org/licenses/LICENSE-2.0
+servers:
+- url: http://localhost:10080
+  description: Local TiDB Node (default status port)
+tags:
+- name: Statistics
+  description: Endpoints for exporting optimizer statistics used for query planning.
+paths:
+  /stats/dump/{db}/{table}:
+    get:
+      operationId: dumpTableStats
+      summary: Dump table statistics
+      description: Returns the optimizer statistics for the specified table in JSON format. Statistics include histogram data, count-min sketch approximations, and correlation coefficients used by the TiDB query optimizer when generating execution plans. Optionally specify a timestamp to retrieve historical statistics.
+      tags:
+      - Statistics
+      parameters:
+      - $ref: '#/components/parameters/db'
+      - $ref: '#/components/parameters/table'
+      - name: timestamp
+        in: query
+        description: Optional Unix timestamp to retrieve historical statistics at a specific point in time.
+        required: false
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Table statistics dumped successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TableStats'
+        '404':
+          description: The specified database or table was not found.
+components:
+  parameters:
+    db:
+      name: db
+      in: path
+      description: The database name.
+      required: true
+      schema:
+        type: string
+    table:
+      name: table
+      in: path
+      description: The table name within the specified database.
+      required: true
+      schema:
+        type: string
+  schemas:
+    TableStats:
+      type: object
+      description: Optimizer statistics for a TiDB table.
+      properties:
+        database:
+          type: string
+          description: The database name.
+        table_name:
+          type: string
+          description: The table name.
+        columns:
+          type: object
+          description: A map of column names to their statistical histogram data.
+          additionalProperties:
+            type: object
+        indices:
+          type: object
+          description: A map of index names to their statistical data.
+          additionalProperties:
+            type: object
+        count:
+          type: integer
+          description: The estimated total row count for the table.
+        modify_count:
+          type: integer
+          description: The number of row modifications since the last statistics collection.
+externalDocs:
+  description: TiDB HTTP API Reference
+  url: https://github.com/pingcap/tidb/blob/master/docs/tidb_http_api.md

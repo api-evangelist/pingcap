@@ -1,0 +1,170 @@
+openapi: 3.2.0
+info:
+  description: 'This is a billing system server for managed service provider (MSP).
+
+
+    **Note:** The MSP API is deprecated as of October 15, 2024, and will be removed in the future. If you are currently using the MSP API, migrate to the Partner Management API in TiDB Cloud Partner.'
+  title: MSP (Managed Service Provider) OPEN Account API
+  contact: {}
+  version: v1beta1
+servers:
+- url: https://msp.tidbapi.com/v1beta1/msp
+tags:
+- name: Account
+paths:
+  /customerSignupUrl:
+    post:
+      x-code-samples:
+      - lang: curl
+        source: "curl --digest \\\n --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n --request POST \\\n --url 'https://msp.tidbapi.com/v1beta1/msp/customerSignupUrl'"
+      description: This endpoint creates a new signup URL for an MSP customer.
+      tags:
+      - Account
+      summary: Create a new signup URL for an MSP customer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.OpenApiMspCustomerSignupUrl'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.OpenApiError'
+      operationId: postCustomerSignupUrl
+      x-operation-id-source: derived
+  /mspCustomers:
+    get:
+      x-code-samples:
+      - lang: curl
+        source: "curl --digest \\\n  --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --request GET \\\n  --url 'https://msp.tidbapi.com/v1beta1/msp/mspCustomers'"
+      description: This endpoint returns a list of MSP customers.
+      tags:
+      - Account
+      summary: Get a list of MSP customers
+      parameters:
+      - description: The page token of the next page.
+        name: pageToken
+        in: query
+        schema:
+          type: string
+      - description: The page size of the next page. If `pageSize` is set to 0, it returns all MSP customers in one page.
+        name: pageSize
+        in: query
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.OpenApiListMspCustomerRsp'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.OpenApiError'
+      operationId: getMspCustomers
+      x-operation-id-source: derived
+  /mspCustomers/{customerOrgId}:
+    get:
+      x-code-samples:
+      - lang: curl
+        source: "curl --digest \\\n  --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --request GET \\\n  --url 'https://msp.tidbapi.com/v1beta1/msp/mspCustomers/{customerOrgID}'"
+      description: This endpoint retrieves a single MSP customer by their customer org ID.
+      tags:
+      - Account
+      summary: Retrieve a single MSP customer
+      parameters:
+      - description: The MSP customer org ID.
+        name: customerOrgId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.OpenApiMspCustomer'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.OpenApiError'
+      operationId: getMspCustomersByCustomerOrgId
+      x-operation-id-source: derived
+components:
+  schemas:
+    api.OpenApiMspCustomerSignupUrl:
+      type: object
+      properties:
+        customerSignupUrl:
+          description: The signup URL of the MSP customer.
+          type: string
+          example: https://test.com/signup?msp=test&third_party_account_provider=test&third_party_account_token=test
+        expiredAt:
+          description: The expired time of the MSP customer signup url.
+          type: string
+          example: '2024-12-06 15:18:13'
+    api.OpenApiError:
+      type: object
+      properties:
+        code:
+          type: string
+        error: {}
+        msgPrefix:
+          type: string
+        status:
+          type: integer
+    api.OpenApiMspCustomer:
+      type: object
+      properties:
+        effectedTime:
+          description: The effected time of the MSP customer.
+          type: string
+          example: '2023-12-06 15:18:13'
+        email:
+          description: The email of the MSP customer.
+          type: string
+          example: 123@my.com
+        expiredTime:
+          description: The expired time of the MSP customer.
+          type: string
+          example: '2023-12-06 15:18:13'
+        id:
+          description: The ID of the MSP customer.
+          type: string
+          example: '123456'
+        orgId:
+          description: The ID of the MSP customer.
+          type: string
+          example: '123456'
+        orgName:
+          description: The org name of the MSP customer.
+          type: string
+          example: New Org
+        state:
+          description: The state of the MSP customer.
+          type: string
+          example: active
+    api.OpenApiListMspCustomerRsp:
+      type: object
+      properties:
+        mspCustomers:
+          description: The list of matching MSP Customers.
+          type: array
+          items:
+            $ref: '#/components/schemas/api.OpenApiMspCustomer'
+        nextPageToken:
+          description: '`next_page_token` can be sent in a subsequent call to fetch more results'
+          type: string
+          example: 498c7f44-656f-4944-b455-0695faa5d4f9

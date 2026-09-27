@@ -1,13 +1,11 @@
 openapi: 3.2.0
 info:
-  title: TiDB Cloud Dedicated Region API
-  description: '*TiDB Cloud API is in beta.*
-
-
-    This API manages TiDB Cloud Dedicated clusters.'
-  version: v1beta1
+  title: Pingcap Region API
+  version: '1.0'
+  description: 'Operations tagged Region across 2 of this provider''s published API definitions: pingcap-tidb-cloud-dedicated-v1beta1-openapi-original.json, tidb-cloud-premium-v1beta2-openapi-original.json. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://dedicated.tidbapi.com/v1beta1
+- url: https://cloud.tidbapi.com/v1beta2
 tags:
 - name: Region
   description: List regions, get a region, and list cloud providers and node specs of a region.
@@ -105,6 +103,8 @@ paths:
       - lang: curl
         label: curl
         source: "curl --digest --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --location 'https://dedicated.tidbapi.com/v1beta1/regions'"
+    servers:
+    - url: https://dedicated.tidbapi.com/v1beta1
   /regions/{regionId}:
     get:
       summary: Get a region
@@ -172,6 +172,8 @@ paths:
       - lang: curl
         label: curl
         source: "curl --digest --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --location 'https://dedicated.tidbapi.com/v1beta1/regions/aws-us-east-1'"
+    servers:
+    - url: https://dedicated.tidbapi.com/v1beta1
   /regions:showCloudProviders:
     get:
       summary: List cloud providers
@@ -233,6 +235,8 @@ paths:
       - lang: curl
         label: curl
         source: "curl --digest --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --location 'https://dedicated.tidbapi.com/v1beta1/regions:showCloudProviders'"
+    servers:
+    - url: https://dedicated.tidbapi.com/v1beta1
   /regions/{regionId}/nodeSpecs:
     get:
       summary: List node specs
@@ -343,6 +347,8 @@ paths:
       - lang: curl
         label: curl
         source: "curl --digest --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --location 'https://dedicated.tidbapi.com/v1beta1/regions/aws-us-east-1/nodeSpecs'"
+    servers:
+    - url: https://dedicated.tidbapi.com/v1beta1
   /regions/{regionId}/componentTypes/{componentType}/nodeSpecs/{nodeSpecKey}:
     get:
       summary: Get a node spec
@@ -433,6 +439,8 @@ paths:
       - lang: curl
         label: curl
         source: "curl --digest --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --location 'https://dedicated.tidbapi.com/v1beta1/regions/aws-us-east-1/componentTypes/TIKV/nodeSpecs/8C32G'"
+    servers:
+    - url: https://dedicated.tidbapi.com/v1beta1
 components:
   schemas:
     StorageNodeSettingStorageType:
@@ -443,13 +451,14 @@ components:
       - Performance
       - Plus
       description: " - Basic: Data disk: gp3; Raft log disk: none.\n - Standard: Data disk: gp3; Raft log disk: gp3.\n - Performance: Data disk: gp3; Raft log disk: io2.\n - Plus: Data disk: io2; Raft log disk: none."
-    dedicatedv1beta1ComponentType:
-      type: string
-      enum:
-      - TIKV
-      - TIDB
-      - TIFLASH
-      - PD
+    protobufAny:
+      type: object
+      properties:
+        '@type':
+          type: string
+          description: A URL or resource name that uniquely identifies the type of the serialized protocol buffer message.
+      additionalProperties: {}
+      description: "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n    // or ...\n    if (any.isSameTypeAs(Foo.getDefaultInstance())) {\n      foo = any.unpack(Foo.getDefaultInstance());\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := anypb.New(foo)\n     if err != nil {\n       ...\n     }\n     ...\n     foo := &pb.Foo{}\n     if err := any.UnmarshalTo(foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
     v1beta1RegionCloudProvider:
       type: string
       enum:
@@ -458,108 +467,6 @@ components:
       - azure
       - alicloud
       description: "Enum of cloud provider names.\n\n - aws: Amazon Web Services.\n - gcp: Google Cloud Platform.\n - azure: Microsoft Azure.\n - alicloud: Alibaba Cloud."
-    tidb_cloud_open_apidedicatedv1beta1ListRegionsResponse:
-      type: object
-      properties:
-        regions:
-          type: array
-          items:
-            $ref: '#/components/schemas/commonv1beta1Region'
-          description: A list of regions that match the query.
-        totalSize:
-          type: integer
-          format: int32
-          description: The total number of regions that match the query.
-        nextPageToken:
-          type: string
-          description: The token to retrieve the next page of results. Use this value as the `pageToken` parameter in the next request. This field is empty when there are no more pages.
-    googlerpcStatus:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-          description: The error code returned with this error.
-        message:
-          type: string
-          description: The error message returned with this error.
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/protobufAny'
-          description: A list of messages with additional error details.
-      description: 'The `Status` type defines a logical error model that is suitable for
-
-        different programming environments, including REST APIs and RPC APIs. It is
-
-        used by [gRPC](https://github.com/grpc). Each `Status` message contains
-
-        three pieces of data: error code, error message, and error details.
-
-
-        You can find out more about this error model and how to work with it in the
-
-        [API Design Guide](https://cloud.google.com/apis/design/errors).'
-    commonv1beta1Region:
-      type: object
-      properties:
-        name:
-          type: string
-          example: regions/aws-us-west-2
-          description: The unique name of the region, in the format of `regions/{region_id}`. For example, `regions/aws-us-west-2`.
-          pattern: ^regions/(aws|gcp|azure)-(.+)$
-        regionId:
-          type: string
-          example: aws-us-west-2
-          description: The unique identifier for the region, in the format of `{cloud_provider}-{region_code}`. For example, `aws-us-west-2`.
-          readOnly: true
-          pattern: ^(aws|gcp|azure|alicloud)-[a-z0-9-]+$
-        cloudProvider:
-          example: aws
-          description: 'The cloud provider that offers the region.
-
-
-            - `"aws"`: Amazon Web Services
-
-
-            - `"gcp"`: Google Cloud
-
-
-            - `"azure"`: Microsoft Azure
-
-
-            - `"alicloud"`: Alibaba Cloud'
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/v1beta1RegionCloudProvider'
-        displayName:
-          type: string
-          example: Oregon (us-west-2)
-          description: A human-readable name for the region. For example, `Oregon (us-west-2)`.
-          readOnly: true
-        provider:
-          type:
-          - string
-          - 'null'
-          example: aws
-          description: '**Deprecated.** Use `cloudProvider` instead. The name of the cloud provider. For example, `aws`, `gcp`, `azure`, or `alicloud`.'
-          readOnly: true
-      description: A representation of a region for deploying TiDB clusters.
-    v1beta1ListNodeSpecsResponse:
-      type: object
-      properties:
-        nodeSpecs:
-          type: array
-          items:
-            $ref: '#/components/schemas/v1beta1NodeSpec'
-          description: A list of node specs that match the query.
-        totalSize:
-          type: integer
-          format: int32
-          description: The total number of node specs that match the query.
-        nextPageToken:
-          type: string
-          description: The token to retrieve the next page of results. Use this value as the `pageToken` parameter in the next request. This field is empty when there are no more pages.
     v1beta1NodeSpec:
       type: object
       properties:
@@ -624,6 +531,48 @@ components:
           type: boolean
           description: Indicates whether this is the default node spec.
       description: All fields are output only.
+    googlerpcStatus:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+          description: The error code returned with this error.
+        message:
+          type: string
+          description: The error message returned with this error.
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/protobufAny'
+          description: A list of messages with additional error details.
+      description: 'The `Status` type defines a logical error model that is suitable for
+
+        different programming environments, including REST APIs and RPC APIs. It is
+
+        used by [gRPC](https://github.com/grpc). Each `Status` message contains
+
+        three pieces of data: error code, error message, and error details.
+
+
+        You can find out more about this error model and how to work with it in the
+
+        [API Design Guide](https://cloud.google.com/apis/design/errors).'
+    v1beta1ListNodeSpecsResponse:
+      type: object
+      properties:
+        nodeSpecs:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1beta1NodeSpec'
+          description: A list of node specs that match the query.
+        totalSize:
+          type: integer
+          format: int32
+          description: The total number of node specs that match the query.
+        nextPageToken:
+          type: string
+          description: The token to retrieve the next page of results. Use this value as the `pageToken` parameter in the next request. This field is empty when there are no more pages.
     v1beta1ShowCloudProvidersResponse:
       type: object
       properties:
@@ -644,20 +593,197 @@ components:
 
 
             - `"alicloud"`: Alibaba Cloud'
-    protobufAny:
+    tidb_cloud_open_apidedicatedv1beta1ListRegionsResponse:
       type: object
       properties:
-        '@type':
+        regions:
+          type: array
+          items:
+            $ref: '#/components/schemas/commonv1beta1Region'
+          description: A list of regions that match the query.
+        totalSize:
+          type: integer
+          format: int32
+          description: The total number of regions that match the query.
+        nextPageToken:
           type: string
-          description: A URL or resource name that uniquely identifies the type of the serialized protocol buffer message.
-      additionalProperties: {}
-      description: "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n    // or ...\n    if (any.isSameTypeAs(Foo.getDefaultInstance())) {\n      foo = any.unpack(Foo.getDefaultInstance());\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := anypb.New(foo)\n     if err != nil {\n       ...\n     }\n     ...\n     foo := &pb.Foo{}\n     if err := any.UnmarshalTo(foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
-x-tagGroups:
-- name: Endpoints
-  tags:
-  - Cluster
-  - Region
-  - Private Endpoint Connection
-  - Import
-  - Integration
-  - Changefeed
+          description: The token to retrieve the next page of results. Use this value as the `pageToken` parameter in the next request. This field is empty when there are no more pages.
+    dedicatedv1beta1ComponentType:
+      type: string
+      enum:
+      - TIKV
+      - TIDB
+      - TIFLASH
+      - PD
+    commonv1beta1Region:
+      type: object
+      properties:
+        name:
+          type: string
+          example: regions/aws-us-west-2
+          description: The unique name of the region, in the format of `regions/{region_id}`. For example, `regions/aws-us-west-2`.
+          pattern: ^regions/(aws|gcp|azure)-(.+)$
+        regionId:
+          type: string
+          example: aws-us-west-2
+          description: The unique identifier for the region, in the format of `{cloud_provider}-{region_code}`. For example, `aws-us-west-2`.
+          readOnly: true
+          pattern: ^(aws|gcp|azure|alicloud)-[a-z0-9-]+$
+        cloudProvider:
+          example: aws
+          description: 'The cloud provider that offers the region.
+
+
+            - `"aws"`: Amazon Web Services
+
+
+            - `"gcp"`: Google Cloud
+
+
+            - `"azure"`: Microsoft Azure
+
+
+            - `"alicloud"`: Alibaba Cloud'
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/v1beta1RegionCloudProvider'
+        displayName:
+          type: string
+          example: Oregon (us-west-2)
+          description: A human-readable name for the region. For example, `Oregon (us-west-2)`.
+          readOnly: true
+        provider:
+          type:
+          - string
+          - 'null'
+          example: aws
+          description: '**Deprecated.** Use `cloudProvider` instead. The name of the cloud provider. For example, `aws`, `gcp`, `azure`, or `alicloud`.'
+          readOnly: true
+      description: A representation of a region for deploying TiDB clusters.
+    v1beta1ServicePlanInfo:
+      type: object
+      properties:
+        servicePlan:
+          $ref: '#/components/schemas/v1beta1ServicePlan'
+        displayName:
+          type: string
+    v1beta1Region:
+      type: object
+      properties:
+        name:
+          type: string
+          example: regions/aws-us-west-2
+          description: The unique name of the region, in the format of `regions/{region_id}`. For example, `regions/aws-us-west-2`.
+          pattern: ^regions/(aws|gcp|azure)-(.+)$
+        regionId:
+          type: string
+          example: aws-us-west-2
+          description: The unique identifier for the region, in the format of `{cloud_provider}-{region_code}`. For example, `aws-us-west-2`.
+          readOnly: true
+          pattern: ^(aws|gcp|azure|alicloud)-[a-z0-9-]+$
+        cloudProvider:
+          example: aws
+          description: 'The cloud provider that offers the region.
+
+
+            - `"aws"`: Amazon Web Services
+
+
+            - `"gcp"`: Google Cloud
+
+
+            - `"azure"`: Microsoft Azure
+
+
+            - `"alicloud"`: Alibaba Cloud'
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/RegionCloudProvider'
+        displayName:
+          type: string
+          example: Oregon (us-west-2)
+          description: A human-readable name for the region. For example, `Oregon (us-west-2)`.
+          readOnly: true
+        provider:
+          type:
+          - string
+          - 'null'
+          example: aws
+          description: '**Deprecated.** Use `cloudProvider` instead. The name of the cloud provider. For example, `aws`, `gcp`, `azure`, or `alicloud`.'
+          title: Deprecated
+          readOnly: true
+        servicePlans:
+          type: array
+          example:
+          - Premium
+          items:
+            $ref: '#/components/schemas/v1beta1ServicePlan'
+          description: The service plans available in this region.
+          title: ServicePlan
+          readOnly: true
+        supportedServicePlans:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/v1beta1ServicePlanInfo'
+          readOnly: true
+      description: A representation of a region for deploying TiDB Cloud Premium instances.
+    v1beta1ServicePlan:
+      type: string
+      enum:
+      - Premium
+    rpcStatus:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+          description: The error code returned with this error.
+        message:
+          type: string
+          description: The error message returned with this error.
+        details:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/protobufAny'
+          description: A list of messages with additional error details.
+      description: 'The `Status` type defines a logical error model that is suitable for
+
+        different programming environments, including REST APIs and RPC APIs. It is
+
+        used by [gRPC](https://github.com/grpc). Each `Status` message contains
+
+        three pieces of data: error code, error message, and error details.
+
+
+        You can find out more about this error model and how to work with it in the
+
+        [API Design Guide](https://cloud.google.com/apis/design/errors).'
+    v1beta2ListRegionsResponse:
+      type: object
+      properties:
+        regions:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/v1beta1Region'
+          description: A list of regions that match the query.
+        totalSize:
+          type: integer
+          format: int32
+          description: The total number of regions that match the query.
+        nextPageToken:
+          type: string
+          description: The token to retrieve the next page of results. Use this value as the `pageToken` parameter in the next request. This field is empty when there are no more pages.
+    RegionCloudProvider:
+      type: string
+      enum:
+      - aws
+      - gcp
+      - azure
+      - alicloud
+      description: "Enum of cloud provider names.\n\n - aws: Amazon Web Services.\n - gcp: Google Cloud Platform.\n - azure: Microsoft Azure.\n - alicloud: Alibaba Cloud."
+x-refined-from:
+- pingcap-tidb-cloud-dedicated-v1beta1-openapi-original.json
+- tidb-cloud-premium-v1beta2-openapi-original.json

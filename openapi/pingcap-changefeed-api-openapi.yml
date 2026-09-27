@@ -1,13 +1,11 @@
 openapi: 3.2.0
 info:
-  title: TiDB Cloud Dedicated Changefeed API
-  description: '*TiDB Cloud API is in beta.*
-
-
-    This API manages TiDB Cloud Dedicated clusters.'
-  version: v1beta1
+  title: Pingcap Changefeed API
+  version: '1.0'
+  description: 'Operations tagged Changefeed across 2 of this provider''s published API definitions: pingcap-tidb-cloud-dedicated-v1beta1-openapi-original.json, tidb-cloud-premium-v1beta2-openapi-original.json. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://dedicated.tidbapi.com/v1beta1
+- url: https://cloud.tidbapi.com/v1beta2
 tags:
 - name: Changefeed
   description: List changefeed RCU options, list changefeeds, create a changefeed, get a changefeed, delete a changefeed, update a changefeed downstream config, pause a changefeed, resume a changefeed, and scale a changefeed.
@@ -51,6 +49,8 @@ paths:
       x-codeSamples:
       - lang: curl
         source: curl -X GET 'https://dedicated.tidbapi.com/v1beta1/changefeedRCUs'
+    servers:
+    - url: https://dedicated.tidbapi.com/v1beta1
   /changefeeds:
     get:
       summary: List changefeeds
@@ -184,6 +184,8 @@ paths:
               $ref: '#/components/schemas/v1beta1CreateChangefeedRequest'
         description: The request for creating a changefeed.
         required: true
+    servers:
+    - url: https://dedicated.tidbapi.com/v1beta1
   /changefeeds/{changefeedId}:
     get:
       summary: Get a changefeed
@@ -284,6 +286,8 @@ paths:
       x-codeSamples:
       - lang: curl
         source: curl -X DELETE 'https://dedicated.tidbapi.com/v1beta1/changefeeds/2068955910051614720'
+    servers:
+    - url: https://dedicated.tidbapi.com/v1beta1
   /changefeeds/{changefeedId}:editDownstreamConfig:
     post:
       summary: Update a changefeed downstream config
@@ -372,6 +376,8 @@ paths:
               - downstreamType
         description: The request for updating a changefeed downstream configuration.
         required: true
+    servers:
+    - url: https://dedicated.tidbapi.com/v1beta1
   /changefeeds/{changefeedId}:pause:
     post:
       summary: Pause a changefeed
@@ -428,6 +434,8 @@ paths:
               description: The request for pausing a changefeed.
         description: The request for pausing a changefeed.
         required: true
+    servers:
+    - url: https://dedicated.tidbapi.com/v1beta1
   /changefeeds/{changefeedId}:resume:
     post:
       summary: Resume a changefeed
@@ -484,6 +492,8 @@ paths:
               description: The request for resuming a changefeed.
         description: The request for resuming a changefeed.
         required: true
+    servers:
+    - url: https://dedicated.tidbapi.com/v1beta1
   /changefeeds/{changefeedId}:scale:
     post:
       summary: Scale a changefeed
@@ -546,67 +556,105 @@ paths:
               - replicationCapacity
         description: The request for scaling a changefeed.
         required: true
+    servers:
+    - url: https://dedicated.tidbapi.com/v1beta1
+  /changefeeds:listCCUs:
+    get:
+      summary: List changefeed CCU options
+      description: Lists the available Changefeed Capacity Unit (CCU) options that can be selected for a changefeed.
+      operationId: ListChangefeedCapacityUnits
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1beta2ListCCUsResponse'
+        '400':
+          description: A request field is invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus_2'
+        '401':
+          description: The API key cannot be authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus_2'
+        '403':
+          description: The API key does not have permission to access the resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus_2'
+        '429':
+          description: You have exceeded the rate limit.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus_2'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus_2'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus_2'
+      tags:
+      - Changefeed
+      x-code-samples:
+      - label: curl
+        lang: curl
+        source: 'curl --location ''https://cloud.tidbapi.com/v1beta2/changefeeds:listCCUs'' \
+
+          --digest --user ''YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY'' \
+
+          --header ''Accept: application/json'''
+    servers:
+    - url: https://cloud.tidbapi.com/v1beta2
 components:
   schemas:
-    v1beta1Connection:
+    v1beta1ChangefeedRCU:
       type: object
       properties:
-        endpoint:
+        name:
           type: string
-          example: mysql.example.com:3306
-          description: The MySQL endpoint address in the `host:port` format. For private endpoint connections, use networkInfo.sinkEndpointId instead. Required for PUBLIC and VPC_PEERING network types. Optional for PRIVATE_LINK, where the endpoint can be assembled from the sink endpoint and ports.
-        username:
+          example: 4rcu
+          description: The name of the RCU option.
+          readOnly: true
+        displayName:
           type: string
-          example: root
-          description: The MySQL username for authentication.
-        password:
-          type: string
-          example: A1B2C3...
-          description: The MySQL password for authentication. This field is input-only and not returned in responses.
-      description: The MySQL connection configuration.
-      required:
-      - username
-    S3DataFormatBinaryEncodingMethod:
+          example: 4 RCUs
+          description: The human-readable display name of the RCU option.
+          readOnly: true
+        rcuNum:
+          type: integer
+          format: int64
+          example: 4
+          description: The number of RCUs (Resource Capacity Units).
+          readOnly: true
+        rpsLimit:
+          type: integer
+          format: int64
+          example: 10000
+          description: The maximum rows per second for the RCU option. This value is for reference only and may vary by workload.
+          readOnly: true
+      description: The changefeed RCU option.
+    v1beta1S3DataFormatProtocol:
       type: string
       enum:
-      - BINARY_ENCODING_METHOD_UNSPECIFIED
-      - BASE64
-      - HEX
-      default: BINARY_ENCODING_METHOD_UNSPECIFIED
-      description: "The binary encoding method.\n\n - `BASE64`: Base64 encoding.\n - `HEX`: Hexadecimal encoding."
-    TopicPartitionConfigPartitionDispatcherConfig:
-      type: object
-      properties:
-        partitionType:
-          example: TABLE
-          allOf:
-          - $ref: '#/components/schemas/TopicPartitionConfigPartitionDispatcher'
-        matcher:
-          type: array
-          items:
-            type: string
-          description: The table name patterns to match for the dispatcher.
-        indexName:
-          type: string
-          description: The index name for the INDEX_VALUE partition dispatcher.
-        columns:
-          type: array
-          items:
-            type: string
-          description: The column names for the COLUMNS partition dispatcher.
-      description: The custom partition dispatcher configuration.
-      required:
-      - partitionType
-    TopicPartitionConfigPartitionDispatcher:
-      type: string
-      enum:
-      - PARTITION_DISPATCHER_UNSPECIFIED
-      - TABLE
-      - INDEX_VALUE
-      - Timestamp
-      - COLUMNS
-      default: PARTITION_DISPATCHER_UNSPECIFIED
-      description: "The partition dispatch strategy.\n\n - `TABLE`: Dispatch by table name.\n - `INDEX_VALUE`: Dispatch by index value.\n - `Timestamp`: Dispatch by timestamp.\n - `COLUMNS`: Dispatch by column values."
+      - PROTOCOL_UNSPECIFIED
+      - PROTOCOL_CSV
+      - PROTOCOL_CANAL_JSON
+      - PROTOCOL_PARQUET
+      default: PROTOCOL_UNSPECIFIED
+      description: "Protocol defines the supported output protocols for cloud storage sinks.\n\n - PROTOCOL_CSV: CSV format.\n - PROTOCOL_CANAL_JSON: Canal JSON format.\n - PROTOCOL_PARQUET: Apache Parquet format."
     DataFormatAvroConfig:
       type: object
       properties:
@@ -621,84 +669,47 @@ components:
         schemaRegistry:
           $ref: '#/components/schemas/AvroConfigSchemaRegistry'
       description: The Avro-specific data format configuration.
-    v1beta1AzureBlobDownstreamConfig:
+    v1beta1GcsDownstreamConfig:
       type: object
       properties:
         endpoint:
-          $ref: '#/components/schemas/v1beta1AzureBlobDownstreamConfigEndpoint'
+          $ref: '#/components/schemas/v1beta1GcsDownstreamConfigEndpoint'
         dataFormat:
           $ref: '#/components/schemas/v1beta1S3DataFormat'
         storageFlushConfig:
           $ref: '#/components/schemas/v1beta1StorageFlushConfig'
-      description: The Azure Blob downstream configuration.
+      description: The GCS downstream configuration.
       required:
       - endpoint
       - dataFormat
-    v1beta1S3DataFormat:
-      type: object
-      properties:
-        protocol:
-          example: PROTOCOL_CANAL_JSON
-          allOf:
-          - $ref: '#/components/schemas/v1beta1S3DataFormatProtocol'
-        terminator:
-          type: string
-          description: The row terminator used to separate data change events. This configuration is only used for storage sinks. The default value is "" (empty string), which means `\r\n` is used.
-        dateSeparator:
-          description: 'The date separator for the directory structure.
-
-
-            - `NONE`: No date separator (default).
-
-            - `YEAR`: Separate by year.
-
-            - `MONTH`: Separate by month.
-
-            - `DAY`: Separate by day.'
-          example: DAY
-          allOf:
-          - $ref: '#/components/schemas/S3DataFormatDateSeparator'
-        enableTidbExtension:
-          type: boolean
-          description: Indicates whether to enable TiDB extension fields in Canal-JSON messages. The default value is false.
-          example: false
-        delimiter:
-          type: string
-          description: The field delimiter for CSV files. The value must be an ASCII character. The default value is `,`.
-        quote:
-          type: string
-          description: The quotation character for CSV fields. The default value is `"`. When the value is empty, no quotation is used.
-        'null':
-          type: string
-          description: The null representation for CSV columns. The default value is `\N`.
-        includeCommitTs:
-          type: boolean
-          description: Indicates whether to include the commit timestamp in CSV rows. The default value is false.
-          example: false
-        binaryEncodingMethod:
-          example: BASE64
-          allOf:
-          - $ref: '#/components/schemas/S3DataFormatBinaryEncodingMethod'
-        outputRawChangeEvent:
-          type: boolean
-          description: Indicates whether to output raw change events. The default value is false. For more information, see https://docs.pingcap.com/tidb/stable/ticdc-split-update-behavior/#split-update-events-for-mysql-sinks.
-          example: false
-        outputFieldHeader:
-          type: boolean
-          description: Indicates whether to include the CSV field header. The default value is false.
-          example: false
-      description: The S3 data format configuration.
-      required:
-      - protocol
-    v1beta1S3DataFormatProtocol:
+    AvroConfigBigintUnsignedHandlingMode:
       type: string
       enum:
-      - PROTOCOL_UNSPECIFIED
-      - PROTOCOL_CSV
-      - PROTOCOL_CANAL_JSON
-      - PROTOCOL_PARQUET
-      default: PROTOCOL_UNSPECIFIED
-      description: "Protocol defines the supported output protocols for cloud storage sinks.\n\n - PROTOCOL_CSV: CSV format.\n - PROTOCOL_CANAL_JSON: Canal JSON format.\n - PROTOCOL_PARQUET: Apache Parquet format."
+      - BIGINT_UNSIGNED_HANDLING_MODE_LONG
+      - BIGINT_UNSIGNED_HANDLING_MODE_STRING
+      default: BIGINT_UNSIGNED_HANDLING_MODE_LONG
+      description: "The handling mode for BIGINT UNSIGNED values.\n\n - `BIGINT_UNSIGNED_HANDLING_MODE_LONG`: Use 64-bit integer (may overflow for very large values).\n - `BIGINT_UNSIGNED_HANDLING_MODE_STRING`: Use string representation (safe for all values)."
+    v1beta1DownstreamType:
+      type: string
+      enum:
+      - DOWNSTREAM_TYPE_UNSPECIFIED
+      - KAFKA
+      - MYSQL
+      - S3
+      - GCS
+      - AZURE_BLOB
+      default: DOWNSTREAM_TYPE_UNSPECIFIED
+      description: "The downstream type for a changefeed.\n\n - `KAFKA`: Apache Kafka.\n - `MYSQL`: MySQL-compatible database.\n - `S3`: Amazon S3 or S3-compatible storage.\n - `GCS`: Google Cloud Storage.\n - `AZURE_BLOB`: Azure Blob Storage."
+    KafkaDownstreamConfigKafkaVersion:
+      type: string
+      enum:
+      - KAFKA_VERSION_UNSPECIFIED
+      - KAFKA_VERSION_0XX
+      - KAFKA_VERSION_1XX
+      - KAFKA_VERSION_2XX
+      - KAFKA_VERSION_3XX
+      default: KAFKA_VERSION_UNSPECIFIED
+      description: "The Kafka broker version.\n\n - `KAFKA_VERSION_0XX`: Kafka 0.x\n - `KAFKA_VERSION_1XX`: Kafka 1.x\n - `KAFKA_VERSION_2XX`: Kafka 2.x\n - `KAFKA_VERSION_3XX`: Kafka 3.x"
     NetworkInfoNetworkType:
       type: string
       enum:
@@ -708,6 +719,68 @@ components:
       - NETWORK_TYPE_PRIVATE_LINK
       default: NETWORK_TYPE_UNSPECIFIED
       description: "The network type for downstream connectivity.\n\n - `NETWORK_TYPE_UNSPECIFIED`: Default value.\n - `NETWORK_TYPE_PUBLIC`: Public internet access.\n - `NETWORK_TYPE_VPC_PEERING`: AWS VPC Peering.\n - `NETWORK_TYPE_PRIVATE_LINK`: Private endpoint connectivity managed by TiDB Cloud."
+    v1beta1CreateChangefeedRequest:
+      type: object
+      properties:
+        changefeed:
+          allOf:
+          - $ref: '#/components/schemas/v1beta1Changefeed'
+          description: The changefeed configuration to create.
+        dryRun:
+          type: boolean
+          example: true
+          description: Indicates whether to run dry-run validation only without creating the changefeed.
+      description: The request for creating a changefeed.
+      required:
+      - changefeed
+    v1beta1GcsDownstreamConfigEndpoint:
+      type: object
+      properties:
+        gcsUri:
+          type: string
+          example: gs://my-bucket/cdc-data
+          description: The GCS bucket URI. For example, `gs://my-bucket/cdc-data`.
+      description: The GCS endpoint configuration.
+      required:
+      - gcsUri
+    TopicPartitionConfigDispatchType:
+      type: string
+      enum:
+      - DISPATCH_TYPE_UNSPECIFIED
+      - DISPATCH_TYPE_ONE_TOPIC
+      - DISPATCH_TYPE_BY_TABLE
+      - DISPATCH_TYPE_BY_DATABASE
+      default: DISPATCH_TYPE_UNSPECIFIED
+      description: "The message dispatch type to topics.\n\n - `DISPATCH_TYPE_ONE_TOPIC`: All messages go to a single topic.\n - `DISPATCH_TYPE_BY_TABLE`: Each table gets its own topic.\n - `DISPATCH_TYPE_BY_DATABASE`: Each database gets its own topic."
+    v1beta1S3DownstreamConfig:
+      type: object
+      properties:
+        endpoint:
+          $ref: '#/components/schemas/v1beta1S3DownstreamConfigEndpoint'
+        dataFormat:
+          $ref: '#/components/schemas/v1beta1S3DataFormat'
+        storageFlushConfig:
+          $ref: '#/components/schemas/v1beta1StorageFlushConfig'
+      description: The S3 downstream configuration.
+      required:
+      - endpoint
+      - dataFormat
+    KafkaDownstreamConfigAuthentication:
+      type: object
+      properties:
+        authType:
+          example: SASL_SCRAM_SHA_256
+          allOf:
+          - $ref: '#/components/schemas/AuthenticationAuthType'
+        username:
+          type: string
+          description: The SASL username for Kafka authentication.
+        password:
+          type: string
+          description: The SASL password for Kafka authentication.
+      description: The Kafka authentication configuration.
+      required:
+      - authType
     v1beta1Changefeed:
       type: object
       properties:
@@ -786,168 +859,107 @@ components:
       - downstreamType
       - tableConfig
       - startPosition
-    KafkaDownstreamConfigDataFormatProtocol:
+    v1beta1S3DataFormat:
+      type: object
+      properties:
+        protocol:
+          example: PROTOCOL_CANAL_JSON
+          allOf:
+          - $ref: '#/components/schemas/v1beta1S3DataFormatProtocol'
+        terminator:
+          type: string
+          description: The row terminator used to separate data change events. This configuration is only used for storage sinks. The default value is "" (empty string), which means `\r\n` is used.
+        dateSeparator:
+          description: 'The date separator for the directory structure.
+
+
+            - `NONE`: No date separator (default).
+
+            - `YEAR`: Separate by year.
+
+            - `MONTH`: Separate by month.
+
+            - `DAY`: Separate by day.'
+          example: DAY
+          allOf:
+          - $ref: '#/components/schemas/S3DataFormatDateSeparator'
+        enableTidbExtension:
+          type: boolean
+          description: Indicates whether to enable TiDB extension fields in Canal-JSON messages. The default value is false.
+          example: false
+        delimiter:
+          type: string
+          description: The field delimiter for CSV files. The value must be an ASCII character. The default value is `,`.
+        quote:
+          type: string
+          description: The quotation character for CSV fields. The default value is `"`. When the value is empty, no quotation is used.
+        'null':
+          type: string
+          description: The null representation for CSV columns. The default value is `\N`.
+        includeCommitTs:
+          type: boolean
+          description: Indicates whether to include the commit timestamp in CSV rows. The default value is false.
+          example: false
+        binaryEncodingMethod:
+          example: BASE64
+          allOf:
+          - $ref: '#/components/schemas/S3DataFormatBinaryEncodingMethod'
+        outputRawChangeEvent:
+          type: boolean
+          description: Indicates whether to output raw change events. The default value is false. For more information, see https://docs.pingcap.com/tidb/stable/ticdc-split-update-behavior/#split-update-events-for-mysql-sinks.
+          example: false
+        outputFieldHeader:
+          type: boolean
+          description: Indicates whether to include the CSV field header. The default value is false.
+          example: false
+      description: The S3 data format configuration.
+      required:
+      - protocol
+    v1beta1StartPositionMode:
       type: string
       enum:
-      - PROTOCOL_UNSPECIFIED
-      - PROTOCOL_CANAL_JSON
-      - PROTOCOL_OPEN_PROTOCOL
-      - PROTOCOL_AVRO
-      - PROTOCOL_DEBEZIUM
-      default: PROTOCOL_UNSPECIFIED
-      description: "The Kafka output protocol.\n\n - `PROTOCOL_CANAL_JSON`: Canal JSON format. Recommended for most use cases.\n - `PROTOCOL_OPEN_PROTOCOL`: Open Protocol (TiDB native format).\n - `PROTOCOL_AVRO`: Apache Avro format.\n - `PROTOCOL_DEBEZIUM`: Debezium format."
-    v1beta1S3DownstreamConfigEndpoint:
+      - MODE_UNSPECIFIED
+      - FROM_NOW
+      - FROM_TSO
+      - FROM_UTC
+      default: MODE_UNSPECIFIED
+      description: "The start position mode.\n\n - `FROM_NOW`: Start from the current time.\n - `FROM_TSO`: Start from a specific TSO.\n - `FROM_UTC`: Start from a specific UTC timestamp."
+    KafkaDownstreamConfigColumnSelector:
       type: object
       properties:
-        s3Uri:
-          type: string
-          example: s3://bucket/prefix/
-          description: The S3 bucket URI. For example, `s3://bucket/prefix/`. The URI must end with a trailing slash.
-        authType:
-          example: S3_AUTH_TYPE_AK_SK
+        matcher:
+          type: array
+          items:
+            type: string
+          description: The table name patterns to match for column selection.
+        columns:
+          type: array
+          items:
+            type: string
+          description: The column names to include for the matched tables.
+      description: The column filtering configuration for specific tables.
+    KafkaDownstreamConfigDataFormat:
+      type: object
+      properties:
+        protocol:
+          example: PROTOCOL_CANAL_JSON
           allOf:
-          - $ref: '#/components/schemas/EndpointS3AuthType'
-        accessKey:
-          type: string
-          description: The access key for S3 authentication. This field is required when authType is S3_AUTH_TYPE_AK_SK.
-          example: AKIA...A1B2C3
-        secretKey:
-          type: string
-          description: The secret key for S3 authentication. This field is required when authType is S3_AUTH_TYPE_AK_SK. This field is input-only and not returned in responses.
-          example: A1B2C3...
-        iamAssumedRoleArn:
-          type: string
-          description: The IAM assumed role ARN for S3 authentication. This field is required when authType is S3_AUTH_TYPE_ASSUME_ROLE.
-          example: arn:aws:iam::123456789012:role/redacted
-      description: The S3 endpoint configuration.
+          - $ref: '#/components/schemas/KafkaDownstreamConfigDataFormatProtocol'
+        debeziumConfig:
+          $ref: '#/components/schemas/DataFormatDebeziumConfig'
+        avroConfig:
+          $ref: '#/components/schemas/DataFormatAvroConfig'
+        enableTidbExtension:
+          type: boolean
+          description: Indicates whether to enable TiDB extension fields. The default value is false. For more information, see https://docs.pingcap.com/tidb/stable/ticdc-avro-protocol/#tidb-extension-fields.
+          example: false
+        outputRawChangeEvent:
+          type: boolean
+          description: Indicates whether to output raw change events. The default value is false. For more information, see https://docs.pingcap.com/tidb/stable/ticdc-split-update-behavior/#split-update-events-for-mysql-sinks.
+          example: false
+      description: The Kafka message format and serialization configuration.
       required:
-      - s3Uri
-      - authType
-    rpcStatus:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/protobufAny'
-    KafkaDownstreamConfigTopicPartitionConfig:
-      type: object
-      properties:
-        dispatchType:
-          example: DISPATCH_TYPE_BY_TABLE
-          allOf:
-          - $ref: '#/components/schemas/TopicPartitionConfigDispatchType'
-        defaultTopic:
-          type: string
-          description: The default topic for dispatching all messages when dispatchType is DISPATCH_TYPE_ONE_TOPIC.
-        topicPrefix:
-          type: string
-          description: The topic name prefix for dispatch types that create per-table or per-database topics.
-        separator:
-          type: string
-          description: The separator between the prefix and the table or database name.
-        topicSuffix:
-          type: string
-          description: The topic name suffix for dispatch types that create per-table or per-database topics.
-        replicationFactor:
-          type: integer
-          format: int64
-          example: 3
-          description: The replication factor for auto-created topics.
-          minimum: 1
-        partitionNum:
-          type: integer
-          format: int64
-          example: 6
-          description: The number of partitions for auto-created topics.
-          minimum: 1
-        partitionDispatchers:
-          type: array
-          items:
-            $ref: '#/components/schemas/TopicPartitionConfigPartitionDispatcherConfig'
-          description: The custom partition dispatcher configurations.
-      description: The Kafka topic and partition configuration.
-      required:
-      - dispatchType
-      - replicationFactor
-      - partitionNum
-    v1beta1GcsDownstreamConfig:
-      type: object
-      properties:
-        endpoint:
-          $ref: '#/components/schemas/v1beta1GcsDownstreamConfigEndpoint'
-        dataFormat:
-          $ref: '#/components/schemas/v1beta1S3DataFormat'
-        storageFlushConfig:
-          $ref: '#/components/schemas/v1beta1StorageFlushConfig'
-      description: The GCS downstream configuration.
-      required:
-      - endpoint
-      - dataFormat
-    v1beta1AzureBlobDownstreamConfigEndpoint:
-      type: object
-      properties:
-        blobUri:
-          type: string
-          example: https://myaccount.blob.core.windows.net/mycontainer/cdc-data
-          description: The Azure Blob container URI. For example, `https://myaccount.blob.core.windows.net/mycontainer/cdc-data`.
-        sasToken:
-          type: string
-          example: sv=2022-11-02&ss=b&srt=sco&sp=rwdlaciytfx&se=2026-06-09T00:00:00Z&st=2026-06-08T00:00:00Z&spr=https&sig=...
-          description: The SAS token for Azure Blob authentication. This field is input-only and not returned in responses.
-      description: Endpoint defines the Azure Blob connection endpoint configuration.
-      required:
-      - blobUri
-      - sasToken
-    v1beta1KafkaDownstreamConfig:
-      type: object
-      properties:
-        broker:
-          $ref: '#/components/schemas/KafkaDownstreamConfigBroker'
-        authentication:
-          $ref: '#/components/schemas/KafkaDownstreamConfigAuthentication'
-        dataFormat:
-          $ref: '#/components/schemas/KafkaDownstreamConfigDataFormat'
-        topicPartitionConfig:
-          $ref: '#/components/schemas/KafkaDownstreamConfigTopicPartitionConfig'
-        columnSelectors:
-          type: array
-          items:
-            $ref: '#/components/schemas/KafkaDownstreamConfigColumnSelector'
-          description: The column selectors for filtering specific columns.
-      description: The Kafka downstream configuration.
-      required:
-      - broker
-      - authentication
-      - dataFormat
-      - topicPartitionConfig
-    v1beta1NetworkInfo:
-      type: object
-      properties:
-        networkType:
-          example: NETWORK_TYPE_PUBLIC
-          allOf:
-          - $ref: '#/components/schemas/NetworkInfoNetworkType'
-        sinkEndpointId:
-          type: string
-          format: uint64
-          description: The private endpoint ID configured in the TiDB Cloud console. This field is required for PRIVATE_LINK network type.
-        ports:
-          type: array
-          items:
-            type: integer
-            format: int64
-          description: The downstream target ports to connect to for PRIVATE_LINK network type.
-          example:
-          - 9092
-      description: The network configuration for downstream connectivity.
-      required:
-      - networkType
+      - protocol
     v1beta1TableConfigMode:
       type: string
       enum:
@@ -956,131 +968,33 @@ components:
       - FORCE_SYNC
       default: MODE_UNSPECIFIED
       description: "The mode for handling unsupported tables.\n\n - `IGNORE_NOT_SUPPORT_TABLE`: Skip unsupported tables silently.\n - `FORCE_SYNC`: Force sync all tables (may fail on unsupported tables)."
-    v1beta1CreateChangefeedRequest:
-      type: object
-      properties:
-        changefeed:
-          allOf:
-          - $ref: '#/components/schemas/v1beta1Changefeed'
-          description: The changefeed configuration to create.
-        dryRun:
-          type: boolean
-          example: true
-          description: Indicates whether to run dry-run validation only without creating the changefeed.
-      description: The request for creating a changefeed.
-      required:
-      - changefeed
-    ChangefeedState:
+    KafkaDownstreamConfigCompressionType:
       type: string
       enum:
-      - STATE_UNSPECIFIED
-      - RUNNING
-      - FAILED
-      - ERROR
-      - CREATING
-      - PAUSING
-      - PAUSED
-      - DELETING
-      - DELETED
-      - EDITING
-      - WARNING
-      - SCALING
-      default: STATE_UNSPECIFIED
-      description: 'The state of a changefeed.
-
-
-        - `STATE_UNSPECIFIED`: Default value. Should not be used.
-
-        - `RUNNING`: The changefeed is actively replicating data.
-
-        - `FAILED`: The changefeed encountered a fatal error and stopped.
-
-        - `ERROR`: The changefeed encountered an error but may recover.
-
-        - `CREATING`: The changefeed is being created.
-
-        - `PAUSING`: The changefeed is in the process of pausing.
-
-        - `PAUSED`: The changefeed is paused.
-
-        - `DELETING`: The changefeed is being deleted.
-
-        - `DELETED`: The changefeed has been deleted.
-
-        - `EDITING`: The changefeed configuration is being updated.
-
-        - `WARNING`: The changefeed is running but has warnings.
-
-        - `SCALING`: The changefeed is being scaled.'
-    DataFormatDebeziumConfig:
-      type: object
-      properties:
-        outputOldValue:
-          type: boolean
-          description: Indicates whether to output the old value before the change.
-        disableSchema:
-          type: boolean
-          description: Indicates whether to disable the schema in Debezium messages.
-      description: The Debezium-specific data format configuration.
-    v1beta1ChangefeedRCU:
-      type: object
-      properties:
-        name:
-          type: string
-          example: 4rcu
-          description: The name of the RCU option.
-          readOnly: true
-        displayName:
-          type: string
-          example: 4 RCUs
-          description: The human-readable display name of the RCU option.
-          readOnly: true
-        rcuNum:
-          type: integer
-          format: int64
-          example: 4
-          description: The number of RCUs (Resource Capacity Units).
-          readOnly: true
-        rpsLimit:
-          type: integer
-          format: int64
-          example: 10000
-          description: The maximum rows per second for the RCU option. This value is for reference only and may vary by workload.
-          readOnly: true
-      description: The changefeed RCU option.
-    v1beta1MySQLDownstreamConfig:
-      type: object
-      properties:
-        connection:
-          $ref: '#/components/schemas/v1beta1Connection'
-      description: The MySQL downstream configuration.
-      required:
-      - connection
-    AvroConfigBigintUnsignedHandlingMode:
+      - COMPRESSION_TYPE_UNSPECIFIED
+      - NONE
+      - GZIP
+      - SNAPPY
+      - LZ4
+      - ZSTD
+      default: COMPRESSION_TYPE_UNSPECIFIED
+      description: "The Kafka message compression type.\n\n - `NONE`: No compression.\n - `GZIP`: GZIP compression.\n - `SNAPPY`: Snappy compression.\n - `LZ4`: LZ4 compression.\n - `ZSTD`: ZSTD compression."
+    AvroConfigDecimalHandlingMode:
       type: string
       enum:
-      - BIGINT_UNSIGNED_HANDLING_MODE_LONG
-      - BIGINT_UNSIGNED_HANDLING_MODE_STRING
-      default: BIGINT_UNSIGNED_HANDLING_MODE_LONG
-      description: "The handling mode for BIGINT UNSIGNED values.\n\n - `BIGINT_UNSIGNED_HANDLING_MODE_LONG`: Use 64-bit integer (may overflow for very large values).\n - `BIGINT_UNSIGNED_HANDLING_MODE_STRING`: Use string representation (safe for all values)."
-    EndpointS3AuthType:
+      - DECIMAL_HANDLING_MODE_UNSPECIFIED
+      - DECIMAL_HANDLING_MODE_PRECISE
+      - DECIMAL_HANDLING_MODE_STRING
+      default: DECIMAL_HANDLING_MODE_UNSPECIFIED
+      description: "The decimal serialization mode.\n\n - `DECIMAL_HANDLING_MODE_PRECISE`: Use precise decimal representation.\n - `DECIMAL_HANDLING_MODE_STRING`: Use string representation."
+    S3DataFormatBinaryEncodingMethod:
       type: string
       enum:
-      - S3_AUTH_TYPE_UNSPECIFIED
-      - S3_AUTH_TYPE_AK_SK
-      - S3_AUTH_TYPE_ASSUME_ROLE
-      default: S3_AUTH_TYPE_UNSPECIFIED
-      description: "The S3 authentication type.\n\n - `S3_AUTH_TYPE_AK_SK`: Access Key / Secret Key authentication.\n - `S3_AUTH_TYPE_ASSUME_ROLE`: IAM Assume Role authentication."
-    AuthenticationAuthType:
-      type: string
-      enum:
-      - AUTH_TYPE_UNSPECIFIED
-      - DISABLE
-      - SASL_PLAIN
-      - SASL_SCRAM_SHA_256
-      - SASL_SCRAM_SHA_512
-      default: AUTH_TYPE_UNSPECIFIED
-      description: "The Kafka authentication type.\n\n - `DISABLE`: No authentication.\n - `SASL_PLAIN`: SASL/PLAIN authentication.\n - `SASL_SCRAM_SHA_256`: SASL/SCRAM-SHA-256 authentication.\n - `SASL_SCRAM_SHA_512`: SASL/SCRAM-SHA-512 authentication."
+      - BINARY_ENCODING_METHOD_UNSPECIFIED
+      - BASE64
+      - HEX
+      default: BINARY_ENCODING_METHOD_UNSPECIFIED
+      description: "The binary encoding method.\n\n - `BASE64`: Base64 encoding.\n - `HEX`: Hexadecimal encoding."
     AvroConfigSchemaRegistry:
       type: object
       properties:
@@ -1099,93 +1013,6 @@ components:
           type: string
           description: The basic authentication password for Schema Registry.
       description: The Schema Registry connection configuration.
-    v1beta1ListChangefeedsResponse:
-      type: object
-      properties:
-        changefeeds:
-          type: array
-          items:
-            $ref: '#/components/schemas/v1beta1Changefeed'
-          description: The list of changefeeds matching the query.
-          readOnly: true
-        totalSize:
-          type: integer
-          format: int32
-          example: 42
-          description: The total number of changefeeds across all pages.
-          readOnly: true
-        nextPageToken:
-          type: string
-          example: eyJpZCI6Njc4OTB9
-          description: The page token for the next page. This field is empty when there are no more pages.
-          readOnly: true
-      title: 'ListChangefeedsResponse represents the response for listing changefeeds
-
-        (-- api-linter: core::0158::response-page-size-field=disabled --)
-
-        (-- api-linter: core::0158::response-next-page-token-field=disabled --)'
-      description: The response for listing changefeeds.
-    KafkaDownstreamConfigColumnSelector:
-      type: object
-      properties:
-        matcher:
-          type: array
-          items:
-            type: string
-          description: The table name patterns to match for column selection.
-        columns:
-          type: array
-          items:
-            type: string
-          description: The column names to include for the matched tables.
-      description: The column filtering configuration for specific tables.
-    KafkaDownstreamConfigBroker:
-      type: object
-      properties:
-        version:
-          example: KAFKA_VERSION_3XX
-          allOf:
-          - $ref: '#/components/schemas/KafkaDownstreamConfigKafkaVersion'
-        brokerEndpoints:
-          type: string
-          example: broker1:9092,broker2:9092
-          description: The comma-separated list of Kafka broker addresses. Required for PUBLIC and VPC_PEERING network types. Not required for PRIVATE_LINK.
-        useTls:
-          type: boolean
-          description: Indicates whether to use TLS for the Kafka connection. The default value is false.
-          example: false
-        insecureSkipVerify:
-          type: boolean
-          description: Indicates whether to skip TLS certificate verification. The default value is false.
-          example: false
-        compression:
-          example: NONE
-          allOf:
-          - $ref: '#/components/schemas/KafkaDownstreamConfigCompressionType'
-      description: The Kafka broker connection configuration.
-      required:
-      - version
-    KafkaDownstreamConfigCompressionType:
-      type: string
-      enum:
-      - COMPRESSION_TYPE_UNSPECIFIED
-      - NONE
-      - GZIP
-      - SNAPPY
-      - LZ4
-      - ZSTD
-      default: COMPRESSION_TYPE_UNSPECIFIED
-      description: "The Kafka message compression type.\n\n - `NONE`: No compression.\n - `GZIP`: GZIP compression.\n - `SNAPPY`: Snappy compression.\n - `LZ4`: LZ4 compression.\n - `ZSTD`: ZSTD compression."
-    KafkaDownstreamConfigKafkaVersion:
-      type: string
-      enum:
-      - KAFKA_VERSION_UNSPECIFIED
-      - KAFKA_VERSION_0XX
-      - KAFKA_VERSION_1XX
-      - KAFKA_VERSION_2XX
-      - KAFKA_VERSION_3XX
-      default: KAFKA_VERSION_UNSPECIFIED
-      description: "The Kafka broker version.\n\n - `KAFKA_VERSION_0XX`: Kafka 0.x\n - `KAFKA_VERSION_1XX`: Kafka 1.x\n - `KAFKA_VERSION_2XX`: Kafka 2.x\n - `KAFKA_VERSION_3XX`: Kafka 3.x"
     protobufAny:
       type: object
       properties:
@@ -1194,37 +1021,31 @@ components:
           description: A URL or resource name that uniquely identifies the type of the serialized protocol buffer message.
       additionalProperties: {}
       description: "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n    // or ...\n    if (any.isSameTypeAs(Foo.getDefaultInstance())) {\n      foo = any.unpack(Foo.getDefaultInstance());\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := anypb.New(foo)\n     if err != nil {\n       ...\n     }\n     ...\n     foo := &pb.Foo{}\n     if err := any.UnmarshalTo(foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
-    KafkaDownstreamConfigAuthentication:
+    v1beta1ListChangefeedRCUsResponse:
       type: object
       properties:
-        authType:
-          example: SASL_SCRAM_SHA_256
-          allOf:
-          - $ref: '#/components/schemas/AuthenticationAuthType'
-        username:
+        rcus:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1beta1ChangefeedRCU'
+          description: The list of available RCU options.
+          readOnly: true
+      description: The response for listing changefeed RCU options.
+    v1beta1AzureBlobDownstreamConfigEndpoint:
+      type: object
+      properties:
+        blobUri:
           type: string
-          description: The SASL username for Kafka authentication.
-        password:
+          example: https://myaccount.blob.core.windows.net/mycontainer/cdc-data
+          description: The Azure Blob container URI. For example, `https://myaccount.blob.core.windows.net/mycontainer/cdc-data`.
+        sasToken:
           type: string
-          description: The SASL password for Kafka authentication.
-      description: The Kafka authentication configuration.
+          example: sv=2022-11-02&ss=b&srt=sco&sp=rwdlaciytfx&se=2026-06-09T00:00:00Z&st=2026-06-08T00:00:00Z&spr=https&sig=...
+          description: The SAS token for Azure Blob authentication. This field is input-only and not returned in responses.
+      description: Endpoint defines the Azure Blob connection endpoint configuration.
       required:
-      - authType
-    v1beta1StorageFlushConfig:
-      type: object
-      properties:
-        interval:
-          type: string
-          example: 1m
-          description: The flush interval. The range is from 2s to 10m. The default value is 1m.
-        fileSize:
-          type: string
-          format: uint64
-          example: '67108864'
-          description: The file size threshold in bytes. The range is from 1048576 (1 MB) to 536870912 (512 MB). The default value is 67108864 (64 MB).
-          maximum: 536870912
-          minimum: 1048576
-      description: The storage flush configuration.
+      - blobUri
+      - sasToken
     v1beta1EventFilter:
       type: object
       properties:
@@ -1270,47 +1091,211 @@ components:
           example: soft_delete = true
           description: The SQL expression to filter DELETE events by column value. Uses SQL expressions in default SQL mode. All tables matched by `table_matchers` must contain all columns referenced.
       description: The event filter configuration for fine-grained control.
-    KafkaDownstreamConfigDataFormat:
+    v1beta1ListChangefeedsResponse:
       type: object
       properties:
-        protocol:
-          example: PROTOCOL_CANAL_JSON
-          allOf:
-          - $ref: '#/components/schemas/KafkaDownstreamConfigDataFormatProtocol'
-        debeziumConfig:
-          $ref: '#/components/schemas/DataFormatDebeziumConfig'
-        avroConfig:
-          $ref: '#/components/schemas/DataFormatAvroConfig'
-        enableTidbExtension:
-          type: boolean
-          description: Indicates whether to enable TiDB extension fields. The default value is false. For more information, see https://docs.pingcap.com/tidb/stable/ticdc-avro-protocol/#tidb-extension-fields.
-          example: false
-        outputRawChangeEvent:
-          type: boolean
-          description: Indicates whether to output raw change events. The default value is false. For more information, see https://docs.pingcap.com/tidb/stable/ticdc-split-update-behavior/#split-update-events-for-mysql-sinks.
-          example: false
-      description: The Kafka message format and serialization configuration.
-      required:
-      - protocol
-    v1beta1ListChangefeedRCUsResponse:
-      type: object
-      properties:
-        rcus:
+        changefeeds:
           type: array
           items:
-            $ref: '#/components/schemas/v1beta1ChangefeedRCU'
-          description: The list of available RCU options.
+            $ref: '#/components/schemas/v1beta1Changefeed'
+          description: The list of changefeeds matching the query.
           readOnly: true
-      description: The response for listing changefeed RCU options.
-    TopicPartitionConfigDispatchType:
+        totalSize:
+          type: integer
+          format: int32
+          example: 42
+          description: The total number of changefeeds across all pages.
+          readOnly: true
+        nextPageToken:
+          type: string
+          example: eyJpZCI6Njc4OTB9
+          description: The page token for the next page. This field is empty when there are no more pages.
+          readOnly: true
+      title: 'ListChangefeedsResponse represents the response for listing changefeeds
+
+        (-- api-linter: core::0158::response-page-size-field=disabled --)
+
+        (-- api-linter: core::0158::response-next-page-token-field=disabled --)'
+      description: The response for listing changefeeds.
+    TopicPartitionConfigPartitionDispatcherConfig:
+      type: object
+      properties:
+        partitionType:
+          example: TABLE
+          allOf:
+          - $ref: '#/components/schemas/TopicPartitionConfigPartitionDispatcher'
+        matcher:
+          type: array
+          items:
+            type: string
+          description: The table name patterns to match for the dispatcher.
+        indexName:
+          type: string
+          description: The index name for the INDEX_VALUE partition dispatcher.
+        columns:
+          type: array
+          items:
+            type: string
+          description: The column names for the COLUMNS partition dispatcher.
+      description: The custom partition dispatcher configuration.
+      required:
+      - partitionType
+    KafkaDownstreamConfigDataFormatProtocol:
       type: string
       enum:
-      - DISPATCH_TYPE_UNSPECIFIED
-      - DISPATCH_TYPE_ONE_TOPIC
-      - DISPATCH_TYPE_BY_TABLE
-      - DISPATCH_TYPE_BY_DATABASE
-      default: DISPATCH_TYPE_UNSPECIFIED
-      description: "The message dispatch type to topics.\n\n - `DISPATCH_TYPE_ONE_TOPIC`: All messages go to a single topic.\n - `DISPATCH_TYPE_BY_TABLE`: Each table gets its own topic.\n - `DISPATCH_TYPE_BY_DATABASE`: Each database gets its own topic."
+      - PROTOCOL_UNSPECIFIED
+      - PROTOCOL_CANAL_JSON
+      - PROTOCOL_OPEN_PROTOCOL
+      - PROTOCOL_AVRO
+      - PROTOCOL_DEBEZIUM
+      default: PROTOCOL_UNSPECIFIED
+      description: "The Kafka output protocol.\n\n - `PROTOCOL_CANAL_JSON`: Canal JSON format. Recommended for most use cases.\n - `PROTOCOL_OPEN_PROTOCOL`: Open Protocol (TiDB native format).\n - `PROTOCOL_AVRO`: Apache Avro format.\n - `PROTOCOL_DEBEZIUM`: Debezium format."
+    EndpointS3AuthType:
+      type: string
+      enum:
+      - S3_AUTH_TYPE_UNSPECIFIED
+      - S3_AUTH_TYPE_AK_SK
+      - S3_AUTH_TYPE_ASSUME_ROLE
+      default: S3_AUTH_TYPE_UNSPECIFIED
+      description: "The S3 authentication type.\n\n - `S3_AUTH_TYPE_AK_SK`: Access Key / Secret Key authentication.\n - `S3_AUTH_TYPE_ASSUME_ROLE`: IAM Assume Role authentication."
+    ChangefeedState:
+      type: string
+      enum:
+      - STATE_UNSPECIFIED
+      - RUNNING
+      - FAILED
+      - ERROR
+      - CREATING
+      - PAUSING
+      - PAUSED
+      - DELETING
+      - DELETED
+      - EDITING
+      - WARNING
+      - SCALING
+      default: STATE_UNSPECIFIED
+      description: 'The state of a changefeed.
+
+
+        - `STATE_UNSPECIFIED`: Default value. Should not be used.
+
+        - `RUNNING`: The changefeed is actively replicating data.
+
+        - `FAILED`: The changefeed encountered a fatal error and stopped.
+
+        - `ERROR`: The changefeed encountered an error but may recover.
+
+        - `CREATING`: The changefeed is being created.
+
+        - `PAUSING`: The changefeed is in the process of pausing.
+
+        - `PAUSED`: The changefeed is paused.
+
+        - `DELETING`: The changefeed is being deleted.
+
+        - `DELETED`: The changefeed has been deleted.
+
+        - `EDITING`: The changefeed configuration is being updated.
+
+        - `WARNING`: The changefeed is running but has warnings.
+
+        - `SCALING`: The changefeed is being scaled.'
+    v1beta1S3DownstreamConfigEndpoint:
+      type: object
+      properties:
+        s3Uri:
+          type: string
+          example: s3://bucket/prefix/
+          description: The S3 bucket URI. For example, `s3://bucket/prefix/`. The URI must end with a trailing slash.
+        authType:
+          example: S3_AUTH_TYPE_AK_SK
+          allOf:
+          - $ref: '#/components/schemas/EndpointS3AuthType'
+        accessKey:
+          type: string
+          description: The access key for S3 authentication. This field is required when authType is S3_AUTH_TYPE_AK_SK.
+          example: AKIA...A1B2C3
+        secretKey:
+          type: string
+          description: The secret key for S3 authentication. This field is required when authType is S3_AUTH_TYPE_AK_SK. This field is input-only and not returned in responses.
+          example: A1B2C3...
+        iamAssumedRoleArn:
+          type: string
+          description: The IAM assumed role ARN for S3 authentication. This field is required when authType is S3_AUTH_TYPE_ASSUME_ROLE.
+          example: arn:aws:iam::123456789012:role/redacted
+      description: The S3 endpoint configuration.
+      required:
+      - s3Uri
+      - authType
+    KafkaDownstreamConfigBroker:
+      type: object
+      properties:
+        version:
+          example: KAFKA_VERSION_3XX
+          allOf:
+          - $ref: '#/components/schemas/KafkaDownstreamConfigKafkaVersion'
+        brokerEndpoints:
+          type: string
+          example: broker1:9092,broker2:9092
+          description: The comma-separated list of Kafka broker addresses. Required for PUBLIC and VPC_PEERING network types. Not required for PRIVATE_LINK.
+        useTls:
+          type: boolean
+          description: Indicates whether to use TLS for the Kafka connection. The default value is false.
+          example: false
+        insecureSkipVerify:
+          type: boolean
+          description: Indicates whether to skip TLS certificate verification. The default value is false.
+          example: false
+        compression:
+          example: NONE
+          allOf:
+          - $ref: '#/components/schemas/KafkaDownstreamConfigCompressionType'
+      description: The Kafka broker connection configuration.
+      required:
+      - version
+    DataFormatDebeziumConfig:
+      type: object
+      properties:
+        outputOldValue:
+          type: boolean
+          description: Indicates whether to output the old value before the change.
+        disableSchema:
+          type: boolean
+          description: Indicates whether to disable the schema in Debezium messages.
+      description: The Debezium-specific data format configuration.
+    v1beta1Connection:
+      type: object
+      properties:
+        endpoint:
+          type: string
+          example: mysql.example.com:3306
+          description: The MySQL endpoint address in the `host:port` format. For private endpoint connections, use networkInfo.sinkEndpointId instead. Required for PUBLIC and VPC_PEERING network types. Optional for PRIVATE_LINK, where the endpoint can be assembled from the sink endpoint and ports.
+        username:
+          type: string
+          example: root
+          description: The MySQL username for authentication.
+        password:
+          type: string
+          example: A1B2C3...
+          description: The MySQL password for authentication. This field is input-only and not returned in responses.
+      description: The MySQL connection configuration.
+      required:
+      - username
+    v1beta1StorageFlushConfig:
+      type: object
+      properties:
+        interval:
+          type: string
+          example: 1m
+          description: The flush interval. The range is from 2s to 10m. The default value is 1m.
+        fileSize:
+          type: string
+          format: uint64
+          example: '67108864'
+          description: The file size threshold in bytes. The range is from 1048576 (1 MB) to 536870912 (512 MB). The default value is 67108864 (64 MB).
+          maximum: 536870912
+          minimum: 1048576
+      description: The storage flush configuration.
     v1beta1StartPosition:
       type: object
       properties:
@@ -1331,67 +1316,28 @@ components:
       description: The start position for the changefeed.
       required:
       - mode
-    v1beta1StartPositionMode:
-      type: string
-      enum:
-      - MODE_UNSPECIFIED
-      - FROM_NOW
-      - FROM_TSO
-      - FROM_UTC
-      default: MODE_UNSPECIFIED
-      description: "The start position mode.\n\n - `FROM_NOW`: Start from the current time.\n - `FROM_TSO`: Start from a specific TSO.\n - `FROM_UTC`: Start from a specific UTC timestamp."
-    AvroConfigDecimalHandlingMode:
-      type: string
-      enum:
-      - DECIMAL_HANDLING_MODE_UNSPECIFIED
-      - DECIMAL_HANDLING_MODE_PRECISE
-      - DECIMAL_HANDLING_MODE_STRING
-      default: DECIMAL_HANDLING_MODE_UNSPECIFIED
-      description: "The decimal serialization mode.\n\n - `DECIMAL_HANDLING_MODE_PRECISE`: Use precise decimal representation.\n - `DECIMAL_HANDLING_MODE_STRING`: Use string representation."
-    S3DataFormatDateSeparator:
-      type: string
-      enum:
-      - DATE_SEPARATOR_UNSPECIFIED
-      - NONE
-      - YEAR
-      - MONTH
-      - DAY
-      default: DATE_SEPARATOR_UNSPECIFIED
-      description: "The date separator for the directory structure.\n\n - `NONE`: No date separator.\n - `YEAR`: Separate by year.\n - `MONTH`: Separate by month.\n - `DAY`: Separate by day."
-    v1beta1S3DownstreamConfig:
+    v1beta1NetworkInfo:
       type: object
       properties:
-        endpoint:
-          $ref: '#/components/schemas/v1beta1S3DownstreamConfigEndpoint'
-        dataFormat:
-          $ref: '#/components/schemas/v1beta1S3DataFormat'
-        storageFlushConfig:
-          $ref: '#/components/schemas/v1beta1StorageFlushConfig'
-      description: The S3 downstream configuration.
-      required:
-      - endpoint
-      - dataFormat
-    v1beta1GcsDownstreamConfigEndpoint:
-      type: object
-      properties:
-        gcsUri:
+        networkType:
+          example: NETWORK_TYPE_PUBLIC
+          allOf:
+          - $ref: '#/components/schemas/NetworkInfoNetworkType'
+        sinkEndpointId:
           type: string
-          example: gs://my-bucket/cdc-data
-          description: The GCS bucket URI. For example, `gs://my-bucket/cdc-data`.
-      description: The GCS endpoint configuration.
+          format: uint64
+          description: The private endpoint ID configured in the TiDB Cloud console. This field is required for PRIVATE_LINK network type.
+        ports:
+          type: array
+          items:
+            type: integer
+            format: int64
+          description: The downstream target ports to connect to for PRIVATE_LINK network type.
+          example:
+          - 9092
+      description: The network configuration for downstream connectivity.
       required:
-      - gcsUri
-    v1beta1DownstreamType:
-      type: string
-      enum:
-      - DOWNSTREAM_TYPE_UNSPECIFIED
-      - KAFKA
-      - MYSQL
-      - S3
-      - GCS
-      - AZURE_BLOB
-      default: DOWNSTREAM_TYPE_UNSPECIFIED
-      description: "The downstream type for a changefeed.\n\n - `KAFKA`: Apache Kafka.\n - `MYSQL`: MySQL-compatible database.\n - `S3`: Amazon S3 or S3-compatible storage.\n - `GCS`: Google Cloud Storage.\n - `AZURE_BLOB`: Azure Blob Storage."
+      - networkType
     v1beta1TableConfig:
       type: object
       properties:
@@ -1413,12 +1359,1213 @@ components:
             $ref: '#/components/schemas/v1beta1EventFilter'
           description: The event filter rules for fine-grained control.
       description: The table filtering and event filter configuration.
-x-tagGroups:
-- name: Endpoints
-  tags:
-  - Cluster
-  - Region
-  - Private Endpoint Connection
-  - Import
-  - Integration
-  - Changefeed
+    S3DataFormatDateSeparator:
+      type: string
+      enum:
+      - DATE_SEPARATOR_UNSPECIFIED
+      - NONE
+      - YEAR
+      - MONTH
+      - DAY
+      default: DATE_SEPARATOR_UNSPECIFIED
+      description: "The date separator for the directory structure.\n\n - `NONE`: No date separator.\n - `YEAR`: Separate by year.\n - `MONTH`: Separate by month.\n - `DAY`: Separate by day."
+    v1beta1AzureBlobDownstreamConfig:
+      type: object
+      properties:
+        endpoint:
+          $ref: '#/components/schemas/v1beta1AzureBlobDownstreamConfigEndpoint'
+        dataFormat:
+          $ref: '#/components/schemas/v1beta1S3DataFormat'
+        storageFlushConfig:
+          $ref: '#/components/schemas/v1beta1StorageFlushConfig'
+      description: The Azure Blob downstream configuration.
+      required:
+      - endpoint
+      - dataFormat
+    rpcStatus:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/protobufAny'
+    v1beta1MySQLDownstreamConfig:
+      type: object
+      properties:
+        connection:
+          $ref: '#/components/schemas/v1beta1Connection'
+      description: The MySQL downstream configuration.
+      required:
+      - connection
+    AuthenticationAuthType:
+      type: string
+      enum:
+      - AUTH_TYPE_UNSPECIFIED
+      - DISABLE
+      - SASL_PLAIN
+      - SASL_SCRAM_SHA_256
+      - SASL_SCRAM_SHA_512
+      default: AUTH_TYPE_UNSPECIFIED
+      description: "The Kafka authentication type.\n\n - `DISABLE`: No authentication.\n - `SASL_PLAIN`: SASL/PLAIN authentication.\n - `SASL_SCRAM_SHA_256`: SASL/SCRAM-SHA-256 authentication.\n - `SASL_SCRAM_SHA_512`: SASL/SCRAM-SHA-512 authentication."
+    TopicPartitionConfigPartitionDispatcher:
+      type: string
+      enum:
+      - PARTITION_DISPATCHER_UNSPECIFIED
+      - TABLE
+      - INDEX_VALUE
+      - Timestamp
+      - COLUMNS
+      default: PARTITION_DISPATCHER_UNSPECIFIED
+      description: "The partition dispatch strategy.\n\n - `TABLE`: Dispatch by table name.\n - `INDEX_VALUE`: Dispatch by index value.\n - `Timestamp`: Dispatch by timestamp.\n - `COLUMNS`: Dispatch by column values."
+    v1beta1KafkaDownstreamConfig:
+      type: object
+      properties:
+        broker:
+          $ref: '#/components/schemas/KafkaDownstreamConfigBroker'
+        authentication:
+          $ref: '#/components/schemas/KafkaDownstreamConfigAuthentication'
+        dataFormat:
+          $ref: '#/components/schemas/KafkaDownstreamConfigDataFormat'
+        topicPartitionConfig:
+          $ref: '#/components/schemas/KafkaDownstreamConfigTopicPartitionConfig'
+        columnSelectors:
+          type: array
+          items:
+            $ref: '#/components/schemas/KafkaDownstreamConfigColumnSelector'
+          description: The column selectors for filtering specific columns.
+      description: The Kafka downstream configuration.
+      required:
+      - broker
+      - authentication
+      - dataFormat
+      - topicPartitionConfig
+    KafkaDownstreamConfigTopicPartitionConfig:
+      type: object
+      properties:
+        dispatchType:
+          example: DISPATCH_TYPE_BY_TABLE
+          allOf:
+          - $ref: '#/components/schemas/TopicPartitionConfigDispatchType'
+        defaultTopic:
+          type: string
+          description: The default topic for dispatching all messages when dispatchType is DISPATCH_TYPE_ONE_TOPIC.
+        topicPrefix:
+          type: string
+          description: The topic name prefix for dispatch types that create per-table or per-database topics.
+        separator:
+          type: string
+          description: The separator between the prefix and the table or database name.
+        topicSuffix:
+          type: string
+          description: The topic name suffix for dispatch types that create per-table or per-database topics.
+        replicationFactor:
+          type: integer
+          format: int64
+          example: 3
+          description: The replication factor for auto-created topics.
+          minimum: 1
+        partitionNum:
+          type: integer
+          format: int64
+          example: 6
+          description: The number of partitions for auto-created topics.
+          minimum: 1
+        partitionDispatchers:
+          type: array
+          items:
+            $ref: '#/components/schemas/TopicPartitionConfigPartitionDispatcherConfig'
+          description: The custom partition dispatcher configurations.
+      description: The Kafka topic and partition configuration.
+      required:
+      - dispatchType
+      - replicationFactor
+      - partitionNum
+    v1beta2S3DownstreamConfigEndpoint:
+      type: object
+      properties:
+        s3Uri:
+          type: string
+          example: s3://my-bucket/cdc-data/
+          description: 'The S3 bucket URI. For example, `s3://bucket/prefix/`. The URI must end with a trailing slash.
+
+
+            For Alibaba Cloud OSS, use the S3-compatible URI format `s3://{bucket_name}/{prefix}/`. Do not use the raw OSS URI format.'
+        authType:
+          example: S3_AUTH_TYPE_AK_SK
+          description: 'The S3 authentication type. This field is required, and the API does not provide a default authentication type. Specify one of the following values.
+
+
+            - `"S3_AUTH_TYPE_AK_SK"`: Access Key / Secret Key authentication.
+
+
+            - `"S3_AUTH_TYPE_ASSUME_ROLE"`: IAM Assume Role authentication.
+
+
+            For Alibaba Cloud OSS, only `S3_AUTH_TYPE_AK_SK` is currently supported.'
+          allOf:
+          - $ref: '#/components/schemas/EndpointS3AuthType_2'
+        accessKey:
+          type: string
+          example: REDACTED_AWS_ACCESS_KEY_ID
+          description: The access key for S3 authentication. This field is required when authType is S3_AUTH_TYPE_AK_SK.
+        secretKey:
+          type: string
+          example: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+          description: The secret key for S3 authentication. This field is required when authType is S3_AUTH_TYPE_AK_SK. This field is input-only and not returned in responses.
+        iamAssumedRoleArn:
+          type: string
+          example: arn:aws:iam::123456789012:role/CDCS3AccessRole
+          description: The IAM assumed role ARN for S3 authentication. This field is required when authType is S3_AUTH_TYPE_ASSUME_ROLE.
+        customEndpoint:
+          type: string
+          example: https://s3.oss-{region_id}.aliyuncs.com
+          description: The custom S3-compatible endpoint. Required for Alibaba OSS.
+        provider:
+          example: AWS
+          description: 'The object storage provider. If omitted or set to `"PROVIDER_UNSPECIFIED"`, AWS S3 behavior is used.
+
+
+            - `"AWS"`: Amazon S3.
+
+
+            - `"ALIBABA_OSS"`: Alibaba Cloud OSS through its S3-compatible endpoint.'
+          allOf:
+          - $ref: '#/components/schemas/EndpointProvider'
+      description: The S3 endpoint configuration.
+      required:
+      - s3Uri
+      - authType
+    v1beta2KafkaDownstreamConfigCompressionType:
+      type: string
+      enum:
+      - NONE
+      - GZIP
+      - SNAPPY
+      - LZ4
+      - ZSTD
+      default: NONE
+      description: "CompressionType defines the compression types for Kafka messages.\n\n - NONE: No compression.\n - GZIP: GZIP compression.\n - SNAPPY: Snappy compression.\n - LZ4: LZ4 compression.\n - ZSTD: ZSTD compression."
+    v1beta2KafkaDownstreamConfigAuthentication:
+      type: object
+      properties:
+        authType:
+          example: SASL_SCRAM_SHA_256
+          description: 'The Kafka authentication type. This field is required, and the API does not provide a default authentication type. Specify one of the following values.
+
+
+            - `"DISABLE"`: No authentication.
+
+
+            - `"SASL_PLAIN"`: SASL/PLAIN authentication.
+
+
+            - `"SASL_SCRAM_SHA_256"`: SASL/SCRAM-SHA-256 authentication.
+
+
+            - `"SASL_SCRAM_SHA_512"`: SASL/SCRAM-SHA-512 authentication.'
+          allOf:
+          - $ref: '#/components/schemas/v1beta2KafkaDownstreamConfigAuthenticationAuthType'
+        username:
+          type: string
+          example: kafka_user
+          description: The SASL username for Kafka authentication.
+        password:
+          type: string
+          example: '********'
+          description: The SASL password for Kafka authentication.
+      description: The Kafka authentication configuration.
+      required:
+      - authType
+    DataFormatAvroConfig_2:
+      type: object
+      properties:
+        decimalHandlingMode:
+          example: DECIMAL_HANDLING_MODE_PRECISE
+          description: 'The decimal serialization mode. The default value is `DECIMAL_HANDLING_MODE_PRECISE`.
+
+
+            - `"DECIMAL_HANDLING_MODE_PRECISE"`: Use precise decimal representation.
+
+
+            - `"DECIMAL_HANDLING_MODE_STRING"`: Use string representation.'
+          allOf:
+          - $ref: '#/components/schemas/AvroConfigDecimalHandlingMode_2'
+        bigintUnsignedHandlingMode:
+          example: BIGINT_UNSIGNED_HANDLING_MODE_STRING
+          description: 'The handling mode for BIGINT UNSIGNED values.
+
+
+            - `"BIGINT_UNSIGNED_HANDLING_MODE_LONG"`: Use 64-bit integer (may overflow for very large values).
+
+
+            - `"BIGINT_UNSIGNED_HANDLING_MODE_STRING"`: Use string representation (safe for all values).'
+          allOf:
+          - $ref: '#/components/schemas/AvroConfigBigintUnsignedHandlingMode_2'
+        schemaRegistry:
+          description: The Schema Registry connection configuration.
+          allOf:
+          - $ref: '#/components/schemas/AvroConfigSchemaRegistry_2'
+      description: The Avro-specific data format configuration.
+    v1beta2StartPosition:
+      type: object
+      properties:
+        mode:
+          example: FROM_NOW
+          description: 'The start position mode.
+
+
+            - `"MODE_UNSPECIFIED"`: Default value.
+
+
+            - `"FROM_NOW"`: Start from the current time.
+
+
+            - `"FROM_TSO"`: Start from a specific TSO.
+
+
+            - `"FROM_UTC"`: Start from a specific UTC timestamp.'
+          allOf:
+          - $ref: '#/components/schemas/v1beta2StartPositionMode'
+        startTso:
+          type: string
+          format: uint64
+          example: '452348901234567890'
+          description: The start TSO. This field is required when the mode is `FROM_TSO`.
+        startTimestamp:
+          type: string
+          example: '2026-01-01T00:00:00Z'
+          description: The start UTC timestamp in RFC 3339 format. This field is required when the mode is `FROM_UTC`.
+      description: The start position for the changefeed.
+      required:
+      - mode
+    AvroConfigBigintUnsignedHandlingMode_2:
+      type: string
+      enum:
+      - BIGINT_UNSIGNED_HANDLING_MODE_LONG
+      - BIGINT_UNSIGNED_HANDLING_MODE_STRING
+      default: BIGINT_UNSIGNED_HANDLING_MODE_LONG
+      description: "BigintUnsignedHandlingMode defines how BIGINT UNSIGNED values are handled.\n\n - BIGINT_UNSIGNED_HANDLING_MODE_LONG: Use 64-bit integer (may overflow for very large values).\n - BIGINT_UNSIGNED_HANDLING_MODE_STRING: Use string representation (safe for all values)."
+    v1beta2ChangefeedCCU:
+      type: object
+      properties:
+        name:
+          type: string
+          example: 4ccu
+          description: The identifier of the CCU option.
+          readOnly: true
+        displayName:
+          type: string
+          example: 4 CCU - Small
+          description: The human-readable display name of the CCU option.
+          readOnly: true
+        ccuNum:
+          type: integer
+          format: int64
+          example: 4
+          description: The number of CCUs (Changefeed Capacity Units).
+          readOnly: true
+        rpsLimit:
+          type: integer
+          format: int64
+          example: 5000
+          description: The maximum rows per second for the CCU option. This value is for reference only and may vary by workload.
+          readOnly: true
+      description: The changefeed CCU option.
+    v1beta2EventFilter:
+      type: object
+      properties:
+        tableMatchers:
+          type: array
+          example:
+          - mydb.orders
+          - mydb.user_*
+          items:
+            type: string
+          description: The table name patterns to match. Uses the same syntax as TiCDC table filter. Supports wildcards. Matches database name, so be careful with database-level DDLs.
+        ignoredEvents:
+          type: array
+          example:
+          - insert
+          - delete
+          - alter table
+          items:
+            type: string
+          description: The event types to ignore. Supported values include DML events such as `insert`, `update`, `delete`, and `all dml`, and DDL events such as `create schema`, `drop table`, `alter table`, and `all ddl`. For the complete list of supported values, see [Changefeed Log Filters](https://docs.pingcap.com/tidb/stable/ticdc-filter/).
+        ignoredSqlStatements:
+          type: array
+          example:
+          - ^drop
+          - add column
+          items:
+            type: string
+          description: The SQL statement patterns to ignore. Only applies to DDL statements. Supports regular expressions.
+        ignoredInsertValueExpression:
+          type: string
+          example: status = 'deleted'
+          description: The SQL expression to filter INSERT events by column value. Uses SQL expressions in default SQL mode. All tables matched by `tableMatchers` must contain all columns referenced in this expression.
+        ignoredUpdateOldValueExpression:
+          type: string
+          example: status = 'archived'
+          description: The SQL expression to filter UPDATE events by the old column value. Uses SQL expressions in default SQL mode. All tables matched by `tableMatchers` must contain all columns referenced in this expression.
+        ignoredUpdateNewValueExpression:
+          type: string
+          example: status = 'deleted'
+          description: The SQL expression to filter UPDATE events by the new column value. Uses SQL expressions in default SQL mode. All tables matched by `tableMatchers` must contain all columns referenced in this expression.
+        ignoredDeleteValueExpression:
+          type: string
+          example: soft_delete = true
+          description: The SQL expression to filter DELETE events by column value. Uses SQL expressions in default SQL mode. All tables matched by `tableMatchers` must contain all columns referenced in this expression.
+      description: The event filter configuration for fine-grained control.
+    KafkaDownstreamConfigKafkaVersion_2:
+      type: string
+      enum:
+      - KAFKA_VERSION_UNSPECIFIED
+      - KAFKA_VERSION_1XX
+      - KAFKA_VERSION_2XX
+      - KAFKA_VERSION_3XX
+      default: KAFKA_VERSION_UNSPECIFIED
+      description: "KafkaVersion defines supported Kafka broker versions.\n\n - KAFKA_VERSION_1XX: Kafka 1.x\n - KAFKA_VERSION_2XX: Kafka 2.x\n - KAFKA_VERSION_3XX: Kafka 3.x"
+    NetworkInfoNetworkType_2:
+      type: string
+      enum:
+      - NETWORK_TYPE_UNSPECIFIED
+      - NETWORK_TYPE_PUBLIC
+      - NETWORK_TYPE_VPC_PEERING
+      - NETWORK_TYPE_PRIVATE_LINK
+      default: NETWORK_TYPE_UNSPECIFIED
+      description: "The network type for downstream connectivity.\n\n - NETWORK_TYPE_UNSPECIFIED: Default value.\n - NETWORK_TYPE_PUBLIC: Public internet access.\n - NETWORK_TYPE_VPC_PEERING: AWS VPC Peering.\n - NETWORK_TYPE_PRIVATE_LINK: Private endpoint connectivity managed by TiDB Cloud."
+    v1beta2S3DownstreamConfig:
+      type: object
+      properties:
+        endpoint:
+          description: The S3 endpoint configuration.
+          allOf:
+          - $ref: '#/components/schemas/v1beta2S3DownstreamConfigEndpoint'
+        dataFormat:
+          description: The S3 data format configuration.
+          allOf:
+          - $ref: '#/components/schemas/v1beta2S3DataFormat'
+        storageFlushConfig:
+          description: The storage flush configuration.
+          allOf:
+          - $ref: '#/components/schemas/v1beta2StorageFlushConfig'
+      description: The S3 downstream configuration.
+      required:
+      - endpoint
+      - dataFormat
+    TopicPartitionConfigDispatchType_2:
+      type: string
+      enum:
+      - DISPATCH_TYPE_ONE_TOPIC
+      - DISPATCH_TYPE_BY_TABLE
+      - DISPATCH_TYPE_BY_DATABASE
+      description: "DispatchType defines how messages are dispatched to topics.\n\n - DISPATCH_TYPE_ONE_TOPIC: All messages go to a single topic.\n - DISPATCH_TYPE_BY_TABLE: Each table gets its own topic.\n - DISPATCH_TYPE_BY_DATABASE: Each database gets its own topic."
+    v1beta2DownstreamType:
+      type: string
+      enum:
+      - DOWNSTREAM_TYPE_UNSPECIFIED
+      - KAFKA
+      - MYSQL
+      - S3
+      default: DOWNSTREAM_TYPE_UNSPECIFIED
+      description: "The downstream type for a changefeed.\n\n - DOWNSTREAM_TYPE_UNSPECIFIED: Default value. Should not be used.\n - KAFKA: Apache Kafka.\n - MYSQL: MySQL-compatible database.\n - S3: Amazon S3 or S3-compatible storage."
+    v1beta2MySQLDownstreamConfig:
+      type: object
+      properties:
+        connection:
+          description: The MySQL connection configuration.
+          allOf:
+          - $ref: '#/components/schemas/v1beta2Connection'
+      description: The MySQL downstream configuration.
+      required:
+      - connection
+    ChangefeedServiceScaleChangefeedBody:
+      type: object
+      properties:
+        changefeedCapacity:
+          type: string
+          example: 8ccu
+          description: The name of the target changefeed capacity option, such as `"8ccu"`. Use the exact `name` value returned by [List changefeed CCU options](#tag/Changefeed/operation/ListChangefeedCapacityUnits).
+      description: The request for scaling a changefeed.
+      required:
+      - changefeedCapacity
+    v1beta2KafkaDownstreamConfigDataFormatProtocol:
+      type: string
+      enum:
+      - PROTOCOL_CANAL_JSON
+      - PROTOCOL_OPEN_PROTOCOL
+      - PROTOCOL_AVRO
+      - PROTOCOL_DEBEZIUM
+      - PROTOCOL_DEBEZIUM_AVRO
+      description: "Protocol defines the supported output protocols.\n\n - PROTOCOL_CANAL_JSON: Canal JSON format. Recommended for most use cases.\n - PROTOCOL_OPEN_PROTOCOL: Open Protocol (TiDB native format). Encodes multiple events into one message.\n - PROTOCOL_AVRO: Apache Avro format. Supports Confluent Schema Registry and AWS Glue Schema Registry.\n - PROTOCOL_DEBEZIUM: Debezium format.\n - PROTOCOL_DEBEZIUM_AVRO: Debezium events encoded with Avro."
+    KafkaDownstreamConfigColumnSelector_2:
+      type: object
+      properties:
+        matcher:
+          type: array
+          example:
+          - mydb.orders
+          - mydb.user_*
+          items:
+            type: string
+          description: The table name patterns to match for column selection.
+        columns:
+          type: array
+          example:
+          - id
+          - name
+          - status
+          items:
+            type: string
+          description: The column names to include for the matched tables.
+      description: The column filtering configuration for specific tables.
+    ChangefeedServiceEditChangefeedDownstreamConfigBody:
+      type: object
+      properties:
+        dryRun:
+          type: boolean
+          example: true
+          description: Indicates whether to run dry-run validation only without applying the update.
+        tableConfig:
+          description: The updated table filtering and event filter configuration.
+          allOf:
+          - $ref: '#/components/schemas/v1beta2TableConfig'
+        downstreamType:
+          example: KAFKA
+          description: The downstream type for a changefeed. Must match the existing downstream type (cannot be changed).
+          allOf:
+          - $ref: '#/components/schemas/v1beta2DownstreamType'
+        kafka:
+          description: The updated Kafka downstream configuration.
+          allOf:
+          - $ref: '#/components/schemas/v1beta2KafkaDownstreamConfig'
+        mysql:
+          description: The updated MySQL downstream configuration.
+          allOf:
+          - $ref: '#/components/schemas/v1beta2MySQLDownstreamConfig'
+        s3:
+          description: The updated S3 downstream configuration.
+          allOf:
+          - $ref: '#/components/schemas/v1beta2S3DownstreamConfig'
+      description: The request for updating a changefeed downstream configuration.
+      required:
+      - downstreamType
+    AvroConfigDecimalHandlingMode_2:
+      type: string
+      enum:
+      - DECIMAL_HANDLING_MODE_PRECISE
+      - DECIMAL_HANDLING_MODE_STRING
+      default: DECIMAL_HANDLING_MODE_PRECISE
+      description: "DecimalHandlingMode defines how decimal values are serialized.\n\n - DECIMAL_HANDLING_MODE_PRECISE: Use precise decimal representation.\n - DECIMAL_HANDLING_MODE_STRING: Use string representation."
+    v1beta2S3DataFormatProtocol:
+      type: string
+      enum:
+      - PROTOCOL_CSV
+      - PROTOCOL_CANAL_JSON
+      description: "Protocol defines the supported output protocols for cloud storage sinks.\n\n - PROTOCOL_CSV: CSV format.\n - PROTOCOL_CANAL_JSON: Canal JSON format."
+    S3DataFormatBinaryEncodingMethod_2:
+      type: string
+      enum:
+      - BASE64
+      - HEX
+      default: BASE64
+      description: "BinaryEncodingMethod defines how binary values are encoded.\n\n - BASE64: Base64 encoding.\n - HEX: Hexadecimal encoding."
+    v1beta2KafkaDownstreamConfigAuthenticationAuthType:
+      type: string
+      enum:
+      - DISABLE
+      - SASL_PLAIN
+      - SASL_SCRAM_SHA_256
+      - SASL_SCRAM_SHA_512
+      description: "AuthType defines the supported Kafka authentication types.\n\n - DISABLE: No authentication.\n - SASL_PLAIN: SASL/PLAIN authentication.\n - SASL_SCRAM_SHA_256: SASL/SCRAM-SHA-256 authentication.\n - SASL_SCRAM_SHA_512: SASL/SCRAM-SHA-512 authentication."
+    AvroConfigSchemaRegistry_2:
+      type: object
+      properties:
+        schemaRegistryEndpoints:
+          type: string
+          example: http://schema-registry:8081
+          description: The comma-separated list of Schema Registry endpoints. Required for Confluent Schema Registry.
+        enableBasicAuth:
+          type: boolean
+          example: true
+          description: Indicates whether to enable HTTP basic authentication for Schema Registry.
+        basicAuthUsername:
+          type: string
+          example: schema_user
+          description: The basic authentication username for Schema Registry.
+        basicAuthPassword:
+          type: string
+          example: '********'
+          description: The basic authentication password for Schema Registry.
+      description: The Schema Registry connection configuration.
+    v1beta2StartPositionMode:
+      type: string
+      enum:
+      - MODE_UNSPECIFIED
+      - FROM_NOW
+      - FROM_TSO
+      - FROM_UTC
+      default: MODE_UNSPECIFIED
+      description: "Mode defines the start position mode.\n\n - MODE_UNSPECIFIED: Default value.\n - FROM_NOW: Start from the current time.\n - FROM_TSO: Start from a specific TSO.\n - FROM_UTC: Start from a specific UTC timestamp."
+    v1beta2TableConfigMode:
+      type: string
+      enum:
+      - MODE_UNSPECIFIED
+      - IGNORE_NOT_SUPPORT_TABLE
+      - FORCE_SYNC
+      default: MODE_UNSPECIFIED
+      description: "Mode defines how to handle tables that are not supported by the changefeed.\n\n - MODE_UNSPECIFIED: Default value.\n - IGNORE_NOT_SUPPORT_TABLE: Skip unsupported tables silently.\n - FORCE_SYNC: Force sync all tables (may fail on unsupported tables)."
+    v1beta2CreateChangefeedRequest:
+      type: object
+      properties:
+        changefeed:
+          description: The changefeed to create. All required fields must be set.
+          allOf:
+          - $ref: '#/components/schemas/v1beta2Changefeed'
+        dryRun:
+          type: boolean
+          example: true
+          description: Indicates whether to run dry-run validation only without creating the changefeed.
+      description: The request for creating a changefeed.
+      required:
+      - changefeed
+    v1beta2KafkaDownstreamConfig:
+      type: object
+      properties:
+        broker:
+          description: The Kafka broker connection configuration.
+          allOf:
+          - $ref: '#/components/schemas/KafkaDownstreamConfigBroker_2'
+        authentication:
+          description: The Kafka authentication configuration.
+          allOf:
+          - $ref: '#/components/schemas/v1beta2KafkaDownstreamConfigAuthentication'
+        dataFormat:
+          description: The Kafka data format and serialization configuration.
+          allOf:
+          - $ref: '#/components/schemas/v1beta2KafkaDownstreamConfigDataFormat'
+        topicPartitionConfig:
+          description: The Kafka topic and partition configuration.
+          allOf:
+          - $ref: '#/components/schemas/KafkaDownstreamConfigTopicPartitionConfig_2'
+        columnSelectors:
+          type: array
+          items:
+            $ref: '#/components/schemas/KafkaDownstreamConfigColumnSelector_2'
+          description: The column selectors for filtering specific columns.
+      description: The Kafka downstream configuration.
+      required:
+      - broker
+      - authentication
+      - dataFormat
+      - topicPartitionConfig
+    TopicPartitionConfigPartitionDispatcherConfig_2:
+      type: object
+      properties:
+        partitionType:
+          example: TABLE
+          description: 'The partition dispatch strategy. This field is required, and the API does not provide a default strategy. Specify one of the following values.
+
+
+            - `"TABLE"`: Dispatch by table name.
+
+
+            - `"INDEX_VALUE"`: Dispatch by index value.
+
+
+            - `"TIMESTAMP"`: Dispatch by timestamp.
+
+
+            - `"COLUMNS"`: Dispatch by column values.'
+          allOf:
+          - $ref: '#/components/schemas/TopicPartitionConfigPartitionDispatcher_2'
+        matcher:
+          type: array
+          example:
+          - mydb.orders
+          items:
+            type: string
+          description: The table name patterns to match for the dispatcher.
+        indexName:
+          type: string
+          example: primary
+          description: The index name for the INDEX_VALUE partition dispatcher.
+        columns:
+          type: array
+          example:
+          - user_id
+          - order_id
+          items:
+            type: string
+          description: The column names for the COLUMNS partition dispatcher.
+      description: The custom partition dispatcher configuration.
+      required:
+      - partitionType
+      - matcher
+    v1beta2ListChangefeedsResponse:
+      type: object
+      properties:
+        changefeeds:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1beta2Changefeed'
+          description: The list of changefeeds matching the query.
+          readOnly: true
+        totalSize:
+          type: integer
+          format: int32
+          example: 42
+          description: The total number of changefeeds across all pages.
+          readOnly: true
+        nextPageToken:
+          type: string
+          example: eyJpZCI6Njc4OTB9
+          description: The page token for the next page. This field is empty when there are no more pages.
+          readOnly: true
+      description: The response for listing changefeeds.
+    EndpointS3AuthType_2:
+      type: string
+      enum:
+      - S3_AUTH_TYPE_AK_SK
+      - S3_AUTH_TYPE_ASSUME_ROLE
+      description: "S3AuthType defines the supported S3 authentication types.\n\n - S3_AUTH_TYPE_AK_SK: Access Key / Secret Key authentication.\n - S3_AUTH_TYPE_ASSUME_ROLE: IAM Assume Role authentication."
+    v1beta2NetworkInfo:
+      type: object
+      properties:
+        networkType:
+          example: NETWORK_TYPE_PUBLIC
+          description: 'The network type for downstream connectivity.
+
+
+            - `"NETWORK_TYPE_UNSPECIFIED"`: Default value.
+
+
+            - `"NETWORK_TYPE_PUBLIC"`: Public internet access.
+
+
+            - `"NETWORK_TYPE_VPC_PEERING"`: AWS VPC Peering.
+
+
+            - `"NETWORK_TYPE_PRIVATE_LINK"`: Private endpoint connectivity managed by TiDB Cloud. Create a private endpoint for the external service in the console UI and assign it to `sinkEndpointId`.'
+          allOf:
+          - $ref: '#/components/schemas/NetworkInfoNetworkType_2'
+        sinkEndpointId:
+          type: string
+          format: uint64
+          example: '12345'
+          description: The ID of the downstream network endpoint for an external service. Required when `networkType` is `NETWORK_TYPE_PRIVATE_LINK`.
+        ports:
+          type: array
+          example:
+          - 9092
+          items:
+            type: integer
+            format: int64
+          description: The ports for private endpoint connectivity. Required when networkType is `NETWORK_TYPE_PRIVATE_LINK`. The server uses these ports to construct broker endpoints as `<sink_endpoint_address>:<port>`.
+      description: The network configuration for downstream connectivity.
+      required:
+      - networkType
+    v1beta2S3DataFormat:
+      type: object
+      properties:
+        protocol:
+          example: PROTOCOL_CANAL_JSON
+          description: 'The output protocol. This field is required, and the API does not provide a default protocol. Specify one of the following values.
+
+
+            - `"PROTOCOL_CSV"`: CSV format.
+
+
+            - `"PROTOCOL_CANAL_JSON"`: Canal JSON format.'
+          allOf:
+          - $ref: '#/components/schemas/v1beta2S3DataFormatProtocol'
+        terminator:
+          type: string
+          example: '
+
+            '
+          description: The row terminator used to separate data change events. This configuration is only used for storage sinks. The default value is a newline character ("\n"). When the field is omitted or empty, a newline is used.
+        dateSeparator:
+          example: DAY
+          description: 'The date separator for the directory structure. The default value is `NONE`.
+
+
+            - `"NONE"`: No date separator.
+
+
+            - `"YEAR"`: Separate by year.
+
+
+            - `"MONTH"`: Separate by month.
+
+
+            - `"DAY"`: Separate by day.'
+          allOf:
+          - $ref: '#/components/schemas/S3DataFormatDateSeparator_2'
+        enableTidbExtension:
+          type: boolean
+          example: false
+          description: Indicates whether to enable TiDB extension fields in Canal-JSON messages. The default value is false.
+        delimiter:
+          type: string
+          example: ','
+          description: The field delimiter for CSV files. Required when protocol is `PROTOCOL_CSV`. The value must be an ASCII character.
+        quote:
+          type: string
+          example: '"'
+          description: The quotation character for CSV fields. The default value is `"`. When the value is empty, the default quotation character is retained.
+        'null':
+          type: string
+          example: 'NULL'
+          description: The null representation for CSV columns. The default value is `\N`.
+        includeCommitTs:
+          type: boolean
+          example: false
+          description: Indicates whether to include the commit timestamp in CSV rows. The default value is false.
+        binaryEncodingMethod:
+          example: BASE64
+          description: 'The binary encoding method. The default value is `BASE64`.
+
+
+            - `"BASE64"`: Base64 encoding.
+
+
+            - `"HEX"`: Hexadecimal encoding.'
+          allOf:
+          - $ref: '#/components/schemas/S3DataFormatBinaryEncodingMethod_2'
+        outputRawChangeEvent:
+          type: boolean
+          example: false
+          description: Indicates whether to output raw change events. The default value is false. For more information, see https://docs.pingcap.com/tidb/stable/ticdc-split-transaction-by-memory.
+        outputFieldHeader:
+          type: boolean
+          example: false
+          description: Indicates whether to include the CSV field header. The default value is false.
+      description: The S3 data format configuration.
+      required:
+      - protocol
+    ChangefeedState_2:
+      type: string
+      enum:
+      - STATE_UNSPECIFIED
+      - RUNNING
+      - FAILED
+      - ERROR
+      - CREATING
+      - PAUSING
+      - PAUSED
+      - DELETING
+      - DELETED
+      - EDITING
+      - WARNING
+      - SCALING
+      - RESUMING
+      default: STATE_UNSPECIFIED
+      description: "State defines the possible states of a changefeed.\n\n - STATE_UNSPECIFIED: Default value. Should not be used.\n - RUNNING: Changefeed is actively replicating data.\n - FAILED: Changefeed encountered a fatal error and stopped.\n - ERROR: Changefeed encountered an error but may recover.\n - CREATING: Changefeed is being created.\n - PAUSING: Changefeed is in the process of pausing.\n - PAUSED: Changefeed is paused.\n - DELETING: Changefeed is being deleted.\n - DELETED: Changefeed has been deleted.\n - EDITING: Changefeed configuration is being updated.\n - WARNING: Changefeed is running but has warnings.\n - SCALING: Changefeed is being scaled.\n - RESUMING: Changefeed is being resumed."
+    KafkaDownstreamConfigBroker_2:
+      type: object
+      properties:
+        version:
+          example: KAFKA_VERSION_3XX
+          description: 'The Kafka broker version.
+
+
+            - `"KAFKA_VERSION_UNSPECIFIED"`: Default value. Must not be used.
+
+
+            - `"KAFKA_VERSION_1XX"`: Kafka 1.x
+
+
+            - `"KAFKA_VERSION_2XX"`: Kafka 2.x
+
+
+            - `"KAFKA_VERSION_3XX"`: Kafka 3.x'
+          allOf:
+          - $ref: '#/components/schemas/KafkaDownstreamConfigKafkaVersion_2'
+        brokerEndpoints:
+          type: string
+          example: broker1:9092,broker2:9092,broker3:9092
+          description: The comma-separated list of Kafka broker addresses. Required for PUBLIC and VPC_PEERING network types. For PRIVATE_LINK, this field can be omitted; the server assembles broker endpoints from `networkInfo.sinkEndpointId` and `networkInfo.ports`.
+        useTls:
+          type: boolean
+          example: true
+          description: Indicates whether to use TLS for the Kafka connection. The default value is false.
+        insecureSkipVerify:
+          type: boolean
+          example: false
+          description: Indicates whether to skip TLS certificate verification. The default value is false. Only enable this field for testing with self-signed certificates.
+        compression:
+          example: LZ4
+          description: 'The Kafka message compression type. The default value is `NONE`.
+
+
+            - `"NONE"`: No compression.
+
+
+            - `"GZIP"`: GZIP compression.
+
+
+            - `"SNAPPY"`: Snappy compression.
+
+
+            - `"LZ4"`: LZ4 compression.
+
+
+            - `"ZSTD"`: ZSTD compression.'
+          allOf:
+          - $ref: '#/components/schemas/v1beta2KafkaDownstreamConfigCompressionType'
+        kafkaClientId:
+          type: string
+          example: my-changefeed-client
+          description: The optional Kafka client ID. When left empty, a system default is used.
+      description: The Kafka broker connection configuration.
+      required:
+      - version
+    DataFormatDebeziumConfig_2:
+      type: object
+      properties:
+        outputOldValue:
+          type: boolean
+          example: true
+          description: Indicates whether to output the old value before the change.
+        disableSchema:
+          type: boolean
+          example: false
+          description: Indicates whether to disable the schema in Debezium messages.
+      description: The Debezium-specific data format configuration.
+    v1beta2Changefeed:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '67890'
+          description: The system-generated unique identifier of the changefeed.
+          readOnly: true
+        tidbId:
+          type: string
+          example: '1234567890123'
+          description: The ID of the source TiDB instance.
+        name:
+          type: string
+          example: my-kafka-changefeed
+          description: The user-defined name for the changefeed. Must be unique within the TiDB instance.
+        networkInfo:
+          description: The network configuration for connecting to the downstream. Required for Kafka and MySQL downstream types.
+          allOf:
+          - $ref: '#/components/schemas/v1beta2NetworkInfo'
+        state:
+          example: RUNNING
+          description: The current state of the changefeed.
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/ChangefeedState_2'
+        createTime:
+          type: string
+          format: date-time
+          example: '2026-06-08T10:30:00Z'
+          description: The creation time of the changefeed.
+          readOnly: true
+        checkpointTso:
+          type: string
+          format: uint64
+          example: '452348901234567890'
+          description: The checkpoint TSO of the changefeed, representing the last successfully replicated timestamp.
+          readOnly: true
+        checkpointTs:
+          type: string
+          format: date-time
+          example: '2026-06-08T10:35:00Z'
+          description: The human-readable checkpoint timestamp of the changefeed.
+          readOnly: true
+        changefeedCapacity:
+          type: string
+          example: 4ccu
+          description: The name of the changefeed capacity option for the changefeed, such as `"4ccu"`. Use the exact `name` value returned by [List changefeed CCU options](#tag/Changefeed/operation/ListChangefeedCapacityUnits).
+        downstreamType:
+          example: KAFKA
+          description: 'The downstream type for a changefeed. When a downstream type is specified, the corresponding configuration field (`kafka`, `mysql`, or `s3`) is required. Cannot be changed after creation.
+
+
+            - `"KAFKA"`: Apache Kafka
+
+
+            - `"MYSQL"`: MySQL-compatible database
+
+
+            - `"S3"`: Amazon S3 or S3-compatible storage'
+          allOf:
+          - $ref: '#/components/schemas/v1beta2DownstreamType'
+        tableConfig:
+          description: The table filtering and event filter configuration. This field is editable only when the changefeed is in PAUSED state.
+          allOf:
+          - $ref: '#/components/schemas/v1beta2TableConfig'
+        startPosition:
+          description: The start position configuration. This field can only be set during creation.
+          allOf:
+          - $ref: '#/components/schemas/v1beta2StartPosition'
+        kafka:
+          description: The Kafka downstream configuration.
+          allOf:
+          - $ref: '#/components/schemas/v1beta2KafkaDownstreamConfig'
+        mysql:
+          description: The MySQL downstream configuration.
+          allOf:
+          - $ref: '#/components/schemas/v1beta2MySQLDownstreamConfig'
+        s3:
+          description: The S3 downstream configuration.
+          allOf:
+          - $ref: '#/components/schemas/v1beta2S3DownstreamConfig'
+        error:
+          type: string
+          example: 'kafka: broker not available'
+          description: The error message when the changefeed is in the FAILED or ERROR state. This field is empty otherwise.
+          readOnly: true
+      description: The changefeed configuration.
+      required:
+      - tidbId
+      - name
+      - changefeedCapacity
+      - downstreamType
+      - tableConfig
+      - startPosition
+    v1beta2Connection:
+      type: object
+      properties:
+        endpoint:
+          type: string
+          example: mysql.example.com:3306
+          description: The MySQL endpoint address in the `host:port` format. Required for PUBLIC and VPC_PEERING networks. For PRIVATE_LINK, this field can be omitted; the server assembles the endpoint from `networkInfo.sinkEndpointId` and `networkInfo.ports`.
+        username:
+          type: string
+          example: cdc_user
+          description: The MySQL username for authentication.
+        password:
+          type: string
+          example: '********'
+          description: The MySQL password for authentication. This field is input-only and not returned in responses.
+      description: The MySQL connection configuration.
+      required:
+      - username
+    S3DataFormatDateSeparator_2:
+      type: string
+      enum:
+      - NONE
+      - YEAR
+      - MONTH
+      - DAY
+      default: NONE
+      description: "DateSeparator defines the date separator options for directory structure.\n\n - NONE: No date separator.\n - YEAR: Separate by year.\n - MONTH: Separate by month.\n - DAY: Separate by day."
+    rpcStatus_2:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+          description: The error code returned with this error.
+        message:
+          type: string
+          description: The error message returned with this error.
+        details:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/protobufAny'
+          description: A list of messages with additional error details.
+      description: 'The `Status` type defines a logical error model that is suitable for
+
+        different programming environments, including REST APIs and RPC APIs. It is
+
+        used by [gRPC](https://github.com/grpc). Each `Status` message contains
+
+        three pieces of data: error code, error message, and error details.
+
+
+        You can find out more about this error model and how to work with it in the
+
+        [API Design Guide](https://cloud.google.com/apis/design/errors).'
+    v1beta2StorageFlushConfig:
+      type: object
+      properties:
+        interval:
+          type: string
+          example: 1m
+          description: The flush interval as a duration string. The range is from 2s to 10m. The default value is 1m.
+        fileSize:
+          type: string
+          format: uint64
+          example: '67108864'
+          description: The file size threshold in bytes. Data is flushed when this size is reached. The range is from 1048576 (1 MB) to 536870912 (512 MB). The default value is 67108864 (64 MB).
+          maximum: 536870912
+          minimum: 1048576
+      description: The storage flush configuration.
+    v1beta2ListCCUsResponse:
+      type: object
+      properties:
+        ccus:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1beta2ChangefeedCCU'
+          description: The list of available CCU options.
+          readOnly: true
+      description: The response for listing changefeed CCU options.
+    v1beta2TableConfig:
+      type: object
+      properties:
+        filterRules:
+          type: array
+          example:
+          - mydb.orders
+          - mydb.user_*
+          - '!mydb.secret_*'
+          items:
+            type: string
+          description: 'The table filter rules. For example: `["mydb.orders", "mydb.user_*", "!mydb.secret_*"]` Refer [TiCDC Table Filter](https://docs.pingcap.com/tidb/stable/ticdc-filter/#table-filter) for supported syntax.'
+        mode:
+          example: FORCE_SYNC
+          description: 'The mode for handling unsupported tables.
+
+
+            - `"MODE_UNSPECIFIED"`: Default value. Must not be used.
+
+
+            - `"IGNORE_NOT_SUPPORT_TABLE"`: Skip unsupported tables silently.
+
+
+            - `"FORCE_SYNC"`: Force sync all tables (may fail on unsupported tables).'
+          allOf:
+          - $ref: '#/components/schemas/v1beta2TableConfigMode'
+        caseSensitive:
+          type: boolean
+          description: Indicates whether the filter rules are case-sensitive. The default value is false.
+        eventFilters:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1beta2EventFilter'
+          description: The event filter rules for fine-grained control.
+        bdrMode:
+          type: boolean
+          description: Indicates whether [bidirectional replication mode](https://docs.pingcap.com/tidb/stable/ticdc-bidirectional-replication/) is enabled.
+      description: The table filtering and event filter configuration.
+      required:
+      - mode
+    TopicPartitionConfigPartitionDispatcher_2:
+      type: string
+      enum:
+      - TABLE
+      - INDEX_VALUE
+      - TIMESTAMP
+      - COLUMNS
+      description: "PartitionDispatcher defines the partition dispatch strategies.\n\n - TABLE: Dispatch by table name.\n - INDEX_VALUE: Dispatch by index value.\n - TIMESTAMP: Dispatch by timestamp.\n - COLUMNS: Dispatch by column values."
+    v1beta2KafkaDownstreamConfigDataFormat:
+      type: object
+      properties:
+        protocol:
+          example: PROTOCOL_CANAL_JSON
+          description: 'The Kafka output protocol. This field is required, and the API does not provide a default protocol. Specify one of the following values.
+
+
+            - `"PROTOCOL_CANAL_JSON"`: Canal JSON format. Recommended for most use cases.
+
+
+            - `"PROTOCOL_OPEN_PROTOCOL"`: Open Protocol (TiDB native format). Encodes multiple events into one message.
+
+
+            - `"PROTOCOL_AVRO"`: Apache Avro format.
+
+
+            - `"PROTOCOL_DEBEZIUM"`: Debezium JSON format.
+
+
+            - `"PROTOCOL_DEBEZIUM_AVRO"`: Debezium events encoded with Avro.'
+          allOf:
+          - $ref: '#/components/schemas/v1beta2KafkaDownstreamConfigDataFormatProtocol'
+        debeziumConfig:
+          description: The Debezium-specific data format configuration.
+          allOf:
+          - $ref: '#/components/schemas/DataFormatDebeziumConfig_2'
+        avroConfig:
+          description: The Avro-specific data format configuration.
+          allOf:
+          - $ref: '#/components/schemas/DataFormatAvroConfig_2'
+        enableTidbExtension:
+          type: boolean
+          example: true
+          description: Indicates whether to enable TiDB extension fields. The default value is false. For more information, see https://docs.pingcap.com/tidb/stable/ticdc-avro-protocol.
+        outputRawChangeEvent:
+          type: boolean
+          example: false
+          description: Indicates whether to output raw change events. The default value is false. For more information, see https://docs.pingcap.com/tidb/stable/ticdc-split-transaction-by-memory.
+      description: The Kafka message format and serialization configuration.
+      required:
+      - protocol
+    EndpointProvider:
+      type: string
+      enum:
+      - PROVIDER_UNSPECIFIED
+      - AWS
+      - ALIBABA_OSS
+      default: PROVIDER_UNSPECIFIED
+      description: "Provider defines the S3-compatible object storage provider.\n\n - PROVIDER_UNSPECIFIED: Default value. Uses AWS S3 behavior.\n - AWS: Amazon S3.\n - ALIBABA_OSS: Alibaba Cloud OSS through its S3-compatible endpoint."
+    KafkaDownstreamConfigTopicPartitionConfig_2:
+      type: object
+      properties:
+        dispatchType:
+          example: DISPATCH_TYPE_BY_TABLE
+          description: 'The message dispatch type to topics. This field is required, and the API does not provide a default dispatch type. Specify one of the following values.
+
+
+            - `"DISPATCH_TYPE_ONE_TOPIC"`: All messages go to a single topic.
+
+
+            - `"DISPATCH_TYPE_BY_TABLE"`: Each table gets its own topic.
+
+
+            - `"DISPATCH_TYPE_BY_DATABASE"`: Each database gets its own topic.'
+          allOf:
+          - $ref: '#/components/schemas/TopicPartitionConfigDispatchType_2'
+        defaultTopic:
+          type: string
+          example: cdc-events
+          description: The default topic for dispatching all messages when dispatchType is DISPATCH_TYPE_ONE_TOPIC.
+        topicPrefix:
+          type: string
+          example: cdc-
+          description: The topic name prefix for dispatch types that create per-table or per-database topics.
+        separator:
+          type: string
+          example: .
+          description: The separator between the prefix and the table or database name.
+        topicSuffix:
+          type: string
+          example: -v1
+          description: The topic name suffix for dispatch types that create per-table or per-database topics.
+        replicationFactor:
+          type: integer
+          format: int64
+          example: 3
+          description: The replication factor for auto-created topics.
+          minimum: 1
+        partitionNum:
+          type: integer
+          format: int64
+          example: 6
+          description: The number of partitions for auto-created topics.
+          minimum: 1
+        partitionDispatchers:
+          type: array
+          items:
+            $ref: '#/components/schemas/TopicPartitionConfigPartitionDispatcherConfig_2'
+          description: The custom partition dispatcher configurations.
+      description: The Kafka topic and partition configuration.
+      required:
+      - dispatchType
+      - replicationFactor
+      - partitionNum
+x-refined-from:
+- pingcap-tidb-cloud-dedicated-v1beta1-openapi-original.json
+- tidb-cloud-premium-v1beta2-openapi-original.json

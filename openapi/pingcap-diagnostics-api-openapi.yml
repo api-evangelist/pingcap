@@ -1,0 +1,43 @@
+openapi: 3.2.0
+info:
+  title: TiDB HTTP Diagnostics API
+  description: The TiDB HTTP API is a built-in administrative interface available on self-managed TiDB server instances, accessible on port 10080 by default.
+  version: '1.0'
+  contact:
+    name: TiDB GitHub
+    url: https://github.com/pingcap/tidb/blob/master/docs/tidb_http_api.md
+  termsOfService: https://www.apache.org/licenses/LICENSE-2.0
+servers:
+- url: http://localhost:10080
+  description: Local TiDB Node (default status port)
+tags:
+- name: Diagnostics
+  description: Endpoints for downloading debug information and managing server diagnostics.
+paths:
+  /debug/zip:
+    get:
+      operationId: downloadDebugZip
+      summary: Download debug info zip
+      description: Returns a zip archive containing TiDB debug information useful for diagnosing production issues. The archive includes heap profile, CPU profile, goroutine dump, and configuration information collected over the specified number of seconds. This endpoint is used when filing bug reports or investigating performance problems with PingCAP support.
+      tags:
+      - Diagnostics
+      parameters:
+      - name: seconds
+        in: query
+        description: Number of seconds to collect CPU profile and goroutine data before packaging.
+        required: false
+        schema:
+          type: integer
+          default: 10
+      responses:
+        '200':
+          description: Debug zip archive returned successfully.
+          content:
+            application/zip:
+              schema:
+                type: string
+                format: binary
+                description: A zip file containing debug information.
+externalDocs:
+  description: TiDB HTTP API Reference
+  url: https://github.com/pingcap/tidb/blob/master/docs/tidb_http_api.md

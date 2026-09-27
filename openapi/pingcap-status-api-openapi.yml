@@ -1,0 +1,143 @@
+openapi: 3.2.0
+info:
+  title: TiDB HTTP Status API
+  description: The TiDB HTTP API is a built-in administrative interface available on self-managed TiDB server instances, accessible on port 10080 by default.
+  version: '1.0'
+  contact:
+    name: TiDB GitHub
+    url: https://github.com/pingcap/tidb/blob/master/docs/tidb_http_api.md
+  termsOfService: https://www.apache.org/licenses/LICENSE-2.0
+servers:
+- url: http://localhost:10080
+  description: Local TiDB Node (default status port)
+tags:
+- name: Status
+  description: Endpoints for retrieving the operational status of the TiDB server instance.
+paths:
+  /status:
+    get:
+      operationId: getServerStatus
+      summary: Get server status
+      description: Returns the current operational status of the TiDB server instance, including the number of active connections, the TiDB version string, and the git commit hash of the binary. This endpoint is commonly used by load balancers and health check systems to verify that the TiDB process is running and accepting connections.
+      tags:
+      - Status
+      responses:
+        '200':
+          description: Server status retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerStatus'
+  /metrics:
+    get:
+      operationId: getMetrics
+      summary: Get Prometheus metrics
+      description: Returns all Prometheus-format performance metrics for the TiDB server instance. This endpoint is consumed by Prometheus scrape jobs to collect TiDB-specific metrics including query latency, error rates, connection pool utilization, and internal component performance counters.
+      tags:
+      - Status
+      responses:
+        '200':
+          description: Prometheus metrics returned in text exposition format.
+          content:
+            text/plain:
+              schema:
+                type: string
+                description: Prometheus text format metrics output.
+  /info:
+    get:
+      operationId: getServerInfo
+      summary: Get server information
+      description: Returns detailed information about the TiDB server instance including version, IP address, listening port, status port, and the git hash of the binary. This endpoint is useful for service discovery and identifying specific nodes in a TiDB cluster.
+      tags:
+      - Status
+      responses:
+        '200':
+          description: Server information retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerInfo'
+  /info/all:
+    get:
+      operationId: getAllServersInfo
+      summary: Get all cluster server information
+      description: Returns information about all TiDB server instances in the cluster as registered with the Placement Driver (PD). This provides a cluster-wide view of all running TiDB nodes and their connection endpoints.
+      tags:
+      - Status
+      responses:
+        '200':
+          description: All TiDB server information retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllServersInfo'
+components:
+  schemas:
+    AllServersInfo:
+      type: object
+      description: Information about all TiDB nodes in the cluster.
+      properties:
+        servers_num:
+          type: integer
+          description: The total number of TiDB servers in the cluster.
+        owner_id:
+          type: string
+          description: The DDL ID of the current DDL owner node.
+        is_all_server_version_consistent:
+          type: boolean
+          description: Whether all TiDB servers are running the same version.
+        all_servers_info:
+          type: object
+          description: A map of server DDL IDs to their ServerInfo objects.
+          additionalProperties:
+            $ref: '#/components/schemas/ServerInfo'
+    ServerInfo:
+      type: object
+      description: Detailed information about the TiDB server instance.
+      properties:
+        ddl_id:
+          type: string
+          description: The unique DDL identifier for this TiDB node.
+        ip:
+          type: string
+          description: The IP address of this TiDB node.
+        listening_port:
+          type: integer
+          description: The SQL connection port this node listens on.
+        status_port:
+          type: integer
+          description: The HTTP status port this node listens on.
+        lease:
+          type: string
+          description: The schema lease duration string.
+        binlog_status:
+          type: string
+          description: The current binlog pump connection status.
+        start_timestamp:
+          type: integer
+          description: The Unix timestamp when this TiDB server started.
+        git_hash:
+          type: string
+          description: The git commit hash of the TiDB binary.
+        is_owner:
+          type: boolean
+          description: Whether this TiDB node is the current DDL owner.
+        op_scope_level:
+          type: integer
+          description: The scope level for this server's operational range.
+    ServerStatus:
+      type: object
+      description: Current operational status of the TiDB server instance.
+      properties:
+        connections:
+          type: integer
+          description: The number of currently active client connections.
+        version:
+          type: string
+          description: The TiDB server version string.
+        git_hash:
+          type: string
+          description: The git commit hash of the running TiDB binary.
+externalDocs:
+  description: TiDB HTTP API Reference
+  url: https://github.com/pingcap/tidb/blob/master/docs/tidb_http_api.md

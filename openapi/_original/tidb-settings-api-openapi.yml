@@ -1,0 +1,89 @@
+# x-archived-from: tidb-settings-api-openapi.yml
+# x-archived-on: 2026-09-26
+openapi: 3.2.0
+info:
+  title: TiDB HTTP Settings API
+  description: The TiDB HTTP API is a built-in administrative interface available on self-managed TiDB server instances, accessible on port 10080 by default.
+  version: '1.0'
+  contact:
+    name: TiDB GitHub
+    url: https://github.com/pingcap/tidb/blob/master/docs/tidb_http_api.md
+  termsOfService: https://www.apache.org/licenses/LICENSE-2.0
+servers:
+- url: http://localhost:10080
+  description: Local TiDB Node (default status port)
+tags:
+- name: Settings
+  description: Endpoints for retrieving and modifying TiDB server runtime settings.
+paths:
+  /settings:
+    get:
+      operationId: getSettings
+      summary: Get server settings
+      description: Returns the current runtime settings of the TiDB server instance, including log level, general log status, and DDL slow threshold. These settings can be modified without restarting the server via the POST method of this endpoint.
+      tags:
+      - Settings
+      responses:
+        '200':
+          description: Server settings retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerSettings'
+    post:
+      operationId: updateSettings
+      summary: Update server settings
+      description: Modifies one or more runtime settings of the TiDB server without requiring a restart. Supports updating general_log to enable or disable the general query log, log_level to change the server log verbosity, and ddl_slow_threshold to adjust the DDL slow operation threshold in milliseconds.
+      tags:
+      - Settings
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UpdateSettingsRequest'
+      responses:
+        '200':
+          description: Server settings updated successfully.
+        '400':
+          description: Invalid setting name or value provided.
+components:
+  schemas:
+    ServerSettings:
+      type: object
+      description: Current runtime settings of the TiDB server.
+      properties:
+        general_log:
+          type: boolean
+          description: Whether the general query log is enabled.
+        log_level:
+          type: string
+          description: The current log verbosity level (debug, info, warn, error).
+        ddl_slow_threshold:
+          type: integer
+          description: The threshold in milliseconds for logging slow DDL operations.
+    UpdateSettingsRequest:
+      type: object
+      description: Request body for updating TiDB server runtime settings.
+      properties:
+        tidb_general_log:
+          type: integer
+          description: Set to 1 to enable general query logging, 0 to disable.
+          enum:
+          - 0
+          - 1
+        log_level:
+          type: string
+          description: The new log level (debug, info, warn, error, fatal).
+          enum:
+          - debug
+          - info
+          - warn
+          - error
+          - fatal
+        ddl_slow_threshold:
+          type: integer
+          description: New DDL slow threshold in milliseconds.
+externalDocs:
+  description: TiDB HTTP API Reference
+  url: https://github.com/pingcap/tidb/blob/master/docs/tidb_http_api.md

@@ -133,6 +133,24 @@ paths:
       - Deployment
 components:
   schemas:
+    protobufAny:
+      type: object
+      properties:
+        '@type':
+          type: string
+      additionalProperties: {}
+    DeploymentOriginInfo:
+      type: object
+      properties:
+        commit:
+          type: string
+          description: The commit ID associated with the deployment.
+          readOnly: true
+        diffUrl:
+          type: string
+          description: The URL to view the diff of the changes in the commit.
+          readOnly: true
+      description: If the `origin` is `"GitHub"`, this filed displays the corresponding commit information.
     rpcStatus:
       type: object
       properties:
@@ -205,24 +223,6 @@ components:
           type: string
           description: 'The timestamp when the deployment was finished. The time format follows the [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) standard. For example: `"2023-06-03T06:52:08Z"`.'
           readOnly: true
-    protobufAny:
-      type: object
-      properties:
-        '@type':
-          type: string
-      additionalProperties: {}
-    DeploymentOriginInfo:
-      type: object
-      properties:
-        commit:
-          type: string
-          description: The commit ID associated with the deployment.
-          readOnly: true
-        diffUrl:
-          type: string
-          description: The URL to view the diff of the changes in the commit.
-          readOnly: true
-      description: If the `origin` is `"GitHub"`, this filed displays the corresponding commit information.
 x-tagGroups:
 - name: Endpoints
   tags:

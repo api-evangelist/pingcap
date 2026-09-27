@@ -1,0 +1,215 @@
+openapi: 3.2.0
+info:
+  title: TiDB HTTP Schema API
+  description: The TiDB HTTP API is a built-in administrative interface available on self-managed TiDB server instances, accessible on port 10080 by default.
+  version: '1.0'
+  contact:
+    name: TiDB GitHub
+    url: https://github.com/pingcap/tidb/blob/master/docs/tidb_http_api.md
+  termsOfService: https://www.apache.org/licenses/LICENSE-2.0
+servers:
+- url: http://localhost:10080
+  description: Local TiDB Node (default status port)
+tags:
+- name: Schema
+  description: Endpoints for retrieving database and table schema information from the TiDB information schema.
+paths:
+  /schema:
+    get:
+      operationId: getAllSchemas
+      summary: Get all database schemas
+      description: Returns schema information for all databases known to this TiDB instance. The response includes table names, column definitions, and index information as represented in the TiDB information schema.
+      tags:
+      - Schema
+      responses:
+        '200':
+          description: All database schemas retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DatabaseSchema'
+  /schema/{db}:
+    get:
+      operationId: getDatabaseSchema
+      summary: Get database schema
+      description: Returns schema information for all tables in the specified database. Optionally set id_name_only to true to return only table IDs and names without the full column and index details, which is faster for large schemas.
+      tags:
+      - Schema
+      parameters:
+      - $ref: '#/components/parameters/db'
+      - name: id_name_only
+        in: query
+        description: If true, returns only table IDs and names without full schema details.
+        required: false
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: Database schema retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TableSchema'
+        '404':
+          description: The specified database was not found.
+  /schema/{db}/{table}:
+    get:
+      operationId: getTableSchema
+      summary: Get table schema
+      description: Returns the full schema definition for the specified table, including all column names, types, default values, and index definitions. Can also look up a table by numeric table_id or multiple table_ids for batch retrieval.
+      tags:
+      - Schema
+      parameters:
+      - $ref: '#/components/parameters/db'
+      - $ref: '#/components/parameters/table'
+      - name: table_id
+        in: query
+        description: Optional numeric table ID for lookup by ID instead of name.
+        required: false
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Table schema retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TableSchema'
+        '404':
+          description: The specified database or table was not found.
+  /db-table/{tableID}:
+    get:
+      operationId: getTableByID
+      summary: Get table info by table ID
+      description: Returns database information, table information, and the current TiDB info schema version for a specific table identified by its numeric table ID. This is useful for reverse lookups when you have a table ID from region information but need the associated database and table names.
+      tags:
+      - Schema
+      parameters:
+      - name: tableID
+        in: path
+        description: The numeric TiDB internal table ID.
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Table information retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TableByIDResponse'
+        '404':
+          description: No table with the specified ID was found.
+components:
+  parameters:
+    db:
+      name: db
+      in: path
+      description: The database name.
+      required: true
+      schema:
+        type: string
+    table:
+      name: table
+      in: path
+      description: The table name within the specified database.
+      required: true
+      schema:
+        type: string
+  schemas:
+    TableByIDResponse:
+      type: object
+      description: Database and table information looked up by table ID.
+      properties:
+        db_info:
+          $ref: '#/components/schemas/DatabaseSchema'
+        table_info:
+          $ref: '#/components/schemas/TableSchema'
+    DatabaseSchema:
+      type: object
+      description: Schema information for a TiDB database.
+      properties:
+        db_name:
+          $ref: '#/components/schemas/CIStr'
+        charset:
+          type: string
+          description: The character set of the database.
+        collate:
+          type: string
+          description: The collation of the database.
+    CIStr:
+      type: object
+      description: A case-insensitive string pair used in TiDB schema objects.
+      properties:
+        O:
+          type: string
+          description: The original case-preserved string value.
+        L:
+          type: string
+          description: The lowercase version of the string.
+    ColumnInfo:
+      type: object
+      description: A column definition within a TiDB table schema.
+      properties:
+        id:
+          type: integer
+          description: The internal numeric column ID.
+        name:
+          $ref: '#/components/schemas/CIStr'
+        field_type:
+          type: object
+          description: The MySQL field type descriptor for this column.
+    IndexInfo:
+      type: object
+      description: An index definition on a TiDB table.
+      properties:
+        id:
+          type: integer
+          description: The internal numeric index ID.
+        idx_name:
+          $ref: '#/components/schemas/CIStr'
+        tbl_name:
+          $ref: '#/components/schemas/CIStr'
+        idx_cols:
+          type: array
+          description: The columns included in this index.
+          items:
+            type: object
+        is_unique:
+          type: boolean
+          description: Whether this is a unique index.
+        is_primary:
+          type: boolean
+          description: Whether this is the primary key index.
+    TableSchema:
+      type: object
+      description: Schema information for a TiDB table.
+      properties:
+        id:
+          type: integer
+          description: The internal numeric TiDB table ID.
+        name:
+          $ref: '#/components/schemas/CIStr'
+        charset:
+          type: string
+          description: The character set of the table.
+        collate:
+          type: string
+          description: The collation of the table.
+        cols:
+          type: array
+          description: The list of column definitions in the table.
+          items:
+            $ref: '#/components/schemas/ColumnInfo'
+        index_info:
+          type: array
+          description: The list of index definitions on the table.
+          items:
+            $ref: '#/components/schemas/IndexInfo'
+externalDocs:
+  description: TiDB HTTP API Reference
+  url: https://github.com/pingcap/tidb/blob/master/docs/tidb_http_api.md

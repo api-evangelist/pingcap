@@ -1,0 +1,257 @@
+openapi: 3.2.0
+info:
+  title: TiDB Cloud Chat2Query Data Summaries API
+  description: The TiDB Cloud Chat2Query API is an AI-powered interface that enables developers to generate and execute SQL statements against TiDB Cloud clusters using natural language instructions.
+  version: v3
+  contact:
+    name: TiDB Cloud Support
+    url: https://docs.pingcap.com/tidbcloud/use-chat2query-api/
+  termsOfService: https://www.pingcap.com/legal/privacy-policy/
+servers:
+- url: https://data.tidbcloud.com/api/v1beta/app/{dataAppId}/endpoint
+  description: Chat2Query Data App Endpoint Server
+  variables:
+    dataAppId:
+      description: The Chat2Query Data App ID assigned by TiDB Cloud.
+      default: dataapp_default
+security:
+- digestAuth: []
+tags:
+- name: Data Summaries
+  description: Operations for generating and managing AI summaries of database schemas used as context for SQL generation.
+paths:
+  /v3/dataSummaries:
+    get:
+      operationId: listDataSummaries
+      summary: List data summaries
+      description: Returns all AI-generated data summaries for the Chat2Query Data App. A data summary captures the schema structure and statistical profile of a database, providing context that the AI uses to generate more accurate SQL statements. Summaries must be created before calling the chat2data endpoint with a data_summary_id.
+      tags:
+      - Data Summaries
+      responses:
+        '200':
+          description: List of data summaries retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListDataSummariesResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimitExceeded'
+    post:
+      operationId: createDataSummary
+      summary: Create a data summary
+      description: Generates an AI-powered summary of the specified database schema on a linked TiDB Cloud cluster. The summary analyzes table structures, relationships, and data distributions to provide context for subsequent SQL generation. Set reuse to true to return an existing summary if one already exists for this database.
+      tags:
+      - Data Summaries
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDataSummaryRequest'
+      responses:
+        '200':
+          description: Data summary creation initiated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataSummaryResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimitExceeded'
+  /v3/dataSummaries/{data_summary_id}:
+    get:
+      operationId: getDataSummary
+      summary: Get a data summary
+      description: Returns the details and current generation status of a specific data summary by its ID. Data summary generation is asynchronous; poll this endpoint until the status is DONE before using the summary_id in a chat2data request.
+      tags:
+      - Data Summaries
+      parameters:
+      - $ref: '#/components/parameters/dataSummaryId'
+      responses:
+        '200':
+          description: Data summary retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataSummaryResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      operationId: updateDataSummary
+      summary: Update a data summary
+      description: Regenerates or updates an existing data summary for a database. Use this endpoint to refresh a summary after significant schema or data changes to keep AI-generated SQL accurate.
+      tags:
+      - Data Summaries
+      parameters:
+      - $ref: '#/components/parameters/dataSummaryId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDataSummaryRequest'
+      responses:
+        '200':
+          description: Data summary updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataSummaryResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v2/dataSummaries:
+    post:
+      operationId: createDataSummaryV2
+      summary: Create a data summary (v2)
+      description: Generates a data summary of the specified database schema using the v2 Chat2Query API. This is the v2 version of the data summary endpoint. The v3 endpoint is recommended for new integrations as it supports additional features including knowledge bases and session management.
+      tags:
+      - Data Summaries
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDataSummaryRequest'
+      responses:
+        '200':
+          description: Data summary creation initiated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataSummaryResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimitExceeded'
+components:
+  schemas:
+    ListDataSummariesResponse:
+      type: object
+      description: API response wrapper for listing data summaries.
+      properties:
+        code:
+          type: integer
+          description: The response code. 200 indicates success.
+        msg:
+          type: string
+          description: A message describing the result.
+        result:
+          type: array
+          description: The list of data summary objects.
+          items:
+            $ref: '#/components/schemas/DataSummary'
+    DataSummary:
+      type: object
+      description: An AI-generated summary of a database schema.
+      properties:
+        data_summary_id:
+          type: integer
+          description: The unique identifier of the data summary.
+        cluster_id:
+          type: string
+          description: The ID of the cluster whose database was summarized.
+        database:
+          type: string
+          description: The name of the summarized database.
+        status:
+          type: string
+          description: The generation status of the data summary.
+          enum:
+          - RUNNING
+          - DONE
+          - FAILED
+    DataSummaryResponse:
+      type: object
+      description: API response wrapper for a data summary operation.
+      properties:
+        code:
+          type: integer
+          description: The response code. 200 indicates success.
+        msg:
+          type: string
+          description: A message describing the result.
+        result:
+          $ref: '#/components/schemas/DataSummary'
+    ErrorResponse:
+      type: object
+      description: Standard error response returned when an API request fails.
+      properties:
+        code:
+          type: integer
+          description: The error code.
+        msg:
+          type: string
+          description: A human-readable error message describing the failure.
+    CreateDataSummaryRequest:
+      type: object
+      description: Request body for creating a new database schema data summary.
+      required:
+      - cluster_id
+      - database
+      properties:
+        cluster_id:
+          type: string
+          description: The ID of the TiDB Cloud cluster whose database will be summarized.
+        database:
+          type: string
+          description: The name of the database to generate a summary for.
+        description:
+          type: string
+          description: An optional human-readable description for this data summary.
+        reuse:
+          type: boolean
+          description: If true, returns an existing summary for this database instead of generating a new one.
+  responses:
+    RateLimitExceeded:
+      description: Rate limit exceeded. The Chat2Query API allows 100 requests per day per Data App. Contact TiDB Cloud support to request a higher limit.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: Authentication failed. Check your Chat2Query API key credentials.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    BadRequest:
+      description: The request body or parameters are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  parameters:
+    dataSummaryId:
+      name: data_summary_id
+      in: path
+      description: The unique identifier of the data summary.
+      required: true
+      schema:
+        type: integer
+  securitySchemes:
+    digestAuth:
+      type: http
+      scheme: digest
+      description: HTTP Digest Authentication using a Chat2Query Data App API public key as the username and private key as the password. Keys are generated within the Chat2Query Data App in the TiDB Cloud console.
+externalDocs:
+  description: TiDB Cloud Chat2Query API Reference
+  url: https://docs.pingcap.com/tidbcloud/use-chat2query-api/

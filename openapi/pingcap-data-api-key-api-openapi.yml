@@ -211,33 +211,36 @@ paths:
       - Data API Key
 components:
   schemas:
-    rpcStatus:
+    v1beta1ApiKey:
       type: object
       properties:
-        code:
+        description:
+          type: string
+          description: The description of the API key.
+        role:
+          $ref: '#/components/schemas/ApiKeyRole'
+          description: Role of the API Key
+        rateLimitRpm:
           type: integer
           format: int32
-        message:
-          type: string
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/protobufAny'
-    ApiKeyApiKeyExpireSetting:
+          default: 100
+          minimum: 1
+          maximum: 1000
+          description: The maximum number of API requests allowed per minute using this key. For Chat2Query Data Apps, you cannot modify this field.
+        apiKeyExpireSetting:
+          $ref: '#/components/schemas/ApiKeyApiKeyExpireSetting'
+          description: The API Key expire setting
+      description: 'An API key of a Data App. '
+      required:
+      - description
+      - role
+      - rateLimitRpm
+    protobufAny:
       type: object
       properties:
-        expireOption:
-          $ref: '#/components/schemas/ApiKeyExpireOption'
-          default: EXPIRE_OPTION_NEVER_EXPIRE
-        apiKeyTtl:
-          type: integer
-          format: int64
-          description: 'The expiration time for the key, in minutes.
-
-            The filed is only available when `expireOption` is set to `EXPIRE_OPTION_SET_TTL`.'
-          minimum: 1
-          maximum: 525600
-      description: The expiration settings for the API key.
+        '@type':
+          type: string
+      additionalProperties: {}
     v1beta1ApiKeyRes:
       type: object
       properties:
@@ -274,38 +277,25 @@ components:
           $ref: '#/components/schemas/ApiKeyApiKeyExpireSetting'
           description: The expiration settings for the API key.
       description: An API key of a Data App
-    v1beta1ApiKey:
+    rpcStatus:
       type: object
       properties:
-        description:
-          type: string
-          description: The description of the API key.
-        role:
-          $ref: '#/components/schemas/ApiKeyRole'
-          description: Role of the API Key
-        rateLimitRpm:
+        code:
           type: integer
           format: int32
-          default: 100
-          minimum: 1
-          maximum: 1000
-          description: The maximum number of API requests allowed per minute using this key. For Chat2Query Data Apps, you cannot modify this field.
-        apiKeyExpireSetting:
-          $ref: '#/components/schemas/ApiKeyApiKeyExpireSetting'
-          description: The API Key expire setting
-      description: 'An API key of a Data App. '
-      required:
-      - description
-      - role
-      - rateLimitRpm
-    ApiKeyExpireState:
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/protobufAny'
+    ApiKeyRole:
       type: string
       enum:
-      - EXPIRE_STATE_NEVER_EXPIRE
-      - EXPIRE_STATE_EXPIRED
-      - EXPIRE_STATE_NOT_EXPIRE
-      default: EXPIRE_STATE_NEVER_EXPIRE
-      description: "The expiration state of the API key:\n- `EXPIRE_STATE_NEVER_EXPIRE`: this API key never expires\n - `EXPIRE_STATE_EXPIRED`: this API key has expired\n - `EXPIRE_STATE_NOT_EXPIRE`: this API key is currently active"
+      - READ_AND_WRITE
+      - READ_ONLY
+      default: READ_ONLY
+      description: "Controls whether the API key can read or write data to the clusters linked to the Data App.\n- `READ_AND_WRITE`: allows the API key to read and write data. You can use this API key to execute all SQL statements, such as DML and DDL statements.\n - `READ_ONLY`:  only allows the API key to read data, such as `SELECT`, `SHOW`, `USE`, `DESC`, and `EXPLAIN` statements."
     v1beta1ListApiKeysResponse:
       type: object
       properties:
@@ -318,19 +308,6 @@ components:
           type: string
           description: The token to retrieve the next page of results.
       title: Response for ListApiKeys
-    ApiKeyRole:
-      type: string
-      enum:
-      - READ_AND_WRITE
-      - READ_ONLY
-      default: READ_ONLY
-      description: "Controls whether the API key can read or write data to the clusters linked to the Data App.\n- `READ_AND_WRITE`: allows the API key to read and write data. You can use this API key to execute all SQL statements, such as DML and DDL statements.\n - `READ_ONLY`:  only allows the API key to read data, such as `SELECT`, `SHOW`, `USE`, `DESC`, and `EXPLAIN` statements."
-    protobufAny:
-      type: object
-      properties:
-        '@type':
-          type: string
-      additionalProperties: {}
     ApiKeyExpireOption:
       type: string
       enum:
@@ -338,6 +315,29 @@ components:
       - EXPIRE_OPTION_SET_TTL
       default: EXPIRE_OPTION_NEVER_EXPIRE
       description: "The method used to determine the API key's expiration:\n- `EXPIRE_OPTION_NEVER_EXPIRE`: this key will never expire\n - `EXPIRE_OPTION_SET_TTL`: this key will expire after the time specified by `apikeyTtl`"
+    ApiKeyApiKeyExpireSetting:
+      type: object
+      properties:
+        expireOption:
+          $ref: '#/components/schemas/ApiKeyExpireOption'
+          default: EXPIRE_OPTION_NEVER_EXPIRE
+        apiKeyTtl:
+          type: integer
+          format: int64
+          description: 'The expiration time for the key, in minutes.
+
+            The filed is only available when `expireOption` is set to `EXPIRE_OPTION_SET_TTL`.'
+          minimum: 1
+          maximum: 525600
+      description: The expiration settings for the API key.
+    ApiKeyExpireState:
+      type: string
+      enum:
+      - EXPIRE_STATE_NEVER_EXPIRE
+      - EXPIRE_STATE_EXPIRED
+      - EXPIRE_STATE_NOT_EXPIRE
+      default: EXPIRE_STATE_NEVER_EXPIRE
+      description: "The expiration state of the API key:\n- `EXPIRE_STATE_NEVER_EXPIRE`: this API key never expires\n - `EXPIRE_STATE_EXPIRED`: this API key has expired\n - `EXPIRE_STATE_NOT_EXPIRE`: this API key is currently active"
 x-tagGroups:
 - name: Endpoints
   tags:
