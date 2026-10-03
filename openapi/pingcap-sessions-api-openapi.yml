@@ -47,26 +47,23 @@ paths:
         '429':
           $ref: '#/components/responses/RateLimitExceeded'
 components:
-  responses:
-    RateLimitExceeded:
-      description: Rate limit exceeded. The Chat2Query API allows 100 requests per day per Data App. Contact TiDB Cloud support to request a higher limit.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    Unauthorized:
-      description: Authentication failed. Check your Chat2Query API key credentials.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    BadRequest:
-      description: The request body or parameters are invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
   schemas:
+    ChatSession:
+      type: object
+      description: A multi-round conversational chat session.
+      properties:
+        code:
+          type: integer
+          description: The response code. 200 indicates success.
+        msg:
+          type: string
+          description: A message describing the result.
+        result:
+          type: object
+          properties:
+            session_id:
+              type: string
+              description: The unique session identifier to use in subsequent chat2data requests.
     CreateSessionRequest:
       type: object
       description: Request body for creating a multi-round chat session.
@@ -90,22 +87,25 @@ components:
         msg:
           type: string
           description: A human-readable error message describing the failure.
-    ChatSession:
-      type: object
-      description: A multi-round conversational chat session.
-      properties:
-        code:
-          type: integer
-          description: The response code. 200 indicates success.
-        msg:
-          type: string
-          description: A message describing the result.
-        result:
-          type: object
-          properties:
-            session_id:
-              type: string
-              description: The unique session identifier to use in subsequent chat2data requests.
+  responses:
+    RateLimitExceeded:
+      description: Rate limit exceeded. The Chat2Query API allows 100 requests per day per Data App. Contact TiDB Cloud support to request a higher limit.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    BadRequest:
+      description: The request body or parameters are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: Authentication failed. Check your Chat2Query API key credentials.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
   securitySchemes:
     digestAuth:
       type: http

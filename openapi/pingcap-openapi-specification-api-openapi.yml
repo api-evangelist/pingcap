@@ -54,6 +54,12 @@ paths:
       - OpenAPI Specification
 components:
   schemas:
+    protobufAny:
+      type: object
+      properties:
+        '@type':
+          type: string
+      additionalProperties: {}
     rpcStatus:
       type: object
       properties:
@@ -66,12 +72,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/protobufAny'
-    protobufAny:
-      type: object
-      properties:
-        '@type':
-          type: string
-      additionalProperties: {}
     v1beta1ApiSpec:
       type: object
       properties:

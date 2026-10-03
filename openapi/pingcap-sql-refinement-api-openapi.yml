@@ -48,6 +48,43 @@ paths:
           $ref: '#/components/responses/RateLimitExceeded'
 components:
   schemas:
+    RefineSqlRequest:
+      type: object
+      description: Request body for refining a previously generated SQL query.
+      required:
+      - cluster_id
+      - database
+      - question
+      - sql
+      - task
+      properties:
+        cluster_id:
+          type: string
+          description: The ID of the TiDB Cloud cluster.
+        database:
+          type: string
+          description: The database within the cluster.
+        question:
+          type: string
+          description: The original natural language question that produced the SQL.
+        sql:
+          type: string
+          description: The SQL query to be refined.
+        task:
+          type: string
+          description: A description of how to refine the SQL query.
+    Chat2DataResponse:
+      type: object
+      description: API response wrapper for a Chat2Data operation.
+      properties:
+        code:
+          type: integer
+          description: The response code. 200 indicates success.
+        msg:
+          type: string
+          description: A message describing the result.
+        result:
+          $ref: '#/components/schemas/Chat2DataResult'
     ColumnDefinition:
       type: object
       description: A column definition in a query result set.
@@ -82,43 +119,6 @@ components:
           description: The column definitions for the query result.
           items:
             $ref: '#/components/schemas/ColumnDefinition'
-    Chat2DataResponse:
-      type: object
-      description: API response wrapper for a Chat2Data operation.
-      properties:
-        code:
-          type: integer
-          description: The response code. 200 indicates success.
-        msg:
-          type: string
-          description: A message describing the result.
-        result:
-          $ref: '#/components/schemas/Chat2DataResult'
-    RefineSqlRequest:
-      type: object
-      description: Request body for refining a previously generated SQL query.
-      required:
-      - cluster_id
-      - database
-      - question
-      - sql
-      - task
-      properties:
-        cluster_id:
-          type: string
-          description: The ID of the TiDB Cloud cluster.
-        database:
-          type: string
-          description: The database within the cluster.
-        question:
-          type: string
-          description: The original natural language question that produced the SQL.
-        sql:
-          type: string
-          description: The SQL query to be refined.
-        task:
-          type: string
-          description: A description of how to refine the SQL query.
     ErrorResponse:
       type: object
       description: Standard error response returned when an API request fails.
@@ -136,14 +136,14 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-    Unauthorized:
-      description: Authentication failed. Check your Chat2Query API key credentials.
+    BadRequest:
+      description: The request body or parameters are invalid.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-    BadRequest:
-      description: The request body or parameters are invalid.
+    Unauthorized:
+      description: Authentication failed. Check your Chat2Query API key credentials.
       content:
         application/json:
           schema:

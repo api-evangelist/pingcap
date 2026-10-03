@@ -159,6 +159,36 @@ paths:
       - Data Source
 components:
   schemas:
+    v1beta1ListDataSourcesResponse:
+      type: object
+      properties:
+        dataSources:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1beta1DataSource'
+          description: The items of data sources in the Data App.
+        nextPageToken:
+          type: string
+          description: The token to retrieve the next page of results.
+      title: Response for ListDataSources
+    protobufAny:
+      type: object
+      properties:
+        '@type':
+          type: string
+      additionalProperties: {}
+    rpcStatus:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/protobufAny'
     v1beta1DataSource:
       type: object
       properties:
@@ -197,36 +227,6 @@ components:
         createdAt:
           type: string
           description: 'The timestamp when the Data App was created. The time format follows the [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) standard. For example: `"2023-06-03T06:52:08Z"`.'
-    rpcStatus:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/protobufAny'
-    protobufAny:
-      type: object
-      properties:
-        '@type':
-          type: string
-      additionalProperties: {}
-    v1beta1ListDataSourcesResponse:
-      type: object
-      properties:
-        dataSources:
-          type: array
-          items:
-            $ref: '#/components/schemas/v1beta1DataSource'
-          description: The items of data sources in the Data App.
-        nextPageToken:
-          type: string
-          description: The token to retrieve the next page of results.
-      title: Response for ListDataSources
 x-tagGroups:
 - name: Endpoints
   tags:

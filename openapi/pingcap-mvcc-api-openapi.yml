@@ -62,17 +62,17 @@ paths:
                 $ref: '#/components/schemas/MvccInfo'
 components:
   parameters:
-    db:
-      name: db
-      in: path
-      description: The database name.
-      required: true
-      schema:
-        type: string
     table:
       name: table
       in: path
       description: The table name within the specified database.
+      required: true
+      schema:
+        type: string
+    db:
+      name: db
+      in: path
+      description: The database name.
       required: true
       schema:
         type: string

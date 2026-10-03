@@ -380,14 +380,85 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    api.OpenApiBatchUpdateUsersRsp:
+    api.OpenApiBatchUpdateUserResult:
       type: object
       properties:
-        results:
-          description: The list of update results, one for each member in the request.
+        error:
+          description: The error details when the member update failed. This field is empty when the update succeeded.
+          allOf:
+          - $ref: '#/components/schemas/api.OpenApiBatchUpdateError'
+        success:
+          description: Indicates whether the member was updated successfully.
+          type: boolean
+        userId:
+          description: The ID of the member.
+          type: string
+    api.openApiBatchUpdateUserEntryDoc:
+      type: object
+      required:
+      - userId
+      properties:
+        instanceRoles:
+          description: The new instance-level roles to assign to the member. The existing instance roles are fully replaced when this field is provided.
           type: array
           items:
-            $ref: '#/components/schemas/api.OpenApiBatchUpdateUserResult'
+            $ref: '#/components/schemas/api.OpenApiInstanceRole'
+        orgRole:
+          description: The new organization-level role to assign to the member.
+          allOf:
+          - $ref: '#/components/schemas/api.OpenApiOrgRole'
+        projectRoles:
+          description: The new project-level roles to assign to the member. The existing project roles are fully replaced when this field is provided.
+          type: array
+          items:
+            $ref: '#/components/schemas/api.OpenApiProjectRole'
+        userId:
+          description: The ID of the member to update.
+          type: string
+    api.openApiBatchUpdateUsersReqDoc:
+      type: object
+      properties:
+        users:
+          description: The list of members to update.
+          type: array
+          items:
+            $ref: '#/components/schemas/api.openApiBatchUpdateUserEntryDoc'
+    api.OpenApiBatchUpdateError:
+      type: object
+      properties:
+        code:
+          description: The error code returned when the member update failed.
+          type: string
+        message:
+          description: The error message describing why the member update failed.
+          type: string
+    api.OpenApiInstanceRole:
+      type: object
+      properties:
+        rbacRole:
+          description: The instance-level role assigned to the member.
+          type: string
+          enum:
+          - cluster:admin
+          - cluster:viewer
+          example: cluster:admin
+        scopeId:
+          description: The ID of the TiDB Cloud Starter, Essential, or Premium instance to which the role applies.
+          type: string
+    api.OpenApiInviteUsersRsp:
+      type: object
+      properties:
+        message:
+          description: A human-readable message describing the result of the invitation.
+          type: string
+        success:
+          description: Indicates whether the invitation was sent successfully.
+          type: boolean
+        users:
+          description: The list of members that were invited.
+          type: array
+          items:
+            $ref: '#/components/schemas/api.OpenApiInviteUserResult'
     api.OpenApiProjectRole:
       type: object
       properties:
@@ -402,19 +473,6 @@ components:
           example: project:owner
         scopeId:
           description: The ID of the project to which the role applies.
-          type: string
-    api.OpenApiInstanceRole:
-      type: object
-      properties:
-        rbacRole:
-          description: The instance-level role assigned to the member.
-          type: string
-          enum:
-          - cluster:admin
-          - cluster:viewer
-          example: cluster:admin
-        scopeId:
-          description: The ID of the TiDB Cloud Starter, Essential, or Premium instance to which the role applies.
           type: string
     api.OpenApiOrgRole:
       type: object
@@ -432,56 +490,23 @@ components:
         scopeId:
           description: The ID of the organization to which the role applies.
           type: string
-    api.openApiBatchUpdateUsersReqDoc:
+    api.openApiUpdateUserReqDoc:
       type: object
       properties:
-        users:
-          description: The list of members to update.
+        instanceRoles:
+          description: The new instance-level roles to assign to the member. The existing instance roles are fully replaced when this field is provided.
           type: array
           items:
-            $ref: '#/components/schemas/api.openApiBatchUpdateUserEntryDoc'
-    api.OpenApiInviteUserResult:
-      type: object
-      properties:
-        email:
-          description: The email address of the invited member.
-          type: string
-        userId:
-          description: The ID of the invited member.
-          type: string
-    api.OpenApiError:
-      type: object
-      properties:
-        code:
-          type: string
-        error: {}
-        msgPrefix:
-          type: string
-        status:
-          type: integer
-    api.OpenApiBatchUpdateError:
-      type: object
-      properties:
-        code:
-          description: The error code returned when the member update failed.
-          type: string
-        message:
-          description: The error message describing why the member update failed.
-          type: string
-    api.OpenApiInviteUsersRsp:
-      type: object
-      properties:
-        message:
-          description: A human-readable message describing the result of the invitation.
-          type: string
-        success:
-          description: Indicates whether the invitation was sent successfully.
-          type: boolean
-        users:
-          description: The list of members that were invited.
+            $ref: '#/components/schemas/api.OpenApiInstanceRole'
+        orgRole:
+          description: The new organization-level role to assign to the member.
+          allOf:
+          - $ref: '#/components/schemas/api.OpenApiOrgRole'
+        projectRoles:
+          description: The new project-level roles to assign to the member. The existing project roles are fully replaced when this field is provided.
           type: array
           items:
-            $ref: '#/components/schemas/api.OpenApiInviteUserResult'
+            $ref: '#/components/schemas/api.OpenApiProjectRole'
     api.OpenApiInviteUsersReq:
       type: object
       required:
@@ -507,52 +532,33 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/api.OpenApiProjectRole'
-    api.openApiUpdateUserReqDoc:
+    api.OpenApiError:
       type: object
       properties:
-        instanceRoles:
-          description: The new instance-level roles to assign to the member. The existing instance roles are fully replaced when this field is provided.
-          type: array
-          items:
-            $ref: '#/components/schemas/api.OpenApiInstanceRole'
-        orgRole:
-          description: The new organization-level role to assign to the member.
-          allOf:
-          - $ref: '#/components/schemas/api.OpenApiOrgRole'
-        projectRoles:
-          description: The new project-level roles to assign to the member. The existing project roles are fully replaced when this field is provided.
-          type: array
-          items:
-            $ref: '#/components/schemas/api.OpenApiProjectRole'
-    api.OpenApiListUsersRsp:
-      type: object
-      properties:
-        nextPageToken:
-          description: The token to retrieve the next page of results. Use this value as the `pageToken` parameter in the next request. This field is empty when there are no more pages.
+        code:
           type: string
-          example: ''
-        totalSize:
-          description: The total number of members that match the query.
+        error: {}
+        msgPrefix:
+          type: string
+        status:
           type: integer
-          example: 10
-        users:
-          description: The list of members returned for the current page.
-          type: array
-          items:
-            $ref: '#/components/schemas/api.OpenApiUser'
-    api.OpenApiBatchUpdateUserResult:
+    api.OpenApiInviteUserResult:
       type: object
       properties:
-        error:
-          description: The error details when the member update failed. This field is empty when the update succeeded.
-          allOf:
-          - $ref: '#/components/schemas/api.OpenApiBatchUpdateError'
-        success:
-          description: Indicates whether the member was updated successfully.
-          type: boolean
-        userId:
-          description: The ID of the member.
+        email:
+          description: The email address of the invited member.
           type: string
+        userId:
+          description: The ID of the invited member.
+          type: string
+    api.OpenApiBatchUpdateUsersRsp:
+      type: object
+      properties:
+        results:
+          description: The list of update results, one for each member in the request.
+          type: array
+          items:
+            $ref: '#/components/schemas/api.OpenApiBatchUpdateUserResult'
     api.OpenApiUser:
       type: object
       properties:
@@ -598,25 +604,19 @@ components:
           description: The ID of the member.
           type: string
           example: '123456'
-    api.openApiBatchUpdateUserEntryDoc:
+    api.OpenApiListUsersRsp:
       type: object
-      required:
-      - userId
       properties:
-        instanceRoles:
-          description: The new instance-level roles to assign to the member. The existing instance roles are fully replaced when this field is provided.
-          type: array
-          items:
-            $ref: '#/components/schemas/api.OpenApiInstanceRole'
-        orgRole:
-          description: The new organization-level role to assign to the member.
-          allOf:
-          - $ref: '#/components/schemas/api.OpenApiOrgRole'
-        projectRoles:
-          description: The new project-level roles to assign to the member. The existing project roles are fully replaced when this field is provided.
-          type: array
-          items:
-            $ref: '#/components/schemas/api.OpenApiProjectRole'
-        userId:
-          description: The ID of the member to update.
+        nextPageToken:
+          description: The token to retrieve the next page of results. Use this value as the `pageToken` parameter in the next request. This field is empty when there are no more pages.
           type: string
+          example: ''
+        totalSize:
+          description: The total number of members that match the query.
+          type: integer
+          example: 10
+        users:
+          description: The list of members returned for the current page.
+          type: array
+          items:
+            $ref: '#/components/schemas/api.OpenApiUser'

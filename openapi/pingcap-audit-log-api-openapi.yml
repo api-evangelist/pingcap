@@ -84,6 +84,16 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    controller.openApiError:
+      type: object
+      properties:
+        code:
+          type: string
+        error: {}
+        msgPrefix:
+          type: string
+        status:
+          type: integer
     controller.orgAuditLog:
       type: object
       properties:
@@ -159,16 +169,6 @@ components:
           description: A trace identifier used to correlate this audit event with related system logs.
           type: string
           example: 1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p
-    controller.openApiError:
-      type: object
-      properties:
-        code:
-          type: string
-        error: {}
-        msgPrefix:
-          type: string
-        status:
-          type: integer
     controller.queryAuditLogRsp:
       type: object
       properties:

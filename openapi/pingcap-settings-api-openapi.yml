@@ -47,19 +47,6 @@ paths:
           description: Invalid setting name or value provided.
 components:
   schemas:
-    ServerSettings:
-      type: object
-      description: Current runtime settings of the TiDB server.
-      properties:
-        general_log:
-          type: boolean
-          description: Whether the general query log is enabled.
-        log_level:
-          type: string
-          description: The current log verbosity level (debug, info, warn, error).
-        ddl_slow_threshold:
-          type: integer
-          description: The threshold in milliseconds for logging slow DDL operations.
     UpdateSettingsRequest:
       type: object
       description: Request body for updating TiDB server runtime settings.
@@ -82,6 +69,19 @@ components:
         ddl_slow_threshold:
           type: integer
           description: New DDL slow threshold in milliseconds.
+    ServerSettings:
+      type: object
+      description: Current runtime settings of the TiDB server.
+      properties:
+        general_log:
+          type: boolean
+          description: Whether the general query log is enabled.
+        log_level:
+          type: string
+          description: The current log verbosity level (debug, info, warn, error).
+        ddl_slow_threshold:
+          type: integer
+          description: The threshold in milliseconds for logging slow DDL operations.
 externalDocs:
   description: TiDB HTTP API Reference
   url: https://github.com/pingcap/tidb/blob/master/docs/tidb_http_api.md

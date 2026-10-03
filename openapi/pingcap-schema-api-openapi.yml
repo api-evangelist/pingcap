@@ -105,21 +105,6 @@ paths:
         '404':
           description: No table with the specified ID was found.
 components:
-  parameters:
-    db:
-      name: db
-      in: path
-      description: The database name.
-      required: true
-      schema:
-        type: string
-    table:
-      name: table
-      in: path
-      description: The table name within the specified database.
-      required: true
-      schema:
-        type: string
   schemas:
     TableByIDResponse:
       type: object
@@ -129,6 +114,41 @@ components:
           $ref: '#/components/schemas/DatabaseSchema'
         table_info:
           $ref: '#/components/schemas/TableSchema'
+    TableSchema:
+      type: object
+      description: Schema information for a TiDB table.
+      properties:
+        id:
+          type: integer
+          description: The internal numeric TiDB table ID.
+        name:
+          $ref: '#/components/schemas/CIStr'
+        charset:
+          type: string
+          description: The character set of the table.
+        collate:
+          type: string
+          description: The collation of the table.
+        cols:
+          type: array
+          description: The list of column definitions in the table.
+          items:
+            $ref: '#/components/schemas/ColumnInfo'
+        index_info:
+          type: array
+          description: The list of index definitions on the table.
+          items:
+            $ref: '#/components/schemas/IndexInfo'
+    CIStr:
+      type: object
+      description: A case-insensitive string pair used in TiDB schema objects.
+      properties:
+        O:
+          type: string
+          description: The original case-preserved string value.
+        L:
+          type: string
+          description: The lowercase version of the string.
     DatabaseSchema:
       type: object
       description: Schema information for a TiDB database.
@@ -141,16 +161,6 @@ components:
         collate:
           type: string
           description: The collation of the database.
-    CIStr:
-      type: object
-      description: A case-insensitive string pair used in TiDB schema objects.
-      properties:
-        O:
-          type: string
-          description: The original case-preserved string value.
-        L:
-          type: string
-          description: The lowercase version of the string.
     ColumnInfo:
       type: object
       description: A column definition within a TiDB table schema.
@@ -185,31 +195,21 @@ components:
         is_primary:
           type: boolean
           description: Whether this is the primary key index.
-    TableSchema:
-      type: object
-      description: Schema information for a TiDB table.
-      properties:
-        id:
-          type: integer
-          description: The internal numeric TiDB table ID.
-        name:
-          $ref: '#/components/schemas/CIStr'
-        charset:
-          type: string
-          description: The character set of the table.
-        collate:
-          type: string
-          description: The collation of the table.
-        cols:
-          type: array
-          description: The list of column definitions in the table.
-          items:
-            $ref: '#/components/schemas/ColumnInfo'
-        index_info:
-          type: array
-          description: The list of index definitions on the table.
-          items:
-            $ref: '#/components/schemas/IndexInfo'
+  parameters:
+    db:
+      name: db
+      in: path
+      description: The database name.
+      required: true
+      schema:
+        type: string
+    table:
+      name: table
+      in: path
+      description: The table name within the specified database.
+      required: true
+      schema:
+        type: string
 externalDocs:
   description: TiDB HTTP API Reference
   url: https://github.com/pingcap/tidb/blob/master/docs/tidb_http_api.md
