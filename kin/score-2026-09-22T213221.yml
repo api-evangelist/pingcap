@@ -1,21 +1,19 @@
-# Kin Score artifact — pingcap — 2026-08-27T132314
+# Kin Score artifact — pingcap — 2026-09-22T213221
 # The API Evangelist rating (https://github.com/api-evangelist/kin-score). Generated; do not edit.
 ---
 kin_score:
   slug: pingcap
-  schema_version: 0.15.1
-  scored_at: '2026-08-27'
-  run_ts: 2026-08-27T132314
-  composite: 61.4
+  schema_version: 0.22.0
+  scored_at: '2026-09-22'
+  run_ts: 2026-09-22T213221
+  composite: 58.3
   band: strong
   facets:
-    discoverability: 87.0
-    contract_quality: 50.2
-    governance: 30.3
+    discoverability: 75.9
+    contract_quality: 50.0
+    contract_governance: 18.2
     operational_transparency: 65.8
     developer_ergonomics: 85.7
-    commercial_clarity: 53.9
-    contract_governance: 30.3
     access_clarity: 53.9
   agent_readiness:
     score: 42.6
@@ -41,6 +39,9 @@ kin_score:
       protected_resource_metadata: false
       dynamic_client_registration: false
       agentic_commerce: false
+  open_source:
+    applies: true
+    score: 50.0
   provenance:
     mcp: first-party
     skills: first-party
@@ -50,4 +51,4 @@ kin_score:
       total: 31
       derived: 0
       coverage: 0.0
-      callable: 83.9
+      callable: 80.6
