@@ -73,6 +73,19 @@ paths:
                 $ref: '#/components/schemas/AllServersInfo'
 components:
   schemas:
+    ServerStatus:
+      type: object
+      description: Current operational status of the TiDB server instance.
+      properties:
+        connections:
+          type: integer
+          description: The number of currently active client connections.
+        version:
+          type: string
+          description: The TiDB server version string.
+        git_hash:
+          type: string
+          description: The git commit hash of the running TiDB binary.
     ServerInfo:
       type: object
       description: Detailed information about the TiDB server instance.
@@ -125,19 +138,6 @@ components:
           description: A map of server DDL IDs to their ServerInfo objects.
           additionalProperties:
             $ref: '#/components/schemas/ServerInfo'
-    ServerStatus:
-      type: object
-      description: Current operational status of the TiDB server instance.
-      properties:
-        connections:
-          type: integer
-          description: The number of currently active client connections.
-        version:
-          type: string
-          description: The TiDB server version string.
-        git_hash:
-          type: string
-          description: The git commit hash of the running TiDB binary.
 externalDocs:
   description: TiDB HTTP API Reference
   url: https://github.com/pingcap/tidb/blob/master/docs/tidb_http_api.md

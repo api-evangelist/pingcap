@@ -106,14 +106,28 @@ paths:
           description: No table with the specified ID was found.
 components:
   schemas:
-    TableByIDResponse:
+    IndexInfo:
       type: object
-      description: Database and table information looked up by table ID.
+      description: An index definition on a TiDB table.
       properties:
-        db_info:
-          $ref: '#/components/schemas/DatabaseSchema'
-        table_info:
-          $ref: '#/components/schemas/TableSchema'
+        id:
+          type: integer
+          description: The internal numeric index ID.
+        idx_name:
+          $ref: '#/components/schemas/CIStr'
+        tbl_name:
+          $ref: '#/components/schemas/CIStr'
+        idx_cols:
+          type: array
+          description: The columns included in this index.
+          items:
+            type: object
+        is_unique:
+          type: boolean
+          description: Whether this is a unique index.
+        is_primary:
+          type: boolean
+          description: Whether this is the primary key index.
     TableSchema:
       type: object
       description: Schema information for a TiDB table.
@@ -139,16 +153,6 @@ components:
           description: The list of index definitions on the table.
           items:
             $ref: '#/components/schemas/IndexInfo'
-    CIStr:
-      type: object
-      description: A case-insensitive string pair used in TiDB schema objects.
-      properties:
-        O:
-          type: string
-          description: The original case-preserved string value.
-        L:
-          type: string
-          description: The lowercase version of the string.
     DatabaseSchema:
       type: object
       description: Schema information for a TiDB database.
@@ -173,28 +177,24 @@ components:
         field_type:
           type: object
           description: The MySQL field type descriptor for this column.
-    IndexInfo:
+    CIStr:
       type: object
-      description: An index definition on a TiDB table.
+      description: A case-insensitive string pair used in TiDB schema objects.
       properties:
-        id:
-          type: integer
-          description: The internal numeric index ID.
-        idx_name:
-          $ref: '#/components/schemas/CIStr'
-        tbl_name:
-          $ref: '#/components/schemas/CIStr'
-        idx_cols:
-          type: array
-          description: The columns included in this index.
-          items:
-            type: object
-        is_unique:
-          type: boolean
-          description: Whether this is a unique index.
-        is_primary:
-          type: boolean
-          description: Whether this is the primary key index.
+        O:
+          type: string
+          description: The original case-preserved string value.
+        L:
+          type: string
+          description: The lowercase version of the string.
+    TableByIDResponse:
+      type: object
+      description: Database and table information looked up by table ID.
+      properties:
+        db_info:
+          $ref: '#/components/schemas/DatabaseSchema'
+        table_info:
+          $ref: '#/components/schemas/TableSchema'
   parameters:
     db:
       name: db

@@ -104,39 +104,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    api.OpenApiListMspCustomerRsp:
-      type: object
-      properties:
-        mspCustomers:
-          description: The list of matching MSP Customers.
-          type: array
-          items:
-            $ref: '#/components/schemas/api.OpenApiMspCustomer'
-        nextPageToken:
-          description: '`next_page_token` can be sent in a subsequent call to fetch more results'
-          type: string
-          example: 498c7f44-656f-4944-b455-0695faa5d4f9
-    api.OpenApiError:
-      type: object
-      properties:
-        code:
-          type: string
-        error: {}
-        msgPrefix:
-          type: string
-        status:
-          type: integer
-    api.OpenApiMspCustomerSignupUrl:
-      type: object
-      properties:
-        customerSignupUrl:
-          description: The signup URL of the MSP customer.
-          type: string
-          example: https://test.com/signup?msp=test&third_party_account_provider=test&third_party_account_token=test
-        expiredAt:
-          description: The expired time of the MSP customer signup url.
-          type: string
-          example: '2024-12-06 15:18:13'
     api.OpenApiMspCustomer:
       type: object
       properties:
@@ -168,3 +135,36 @@ components:
           description: The state of the MSP customer.
           type: string
           example: active
+    api.OpenApiMspCustomerSignupUrl:
+      type: object
+      properties:
+        customerSignupUrl:
+          description: The signup URL of the MSP customer.
+          type: string
+          example: https://test.com/signup?msp=test&third_party_account_provider=test&third_party_account_token=test
+        expiredAt:
+          description: The expired time of the MSP customer signup url.
+          type: string
+          example: '2024-12-06 15:18:13'
+    api.OpenApiListMspCustomerRsp:
+      type: object
+      properties:
+        mspCustomers:
+          description: The list of matching MSP Customers.
+          type: array
+          items:
+            $ref: '#/components/schemas/api.OpenApiMspCustomer'
+        nextPageToken:
+          description: '`next_page_token` can be sent in a subsequent call to fetch more results'
+          type: string
+          example: 498c7f44-656f-4944-b455-0695faa5d4f9
+    api.OpenApiError:
+      type: object
+      properties:
+        code:
+          type: string
+        error: {}
+        msgPrefix:
+          type: string
+        status:
+          type: integer

@@ -211,18 +211,6 @@ paths:
       - Data API Key
 components:
   schemas:
-    v1beta1ListApiKeysResponse:
-      type: object
-      properties:
-        apiKeys:
-          type: array
-          items:
-            $ref: '#/components/schemas/v1beta1ApiKeyRes'
-          description: The items of API keys in the Data App.
-        nextPageToken:
-          type: string
-          description: The token to retrieve the next page of results.
-      title: Response for ListApiKeys
     v1beta1ApiKeyRes:
       type: object
       properties:
@@ -259,25 +247,6 @@ components:
           $ref: '#/components/schemas/ApiKeyApiKeyExpireSetting'
           description: The expiration settings for the API key.
       description: An API key of a Data App
-    ApiKeyExpireOption:
-      type: string
-      enum:
-      - EXPIRE_OPTION_NEVER_EXPIRE
-      - EXPIRE_OPTION_SET_TTL
-      default: EXPIRE_OPTION_NEVER_EXPIRE
-      description: "The method used to determine the API key's expiration:\n- `EXPIRE_OPTION_NEVER_EXPIRE`: this key will never expire\n - `EXPIRE_OPTION_SET_TTL`: this key will expire after the time specified by `apikeyTtl`"
-    rpcStatus:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/protobufAny'
     ApiKeyRole:
       type: string
       enum:
@@ -285,6 +254,21 @@ components:
       - READ_ONLY
       default: READ_ONLY
       description: "Controls whether the API key can read or write data to the clusters linked to the Data App.\n- `READ_AND_WRITE`: allows the API key to read and write data. You can use this API key to execute all SQL statements, such as DML and DDL statements.\n - `READ_ONLY`:  only allows the API key to read data, such as `SELECT`, `SHOW`, `USE`, `DESC`, and `EXPLAIN` statements."
+    ApiKeyExpireOption:
+      type: string
+      enum:
+      - EXPIRE_OPTION_NEVER_EXPIRE
+      - EXPIRE_OPTION_SET_TTL
+      default: EXPIRE_OPTION_NEVER_EXPIRE
+      description: "The method used to determine the API key's expiration:\n- `EXPIRE_OPTION_NEVER_EXPIRE`: this key will never expire\n - `EXPIRE_OPTION_SET_TTL`: this key will expire after the time specified by `apikeyTtl`"
+    ApiKeyExpireState:
+      type: string
+      enum:
+      - EXPIRE_STATE_NEVER_EXPIRE
+      - EXPIRE_STATE_EXPIRED
+      - EXPIRE_STATE_NOT_EXPIRE
+      default: EXPIRE_STATE_NEVER_EXPIRE
+      description: "The expiration state of the API key:\n- `EXPIRE_STATE_NEVER_EXPIRE`: this API key never expires\n - `EXPIRE_STATE_EXPIRED`: this API key has expired\n - `EXPIRE_STATE_NOT_EXPIRE`: this API key is currently active"
     ApiKeyApiKeyExpireSetting:
       type: object
       properties:
@@ -300,6 +284,36 @@ components:
           minimum: 1
           maximum: 525600
       description: The expiration settings for the API key.
+    rpcStatus:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/protobufAny'
+    v1beta1ListApiKeysResponse:
+      type: object
+      properties:
+        apiKeys:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1beta1ApiKeyRes'
+          description: The items of API keys in the Data App.
+        nextPageToken:
+          type: string
+          description: The token to retrieve the next page of results.
+      title: Response for ListApiKeys
+    protobufAny:
+      type: object
+      properties:
+        '@type':
+          type: string
+      additionalProperties: {}
     v1beta1ApiKey:
       type: object
       properties:
@@ -324,20 +338,6 @@ components:
       - description
       - role
       - rateLimitRpm
-    ApiKeyExpireState:
-      type: string
-      enum:
-      - EXPIRE_STATE_NEVER_EXPIRE
-      - EXPIRE_STATE_EXPIRED
-      - EXPIRE_STATE_NOT_EXPIRE
-      default: EXPIRE_STATE_NEVER_EXPIRE
-      description: "The expiration state of the API key:\n- `EXPIRE_STATE_NEVER_EXPIRE`: this API key never expires\n - `EXPIRE_STATE_EXPIRED`: this API key has expired\n - `EXPIRE_STATE_NOT_EXPIRE`: this API key is currently active"
-    protobufAny:
-      type: object
-      properties:
-        '@type':
-          type: string
-      additionalProperties: {}
 x-tagGroups:
 - name: Endpoints
   tags:

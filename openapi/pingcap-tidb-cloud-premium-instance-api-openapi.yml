@@ -639,6 +639,112 @@ paths:
           --header ''Accept: application/json'''
 components:
   schemas:
+    v1beta2CustomerManagedEncryptionKey:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The unique name of the CMEK, in the format of `cmeks/{cmek_id}`.
+          readOnly: true
+        customerManagedEncryptionKeyId:
+          type: string
+          description: The ID of the CMEK.
+          readOnly: true
+        regionId:
+          type: string
+          description: The region where the CMEK is located, in the format of `{cloud_provider}-{region_code}`. For example, `aws-us-west-2`.
+        cloudProvider:
+          description: 'The cloud provider where the CMEK is located.
+
+
+            - `"aws"`: Amazon Web Services
+
+
+            - `"gcp"`: Google Cloud (not yet supported, planned for a future release)
+
+
+            - `"azure"`: Microsoft Azure (not yet supported, planned for a future release)
+
+
+            - `"alicloud"`: Alibaba Cloud'
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/RegionCloudProvider'
+        servicePlan:
+          $ref: '#/components/schemas/v1beta1ServicePlan'
+        awsKms:
+          description: The configuration for AWS KMS.
+          allOf:
+          - $ref: '#/components/schemas/CustomerManagedEncryptionKeyAwsKms'
+        aliyunKms:
+          description: The configuration for Alibaba Cloud KMS.
+          allOf:
+          - $ref: '#/components/schemas/CustomerManagedEncryptionKeyAliyunKms'
+        awsPrincipal:
+          description: AWS IAM principal.
+          allOf:
+          - $ref: '#/components/schemas/CmekAccessIamPrincipalAwsCmekPrincipal'
+        aliyunPrincipal:
+          description: Alibaba Cloud RAM principal.
+          allOf:
+          - $ref: '#/components/schemas/CmekAccessIamPrincipalAliyunCmekPrincipal'
+        createTime:
+          type: string
+          format: date-time
+          description: The timestamp when the CMEK was created, in the [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format.
+          readOnly: true
+      required:
+      - regionId
+      - servicePlan
+    TidbServiceResetRootPasswordBody:
+      type: object
+      properties:
+        rootPassword:
+          type: string
+          example: my-shining-password
+          description: 'The new root password.
+
+
+            This field supports two input formats:
+
+            - Plaintext password (legacy behavior)
+
+            - RSA-OAEP-SHA256 encrypted payload prefixed with `rsa_oaep_sha256:`
+
+
+            If the marker prefix is present, the server parses and decrypts the encrypted payload.
+
+            Any parse/decrypt failure returns an explicit parameter error without plaintext fallback.
+
+            If the marker prefix is absent, the value is treated as plaintext for backward compatibility.
+
+
+            For plaintext input, the password must be between 8 and 64 characters long.'
+          pattern: ^(rsa_oaep_sha256:.+|.{8,64})$
+      required:
+      - rootPassword
+    TidbDualLayerDataEncryption:
+      type: object
+      properties:
+        noEncryption:
+          type: object
+          properties: {}
+          description: Disables dual-layer data encryption. The TiDB Cloud Premium instance uses the default encryption provided by the cloud provider.
+        defaultKey:
+          type: object
+          properties: {}
+          description: Enables dual-layer data encryption using the TiDB Cloud default key.
+        cmek:
+          description: 'Enables dual-layer data encryption using a customer-managed encryption key (CMEK).
+
+            Configure the key according to the cloud provider:
+
+            - AWS: set `awsKms` and `awsPrincipal`.
+
+            - Alibaba Cloud: set `aliyunKms` and `aliyunPrincipal`.'
+          allOf:
+          - $ref: '#/components/schemas/v1beta2CustomerManagedEncryptionKey'
+      description: 'The dual-layer data encryption configuration for a TiDB Cloud Premium instance. Specify exactly one of the following options: `noEncryption`, `defaultKey`, or `cmek`.'
     nextgenv1beta2Tidb:
       type: object
       properties:
@@ -799,60 +905,15 @@ components:
       - regionId
       - maxRcu
       - servicePlan
-    TidbEndpoint:
+    v1beta2CaCertificateDownloadUrl:
       type: object
       properties:
-        host:
+        uri:
           type: string
-          description: 'The hostname of the endpoint.
-
-
-            When `connectionType` is `"PRIVATE_ENDPOINT"`, the behavior of the `host` field varies by cloud provider:
-
-            - For AWS, this field is available after the Private Link service is ready.
-
-            - For Google Cloud and Azure, this field is available after you create a private endpoint connection.'
+          description: The download URL for the CA certificate of the TiDB Cloud Premium instance.
           readOnly: true
-        port:
-          type: integer
-          format: int32
-          description: The port number of the endpoint.
-          readOnly: true
-        connectionType:
-          description: 'The connection type of the endpoint.
-
-
-            - `PUBLIC`: a public endpoint. For more information, see [Network](https://docs.pingcap.com/tidbcloud/connect-to-tidb-instance/#network).
-
-
-            - `PRIVATE_ENDPOINT`: a private endpoint. For more information, see [Network](https://docs.pingcap.com/tidbcloud/connect-to-tidb-instance/#network).
-
-
-            - `VPC_PEERING`: a VPC peering endpoint (not yet supported, planned for a future release).'
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/EndpointConnectionType'
-        connectionReachability:
-          description: The reachability status of the endpoint connection.
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/v1beta2ConnectionReachability'
-    v1beta2ConnectionReachability:
+    v1beta2ResetRootPasswordResponse:
       type: object
-      properties:
-        reachable:
-          type: boolean
-          description: Indicates whether the endpoint is reachable.
-          readOnly: true
-        detail:
-          description: The detailed reachability status of the endpoint connection.
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/ConnectionReachabilityDetail'
-    v1beta1ServicePlan:
-      type: string
-      enum:
-      - Premium
     ConnectionReachabilityDetail:
       type: object
       properties:
@@ -871,6 +932,19 @@ components:
         message:
           type: string
           description: A human-readable message that describes the reachability status.
+          readOnly: true
+    CmekAccessIamPrincipalAwsCmekPrincipal:
+      type: object
+      properties:
+        accountId:
+          type: string
+          description: The AWS account ID of the CMEK principal.
+          readOnly: true
+        externalId:
+          type: string
+          description: 'The AWS STS AssumeRole `ExternalId` that must be pinned in the KMS
+
+            key policy''s `Condition` block when granting access to this principal.'
           readOnly: true
     v1beta2ListTidbsResponse:
       type: object
@@ -895,80 +969,44 @@ components:
           type: string
           description: The Alibaba Cloud account ID of the CMEK principal.
           readOnly: true
-    TidbServiceResetRootPasswordBody:
-      type: object
-      properties:
-        rootPassword:
-          type: string
-          example: my-shining-password
-          description: 'The new root password.
-
-
-            This field supports two input formats:
-
-            - Plaintext password (legacy behavior)
-
-            - RSA-OAEP-SHA256 encrypted payload prefixed with `rsa_oaep_sha256:`
-
-
-            If the marker prefix is present, the server parses and decrypts the encrypted payload.
-
-            Any parse/decrypt failure returns an explicit parameter error without plaintext fallback.
-
-            If the marker prefix is absent, the value is treated as plaintext for backward compatibility.
-
-
-            For plaintext input, the password must be between 8 and 64 characters long.'
-          pattern: ^(rsa_oaep_sha256:.+|.{8,64})$
-      required:
-      - rootPassword
-    v1beta1ClusterState:
+    RegionCloudProvider:
       type: string
       enum:
-      - CREATING
-      - DELETING
-      - ACTIVE
-      - RESTORING
-      - MAINTENANCE
-      - DELETED
-      - INACTIVE
-      - UPGRADING
-      - IMPORTING
-      - MODIFYING
-      - PAUSING
-      - PAUSED
-      - RESUMING
-      description: "The possible states of a TiDB Cloud Premium instance.\n\n - CREATING: The TiDB Cloud Premium instance is being created.\n - DELETING: The TiDB Cloud Premium instance is being deleted.\n - ACTIVE: The TiDB Cloud Premium instance is active for use.\n - RESTORING: Data for the TiDB Cloud Premium instance is being restored.\n - MAINTENANCE: The TiDB Cloud Premium instance is under maintenance.\n - DELETED: The TiDB Cloud Premium instance has been deleted.\n - INACTIVE: The TiDB Cloud Premium instance is not active, but is not being deleted.\n - UPGRADING: Cluster is being updated.\nOnly for Dedicated Cluster.\n - IMPORTING: Cluster is being imported.\nOnly for Dedicated Cluster.\n - MODIFYING: Cluster is being modified.\nOnly for Dedicated Cluster.\n - PAUSING: Cluster is being paused.\nOnly for Dedicated Cluster.\n - PAUSED: Cluster is paused.\nOnly for Dedicated Cluster.\n - RESUMING: Cluster is resuming.\nOnly for Dedicated Cluster."
-    protobufAny:
+      - aws
+      - gcp
+      - azure
+      - alicloud
+      description: "Enum of cloud provider names.\n\n - aws: Amazon Web Services.\n - gcp: Google Cloud Platform.\n - azure: Microsoft Azure.\n - alicloud: Alibaba Cloud."
+    TidbHighAvailabilityType:
+      type: string
+      enum:
+      - REGIONAL
+      - ZONAL
+      description: "The high availability configuration for the TiDB Cloud Premium instance.\n\n - REGIONAL: High availability across multiple availability zones within a region.\n - ZONAL: High availability within a single availability zone."
+    CustomerManagedEncryptionKeyAwsKms:
       type: object
       properties:
-        '@type':
+        kmsKeyArn:
           type: string
-          description: A URL or resource name that uniquely identifies the type of the serialized protocol buffer message.
-      additionalProperties: {}
-      description: "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n    // or ...\n    if (any.isSameTypeAs(Foo.getDefaultInstance())) {\n      foo = any.unpack(Foo.getDefaultInstance());\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := anypb.New(foo)\n     if err != nil {\n       ...\n     }\n     ...\n     foo := &pb.Foo{}\n     if err := any.UnmarshalTo(foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
-    TidbDualLayerDataEncryption:
+          description: The Amazon Resource Name (ARN) of the AWS KMS key used for encryption.
+      required:
+      - kmsKeyArn
+    v1beta2ConnectionReachability:
       type: object
       properties:
-        noEncryption:
-          type: object
-          properties: {}
-          description: Disables dual-layer data encryption. The TiDB Cloud Premium instance uses the default encryption provided by the cloud provider.
-        defaultKey:
-          type: object
-          properties: {}
-          description: Enables dual-layer data encryption using the TiDB Cloud default key.
-        cmek:
-          description: 'Enables dual-layer data encryption using a customer-managed encryption key (CMEK).
-
-            Configure the key according to the cloud provider:
-
-            - AWS: set `awsKms` and `awsPrincipal`.
-
-            - Alibaba Cloud: set `aliyunKms` and `aliyunPrincipal`.'
+        reachable:
+          type: boolean
+          description: Indicates whether the endpoint is reachable.
+          readOnly: true
+        detail:
+          description: The detailed reachability status of the endpoint connection.
+          readOnly: true
           allOf:
-          - $ref: '#/components/schemas/v1beta2CustomerManagedEncryptionKey'
-      description: 'The dual-layer data encryption configuration for a TiDB Cloud Premium instance. Specify exactly one of the following options: `noEncryption`, `defaultKey`, or `cmek`.'
+          - $ref: '#/components/schemas/ConnectionReachabilityDetail'
+    v1beta1ServicePlan:
+      type: string
+      enum:
+      - Premium
     v1beta2CloudProviderInfo:
       type: object
       properties:
@@ -1008,86 +1046,20 @@ components:
           readOnly: true
       required:
       - tidbId
-    v1beta2ResetRootPasswordResponse:
-      type: object
-    v1beta2CustomerManagedEncryptionKey:
-      type: object
-      properties:
-        name:
-          type: string
-          description: The unique name of the CMEK, in the format of `cmeks/{cmek_id}`.
-          readOnly: true
-        customerManagedEncryptionKeyId:
-          type: string
-          description: The ID of the CMEK.
-          readOnly: true
-        regionId:
-          type: string
-          description: The region where the CMEK is located, in the format of `{cloud_provider}-{region_code}`. For example, `aws-us-west-2`.
-        cloudProvider:
-          description: 'The cloud provider where the CMEK is located.
-
-
-            - `"aws"`: Amazon Web Services
-
-
-            - `"gcp"`: Google Cloud (not yet supported, planned for a future release)
-
-
-            - `"azure"`: Microsoft Azure (not yet supported, planned for a future release)
-
-
-            - `"alicloud"`: Alibaba Cloud'
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/RegionCloudProvider'
-        servicePlan:
-          $ref: '#/components/schemas/v1beta1ServicePlan'
-        awsKms:
-          description: The configuration for AWS KMS.
-          allOf:
-          - $ref: '#/components/schemas/CustomerManagedEncryptionKeyAwsKms'
-        aliyunKms:
-          description: The configuration for Alibaba Cloud KMS.
-          allOf:
-          - $ref: '#/components/schemas/CustomerManagedEncryptionKeyAliyunKms'
-        awsPrincipal:
-          description: AWS IAM principal.
-          allOf:
-          - $ref: '#/components/schemas/CmekAccessIamPrincipalAwsCmekPrincipal'
-        aliyunPrincipal:
-          description: Alibaba Cloud RAM principal.
-          allOf:
-          - $ref: '#/components/schemas/CmekAccessIamPrincipalAliyunCmekPrincipal'
-        createTime:
-          type: string
-          format: date-time
-          description: The timestamp when the CMEK was created, in the [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format.
-          readOnly: true
-      required:
-      - regionId
-      - servicePlan
-    v1beta2CaCertificateDownloadUrl:
-      type: object
-      properties:
-        uri:
-          type: string
-          description: The download URL for the CA certificate of the TiDB Cloud Premium instance.
-          readOnly: true
-    CustomerManagedEncryptionKeyAliyunKms:
-      type: object
-      properties:
-        kmsKeyArn:
-          type: string
-          description: The Alibaba Cloud KMS key ID used for encryption. For example, `acs:kms:ap-southeast-1:5841052134823325:key/key-sgp68887a54phjt9703ut`.
-      required:
-      - kmsKeyArn
-    TidbHighAvailabilityType:
+    EndpointConnectionType:
       type: string
       enum:
-      - REGIONAL
-      - ZONAL
-      description: "The high availability configuration for the TiDB Cloud Premium instance.\n\n - REGIONAL: High availability across multiple availability zones within a region.\n - ZONAL: High availability within a single availability zone."
+      - PUBLIC
+      - PRIVATE_ENDPOINT
+      - VPC_PEERING
+    protobufAny:
+      type: object
+      properties:
+        '@type':
+          type: string
+          description: A URL or resource name that uniquely identifies the type of the serialized protocol buffer message.
+      additionalProperties: {}
+      description: "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n    // or ...\n    if (any.isSameTypeAs(Foo.getDefaultInstance())) {\n      foo = any.unpack(Foo.getDefaultInstance());\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := anypb.New(foo)\n     if err != nil {\n       ...\n     }\n     ...\n     foo := &pb.Foo{}\n     if err := any.UnmarshalTo(foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
     rpcStatus:
       type: object
       properties:
@@ -1116,41 +1088,69 @@ components:
         You can find out more about this error model and how to work with it in the
 
         [API Design Guide](https://cloud.google.com/apis/design/errors).'
-    EndpointConnectionType:
+    v1beta1ClusterState:
       type: string
       enum:
-      - PUBLIC
-      - PRIVATE_ENDPOINT
-      - VPC_PEERING
-    CustomerManagedEncryptionKeyAwsKms:
+      - CREATING
+      - DELETING
+      - ACTIVE
+      - RESTORING
+      - MAINTENANCE
+      - DELETED
+      - INACTIVE
+      - UPGRADING
+      - IMPORTING
+      - MODIFYING
+      - PAUSING
+      - PAUSED
+      - RESUMING
+      description: "The possible states of a TiDB Cloud Premium instance.\n\n - CREATING: The TiDB Cloud Premium instance is being created.\n - DELETING: The TiDB Cloud Premium instance is being deleted.\n - ACTIVE: The TiDB Cloud Premium instance is active for use.\n - RESTORING: Data for the TiDB Cloud Premium instance is being restored.\n - MAINTENANCE: The TiDB Cloud Premium instance is under maintenance.\n - DELETED: The TiDB Cloud Premium instance has been deleted.\n - INACTIVE: The TiDB Cloud Premium instance is not active, but is not being deleted.\n - UPGRADING: Cluster is being updated.\nOnly for Dedicated Cluster.\n - IMPORTING: Cluster is being imported.\nOnly for Dedicated Cluster.\n - MODIFYING: Cluster is being modified.\nOnly for Dedicated Cluster.\n - PAUSING: Cluster is being paused.\nOnly for Dedicated Cluster.\n - PAUSED: Cluster is paused.\nOnly for Dedicated Cluster.\n - RESUMING: Cluster is resuming.\nOnly for Dedicated Cluster."
+    CustomerManagedEncryptionKeyAliyunKms:
       type: object
       properties:
         kmsKeyArn:
           type: string
-          description: The Amazon Resource Name (ARN) of the AWS KMS key used for encryption.
+          description: The Alibaba Cloud KMS key ID used for encryption. For example, `acs:kms:ap-southeast-1:5841052134823325:key/key-sgp68887a54phjt9703ut`.
       required:
       - kmsKeyArn
-    RegionCloudProvider:
-      type: string
-      enum:
-      - aws
-      - gcp
-      - azure
-      - alicloud
-      description: "Enum of cloud provider names.\n\n - aws: Amazon Web Services.\n - gcp: Google Cloud Platform.\n - azure: Microsoft Azure.\n - alicloud: Alibaba Cloud."
-    CmekAccessIamPrincipalAwsCmekPrincipal:
+    TidbEndpoint:
       type: object
       properties:
-        accountId:
+        host:
           type: string
-          description: The AWS account ID of the CMEK principal.
-          readOnly: true
-        externalId:
-          type: string
-          description: 'The AWS STS AssumeRole `ExternalId` that must be pinned in the KMS
+          description: 'The hostname of the endpoint.
 
-            key policy''s `Condition` block when granting access to this principal.'
+
+            When `connectionType` is `"PRIVATE_ENDPOINT"`, the behavior of the `host` field varies by cloud provider:
+
+            - For AWS, this field is available after the Private Link service is ready.
+
+            - For Google Cloud and Azure, this field is available after you create a private endpoint connection.'
           readOnly: true
+        port:
+          type: integer
+          format: int32
+          description: The port number of the endpoint.
+          readOnly: true
+        connectionType:
+          description: 'The connection type of the endpoint.
+
+
+            - `PUBLIC`: a public endpoint. For more information, see [Network](https://docs.pingcap.com/tidbcloud/connect-to-tidb-instance/#network).
+
+
+            - `PRIVATE_ENDPOINT`: a private endpoint. For more information, see [Network](https://docs.pingcap.com/tidbcloud/connect-to-tidb-instance/#network).
+
+
+            - `VPC_PEERING`: a VPC peering endpoint (not yet supported, planned for a future release).'
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/EndpointConnectionType'
+        connectionReachability:
+          description: The reachability status of the endpoint connection.
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/v1beta2ConnectionReachability'
 x-tagGroups:
 - name: Endpoints
   tags:

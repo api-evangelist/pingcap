@@ -235,6 +235,168 @@ paths:
         required: true
 components:
   schemas:
+    TestEndpointResponseColumn:
+      type: object
+      properties:
+        col:
+          type: string
+          description: The column name of the requested data table.
+        dataType:
+          type: string
+          description: The column type of the requested data table.
+        nullable:
+          type: boolean
+          description: Whether the column of the requested data table supports null values.
+    v1beta1EndpointSettings:
+      type: object
+      properties:
+        timeout:
+          type: integer
+          format: int32
+          description: The user-defined timeout for the endpoint in milliseconds.
+          minimum: 1
+          maximum: 60000
+        rowLimit:
+          type: integer
+          format: int32
+          description: The maximum number of rows that the endpoint can operate or return.
+          minimum: 1
+          maximum: 2000
+        paginationEnabled:
+          type: boolean
+          description: Controls whether to enable the pagination for the results returned by the `GET` request. When pagination is enabled, you can paginate the results by specifying `page` and `page_size` as query parameters when calling the endpoint.
+        cacheEnabled:
+          type: boolean
+          description: Controls whether to cache the response returned by your `GET` requests within a specified time-to-live (TTL) period.
+        cacheTtl:
+          type: integer
+          format: int32
+          description: The time-to-live (TTL) period in seconds for cached response when `cacheEnabled` is set to `true`.
+          minimum: 30
+          maximum: 600
+      required:
+      - timeout
+      - rowLimit
+      - paginationEnabled
+      - cacheEnabled
+      - cacheTtl
+      description: The settings used in the endpoint.
+    v1beta1EndpointParamsRes:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The user-defined name of the parameter.
+        type:
+          $ref: '#/components/schemas/v1beta1EndpointParamsType'
+          description: "The user-defined data type of the parameter. \n - `string`\n - `number`\n - `integer`\n - `bool`\n - `array`"
+        itemType:
+          type: '#/definitions/v1beta1EndpointParamsItemType'
+          description: "The item type of an array type parameter. \n - `string`\n - `number`\n - `integer`"
+        required:
+          type: boolean
+          description: Specifies whether the parameter is required in the request.
+        defaultValue:
+          type: string
+          description: The default value of the parameter. Make sure that the value matches the type of parameter you specified. Otherwise, the endpoint returns an error.
+        description:
+          type: string
+          description: The description of the parameter.
+        enum:
+          type: string
+          description: 'Specifies the value options of the parameter. To specify multiple values, you can separate them with a comma (`,`). For example: `"1,2"`.'
+    v1beta1ListEndpointsResponse:
+      type: object
+      properties:
+        endpoints:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1beta1EndpointRes'
+          description: The items of endpoints in the Data App.
+        nextPageToken:
+          type: string
+          description: The token to retrieve the next page of results.
+      title: Response for ListEndpoint
+    v1beta1Endpoint:
+      type: object
+      properties:
+        displayName:
+          type: string
+          description: The name of the endpoint. By default, it is the same as the `path` value.
+          minLength: 1
+          maxLength: 32
+          pattern: ^[a-zA-Z0-9_\-\/\[\]]+$
+        description:
+          type: string
+          description: The user-defined description of the endpoint.
+          minLength: 0
+          maxLength: 2000
+        path:
+          type: string
+          description: 'The user-defined HTTP path of the endpoint in the Data App. A path must start with a slash (`/`). For example: `"/v1/hello"`.'
+          pattern: ^\/([a-zA-Z0-9_]+\/)*[a-zA-Z0-9_]+$
+          minLength: 2
+          maxLength: 64
+        method:
+          type: string
+          description: 'The user-defined HTTP method of the endpoint. The supported HTTP methods are: `GET`, `POST`, `PUT`, and `DELETE`.'
+        clusterId:
+          type: string
+          description: The ID of the TiDB cluster that is linked to the endpoint.
+        params:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1beta1EndpointParams'
+          description: The parameters used in the endpoint.
+        settings:
+          $ref: '#/components/schemas/v1beta1EndpointSettings'
+          description: The settings used in the endpoint.
+        tag:
+          type: string
+          description: The tag used for identifying a group of endpoints.
+          default: Default
+        batchOperation:
+          type: boolean
+          description: Controls whether to enable the endpoint to operate in batch mode. When it is set to `true`, you can operate on multiple rows in a single request.
+        sqlTemplate:
+          type: string
+          description: Specifies the SQL statements to query data through the endpoint.
+      required:
+      - displayName
+      - path
+      - method
+      - clusterId
+      - settings
+      - tag
+      - sqlTemplate
+    rpcStatus:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/protobufAny'
+    v1beta1EndpointArgs:
+      type: object
+      properties:
+        items:
+          type: object
+          additionalProperties:
+            type: string
+          description: 'The key-value pairs used as parameters for endpoint testing, in the format of `key:value`. All values are of the string type. For example: `"limit":"2"`'
+      required:
+      - items
+    protobufAny:
+      type: object
+      properties:
+        '@type':
+          type: string
+      additionalProperties: {}
     v1beta1TestEndpointResponse:
       type: object
       properties:
@@ -245,6 +407,85 @@ components:
           $ref: '#/components/schemas/TestEndpointResponseData'
           description: The response of testing the endpoint.
       title: Response for TestEndpoint
+    TestEndpointResponseResult:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+          description: HTTPS status code of the request.
+        message:
+          type: string
+          description: HTTPS result message of the request. If the status code returned by the request is 200, OK is returned here. If there is an error in the request, the specific reason for the error is returned.
+        startMs:
+          type: string
+          format: int64
+          description: 'The request''s start timestamp. For example: 1704871891280'
+        endMs:
+          type: string
+          format: int64
+          description: 'The request''s end timestamp. For example: 1704871891474'
+        latency:
+          type: string
+          description: 'The request latency. For example: 194ms'
+        rowCount:
+          type: integer
+          format: int32
+          description: The number of rows that the request should return. Sometimes the maximum number of returned rows set by the user is exceeded. But in the end, only the number of rows returned is the minimum of these two values.
+        rowAffect:
+          type: integer
+          format: int32
+          description: When executing non-query SQL statements, the number of rows affected.
+        limit:
+          type: integer
+          format: int32
+          description: The maximum number of returned rows set by the request.
+      description: 'Return basic information about request execution. For example: whether the execution is successful, execution time, number of items returned, etc.'
+    TestEndpointResponseRow:
+      type: object
+      properties:
+        items:
+          type: object
+          additionalProperties:
+            type: string
+          description: The columns and data results of the requested data table of the endpoint.
+    v1beta1EndpointParamsType:
+      type: string
+      enum:
+      - string
+      - number
+      - integer
+      - bool
+      - array
+      description: "The user-defined data type of the parameter. \n - `string`\n - `number`\n - `integer`\n - `bool`\n - `array`"
+    v1beta1EndpointSettingsRes:
+      type: object
+      properties:
+        timeout:
+          type: integer
+          format: int32
+          description: The user-defined timeout for the endpoint in milliseconds.
+          minimum: 1
+          maximum: 60000
+        rowLimit:
+          type: integer
+          format: int32
+          description: The maximum number of rows that the endpoint can operate or return.
+          minimum: 1
+          maximum: 2000
+        paginationEnabled:
+          type: boolean
+          description: Controls whether to enable the pagination for the results returned by the `GET` request. When pagination is enabled, you can paginate the results by specifying `page` and `page_size` as query parameters when calling the endpoint.
+        cacheEnabled:
+          type: boolean
+          description: Controls whether to cache the response returned by your `GET` requests within a specified time-to-live (TTL) period.
+        cacheTtl:
+          type: integer
+          format: int32
+          description: The time-to-live (TTL) period in seconds for cached response when `cacheEnabled` is set to `true`.
+          minimum: 30
+          maximum: 600
+      description: The settings used in the endpoint.
     v1beta1EndpointRes:
       type: object
       properties:
@@ -304,178 +545,6 @@ components:
         updatedAt:
           type: string
           description: 'The timestamp when the endpoint was last updated. The time format follows the [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) standard. For example: `"2023-06-03T06:52:08Z"`.'
-    rpcStatus:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/protobufAny'
-    v1beta1EndpointArgs:
-      type: object
-      properties:
-        items:
-          type: object
-          additionalProperties:
-            type: string
-          description: 'The key-value pairs used as parameters for endpoint testing, in the format of `key:value`. All values are of the string type. For example: `"limit":"2"`'
-      required:
-      - items
-    v1beta1Endpoint:
-      type: object
-      properties:
-        displayName:
-          type: string
-          description: The name of the endpoint. By default, it is the same as the `path` value.
-          minLength: 1
-          maxLength: 32
-          pattern: ^[a-zA-Z0-9_\-\/\[\]]+$
-        description:
-          type: string
-          description: The user-defined description of the endpoint.
-          minLength: 0
-          maxLength: 2000
-        path:
-          type: string
-          description: 'The user-defined HTTP path of the endpoint in the Data App. A path must start with a slash (`/`). For example: `"/v1/hello"`.'
-          pattern: ^\/([a-zA-Z0-9_]+\/)*[a-zA-Z0-9_]+$
-          minLength: 2
-          maxLength: 64
-        method:
-          type: string
-          description: 'The user-defined HTTP method of the endpoint. The supported HTTP methods are: `GET`, `POST`, `PUT`, and `DELETE`.'
-        clusterId:
-          type: string
-          description: The ID of the TiDB cluster that is linked to the endpoint.
-        params:
-          type: array
-          items:
-            $ref: '#/components/schemas/v1beta1EndpointParams'
-          description: The parameters used in the endpoint.
-        settings:
-          $ref: '#/components/schemas/v1beta1EndpointSettings'
-          description: The settings used in the endpoint.
-        tag:
-          type: string
-          description: The tag used for identifying a group of endpoints.
-          default: Default
-        batchOperation:
-          type: boolean
-          description: Controls whether to enable the endpoint to operate in batch mode. When it is set to `true`, you can operate on multiple rows in a single request.
-        sqlTemplate:
-          type: string
-          description: Specifies the SQL statements to query data through the endpoint.
-      required:
-      - displayName
-      - path
-      - method
-      - clusterId
-      - settings
-      - tag
-      - sqlTemplate
-    TestEndpointResponseRow:
-      type: object
-      properties:
-        items:
-          type: object
-          additionalProperties:
-            type: string
-          description: The columns and data results of the requested data table of the endpoint.
-    TestEndpointResponseData:
-      type: object
-      properties:
-        columns:
-          type: array
-          items:
-            $ref: '#/components/schemas/TestEndpointResponseColumn'
-          description: Returns the columns and columns' details of the requested data table of the endpoint.
-        rows:
-          type: array
-          items:
-            $ref: '#/components/schemas/TestEndpointResponseRow'
-          description: Return the columns and data results of the requested data table of the endpoint.
-        result:
-          $ref: '#/components/schemas/TestEndpointResponseResult'
-      title: Endpoint request data
-    v1beta1ListEndpointsResponse:
-      type: object
-      properties:
-        endpoints:
-          type: array
-          items:
-            $ref: '#/components/schemas/v1beta1EndpointRes'
-          description: The items of endpoints in the Data App.
-        nextPageToken:
-          type: string
-          description: The token to retrieve the next page of results.
-      title: Response for ListEndpoint
-    v1beta1EndpointSettings:
-      type: object
-      properties:
-        timeout:
-          type: integer
-          format: int32
-          description: The user-defined timeout for the endpoint in milliseconds.
-          minimum: 1
-          maximum: 60000
-        rowLimit:
-          type: integer
-          format: int32
-          description: The maximum number of rows that the endpoint can operate or return.
-          minimum: 1
-          maximum: 2000
-        paginationEnabled:
-          type: boolean
-          description: Controls whether to enable the pagination for the results returned by the `GET` request. When pagination is enabled, you can paginate the results by specifying `page` and `page_size` as query parameters when calling the endpoint.
-        cacheEnabled:
-          type: boolean
-          description: Controls whether to cache the response returned by your `GET` requests within a specified time-to-live (TTL) period.
-        cacheTtl:
-          type: integer
-          format: int32
-          description: The time-to-live (TTL) period in seconds for cached response when `cacheEnabled` is set to `true`.
-          minimum: 30
-          maximum: 600
-      required:
-      - timeout
-      - rowLimit
-      - paginationEnabled
-      - cacheEnabled
-      - cacheTtl
-      description: The settings used in the endpoint.
-    v1beta1EndpointSettingsRes:
-      type: object
-      properties:
-        timeout:
-          type: integer
-          format: int32
-          description: The user-defined timeout for the endpoint in milliseconds.
-          minimum: 1
-          maximum: 60000
-        rowLimit:
-          type: integer
-          format: int32
-          description: The maximum number of rows that the endpoint can operate or return.
-          minimum: 1
-          maximum: 2000
-        paginationEnabled:
-          type: boolean
-          description: Controls whether to enable the pagination for the results returned by the `GET` request. When pagination is enabled, you can paginate the results by specifying `page` and `page_size` as query parameters when calling the endpoint.
-        cacheEnabled:
-          type: boolean
-          description: Controls whether to cache the response returned by your `GET` requests within a specified time-to-live (TTL) period.
-        cacheTtl:
-          type: integer
-          format: int32
-          description: The time-to-live (TTL) period in seconds for cached response when `cacheEnabled` is set to `true`.
-          minimum: 30
-          maximum: 600
-      description: The settings used in the endpoint.
     v1beta1EndpointParams:
       type: object
       properties:
@@ -503,91 +572,22 @@ components:
       required:
       - name
       - type
-    TestEndpointResponseColumn:
+    TestEndpointResponseData:
       type: object
       properties:
-        col:
-          type: string
-          description: The column name of the requested data table.
-        dataType:
-          type: string
-          description: The column type of the requested data table.
-        nullable:
-          type: boolean
-          description: Whether the column of the requested data table supports null values.
-    v1beta1EndpointParamsRes:
-      type: object
-      properties:
-        name:
-          type: string
-          description: The user-defined name of the parameter.
-        type:
-          $ref: '#/components/schemas/v1beta1EndpointParamsType'
-          description: "The user-defined data type of the parameter. \n - `string`\n - `number`\n - `integer`\n - `bool`\n - `array`"
-        itemType:
-          type: '#/definitions/v1beta1EndpointParamsItemType'
-          description: "The item type of an array type parameter. \n - `string`\n - `number`\n - `integer`"
-        required:
-          type: boolean
-          description: Specifies whether the parameter is required in the request.
-        defaultValue:
-          type: string
-          description: The default value of the parameter. Make sure that the value matches the type of parameter you specified. Otherwise, the endpoint returns an error.
-        description:
-          type: string
-          description: The description of the parameter.
-        enum:
-          type: string
-          description: 'Specifies the value options of the parameter. To specify multiple values, you can separate them with a comma (`,`). For example: `"1,2"`.'
-    protobufAny:
-      type: object
-      properties:
-        '@type':
-          type: string
-      additionalProperties: {}
-    TestEndpointResponseResult:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-          description: HTTPS status code of the request.
-        message:
-          type: string
-          description: HTTPS result message of the request. If the status code returned by the request is 200, OK is returned here. If there is an error in the request, the specific reason for the error is returned.
-        startMs:
-          type: string
-          format: int64
-          description: 'The request''s start timestamp. For example: 1704871891280'
-        endMs:
-          type: string
-          format: int64
-          description: 'The request''s end timestamp. For example: 1704871891474'
-        latency:
-          type: string
-          description: 'The request latency. For example: 194ms'
-        rowCount:
-          type: integer
-          format: int32
-          description: The number of rows that the request should return. Sometimes the maximum number of returned rows set by the user is exceeded. But in the end, only the number of rows returned is the minimum of these two values.
-        rowAffect:
-          type: integer
-          format: int32
-          description: When executing non-query SQL statements, the number of rows affected.
-        limit:
-          type: integer
-          format: int32
-          description: The maximum number of returned rows set by the request.
-      description: 'Return basic information about request execution. For example: whether the execution is successful, execution time, number of items returned, etc.'
-    v1beta1EndpointParamsType:
-      type: string
-      enum:
-      - string
-      - number
-      - integer
-      - bool
-      - array
-      description: "The user-defined data type of the parameter. \n - `string`\n - `number`\n - `integer`\n - `bool`\n - `array`"
+        columns:
+          type: array
+          items:
+            $ref: '#/components/schemas/TestEndpointResponseColumn'
+          description: Returns the columns and columns' details of the requested data table of the endpoint.
+        rows:
+          type: array
+          items:
+            $ref: '#/components/schemas/TestEndpointResponseRow'
+          description: Return the columns and data results of the requested data table of the endpoint.
+        result:
+          $ref: '#/components/schemas/TestEndpointResponseResult'
+      title: Endpoint request data
 x-tagGroups:
 - name: Endpoints
   tags:

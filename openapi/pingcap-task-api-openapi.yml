@@ -704,30 +704,508 @@ paths:
                 $ref: '#/components/schemas/ErrorWithMessage'
 components:
   schemas:
-    OperateTaskResponse:
+    GetTaskMigrateTargetsResponse:
+      type: object
+      properties:
+        total:
+          type: integer
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaskMigrateTarget'
+      required:
+      - total
+      - data
+    GetTaskListResponse:
+      type: object
+      properties:
+        total:
+          type: integer
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Task'
+      required:
+      - total
+      - data
+    Security:
+      type:
+      - object
+      - 'null'
+      description: data source ssl configuration, the field will be hidden when getting the data source configuration from the interface
+      properties:
+        ssl_ca_content:
+          type: string
+          example: ''
+          description: certificate file content
+        ssl_cert_content:
+          type: string
+          example: ''
+          description: File content of PEM format/X509 format certificates
+        ssl_key_content:
+          type: string
+          example: ''
+          description: Content of the private key file in X509 format
+        cert_allowed_cn:
+          type: array
+          description: Common Name of SSL certificates
+          items:
+            type: string
+      required:
+      - ssl_ca_content
+      - ssl_cert_content
+      - ssl_key_content
+    ConverterTaskResponse:
       type: object
       properties:
         task:
           $ref: '#/components/schemas/Task'
-        check_result:
+        task_config_file:
           type: string
-          description: pre-check result
-          example: 'pre-check is passed. '
+          description: config file in yaml format https://docs.pingcap.com/zh/tidb/stable/task-configuration-file-full.
       required:
       - task
-      - check_result
-    TaskIncrMigrateConf:
-      description: configuration of incremental tasks
+      - task_config_file
+    SchemaNameList:
+      description: schema name list
+      type: array
+      items:
+        type: string
+        example: db1
+    TaskMigrateTarget:
+      type: object
+      description: task migrate targets
+      properties:
+        source_schema:
+          type: string
+          example: db1
+        source_table:
+          type: string
+          example: tb1
+        target_schema:
+          type: string
+          example: db1
+        target_table:
+          type: string
+          example: tb1
+      required:
+      - source_schema
+      - source_table
+      - target_schema
+      - target_table
+    TaskTableMigrateRuleTarget:
+      type: object
+      description: downstream-related configuration
+      properties:
+        schema:
+          type: string
+          description: schema name, does not support wildcards
+          example: db1
+        table:
+          type: string
+          description: table name, does not support wildcards
+          example: tb1
+    DumpStatus:
+      type: object
+      description: status of dump unit
+      properties:
+        total_tables:
+          type: integer
+          format: int64
+        completed_tables:
+          type: number
+          format: double
+        finished_bytes:
+          type: number
+          format: double
+        finished_rows:
+          type: number
+          format: double
+        estimate_total_rows:
+          type: number
+          format: double
+        bps:
+          type: integer
+          format: int64
+        progress:
+          type: string
+      required:
+      - total_tables
+      - completed_tables
+      - finished_bytes
+      - finished_rows
+      - estimate_total_rows
+      - bps
+      - progress
+    TaskBinLogFilterRule:
+      description: Filtering rules at binlog level
       type: object
       properties:
-        repl_threads:
+        ignore_event:
+          description: event type
+          type: array
+          items:
+            type: string
+            description: event type
+            example: all dml
+        ignore_sql:
+          description: sql pattern to filter
+          type: array
+          items:
+            type: string
+            description: sql pattern to filter
+            example: ^Drop
+    TableNameList:
+      description: schema name list
+      type: array
+      items:
+        type: string
+        example: table1
+    TaskSourceConf:
+      type: object
+      properties:
+        source_name:
+          type: string
+          example: mysql-replica-01
+          description: source name
+        binlog_name:
+          type: string
+          example: binlog.000001
+        binlog_pos:
           type: integer
-          description: incremental task of concurrent
-          default: 16
-        repl_batch:
+          example: 4
+        binlog_gtid:
+          type: string
+          example: 03fc0263-28c7-11e7-a653-6c0b84d59f30:1-7041423,05474d3c-28c7-11e7-8352-203db246dd3d:1-170
+      required:
+      - source_name
+    SourceNameList:
+      description: source name list
+      type: array
+      items:
+        type: string
+        example: source-1
+    SubTaskStatus:
+      type: object
+      properties:
+        name:
+          type: string
+          description: task name
+        source_name:
+          type: string
+          description: source name
+        worker_name:
+          type: string
+          description: worker name
+        stage:
+          $ref: '#/components/schemas/TaskStage'
+        unit:
+          type: string
+          example: sync
+          description: task unit type
+        unresolved_ddl_lock_id:
+          type: string
+        load_status:
+          $ref: '#/components/schemas/LoadStatus'
+        sync_status:
+          $ref: '#/components/schemas/SyncStatus'
+        dump_status:
+          $ref: '#/components/schemas/DumpStatus'
+        error_msg:
+          type: string
+          description: error message when something wrong
+      required:
+      - name
+      - source_name
+      - worker_name
+      - stage
+      - unit
+    ShardingGroup:
+      type: object
+      properties:
+        target:
+          type: string
+        ddl_list:
+          type: array
+          items:
+            type: string
+          description: ''
+        first_location:
+          type: string
+        synced:
+          type: array
+          items:
+            type: string
+          description: ''
+        unsynced:
+          type: array
+          items:
+            type: string
+          description: ''
+      required:
+      - target
+      - ddl_list
+      - first_location
+      - synced
+      - unsynced
+    CreateTaskRequest:
+      type: object
+      properties:
+        task:
+          $ref: '#/components/schemas/Task'
+      required:
+      - task
+    TaskTableMigrateRule:
+      type: object
+      description: upstream table to downstream migrate rules
+      properties:
+        source:
+          $ref: '#/components/schemas/TaskTableMigrateRuleSource'
+        target:
+          $ref: '#/components/schemas/TaskTableMigrateRuleTarget'
+        binlog_filter_rule:
+          type: array
+          description: filter rule name
+          items:
+            type: string
+            example: rule-1
+      required:
+      - source
+    GetTaskStatusResponse:
+      type: object
+      properties:
+        total:
           type: integer
-          description: incremental synchronization of batch execution sql quantities
-          default: 100
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubTaskStatus'
+      required:
+      - total
+      - data
+    TaskStage:
+      type: string
+      enum:
+      - Stopped
+      - Running
+      - Finished
+      - Paused
+    OperateTaskTableStructureRequest:
+      description: action to operate table request
+      type: object
+      properties:
+        sql_content:
+          type: string
+          example: CREATE TABLE `t1` ( `c1` int(11) DEFAULT NULL, `c2` int(11) DEFAULT NULL, `c3` int(11) DEFAULT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+          description: sql you want to operate
+        flush:
+          type: boolean
+          default: true
+          description: Writes the schema to the checkpoint so that DM can load it after restarting the task
+        sync:
+          type: boolean
+          description: Updates the optimistic sharding metadata with this schema only used when an error occurs in the optimistic sharding DDL mode
+      required:
+      - sql_content
+    TaskSourceConfig:
+      type: object
+      description: source-related configuration
+      properties:
+        full_migrate_conf:
+          $ref: '#/components/schemas/TaskFullMigrateConf'
+        incr_migrate_conf:
+          $ref: '#/components/schemas/TaskIncrMigrateConf'
+        source_conf:
+          type: array
+          description: source configuration
+          items:
+            $ref: '#/components/schemas/TaskSourceConf'
+      required:
+      - source_conf
+    Task:
+      description: task
+      type: object
+      properties:
+        name:
+          type: string
+          example: task-1
+          description: task name
+        task_mode:
+          type: string
+          example: all
+          description: migrate mode
+          enum:
+          - full
+          - incremental
+          - all
+          - dump
+          - load
+        shard_mode:
+          type: string
+          description: the way to coordinate DDL
+          enum:
+          - pessimistic
+          - optimistic
+        strict_optimistic_shard_mode:
+          type: boolean
+          example: true
+          description: whether to enable strict optimistic shard mode
+          default: false
+        meta_schema:
+          type: string
+          example: dm-meta
+          description: downstream database for storing meta information
+          default: dm-meta
+        enhance_online_schema_change:
+          type: boolean
+          example: true
+          description: whether to enable support for the online ddl plugin
+          default: true
+        on_duplicate:
+          type: string
+          description: how to handle conflicted data
+          enum:
+          - replace
+          - error
+          - ignore
+        target_config:
+          $ref: '#/components/schemas/TaskTargetDataBase'
+        binlog_filter_rule:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/TaskBinLogFilterRule'
+        table_migrate_rule:
+          type: array
+          description: table migrate rule
+          items:
+            $ref: '#/components/schemas/TaskTableMigrateRule'
+        source_config:
+          $ref: '#/components/schemas/TaskSourceConfig'
+        status_list:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubTaskStatus'
+        ignore_checking_items:
+          type: array
+          description: ignore precheck items
+          items:
+            type: string
+            example: version
+      required:
+      - name
+      - task_mode
+      - enhance_online_schema_change
+      - on_duplicate
+      - target_config
+      - table_migrate_rule
+      - source_config
+    StopTaskRequest:
+      type: object
+      properties:
+        timeout_duration:
+          type: string
+          example: 15s
+          description: time duration waiting task stop
+        source_name_list:
+          $ref: '#/components/schemas/SourceNameList'
+    TaskTemplateRequest:
+      type: object
+      properties:
+        overwrite:
+          type: boolean
+          default: false
+          description: whether to overwrite task template template
+      required:
+      - overwrite
+    StartTaskRequest:
+      type: object
+      properties:
+        remove_meta:
+          type: boolean
+          default: false
+          description: whether to remove meta database in downstream database
+        source_name_list:
+          $ref: '#/components/schemas/SourceNameList'
+        start_time:
+          type: string
+          example: '2006-01-02T15:04:05+08:00'
+          description: task start time. Prefer RFC3339-like values with timezone offset (`+08:00` or `+0800`). Legacy values without timezone are interpreted in upstream timezone.
+        safe_mode_time_duration:
+          type: string
+          example: 10s
+          description: time duration of safe mode
+    ErrorWithMessage:
+      description: operation error
+      type: object
+      properties:
+        error_msg:
+          type: string
+          description: error message
+        error_code:
+          type: integer
+          description: error code
+      required:
+      - error_msg
+      - error_code
+    SyncStatus:
+      type: object
+      description: status of sync unit
+      properties:
+        total_events:
+          type: integer
+          format: int64
+        total_tps:
+          type: integer
+          format: int64
+        recent_tps:
+          type: integer
+          format: int64
+        master_binlog:
+          type: string
+        master_binlog_gtid:
+          type: string
+        syncer_binlog:
+          type: string
+        syncer_binlog_gtid:
+          type: string
+        blocking_ddls:
+          type: array
+          items:
+            type: string
+          description: sharding DDL which current is blocking
+        unresolved_groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShardingGroup'
+          description: sharding groups which current are un-resolved
+        synced:
+          type: boolean
+        binlog_type:
+          type: string
+        seconds_behind_master:
+          type: integer
+          format: int64
+        io_total_bytes:
+          type: integer
+          format: uint64
+        dump_io_total_bytes:
+          type: integer
+          format: uint64
+      required:
+      - total_events
+      - total_tps
+      - recent_tps
+      - master_binlog
+      - master_binlog_gtid
+      - syncer_binlog
+      - syncer_binlog_gtid
+      - blocking_ddls
+      - unresolved_groups
+      - synced
+      - binlog_type
+      - seconds_behind_master
+      - io_total_bytes
+      - dump_io_total_bytes
     LoadStatus:
       type: object
       description: status of load unit
@@ -754,6 +1232,13 @@ components:
       - meta_binlog
       - meta_binlog_gtid
       - bps
+    UpdateTaskRequest:
+      type: object
+      properties:
+        task:
+          $ref: '#/components/schemas/Task'
+      required:
+      - task
     TaskFullMigrateConf:
       description: configuration of full migrate tasks
       type: object
@@ -855,108 +1340,14 @@ components:
           enum:
           - none
           - manual
-    TaskStage:
-      type: string
-      enum:
-      - Stopped
-      - Running
-      - Finished
-      - Paused
-    TaskTemplateRequest:
+    ConverterTaskRequest:
       type: object
       properties:
-        overwrite:
-          type: boolean
-          default: false
-          description: whether to overwrite task template template
-      required:
-      - overwrite
-    SyncStatus:
-      type: object
-      description: status of sync unit
-      properties:
-        total_events:
-          type: integer
-          format: int64
-        total_tps:
-          type: integer
-          format: int64
-        recent_tps:
-          type: integer
-          format: int64
-        master_binlog:
+        task:
+          $ref: '#/components/schemas/Task'
+        task_config_file:
           type: string
-        master_binlog_gtid:
-          type: string
-        syncer_binlog:
-          type: string
-        syncer_binlog_gtid:
-          type: string
-        blocking_ddls:
-          type: array
-          items:
-            type: string
-          description: sharding DDL which current is blocking
-        unresolved_groups:
-          type: array
-          items:
-            $ref: '#/components/schemas/ShardingGroup'
-          description: sharding groups which current are un-resolved
-        synced:
-          type: boolean
-        binlog_type:
-          type: string
-        seconds_behind_master:
-          type: integer
-          format: int64
-        io_total_bytes:
-          type: integer
-          format: uint64
-        dump_io_total_bytes:
-          type: integer
-          format: uint64
-      required:
-      - total_events
-      - total_tps
-      - recent_tps
-      - master_binlog
-      - master_binlog_gtid
-      - syncer_binlog
-      - syncer_binlog_gtid
-      - blocking_ddls
-      - unresolved_groups
-      - synced
-      - binlog_type
-      - seconds_behind_master
-      - io_total_bytes
-      - dump_io_total_bytes
-    Security:
-      type:
-      - object
-      - 'null'
-      description: data source ssl configuration, the field will be hidden when getting the data source configuration from the interface
-      properties:
-        ssl_ca_content:
-          type: string
-          example: ''
-          description: certificate file content
-        ssl_cert_content:
-          type: string
-          example: ''
-          description: File content of PEM format/X509 format certificates
-        ssl_key_content:
-          type: string
-          example: ''
-          description: Content of the private key file in X509 format
-        cert_allowed_cn:
-          type: array
-          description: Common Name of SSL certificates
-          items:
-            type: string
-      required:
-      - ssl_ca_content
-      - ssl_cert_content
-      - ssl_key_content
+          description: config file in yaml format https://docs.pingcap.com/zh/tidb/stable/task-configuration-file-full.
     TaskTargetDataBase:
       type: object
       description: downstream database configuration
@@ -985,421 +1376,6 @@ components:
       - port
       - user
       - password
-    TaskTableMigrateRuleSource:
-      description: source-related configuration
-      properties:
-        source_name:
-          type: string
-          description: source name
-          example: source-name
-        schema:
-          type: string
-          description: schema name, wildcard support
-          example: db-*
-        table:
-          type: string
-          description: table name, wildcard support
-          example: tb-*
-      required:
-      - source_name
-      - schema
-      - table
-    GetTaskStatusResponse:
-      type: object
-      properties:
-        total:
-          type: integer
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/SubTaskStatus'
-      required:
-      - total
-      - data
-    SchemaNameList:
-      description: schema name list
-      type: array
-      items:
-        type: string
-        example: db1
-    GetTaskListResponse:
-      type: object
-      properties:
-        total:
-          type: integer
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Task'
-      required:
-      - total
-      - data
-    TableNameList:
-      description: schema name list
-      type: array
-      items:
-        type: string
-        example: table1
-    ErrorWithMessage:
-      description: operation error
-      type: object
-      properties:
-        error_msg:
-          type: string
-          description: error message
-        error_code:
-          type: integer
-          description: error code
-      required:
-      - error_msg
-      - error_code
-    StopTaskRequest:
-      type: object
-      properties:
-        timeout_duration:
-          type: string
-          example: 15s
-          description: time duration waiting task stop
-        source_name_list:
-          $ref: '#/components/schemas/SourceNameList'
-    DumpStatus:
-      type: object
-      description: status of dump unit
-      properties:
-        total_tables:
-          type: integer
-          format: int64
-        completed_tables:
-          type: number
-          format: double
-        finished_bytes:
-          type: number
-          format: double
-        finished_rows:
-          type: number
-          format: double
-        estimate_total_rows:
-          type: number
-          format: double
-        bps:
-          type: integer
-          format: int64
-        progress:
-          type: string
-      required:
-      - total_tables
-      - completed_tables
-      - finished_bytes
-      - finished_rows
-      - estimate_total_rows
-      - bps
-      - progress
-    UpdateTaskRequest:
-      type: object
-      properties:
-        task:
-          $ref: '#/components/schemas/Task'
-      required:
-      - task
-    CreateTaskRequest:
-      type: object
-      properties:
-        task:
-          $ref: '#/components/schemas/Task'
-      required:
-      - task
-    TaskMigrateTarget:
-      type: object
-      description: task migrate targets
-      properties:
-        source_schema:
-          type: string
-          example: db1
-        source_table:
-          type: string
-          example: tb1
-        target_schema:
-          type: string
-          example: db1
-        target_table:
-          type: string
-          example: tb1
-      required:
-      - source_schema
-      - source_table
-      - target_schema
-      - target_table
-    TaskBinLogFilterRule:
-      description: Filtering rules at binlog level
-      type: object
-      properties:
-        ignore_event:
-          description: event type
-          type: array
-          items:
-            type: string
-            description: event type
-            example: all dml
-        ignore_sql:
-          description: sql pattern to filter
-          type: array
-          items:
-            type: string
-            description: sql pattern to filter
-            example: ^Drop
-    ConverterTaskRequest:
-      type: object
-      properties:
-        task:
-          $ref: '#/components/schemas/Task'
-        task_config_file:
-          type: string
-          description: config file in yaml format https://docs.pingcap.com/zh/tidb/stable/task-configuration-file-full.
-    SubTaskStatus:
-      type: object
-      properties:
-        name:
-          type: string
-          description: task name
-        source_name:
-          type: string
-          description: source name
-        worker_name:
-          type: string
-          description: worker name
-        stage:
-          $ref: '#/components/schemas/TaskStage'
-        unit:
-          type: string
-          example: sync
-          description: task unit type
-        unresolved_ddl_lock_id:
-          type: string
-        load_status:
-          $ref: '#/components/schemas/LoadStatus'
-        sync_status:
-          $ref: '#/components/schemas/SyncStatus'
-        dump_status:
-          $ref: '#/components/schemas/DumpStatus'
-        error_msg:
-          type: string
-          description: error message when something wrong
-      required:
-      - name
-      - source_name
-      - worker_name
-      - stage
-      - unit
-    OperateTaskTableStructureRequest:
-      description: action to operate table request
-      type: object
-      properties:
-        sql_content:
-          type: string
-          example: CREATE TABLE `t1` ( `c1` int(11) DEFAULT NULL, `c2` int(11) DEFAULT NULL, `c3` int(11) DEFAULT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
-          description: sql you want to operate
-        flush:
-          type: boolean
-          default: true
-          description: Writes the schema to the checkpoint so that DM can load it after restarting the task
-        sync:
-          type: boolean
-          description: Updates the optimistic sharding metadata with this schema only used when an error occurs in the optimistic sharding DDL mode
-      required:
-      - sql_content
-    ShardingGroup:
-      type: object
-      properties:
-        target:
-          type: string
-        ddl_list:
-          type: array
-          items:
-            type: string
-          description: ''
-        first_location:
-          type: string
-        synced:
-          type: array
-          items:
-            type: string
-          description: ''
-        unsynced:
-          type: array
-          items:
-            type: string
-          description: ''
-      required:
-      - target
-      - ddl_list
-      - first_location
-      - synced
-      - unsynced
-    TaskSourceConf:
-      type: object
-      properties:
-        source_name:
-          type: string
-          example: mysql-replica-01
-          description: source name
-        binlog_name:
-          type: string
-          example: binlog.000001
-        binlog_pos:
-          type: integer
-          example: 4
-        binlog_gtid:
-          type: string
-          example: 03fc0263-28c7-11e7-a653-6c0b84d59f30:1-7041423,05474d3c-28c7-11e7-8352-203db246dd3d:1-170
-      required:
-      - source_name
-    StartTaskRequest:
-      type: object
-      properties:
-        remove_meta:
-          type: boolean
-          default: false
-          description: whether to remove meta database in downstream database
-        source_name_list:
-          $ref: '#/components/schemas/SourceNameList'
-        start_time:
-          type: string
-          example: '2006-01-02T15:04:05+08:00'
-          description: task start time. Prefer RFC3339-like values with timezone offset (`+08:00` or `+0800`). Legacy values without timezone are interpreted in upstream timezone.
-        safe_mode_time_duration:
-          type: string
-          example: 10s
-          description: time duration of safe mode
-    ConverterTaskResponse:
-      type: object
-      properties:
-        task:
-          $ref: '#/components/schemas/Task'
-        task_config_file:
-          type: string
-          description: config file in yaml format https://docs.pingcap.com/zh/tidb/stable/task-configuration-file-full.
-      required:
-      - task
-      - task_config_file
-    TaskSourceConfig:
-      type: object
-      description: source-related configuration
-      properties:
-        full_migrate_conf:
-          $ref: '#/components/schemas/TaskFullMigrateConf'
-        incr_migrate_conf:
-          $ref: '#/components/schemas/TaskIncrMigrateConf'
-        source_conf:
-          type: array
-          description: source configuration
-          items:
-            $ref: '#/components/schemas/TaskSourceConf'
-      required:
-      - source_conf
-    GetTaskTableStructureResponse:
-      type: object
-      properties:
-        schema_name:
-          type: string
-          example: db1
-        table_name:
-          type: string
-          example: table1
-        schema_create_sql:
-          type: string
-          example: CREATE TABLE `t1` (`id` int(11) NOT NULL AUTO_INCREMENT,PRIMARY KEY (`id`) /*T![clustered_index] CLUSTERED */) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin
-      required:
-      - table_name
-      - table_create_sql
-    TaskTableMigrateRuleTarget:
-      type: object
-      description: downstream-related configuration
-      properties:
-        schema:
-          type: string
-          description: schema name, does not support wildcards
-          example: db1
-        table:
-          type: string
-          description: table name, does not support wildcards
-          example: tb1
-    Task:
-      description: task
-      type: object
-      properties:
-        name:
-          type: string
-          example: task-1
-          description: task name
-        task_mode:
-          type: string
-          example: all
-          description: migrate mode
-          enum:
-          - full
-          - incremental
-          - all
-          - dump
-          - load
-        shard_mode:
-          type: string
-          description: the way to coordinate DDL
-          enum:
-          - pessimistic
-          - optimistic
-        strict_optimistic_shard_mode:
-          type: boolean
-          example: true
-          description: whether to enable strict optimistic shard mode
-          default: false
-        meta_schema:
-          type: string
-          example: dm-meta
-          description: downstream database for storing meta information
-          default: dm-meta
-        enhance_online_schema_change:
-          type: boolean
-          example: true
-          description: whether to enable support for the online ddl plugin
-          default: true
-        on_duplicate:
-          type: string
-          description: how to handle conflicted data
-          enum:
-          - replace
-          - error
-          - ignore
-        target_config:
-          $ref: '#/components/schemas/TaskTargetDataBase'
-        binlog_filter_rule:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/TaskBinLogFilterRule'
-        table_migrate_rule:
-          type: array
-          description: table migrate rule
-          items:
-            $ref: '#/components/schemas/TaskTableMigrateRule'
-        source_config:
-          $ref: '#/components/schemas/TaskSourceConfig'
-        status_list:
-          type: array
-          items:
-            $ref: '#/components/schemas/SubTaskStatus'
-        ignore_checking_items:
-          type: array
-          description: ignore precheck items
-          items:
-            type: string
-            example: version
-      required:
-      - name
-      - task_mode
-      - enhance_online_schema_change
-      - on_duplicate
-      - target_config
-      - table_migrate_rule
-      - source_config
     TaskTemplateResponse:
       type: object
       properties:
@@ -1422,40 +1398,64 @@ components:
       required:
       - success_task_list
       - failed_task_list
-    TaskTableMigrateRule:
+    OperateTaskResponse:
       type: object
-      description: upstream table to downstream migrate rules
       properties:
-        source:
-          $ref: '#/components/schemas/TaskTableMigrateRuleSource'
-        target:
-          $ref: '#/components/schemas/TaskTableMigrateRuleTarget'
-        binlog_filter_rule:
-          type: array
-          description: filter rule name
-          items:
-            type: string
-            example: rule-1
+        task:
+          $ref: '#/components/schemas/Task'
+        check_result:
+          type: string
+          description: pre-check result
+          example: 'pre-check is passed. '
       required:
-      - source
-    GetTaskMigrateTargetsResponse:
+      - task
+      - check_result
+    TaskTableMigrateRuleSource:
+      description: source-related configuration
+      properties:
+        source_name:
+          type: string
+          description: source name
+          example: source-name
+        schema:
+          type: string
+          description: schema name, wildcard support
+          example: db-*
+        table:
+          type: string
+          description: table name, wildcard support
+          example: tb-*
+      required:
+      - source_name
+      - schema
+      - table
+    GetTaskTableStructureResponse:
       type: object
       properties:
-        total:
+        schema_name:
+          type: string
+          example: db1
+        table_name:
+          type: string
+          example: table1
+        schema_create_sql:
+          type: string
+          example: CREATE TABLE `t1` (`id` int(11) NOT NULL AUTO_INCREMENT,PRIMARY KEY (`id`) /*T![clustered_index] CLUSTERED */) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin
+      required:
+      - table_name
+      - table_create_sql
+    TaskIncrMigrateConf:
+      description: configuration of incremental tasks
+      type: object
+      properties:
+        repl_threads:
           type: integer
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/TaskMigrateTarget'
-      required:
-      - total
-      - data
-    SourceNameList:
-      description: source name list
-      type: array
-      items:
-        type: string
-        example: source-1
+          description: incremental task of concurrent
+          default: 16
+        repl_batch:
+          type: integer
+          description: incremental synchronization of batch execution sql quantities
+          default: 100
 externalDocs:
   description: DM OpenAPI DOC
   url: https://docs.pingcap.com/zh/tidb-data-migration/stable

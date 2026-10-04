@@ -48,6 +48,16 @@ paths:
           $ref: '#/components/responses/RateLimitExceeded'
 components:
   schemas:
+    ErrorResponse:
+      type: object
+      description: Standard error response returned when an API request fails.
+      properties:
+        code:
+          type: integer
+          description: The error code.
+        msg:
+          type: string
+          description: A human-readable error message describing the failure.
     ChatSession:
       type: object
       description: A multi-round conversational chat session.
@@ -77,16 +87,6 @@ components:
         database:
           type: string
           description: The database to use for this chat session.
-    ErrorResponse:
-      type: object
-      description: Standard error response returned when an API request fails.
-      properties:
-        code:
-          type: integer
-          description: The error code.
-        msg:
-          type: string
-          description: A human-readable error message describing the failure.
   responses:
     RateLimitExceeded:
       description: Rate limit exceeded. The Chat2Query API allows 100 requests per day per Data App. Contact TiDB Cloud support to request a higher limit.

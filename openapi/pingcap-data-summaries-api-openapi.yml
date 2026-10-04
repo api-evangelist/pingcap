@@ -138,18 +138,6 @@ paths:
           $ref: '#/components/responses/RateLimitExceeded'
 components:
   schemas:
-    DataSummaryResponse:
-      type: object
-      description: API response wrapper for a data summary operation.
-      properties:
-        code:
-          type: integer
-          description: The response code. 200 indicates success.
-        msg:
-          type: string
-          description: A message describing the result.
-        result:
-          $ref: '#/components/schemas/DataSummary'
     DataSummary:
       type: object
       description: An AI-generated summary of a database schema.
@@ -170,6 +158,31 @@ components:
           - RUNNING
           - DONE
           - FAILED
+    ErrorResponse:
+      type: object
+      description: Standard error response returned when an API request fails.
+      properties:
+        code:
+          type: integer
+          description: The error code.
+        msg:
+          type: string
+          description: A human-readable error message describing the failure.
+    ListDataSummariesResponse:
+      type: object
+      description: API response wrapper for listing data summaries.
+      properties:
+        code:
+          type: integer
+          description: The response code. 200 indicates success.
+        msg:
+          type: string
+          description: A message describing the result.
+        result:
+          type: array
+          description: The list of data summary objects.
+          items:
+            $ref: '#/components/schemas/DataSummary'
     CreateDataSummaryRequest:
       type: object
       description: Request body for creating a new database schema data summary.
@@ -189,9 +202,9 @@ components:
         reuse:
           type: boolean
           description: If true, returns an existing summary for this database instead of generating a new one.
-    ListDataSummariesResponse:
+    DataSummaryResponse:
       type: object
-      description: API response wrapper for listing data summaries.
+      description: API response wrapper for a data summary operation.
       properties:
         code:
           type: integer
@@ -200,20 +213,7 @@ components:
           type: string
           description: A message describing the result.
         result:
-          type: array
-          description: The list of data summary objects.
-          items:
-            $ref: '#/components/schemas/DataSummary'
-    ErrorResponse:
-      type: object
-      description: Standard error response returned when an API request fails.
-      properties:
-        code:
-          type: integer
-          description: The error code.
-        msg:
-          type: string
-          description: A human-readable error message describing the failure.
+          $ref: '#/components/schemas/DataSummary'
   responses:
     RateLimitExceeded:
       description: Rate limit exceeded. The Chat2Query API allows 100 requests per day per Data App. Contact TiDB Cloud support to request a higher limit.
@@ -221,14 +221,14 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-    BadRequest:
-      description: The request body or parameters are invalid.
+    NotFound:
+      description: The requested resource was not found.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-    NotFound:
-      description: The requested resource was not found.
+    BadRequest:
+      description: The request body or parameters are invalid.
       content:
         application/json:
           schema:

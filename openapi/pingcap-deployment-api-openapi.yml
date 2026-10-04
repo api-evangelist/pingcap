@@ -133,30 +133,6 @@ paths:
       - Deployment
 components:
   schemas:
-    v1beta1ListDeploymentsResponse:
-      type: object
-      properties:
-        deployments:
-          type: array
-          items:
-            $ref: '#/components/schemas/v1beta1Deployment'
-          description: The items of deployments in the Data App.
-        nextPageToken:
-          type: string
-          description: The token to retrieve the next page of results.
-      title: Response for ListDeployments
-    DeploymentOriginInfo:
-      type: object
-      properties:
-        commit:
-          type: string
-          description: The commit ID associated with the deployment.
-          readOnly: true
-        diffUrl:
-          type: string
-          description: The URL to view the diff of the changes in the commit.
-          readOnly: true
-      description: If the `origin` is `"GitHub"`, this filed displays the corresponding commit information.
     rpcStatus:
       type: object
       properties:
@@ -169,6 +145,12 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/protobufAny'
+    protobufAny:
+      type: object
+      properties:
+        '@type':
+          type: string
+      additionalProperties: {}
     v1beta1Deployment:
       type: object
       properties:
@@ -217,12 +199,30 @@ components:
           type: string
           description: 'The timestamp when the deployment was finished. The time format follows the [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) standard. For example: `"2023-06-03T06:52:08Z"`.'
           readOnly: true
-    protobufAny:
+    v1beta1ListDeploymentsResponse:
       type: object
       properties:
-        '@type':
+        deployments:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1beta1Deployment'
+          description: The items of deployments in the Data App.
+        nextPageToken:
           type: string
-      additionalProperties: {}
+          description: The token to retrieve the next page of results.
+      title: Response for ListDeployments
+    DeploymentOriginInfo:
+      type: object
+      properties:
+        commit:
+          type: string
+          description: The commit ID associated with the deployment.
+          readOnly: true
+        diffUrl:
+          type: string
+          description: The URL to view the diff of the changes in the commit.
+          readOnly: true
+      description: If the `origin` is `"GitHub"`, this filed displays the corresponding commit information.
 x-tagGroups:
 - name: Endpoints
   tags:
