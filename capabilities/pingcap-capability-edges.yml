@@ -1,0 +1,70 @@
+slug: pingcap
+provider: PingCAP
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 5
+edges:
+- tag: Billing
+  spec_file: pingcap-billing-api-openapi.yml
+  capability_id: BC-4250.30
+  capability_id_l1: BC-4250
+  capability_name: Invoicing & Statement Management
+  confidence: 0.75
+  evidence: '''Return organization monthly bills'', ''Return the monthly bill of the organization with
+    daily usage details'', ''Return credits applied to a specific MSP'', ''Return discounts applied to
+    a specific MSP'''
+  reason: 'Clearly the billing surface of a consumption-based cloud service: monthly bills, usage/cost
+    explorer, credits and discounts. L1 subscription billing is certain; the dominant L2 is invoice/statement
+    retrieval, though rating and usage metering are also touched, so 0.75 on the sub-capability.'
+- tag: Member
+  spec_file: pingcap-member-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.75
+  evidence: POST /members postMembers 'Invite members'; schemas api.OpenApiOrgRole, api.OpenApiProjectRole,
+    api.OpenApiUser
+  reason: Operations invite, update, and delete user accounts and assign org/project/instance roles within
+    the TiDB Cloud IAM system — user account and access administration, i.e. Identity & Access Management.
+    Not HR employee management despite the 'Member' noun.
+- tag: Integration
+  spec_file: pingcap-integration-api-openapi.yml
+  capability_id: BC-4220.20
+  capability_id_l1: BC-4220
+  capability_name: Observability Management
+  confidence: 0.72
+  evidence: '''List integrations'' / ''Create an integration'' for clusters; schemas ''v1beta1DatadogIntegrationStatusResp'',
+    ''v1beta1CreateNewrelicIntegrationRequest'', ''v1beta1CreatePrometheusMetricsKeyRequest'''
+  reason: The integrations managed are metrics exporters to Datadog, New Relic and Prometheus for managed
+    clusters — i.e. wiring up metrics so the running service is observable. The generic 'Integration'
+    tag name is disambiguated by the schema names.
+- tag: API Key
+  spec_file: pingcap-api-key-api-openapi.yml
+  capability_id: BC-4270.40
+  capability_id_l1: BC-4270
+  capability_name: Developer Identity & Credential Management
+  confidence: 0.7
+  evidence: '''Create a new API key'', ''Delete an API key'', schema ''api.OpenApiApiKey''; spec overview:
+    ''The TiDB Cloud API is a REST interface that provides you with programmatic access'''
+  reason: CRUD over API keys that external developers use to call TiDB Cloud's public API — issuance and
+    stewardship of developer credentials. Could also be read as generic IAM, hence not higher than 0.7.
+- tag: Data API Key
+  spec_file: pingcap-data-api-key-api-openapi.yml
+  capability_id: BC-4270.40
+  capability_id_l1: BC-4270
+  capability_name: Developer Identity & Credential Management
+  confidence: 0.7
+  evidence: '''Create an API key for a Data App'', ''List all API keys for a Data App'', schema ''v1beta1ApiKeyRes'',
+    ''ApiKeyExpireSetting'''
+  reason: Lifecycle of API credentials that external consumers use to call Data Service endpoints, including
+    roles and expiry — developer credential issuance and stewardship. Some overlap with generic IAM keeps
+    confidence at 0.7.
