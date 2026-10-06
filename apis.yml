@@ -43,7 +43,7 @@ x-type: company
 x-source: harvest:secondary-market
 specificationVersion: '0.23'
 created: '2026-08-02'
-modified: '2026-08-02'
+modified: '2026-10-06'
 tags:
 - Distributed SQL
 - Database
@@ -2073,6 +2073,8 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- url: https://www.pingcap.com/feed/
+  type: BlogRSS
 - type: Overlay
   url: overlays/tidb-premium-overlay.yaml
 - type: Overlay
