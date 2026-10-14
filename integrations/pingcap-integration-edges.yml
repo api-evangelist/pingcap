@@ -1,7 +1,9 @@
 generated: '2026-10-13'
 method: searched
 checked:
+- datadog/integrations/datadog-integration-edges.yml
 - https://azuremarketplace.microsoft.com/
+- new-relic/integrations/new-relic-integration-edges.yml
 marketplace_apps: []
 edges:
 - partner_name: Microsoft Azure Marketplace
@@ -19,3 +21,41 @@ edges:
   seller_name: PingCAP (US), INC
   detected_by: sweep-cloud-marketplaces.py
   detected: '2026-10-13'
+- partner_name: Datadog (own)
+  partner: datadog
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://github.com/DataDog/integrations-extras/tree/master/tidb
+  mirror_of: datadog/integrations/datadog-integration-edges.yml
+  apps:
+  - TiDB
+  - TiDB Cloud
+  listing_count: 2
+  detected: '2026-10-14'
+  detected_by: mirror-platform-listings.py
+  category: Data Stores
+- partner_name: New Relic (own)
+  partner: new-relic
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://newrelic.com/instant-observability/tidbcloud-quickstart
+  mirror_of: new-relic/integrations/new-relic-integration-edges.yml
+  apps:
+  - TiDB Cloud
+  listing_count: 1
+  detected: '2026-10-14'
+  detected_by: mirror-platform-listings.py
+  category: Community
+source:
+- datadog/integrations/datadog-integration-edges.yml
+- new-relic/integrations/new-relic-integration-edges.yml
