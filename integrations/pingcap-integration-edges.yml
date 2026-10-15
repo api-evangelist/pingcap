@@ -3,6 +3,7 @@ method: searched
 checked:
 - datadog/integrations/datadog-integration-edges.yml
 - https://azuremarketplace.microsoft.com/
+- https://github.com/run-llama/llama_index/tree/main/llama-index-integrations
 - new-relic/integrations/new-relic-integration-edges.yml
 marketplace_apps: []
 edges:
@@ -56,6 +57,25 @@ edges:
   detected: '2026-10-14'
   detected_by: mirror-platform-listings.py
   category: Community
+- partner_name: LlamaIndex
+  partner: llamaindex
+  partner_match: framework
+  channel: partner-built
+  direction: partner-built
+  type: coverage
+  relationship: system-coverage
+  evidence: https://github.com/run-llama/llama_index/tree/main/llama-index-integrations/vector_stores/llama-index-vector-stores-tidbvector
+  coverage_role:
+  - vector-store
+  framework_signals:
+    packages:
+    - llama-index-vector-stores-tidbvector
+    roles:
+    - vector-store
+    vendor_domain: pingcap.com
+  matched_by: verified-domain-table
+  detected_by: sweep-rag-vector.py
+  first_seen: '2026-10-15'
 source:
 - datadog/integrations/datadog-integration-edges.yml
 - new-relic/integrations/new-relic-integration-edges.yml
