@@ -104,37 +104,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    api.OpenApiMspCustomer:
-      type: object
-      properties:
-        effectedTime:
-          description: The effected time of the MSP customer.
-          type: string
-          example: '2023-12-06 15:18:13'
-        email:
-          description: The email of the MSP customer.
-          type: string
-          example: 123@my.com
-        expiredTime:
-          description: The expired time of the MSP customer.
-          type: string
-          example: '2023-12-06 15:18:13'
-        id:
-          description: The ID of the MSP customer.
-          type: string
-          example: '123456'
-        orgId:
-          description: The ID of the MSP customer.
-          type: string
-          example: '123456'
-        orgName:
-          description: The org name of the MSP customer.
-          type: string
-          example: New Org
-        state:
-          description: The state of the MSP customer.
-          type: string
-          example: active
     api.OpenApiMspCustomerSignupUrl:
       type: object
       properties:
@@ -168,3 +137,34 @@ components:
           type: string
         status:
           type: integer
+    api.OpenApiMspCustomer:
+      type: object
+      properties:
+        effectedTime:
+          description: The effected time of the MSP customer.
+          type: string
+          example: '2023-12-06 15:18:13'
+        email:
+          description: The email of the MSP customer.
+          type: string
+          example: 123@my.com
+        expiredTime:
+          description: The expired time of the MSP customer.
+          type: string
+          example: '2023-12-06 15:18:13'
+        id:
+          description: The ID of the MSP customer.
+          type: string
+          example: '123456'
+        orgId:
+          description: The ID of the MSP customer.
+          type: string
+          example: '123456'
+        orgName:
+          description: The org name of the MSP customer.
+          type: string
+          example: New Org
+        state:
+          description: The state of the MSP customer.
+          type: string
+          example: active

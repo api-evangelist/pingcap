@@ -380,6 +380,23 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    api.openApiUpdateUserReqDoc:
+      type: object
+      properties:
+        instanceRoles:
+          description: The new instance-level roles to assign to the member. The existing instance roles are fully replaced when this field is provided.
+          type: array
+          items:
+            $ref: '#/components/schemas/api.OpenApiInstanceRole'
+        orgRole:
+          description: The new organization-level role to assign to the member.
+          allOf:
+          - $ref: '#/components/schemas/api.OpenApiOrgRole'
+        projectRoles:
+          description: The new project-level roles to assign to the member. The existing project roles are fully replaced when this field is provided.
+          type: array
+          items:
+            $ref: '#/components/schemas/api.OpenApiProjectRole'
     api.OpenApiInviteUserResult:
       type: object
       properties:
@@ -413,90 +430,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/api.openApiBatchUpdateUserEntryDoc'
-    api.OpenApiProjectRole:
-      type: object
-      properties:
-        rbacRole:
-          description: The project-level role assigned to the member.
-          type: string
-          enum:
-          - project:owner
-          - project:dev
-          - project:readonly
-          - project:ctl_plane_viewer
-          example: project:owner
-        scopeId:
-          description: The ID of the project to which the role applies.
-          type: string
-    api.openApiUpdateUserReqDoc:
-      type: object
-      properties:
-        instanceRoles:
-          description: The new instance-level roles to assign to the member. The existing instance roles are fully replaced when this field is provided.
-          type: array
-          items:
-            $ref: '#/components/schemas/api.OpenApiInstanceRole'
-        orgRole:
-          description: The new organization-level role to assign to the member.
-          allOf:
-          - $ref: '#/components/schemas/api.OpenApiOrgRole'
-        projectRoles:
-          description: The new project-level roles to assign to the member. The existing project roles are fully replaced when this field is provided.
-          type: array
-          items:
-            $ref: '#/components/schemas/api.OpenApiProjectRole'
-    api.openApiBatchUpdateUserEntryDoc:
-      type: object
-      required:
-      - userId
-      properties:
-        instanceRoles:
-          description: The new instance-level roles to assign to the member. The existing instance roles are fully replaced when this field is provided.
-          type: array
-          items:
-            $ref: '#/components/schemas/api.OpenApiInstanceRole'
-        orgRole:
-          description: The new organization-level role to assign to the member.
-          allOf:
-          - $ref: '#/components/schemas/api.OpenApiOrgRole'
-        projectRoles:
-          description: The new project-level roles to assign to the member. The existing project roles are fully replaced when this field is provided.
-          type: array
-          items:
-            $ref: '#/components/schemas/api.OpenApiProjectRole'
-        userId:
-          description: The ID of the member to update.
-          type: string
-    api.OpenApiBatchUpdateUsersRsp:
-      type: object
-      properties:
-        results:
-          description: The list of update results, one for each member in the request.
-          type: array
-          items:
-            $ref: '#/components/schemas/api.OpenApiBatchUpdateUserResult'
-    api.OpenApiInstanceRole:
-      type: object
-      properties:
-        rbacRole:
-          description: The instance-level role assigned to the member.
-          type: string
-          enum:
-          - cluster:admin
-          - cluster:viewer
-          example: cluster:admin
-        scopeId:
-          description: The ID of the TiDB Cloud Starter, Essential, or Premium instance to which the role applies.
-          type: string
-    api.OpenApiBatchUpdateError:
-      type: object
-      properties:
-        code:
-          description: The error code returned when the member update failed.
-          type: string
-        message:
-          description: The error message describing why the member update failed.
-          type: string
     api.OpenApiUser:
       type: object
       properties:
@@ -568,6 +501,21 @@ components:
         scopeId:
           description: The ID of the organization to which the role applies.
           type: string
+    api.OpenApiProjectRole:
+      type: object
+      properties:
+        rbacRole:
+          description: The project-level role assigned to the member.
+          type: string
+          enum:
+          - project:owner
+          - project:dev
+          - project:readonly
+          - project:ctl_plane_viewer
+          example: project:owner
+        scopeId:
+          description: The ID of the project to which the role applies.
+          type: string
     api.OpenApiInviteUsersRsp:
       type: object
       properties:
@@ -582,6 +530,14 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/api.OpenApiInviteUserResult'
+    api.OpenApiBatchUpdateUsersRsp:
+      type: object
+      properties:
+        results:
+          description: The list of update results, one for each member in the request.
+          type: array
+          items:
+            $ref: '#/components/schemas/api.OpenApiBatchUpdateUserResult'
     api.OpenApiBatchUpdateUserResult:
       type: object
       properties:
@@ -620,3 +576,47 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/api.OpenApiProjectRole'
+    api.openApiBatchUpdateUserEntryDoc:
+      type: object
+      required:
+      - userId
+      properties:
+        instanceRoles:
+          description: The new instance-level roles to assign to the member. The existing instance roles are fully replaced when this field is provided.
+          type: array
+          items:
+            $ref: '#/components/schemas/api.OpenApiInstanceRole'
+        orgRole:
+          description: The new organization-level role to assign to the member.
+          allOf:
+          - $ref: '#/components/schemas/api.OpenApiOrgRole'
+        projectRoles:
+          description: The new project-level roles to assign to the member. The existing project roles are fully replaced when this field is provided.
+          type: array
+          items:
+            $ref: '#/components/schemas/api.OpenApiProjectRole'
+        userId:
+          description: The ID of the member to update.
+          type: string
+    api.OpenApiInstanceRole:
+      type: object
+      properties:
+        rbacRole:
+          description: The instance-level role assigned to the member.
+          type: string
+          enum:
+          - cluster:admin
+          - cluster:viewer
+          example: cluster:admin
+        scopeId:
+          description: The ID of the TiDB Cloud Starter, Essential, or Premium instance to which the role applies.
+          type: string
+    api.OpenApiBatchUpdateError:
+      type: object
+      properties:
+        code:
+          description: The error code returned when the member update failed.
+          type: string
+        message:
+          description: The error message describing why the member update failed.
+          type: string

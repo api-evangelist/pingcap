@@ -58,6 +58,19 @@ components:
         msg:
           type: string
           description: A human-readable error message describing the failure.
+    CreateSessionRequest:
+      type: object
+      description: Request body for creating a multi-round chat session.
+      required:
+      - cluster_id
+      - database
+      properties:
+        cluster_id:
+          type: string
+          description: The ID of the TiDB Cloud cluster for this session.
+        database:
+          type: string
+          description: The database to use for this chat session.
     ChatSession:
       type: object
       description: A multi-round conversational chat session.
@@ -74,28 +87,15 @@ components:
             session_id:
               type: string
               description: The unique session identifier to use in subsequent chat2data requests.
-    CreateSessionRequest:
-      type: object
-      description: Request body for creating a multi-round chat session.
-      required:
-      - cluster_id
-      - database
-      properties:
-        cluster_id:
-          type: string
-          description: The ID of the TiDB Cloud cluster for this session.
-        database:
-          type: string
-          description: The database to use for this chat session.
   responses:
-    RateLimitExceeded:
-      description: Rate limit exceeded. The Chat2Query API allows 100 requests per day per Data App. Contact TiDB Cloud support to request a higher limit.
+    BadRequest:
+      description: The request body or parameters are invalid.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-    BadRequest:
-      description: The request body or parameters are invalid.
+    RateLimitExceeded:
+      description: Rate limit exceeded. The Chat2Query API allows 100 requests per day per Data App. Contact TiDB Cloud support to request a higher limit.
       content:
         application/json:
           schema:

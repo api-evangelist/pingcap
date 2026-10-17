@@ -84,16 +84,23 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    controller.openApiError:
+    controller.queryAuditLogRsp:
       type: object
       properties:
-        code:
+        auditLogs:
+          description: A list of console audit logs that match the query.
+          type: array
+          items:
+            $ref: '#/components/schemas/controller.orgAuditLog'
+          title: AuditLog
+        nextPageToken:
+          description: The token to retrieve the next page of results. Use this value as the `pageToken` parameter in the next request. This field is empty when there are no more pages.
           type: string
-        error: {}
-        msgPrefix:
-          type: string
-        status:
+          example: 1a2b3c4d5e6f7g8h
+        totalSize:
+          description: The total number of console audit logs that match the query.
           type: integer
+          example: 100
     controller.orgAuditLog:
       type: object
       properties:
@@ -169,20 +176,13 @@ components:
           description: A trace identifier used to correlate this audit event with related system logs.
           type: string
           example: 1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p
-    controller.queryAuditLogRsp:
+    controller.openApiError:
       type: object
       properties:
-        auditLogs:
-          description: A list of console audit logs that match the query.
-          type: array
-          items:
-            $ref: '#/components/schemas/controller.orgAuditLog'
-          title: AuditLog
-        nextPageToken:
-          description: The token to retrieve the next page of results. Use this value as the `pageToken` parameter in the next request. This field is empty when there are no more pages.
+        code:
           type: string
-          example: 1a2b3c4d5e6f7g8h
-        totalSize:
-          description: The total number of console audit logs that match the query.
+        error: {}
+        msgPrefix:
+          type: string
+        status:
           type: integer
-          example: 100

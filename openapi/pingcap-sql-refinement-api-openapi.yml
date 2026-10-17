@@ -48,6 +48,29 @@ paths:
           $ref: '#/components/responses/RateLimitExceeded'
 components:
   schemas:
+    ErrorResponse:
+      type: object
+      description: Standard error response returned when an API request fails.
+      properties:
+        code:
+          type: integer
+          description: The error code.
+        msg:
+          type: string
+          description: A human-readable error message describing the failure.
+    ColumnDefinition:
+      type: object
+      description: A column definition in a query result set.
+      properties:
+        col:
+          type: string
+          description: The column name.
+        data_type:
+          type: string
+          description: The SQL data type of the column.
+        nullable:
+          type: boolean
+          description: Whether the column can contain NULL values.
     Chat2DataResult:
       type: object
       description: The result of a Chat2Data SQL generation and execution.
@@ -69,41 +92,6 @@ components:
           description: The column definitions for the query result.
           items:
             $ref: '#/components/schemas/ColumnDefinition'
-    ColumnDefinition:
-      type: object
-      description: A column definition in a query result set.
-      properties:
-        col:
-          type: string
-          description: The column name.
-        data_type:
-          type: string
-          description: The SQL data type of the column.
-        nullable:
-          type: boolean
-          description: Whether the column can contain NULL values.
-    ErrorResponse:
-      type: object
-      description: Standard error response returned when an API request fails.
-      properties:
-        code:
-          type: integer
-          description: The error code.
-        msg:
-          type: string
-          description: A human-readable error message describing the failure.
-    Chat2DataResponse:
-      type: object
-      description: API response wrapper for a Chat2Data operation.
-      properties:
-        code:
-          type: integer
-          description: The response code. 200 indicates success.
-        msg:
-          type: string
-          description: A message describing the result.
-        result:
-          $ref: '#/components/schemas/Chat2DataResult'
     RefineSqlRequest:
       type: object
       description: Request body for refining a previously generated SQL query.
@@ -129,15 +117,27 @@ components:
         task:
           type: string
           description: A description of how to refine the SQL query.
+    Chat2DataResponse:
+      type: object
+      description: API response wrapper for a Chat2Data operation.
+      properties:
+        code:
+          type: integer
+          description: The response code. 200 indicates success.
+        msg:
+          type: string
+          description: A message describing the result.
+        result:
+          $ref: '#/components/schemas/Chat2DataResult'
   responses:
-    RateLimitExceeded:
-      description: Rate limit exceeded. The Chat2Query API allows 100 requests per day per Data App. Contact TiDB Cloud support to request a higher limit.
+    BadRequest:
+      description: The request body or parameters are invalid.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-    BadRequest:
-      description: The request body or parameters are invalid.
+    RateLimitExceeded:
+      description: Rate limit exceeded. The Chat2Query API allows 100 requests per day per Data App. Contact TiDB Cloud support to request a higher limit.
       content:
         application/json:
           schema:

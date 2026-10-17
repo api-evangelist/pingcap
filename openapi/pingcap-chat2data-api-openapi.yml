@@ -125,6 +125,16 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
+    ErrorResponse:
+      type: object
+      description: Standard error response returned when an API request fails.
+      properties:
+        code:
+          type: integer
+          description: The error code.
+        msg:
+          type: string
+          description: A human-readable error message describing the failure.
     SuggestQuestionsResponse:
       type: object
       description: API response wrapper for question suggestions.
@@ -143,6 +153,44 @@ components:
               description: A list of suggested natural language questions for the database.
               items:
                 type: string
+    JobStatusResponse:
+      type: object
+      description: Status and result of an asynchronous Chat2Query v2 job.
+      properties:
+        code:
+          type: integer
+          description: The response code. 200 indicates success.
+        msg:
+          type: string
+          description: A message describing the result.
+        result:
+          type: object
+          properties:
+            job_id:
+              type: string
+              description: The job identifier.
+            status:
+              type: string
+              description: The current status of the job.
+              enum:
+              - RUNNING
+              - DONE
+              - FAILED
+            data:
+              $ref: '#/components/schemas/Chat2DataResult'
+    ColumnDefinition:
+      type: object
+      description: A column definition in a query result set.
+      properties:
+        col:
+          type: string
+          description: The column name.
+        data_type:
+          type: string
+          description: The SQL data type of the column.
+        nullable:
+          type: boolean
+          description: Whether the column can contain NULL values.
     Chat2DataResult:
       type: object
       description: The result of a Chat2Data SQL generation and execution.
@@ -164,19 +212,19 @@ components:
           description: The column definitions for the query result.
           items:
             $ref: '#/components/schemas/ColumnDefinition'
-    ColumnDefinition:
+    SuggestQuestionsRequest:
       type: object
-      description: A column definition in a query result set.
+      description: Request body for generating question suggestions for a database.
+      required:
+      - cluster_id
+      - database
       properties:
-        col:
+        cluster_id:
           type: string
-          description: The column name.
-        data_type:
+          description: The ID of the TiDB Cloud cluster.
+        database:
           type: string
-          description: The SQL data type of the column.
-        nullable:
-          type: boolean
-          description: Whether the column can contain NULL values.
+          description: The database to generate question suggestions for.
     JobResponse:
       type: object
       description: Response for asynchronous v2 Chat2Query job creation.
@@ -193,28 +241,6 @@ components:
             job_id:
               type: string
               description: The unique identifier for polling the job status.
-    ErrorResponse:
-      type: object
-      description: Standard error response returned when an API request fails.
-      properties:
-        code:
-          type: integer
-          description: The error code.
-        msg:
-          type: string
-          description: A human-readable error message describing the failure.
-    Chat2DataResponse:
-      type: object
-      description: API response wrapper for a Chat2Data operation.
-      properties:
-        code:
-          type: integer
-          description: The response code. 200 indicates success.
-        msg:
-          type: string
-          description: A message describing the result.
-        result:
-          $ref: '#/components/schemas/Chat2DataResult'
     Chat2DataRequest:
       type: object
       description: Request body for generating and executing a SQL query from natural language.
@@ -245,22 +271,9 @@ components:
         session_id:
           type: string
           description: The session ID for multi-round conversational queries.
-    SuggestQuestionsRequest:
+    Chat2DataResponse:
       type: object
-      description: Request body for generating question suggestions for a database.
-      required:
-      - cluster_id
-      - database
-      properties:
-        cluster_id:
-          type: string
-          description: The ID of the TiDB Cloud cluster.
-        database:
-          type: string
-          description: The database to generate question suggestions for.
-    JobStatusResponse:
-      type: object
-      description: Status and result of an asynchronous Chat2Query v2 job.
+      description: API response wrapper for a Chat2Data operation.
       properties:
         code:
           type: integer
@@ -269,23 +282,10 @@ components:
           type: string
           description: A message describing the result.
         result:
-          type: object
-          properties:
-            job_id:
-              type: string
-              description: The job identifier.
-            status:
-              type: string
-              description: The current status of the job.
-              enum:
-              - RUNNING
-              - DONE
-              - FAILED
-            data:
-              $ref: '#/components/schemas/Chat2DataResult'
+          $ref: '#/components/schemas/Chat2DataResult'
   responses:
-    RateLimitExceeded:
-      description: Rate limit exceeded. The Chat2Query API allows 100 requests per day per Data App. Contact TiDB Cloud support to request a higher limit.
+    BadRequest:
+      description: The request body or parameters are invalid.
       content:
         application/json:
           schema:
@@ -296,8 +296,8 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-    BadRequest:
-      description: The request body or parameters are invalid.
+    RateLimitExceeded:
+      description: Rate limit exceeded. The Chat2Query API allows 100 requests per day per Data App. Contact TiDB Cloud support to request a higher limit.
       content:
         application/json:
           schema:

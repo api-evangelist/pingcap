@@ -138,26 +138,6 @@ paths:
           $ref: '#/components/responses/RateLimitExceeded'
 components:
   schemas:
-    DataSummary:
-      type: object
-      description: An AI-generated summary of a database schema.
-      properties:
-        data_summary_id:
-          type: integer
-          description: The unique identifier of the data summary.
-        cluster_id:
-          type: string
-          description: The ID of the cluster whose database was summarized.
-        database:
-          type: string
-          description: The name of the summarized database.
-        status:
-          type: string
-          description: The generation status of the data summary.
-          enum:
-          - RUNNING
-          - DONE
-          - FAILED
     ErrorResponse:
       type: object
       description: Standard error response returned when an API request fails.
@@ -168,6 +148,18 @@ components:
         msg:
           type: string
           description: A human-readable error message describing the failure.
+    DataSummaryResponse:
+      type: object
+      description: API response wrapper for a data summary operation.
+      properties:
+        code:
+          type: integer
+          description: The response code. 200 indicates success.
+        msg:
+          type: string
+          description: A message describing the result.
+        result:
+          $ref: '#/components/schemas/DataSummary'
     ListDataSummariesResponse:
       type: object
       description: API response wrapper for listing data summaries.
@@ -202,21 +194,29 @@ components:
         reuse:
           type: boolean
           description: If true, returns an existing summary for this database instead of generating a new one.
-    DataSummaryResponse:
+    DataSummary:
       type: object
-      description: API response wrapper for a data summary operation.
+      description: An AI-generated summary of a database schema.
       properties:
-        code:
+        data_summary_id:
           type: integer
-          description: The response code. 200 indicates success.
-        msg:
+          description: The unique identifier of the data summary.
+        cluster_id:
           type: string
-          description: A message describing the result.
-        result:
-          $ref: '#/components/schemas/DataSummary'
+          description: The ID of the cluster whose database was summarized.
+        database:
+          type: string
+          description: The name of the summarized database.
+        status:
+          type: string
+          description: The generation status of the data summary.
+          enum:
+          - RUNNING
+          - DONE
+          - FAILED
   responses:
-    RateLimitExceeded:
-      description: Rate limit exceeded. The Chat2Query API allows 100 requests per day per Data App. Contact TiDB Cloud support to request a higher limit.
+    BadRequest:
+      description: The request body or parameters are invalid.
       content:
         application/json:
           schema:
@@ -227,8 +227,8 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-    BadRequest:
-      description: The request body or parameters are invalid.
+    RateLimitExceeded:
+      description: Rate limit exceeded. The Chat2Query API allows 100 requests per day per Data App. Contact TiDB Cloud support to request a higher limit.
       content:
         application/json:
           schema:

@@ -73,19 +73,24 @@ paths:
                 $ref: '#/components/schemas/AllServersInfo'
 components:
   schemas:
-    ServerStatus:
+    AllServersInfo:
       type: object
-      description: Current operational status of the TiDB server instance.
+      description: Information about all TiDB nodes in the cluster.
       properties:
-        connections:
+        servers_num:
           type: integer
-          description: The number of currently active client connections.
-        version:
+          description: The total number of TiDB servers in the cluster.
+        owner_id:
           type: string
-          description: The TiDB server version string.
-        git_hash:
-          type: string
-          description: The git commit hash of the running TiDB binary.
+          description: The DDL ID of the current DDL owner node.
+        is_all_server_version_consistent:
+          type: boolean
+          description: Whether all TiDB servers are running the same version.
+        all_servers_info:
+          type: object
+          description: A map of server DDL IDs to their ServerInfo objects.
+          additionalProperties:
+            $ref: '#/components/schemas/ServerInfo'
     ServerInfo:
       type: object
       description: Detailed information about the TiDB server instance.
@@ -120,24 +125,19 @@ components:
         op_scope_level:
           type: integer
           description: The scope level for this server's operational range.
-    AllServersInfo:
+    ServerStatus:
       type: object
-      description: Information about all TiDB nodes in the cluster.
+      description: Current operational status of the TiDB server instance.
       properties:
-        servers_num:
+        connections:
           type: integer
-          description: The total number of TiDB servers in the cluster.
-        owner_id:
+          description: The number of currently active client connections.
+        version:
           type: string
-          description: The DDL ID of the current DDL owner node.
-        is_all_server_version_consistent:
-          type: boolean
-          description: Whether all TiDB servers are running the same version.
-        all_servers_info:
-          type: object
-          description: A map of server DDL IDs to their ServerInfo objects.
-          additionalProperties:
-            $ref: '#/components/schemas/ServerInfo'
+          description: The TiDB server version string.
+        git_hash:
+          type: string
+          description: The git commit hash of the running TiDB binary.
 externalDocs:
   description: TiDB HTTP API Reference
   url: https://github.com/pingcap/tidb/blob/master/docs/tidb_http_api.md

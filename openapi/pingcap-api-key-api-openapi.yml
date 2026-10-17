@@ -180,21 +180,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    api.OpenApiUpdateApiKeyReq:
-      type: object
-      properties:
-        displayName:
-          description: The display name of the API key.
-          type: string
-          example: New Key
-        projectId:
-          description: The project to which the API key belongs. If not set, the API key belongs to org.
-          type: integer
-          example: 123456
-        role:
-          description: "The role of API key.\n\n- If `projectId` is set to `0`, use an [organization role](https://docs.pingcap.com/tidbcloud/manage-user-access/#organization-roles):\n\n  - `org:owner`: indicates the `Organization Owner` role.\n\n  - `org:member`: indicates the `Organization Viewer` role.\n\n  - `org:billing_admin`: indicates the `Organization Billing Manager` role.\n\n  - `org:billing_viewer`: indicates the `Organization Billing Viewer` role.\n\n  - `org:audit_admin`: indicates the `Organization Console Audit Manager` role.\n\n- if `projectId` is not set to `0`, use a [project role](https://docs.pingcap.com/tidbcloud/manage-user-access/#project-roles):\n\n  - `project:owner`: indicates the `Project Owner` role.\n\n  - `project:dev`: indicates the `Project Data Access Read-Write` role.\n\n  - `project:readonly`: indicates the `Project Data Access Read-Only` role.\n\n  - `project:ctl_plane_viewer`: indicates the `Project Viewer` role."
-          type: string
-          example: org:owner
     api.OpenApiListApiKeyRsp:
       type: object
       properties:
@@ -249,6 +234,21 @@ components:
           example: New Key
         projectId:
           description: The ID of the project. If not specified, the project ID of the default project is used.
+          type: integer
+          example: 123456
+        role:
+          description: "The role of API key.\n\n- If `projectId` is set to `0`, use an [organization role](https://docs.pingcap.com/tidbcloud/manage-user-access/#organization-roles):\n\n  - `org:owner`: indicates the `Organization Owner` role.\n\n  - `org:member`: indicates the `Organization Viewer` role.\n\n  - `org:billing_admin`: indicates the `Organization Billing Manager` role.\n\n  - `org:billing_viewer`: indicates the `Organization Billing Viewer` role.\n\n  - `org:audit_admin`: indicates the `Organization Console Audit Manager` role.\n\n- if `projectId` is not set to `0`, use a [project role](https://docs.pingcap.com/tidbcloud/manage-user-access/#project-roles):\n\n  - `project:owner`: indicates the `Project Owner` role.\n\n  - `project:dev`: indicates the `Project Data Access Read-Write` role.\n\n  - `project:readonly`: indicates the `Project Data Access Read-Only` role.\n\n  - `project:ctl_plane_viewer`: indicates the `Project Viewer` role."
+          type: string
+          example: org:owner
+    api.OpenApiUpdateApiKeyReq:
+      type: object
+      properties:
+        displayName:
+          description: The display name of the API key.
+          type: string
+          example: New Key
+        projectId:
+          description: The project to which the API key belongs. If not set, the API key belongs to org.
           type: integer
           example: 123456
         role:
